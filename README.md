@@ -1,9 +1,9 @@
 <h1 align="center">
-    Patient Management System
+    SuperVision
 </h1>
 
 <div align="center">
-  project tagline here
+  Optometry Patient Management for a Cause
 </div>
 
 <details open="open">
@@ -19,6 +19,8 @@
 ---
 
 ## About
+SuperVision is a patient management system for optometry clinics. 
+It has been designed to be used by the [Aotearoa Vision Bus](https://communityeyehealth.auckland.ac.nz/our-research/vision-bus-aotearoa/).
 
 ### Built With
 
