@@ -25,6 +25,7 @@ jobs:
           l_max_size: '1000'
           xl_label: 'extra large'
           fail_if_xl: 'false'
+          message_if_xl: false
           files_to_ignore: 'package-lock.json'
   validate:
     name: Validate PR title
