@@ -1,13 +1,18 @@
 {
   "name": "supervision",
   "version": "0.0.0",
-  "license": "unlicensed",
+  "license": "UNLICENSED",
+  "repository": "github:University-of-Auckland-SOFTENG761/project-team-1",
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test"
   },
   "private": true,
+  "engines": {
+    "node": "16",
+    "npm": "8"
+  },
   "devDependencies": {
     "@nrwl/cli": "14.5.4",
     "@nrwl/cypress": "14.5.4",
