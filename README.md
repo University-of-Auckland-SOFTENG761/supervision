@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/dec0dOS/amazing-github-template">
+  <a href="https://github.com/University-of-Auckland-SOFTENG761/project-team-1">
     <img src="docs/images/logo.svg" alt="SuperVision" width="450">
   </a>
 </h1>
