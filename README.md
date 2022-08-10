@@ -1,6 +1,6 @@
 <h1 align="center">
   <a href="https://github.com/dec0dOS/amazing-github-template">
-    <img src="docs/images/logo.svg" alt="SuperVision" width="125" height="125">
+    <img src="docs/images/logo.svg" alt="SuperVision" width="450">
   </a>
 </h1>
 
