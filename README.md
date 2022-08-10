@@ -1,9 +1,11 @@
 <h1 align="center">
-    SuperVision
+  <a href="https://github.com/dec0dOS/amazing-github-template">
+    <img src="docs/images/logo.svg" alt="SuperVision" width="125" height="125">
+  </a>
 </h1>
 
 <div align="center">
-  Optometry Patient Management for a Cause
+  Educational Patient Management for Optometrists
 </div>
 
 <details open="open">
