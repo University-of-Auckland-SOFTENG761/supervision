@@ -6,7 +6,6 @@ on:
       - main
   pull_request:
 
-
 jobs:
   main:
     runs-on: ubuntu-latest
