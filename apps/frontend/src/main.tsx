@@ -4,10 +4,10 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './app/app';
 
-if ("serviceWorker" in navigator){
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js");
-  })
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
 }
 
 const root = ReactDOM.createRoot(
