@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx nx workspace-lint
-npx nx format
+npx nx format:write --uncommitted
 npx nx affected --target=lint --parallel=3
