@@ -27,3 +27,5 @@ export const configSchema = Joi.object({
     name: Joi.string().required(),
   }),
 });
+
+export { TypeOrmConfigService } from './TypeOrmConfigService';
