@@ -61,9 +61,13 @@
     "@mantine/core": "^5.1.4",
     "@mantine/hooks": "^5.1.4",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/typeorm": "^9.0.1",
     "core-js": "^3.6.5",
+    "joi": "^17.6.0",
+    "pg": "^8.7.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.3.0",
@@ -71,6 +75,7 @@
     "regenerator-runtime": "0.13.7",
     "rxjs": "^7.0.0",
     "tslib": "^2.3.0",
+    "typeorm": "^0.3.7",
     "webpack-merge": "^5.8.0",
     "workbox-webpack-plugin": "^6.5.4"
   }
