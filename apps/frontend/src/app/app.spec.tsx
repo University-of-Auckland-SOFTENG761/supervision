@@ -22,8 +22,6 @@ describe('App', () => {
       </BrowserRouter>
     );
 
-    expect(
-      getByText(/A fully featured React components and hooks library/gi)
-    ).toBeTruthy();
+    expect(getByText(/React components and hooks library/gi)).toBeTruthy();
   });
 });
