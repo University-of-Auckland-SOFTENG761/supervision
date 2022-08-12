@@ -15,13 +15,15 @@ describe('App', () => {
     expect(baseElement).toBeTruthy();
   });
 
-  it('should have a greeting as the title', () => {
+  it('should have a mantine message as the title', () => {
     const { getByText } = render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
 
-    expect(getByText(/Welcome frontend/gi)).toBeTruthy();
+    expect(
+      getByText(/A fully featured React components and hooks library/gi)
+    ).toBeTruthy();
   });
 });
