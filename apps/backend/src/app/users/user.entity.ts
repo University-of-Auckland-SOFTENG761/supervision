@@ -7,7 +7,7 @@ export enum UserRole {
 }
 
 @Entity()
-export default class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @Column('varchar', { length: 30 })
   firstName: string;
 

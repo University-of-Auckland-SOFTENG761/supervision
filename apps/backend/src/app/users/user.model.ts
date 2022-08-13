@@ -1,0 +1,22 @@
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { BaseModel } from '@supervision/entities/base.model';
+import { UserRole } from './user.entity';
+
+registerEnumType(UserRole, {
+  name: 'UserRole',
+});
+
+@ObjectType({ description: 'user' })
+export class UserModel extends BaseModel {
+  @Field()
+  firstName: string;
+
+  @Field()
+  lastName: string;
+
+  @Field(() => UserRole)
+  role: UserRole;
+
+  @Field()
+  isActive: boolean;
+}
