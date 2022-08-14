@@ -7,6 +7,7 @@ import configuration, {
   configSchema,
   TypeOrmConfigService,
 } from '@supervision/config';
+import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 
 @Module({
@@ -23,6 +24,7 @@ import { UsersModule } from '@supervision/users';
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
+    HealthModule,
     UsersModule,
   ],
 })

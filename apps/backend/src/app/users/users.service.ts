@@ -36,15 +36,11 @@ export class UserService {
         );
     }
 
-    const results = await query
+    return await query
       .orderBy('user.updatedAt', 'DESC')
       .addOrderBy('user.id')
       .take(limit)
       .withDeleted()
       .getMany();
-
-    console.debug(results, query.getSql(), minUpdatedAt, lastId, limit);
-
-    return results;
   }
 }
