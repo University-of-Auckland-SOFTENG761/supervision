@@ -8,8 +8,7 @@
     "target": "es2015",
     "baseUrl": "src",
     "paths": {
-      "@supervision/*": ["*"],
-      "@supervision/users/*": ["app/users/*"]
+      "@supervision/*": ["app/*"]
     }
   },
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],

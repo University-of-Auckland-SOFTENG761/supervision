@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { BaseModel } from '@supervision/entities/base.model';
-import { UserRole } from './user.entity';
+import { BaseModel } from '@supervision/shared';
+import { UserRole } from '@supervision/users';
 
 registerEnumType(UserRole, {
   name: 'UserRole',

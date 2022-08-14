@@ -1,5 +1,5 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '@supervision/entities';
+import { BaseEntity } from '@supervision/shared';
 
 export enum UserRole {
   SUPERVISOR = 'supervisor',
