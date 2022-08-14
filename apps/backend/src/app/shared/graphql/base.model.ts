@@ -11,7 +11,7 @@ export abstract class BaseModel {
   @Field()
   createdAt: Date;
 
-  @Field()
+  @Field({ nullable: true })
   deletedAt: Date;
 
   @Field()

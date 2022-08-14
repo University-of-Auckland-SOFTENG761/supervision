@@ -6,7 +6,7 @@ export enum UserRole {
   STUDENT = 'student',
 }
 
-@Entity()
+@Entity({ name: 'user' })
 export class UserEntity extends BaseEntity {
   @Column('varchar', { length: 30 })
   firstName: string;
