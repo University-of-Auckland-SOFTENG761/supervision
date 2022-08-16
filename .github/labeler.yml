@@ -1,0 +1,11 @@
+frontend:
+  - apps/frontend/**/*
+  - apps/frontend-e2e/**/*
+
+backend:
+  - apps/backend/**/*
+
+test:
+  - '**/*.spec.ts'
+  - '**/*.cy.ts'
+  - apps/frontend-e2e/**/*
