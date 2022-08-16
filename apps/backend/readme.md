@@ -52,6 +52,7 @@ sudo -u postgres createdb supervision
 </details>
 
 ### Node
+
 ```bash
 npm install
 ```
