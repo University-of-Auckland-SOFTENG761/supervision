@@ -2,7 +2,7 @@ import { MantineProvider } from '@mantine/core';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-
+import MantineTheme from './mantine.config';
 import App from './app/app';
 
 // if ('serviceWorker' in navigator) {
@@ -18,7 +18,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <BrowserRouter>
-      <MantineProvider withGlobalStyles withNormalizeCSS>
+      <MantineProvider withGlobalStyles withNormalizeCSS theme={MantineTheme}>
         <App />
       </MantineProvider>
     </BrowserRouter>
