@@ -3,10 +3,18 @@ const { GenerateSW } = require('workbox-webpack-plugin');
 
 module.exports = (config, context) => {
   return merge(config, {
-    plugins: [
-      new GenerateSW({
-        swDest: 'sw.js',
-      }),
-    ],
+    // plugins: [
+    //   new GenerateSW({
+    //     swDest: 'sw.js',
+    //   }),
+    // ],
+    module: {
+      rules: [
+        {
+          test: /\.svg$/i,
+          type: 'asset',
+        },
+      ],
+    },
   });
 };
