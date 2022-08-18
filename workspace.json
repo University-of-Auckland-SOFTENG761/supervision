@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "backend": "apps/backend",
+    "components": "libs/components",
     "frontend": "apps/frontend",
     "frontend-e2e": "apps/frontend-e2e"
   }
