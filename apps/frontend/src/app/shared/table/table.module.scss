@@ -7,7 +7,21 @@
 */
 
 .table {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #eaebec;
+
   thead {
-    background-color: red;
+    font-weight: 700;
+  }
+
+  &.primary thead {
+    background-color: #e0ecf0;
+    color: #073b4c;
+  }
+
+  &.secondary thead {
+    background-color: #e3f2ee;
+    color: #035842;
   }
 }

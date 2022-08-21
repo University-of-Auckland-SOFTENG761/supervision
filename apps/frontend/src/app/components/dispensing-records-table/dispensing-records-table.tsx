@@ -1,5 +1,5 @@
+import { Table, TableTheme } from '@shared';
 import React from 'react';
-import { Table } from '@shared';
 
 export const DispensingRecordsTable = () => {
   // TODO: Replace with actual data
@@ -31,7 +31,7 @@ export const DispensingRecordsTable = () => {
   ];
 
   return (
-    <Table striped>
+    <Table theme={TableTheme.Secondary}>
       <thead>
         <tr>
           <th>DATE</th>

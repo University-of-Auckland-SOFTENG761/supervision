@@ -18,7 +18,12 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <MantineProvider withGlobalStyles withNormalizeCSS theme={MantineTheme}>
+    <MantineProvider
+      withCSSVariables
+      withGlobalStyles
+      withNormalizeCSS
+      theme={MantineTheme}
+    >
       <BrowserRouter>
         <Routes />
       </BrowserRouter>

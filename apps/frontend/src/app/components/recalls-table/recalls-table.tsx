@@ -1,9 +1,9 @@
+import { Table, TableTheme } from '@shared';
 import React from 'react';
-import { Table } from '@shared';
 
 export const RecallsTable = () => {
   return (
-    <Table striped>
+    <Table striped theme={TableTheme.Primary}>
       <thead>
         <tr>
           <th>Recalls:</th>

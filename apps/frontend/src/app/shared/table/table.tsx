@@ -1,22 +1,33 @@
 import {
-  ColorInputProps,
-  MantineColor,
   Table as MantineTable,
   TableProps as MantineTableProps,
 } from '@mantine/core';
 import React from 'react';
 import styles from './table.module.scss';
 
+export enum TableTheme {
+  Primary = 'primary',
+  Secondary = 'secondary',
+}
+
+const themeClasses = {
+  [TableTheme.Primary]: styles['primary'],
+  [TableTheme.Secondary]: styles['secondary'],
+};
+
 export interface TableProps extends MantineTableProps {
-  colors?: {
-    header?: MantineColor;
-    striped?: MantineColor;
-  };
+  theme?: TableTheme;
+}
+
+function getThemeClass(theme?: TableTheme): string {
+  return theme ? themeClasses[theme] : '';
 }
 
 export function Table(props: TableProps) {
   return (
-    <MantineTable className={styles['table']}>{props.children}</MantineTable>
+    <div className={[styles['table'], getThemeClass(props.theme)].join(' ')}>
+      <MantineTable {...props} />
+    </div>
   );
 }
 
