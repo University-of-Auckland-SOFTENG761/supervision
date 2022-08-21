@@ -1,11 +1,12 @@
-import { Tabs, Text } from '@mantine/core';
+import { Tabs } from '@mantine/core';
 import { IconPill, IconReportMedical } from '@tabler/icons';
 import React from 'react';
+import { ConsultRecordsTable } from '../consult-records-table';
+import { DispensingRecordsTable } from '../dispensing-records-table';
 
 type PatientRecordsProps = {
   className?: string;
 };
-
 export const PatientRecords = (props: PatientRecordsProps) => {
   return (
     <Tabs variant="outline" defaultValue="consult" className={props.className}>
@@ -19,10 +20,10 @@ export const PatientRecords = (props: PatientRecordsProps) => {
       </Tabs.List>
 
       <Tabs.Panel value="consult" className="p-3">
-        <Text>Consult Records Table</Text>
+        <ConsultRecordsTable />
       </Tabs.Panel>
       <Tabs.Panel value="dispensing" className="p-3">
-        <Text>Dispensing Records Table</Text>
+        <DispensingRecordsTable />
       </Tabs.Panel>
     </Tabs>
   );
