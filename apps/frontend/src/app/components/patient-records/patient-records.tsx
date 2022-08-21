@@ -1,7 +1,6 @@
 import { Tabs } from '@mantine/core';
 import { IconPill, IconReportMedical } from '@tabler/icons';
 import React from 'react';
-import { Button } from '../../shared/button';
 import { ConsultRecordsTable } from '../consult-records-table';
 import { DispensingRecordsTable } from '../dispensing-records-table';
 
