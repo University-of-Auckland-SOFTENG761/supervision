@@ -10,6 +10,7 @@ import {
 import styles from './app.module.scss';
 import { AppShell } from '@shared';
 import NavbarLink from './shared/navbar/link/navbar-link';
+import { Outlet } from 'react-router-dom';
 
 export function App() {
   return (
@@ -29,7 +30,9 @@ export function App() {
           </Navbar.Section>
         </Navbar>
       }
-    ></AppShell>
+    >
+      <Outlet />
+    </AppShell>
   );
 }
 

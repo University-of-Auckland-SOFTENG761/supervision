@@ -5,7 +5,9 @@
     "types": ["node"],
     "baseUrl": "./src",
     "paths": {
-      "@shared": ["app/shared/index.ts"]
+      "@shared": ["app/shared/index.ts"],
+      "@components": ["app/components/index.ts"],
+      "@pages": ["app/pages/index.ts"]
     }
   },
   "files": [

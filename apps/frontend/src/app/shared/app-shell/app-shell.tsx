@@ -27,6 +27,10 @@ export function AppShell(props: AppShellProps) {
               : theme.colors.gray[0],
         },
       })}
+      classNames={{
+        root: 'h-screen overflow-none',
+        body: 'h-[calc(100%-60px)]',
+      }}
     >
       {props.children}
     </MantineAppShell>

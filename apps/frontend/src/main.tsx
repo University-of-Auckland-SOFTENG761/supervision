@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import MantineTheme from './mantine.config';
 import App from './app/app';
+import Routes from 'app/pages/routes';
 
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
@@ -17,10 +18,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <BrowserRouter>
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={MantineTheme}>
-        <App />
-      </MantineProvider>
-    </BrowserRouter>
+    <MantineProvider withGlobalStyles withNormalizeCSS theme={MantineTheme}>
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>
+    </MantineProvider>
   </StrictMode>
 );
