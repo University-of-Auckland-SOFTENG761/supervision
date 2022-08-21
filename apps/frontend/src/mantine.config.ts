@@ -64,6 +64,7 @@ const theme: MantineThemeOverride = {
       '#11252B',
     ],
   },
+  fontFamily: 'Open Sans, sans-serif',
   defaultRadius: 'md',
   components: {
     Navbar: {
