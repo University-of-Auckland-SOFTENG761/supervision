@@ -10,6 +10,7 @@ import {
 import { useForm } from '@mantine/form';
 import { IPatient } from '@pages';
 import { RecallsTable } from '../recalls-table';
+import { calculateAge } from 'utils/date.utils';
 
 type PatientInputsProps = {
   patient: IPatient;
@@ -21,6 +22,7 @@ export const PatientInputs = ({
   onUpdatePatient,
 }: PatientInputsProps) => {
   const [patientUid, setPatientUid] = useState(patient.uid);
+  const [patientAge, setPatientAge] = useState(calculateAge(patient.dob));
 
   const form = useForm({
     initialValues: patient,
@@ -29,6 +31,7 @@ export const PatientInputs = ({
   useEffect(() => {
     if (patient.uid !== patientUid) {
       setPatientUid(patient.uid);
+
       form.setValues({
         uid: patient.uid,
         firstName: patient.firstName ?? '',
@@ -54,6 +57,10 @@ export const PatientInputs = ({
     }
   }, [form, patientUid, patient]);
 
+  useEffect(() => {
+    setPatientAge(calculateAge(form.values.dob));
+  }, [form.values.dob]);
+
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -74,7 +81,7 @@ export const PatientInputs = ({
         <TextInput label="Last name:" {...form.getInputProps('lastName')} />
         <Group className="justify-between">
           <TextInput label="Date of birth:" {...form.getInputProps('dob')} />
-          <NumberInput label="Age:" className="w-20" />
+          <NumberInput label="Age:" className="w-20" value={patientAge} />
         </Group>
         <TextInput label="Patient ID:" {...form.getInputProps('patientId')} />
         <Group className="justify-between">
