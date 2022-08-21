@@ -1,7 +1,7 @@
 import { MantineThemeOverride } from '@mantine/core';
 
 const theme: MantineThemeOverride = {
-  primaryColor: 'red',
+  primaryColor: 'blue',
   primaryShade: 5,
   colors: {
     red: [
