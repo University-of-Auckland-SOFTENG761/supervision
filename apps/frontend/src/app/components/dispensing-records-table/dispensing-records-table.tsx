@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from '@mantine/core';
+import { Table } from '@shared';
 
 export const DispensingRecordsTable = () => {
   // TODO: Replace with actual data
@@ -20,10 +20,18 @@ export const DispensingRecordsTable = () => {
       heights: '64mm',
       frameCode: '39456/Blue',
     },
+    {
+      date: '13/02/2019',
+      rxRight: '+4.00/-3.00x180',
+      rxLeft: '+4.00/-3.00x180',
+      pd: '62',
+      heights: '64mm',
+      frameCode: '39456/Blue',
+    },
   ];
 
   return (
-    <Table>
+    <Table striped>
       <thead>
         <tr>
           <th>DATE</th>

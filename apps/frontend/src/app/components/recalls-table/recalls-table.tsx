@@ -1,9 +1,9 @@
 import React from 'react';
-import { Table } from '@mantine/core';
+import { Table } from '@shared';
 
 export const RecallsTable = () => {
   return (
-    <Table>
+    <Table striped>
       <thead>
         <tr>
           <th>Recalls:</th>

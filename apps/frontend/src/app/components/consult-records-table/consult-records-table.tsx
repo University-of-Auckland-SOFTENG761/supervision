@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from '@mantine/core';
+import { Table } from '@shared';
 
 export const ConsultRecordsTable = () => {
   // TODO: Replace with actual data
@@ -23,7 +23,7 @@ export const ConsultRecordsTable = () => {
   ];
 
   return (
-    <Table>
+    <Table striped>
       <thead>
         <tr>
           <th>DATE SEEN</th>
