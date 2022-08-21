@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollArea, SimpleGrid } from '@mantine/core';
 import { PatientInputs, PatientRecords, PatientTabs } from '@components';
+import { SearchModal } from '../../modals/search/SearchModal';
 
 export type IPatient = {
   uid: string;
@@ -101,6 +102,7 @@ export const PatientDetailsPage = () => {
         </SimpleGrid>
         <PatientRecords className="py-5" />
       </ScrollArea>
+      <SearchModal />
     </>
   );
 };
