@@ -16,7 +16,7 @@ export interface AppShellProps {
 export function AppShell(props: AppShellProps) {
   return (
     <MantineAppShell
-      padding="md"
+      padding={0}
       navbar={props.navbar}
       header={props.header ?? <Header />}
       styles={(theme) => ({
@@ -28,8 +28,8 @@ export function AppShell(props: AppShellProps) {
         },
       })}
       classNames={{
-        root: 'h-screen overflow-none',
-        body: 'h-[calc(100%-60px)]',
+        root: 'h-screen overflow-hidden',
+        body: 'h-[calc(100%-80px)]',
       }}
     >
       {props.children}
