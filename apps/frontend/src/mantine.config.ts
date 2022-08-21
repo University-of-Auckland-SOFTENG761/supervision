@@ -1,7 +1,7 @@
 import { MantineThemeOverride } from '@mantine/core';
 
 const theme: MantineThemeOverride = {
-  primaryColor: 'red',
+  primaryColor: 'blue',
   primaryShade: 5,
   colors: {
     red: [
@@ -64,6 +64,7 @@ const theme: MantineThemeOverride = {
       '#11252B',
     ],
   },
+  fontFamily: 'Open Sans, sans-serif',
   defaultRadius: 'md',
   components: {
     Navbar: {

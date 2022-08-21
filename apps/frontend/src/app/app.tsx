@@ -10,8 +10,11 @@ import {
 import styles from './app.module.scss';
 import { AppShell } from '@shared';
 import NavbarLink from './shared/navbar/link/navbar-link';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export function App() {
+  const navigate = useNavigate();
+
   return (
     <AppShell
       navbar={
@@ -19,7 +22,11 @@ export function App() {
           <Navbar.Section grow>
             <Stack justify="center" align="center">
               <NavbarLink label="Search" icon={IconSearch}></NavbarLink>
-              <NavbarLink label="Patients" icon={IconUser}></NavbarLink>
+              <NavbarLink
+                label="Patients"
+                icon={IconUser}
+                onClick={() => navigate('/patient-details')}
+              ></NavbarLink>
               <NavbarLink
                 label="Consultations"
                 icon={IconStethoscope}
@@ -29,7 +36,9 @@ export function App() {
           </Navbar.Section>
         </Navbar>
       }
-    ></AppShell>
+    >
+      <Outlet />
+    </AppShell>
   );
 }
 
