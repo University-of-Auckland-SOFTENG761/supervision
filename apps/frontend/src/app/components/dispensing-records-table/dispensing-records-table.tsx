@@ -18,7 +18,7 @@ export const DispensingRecordsTable = () => {
       rxLeft: '+4.00/-3.00x180',
       pd: '62',
       heights: '64mm',
-      management: '39456/Blue',
+      frameCode: '39456/Blue',
     },
   ];
 
