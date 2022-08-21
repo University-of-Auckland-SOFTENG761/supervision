@@ -26,7 +26,7 @@ function getThemeClass(theme?: TableTheme): string {
 export function Table(props: TableProps) {
   return (
     <div className={[styles['table'], getThemeClass(props.theme)].join(' ')}>
-      <MantineTable {...props} />
+      <MantineTable {...props} striped highlightOnHover />
     </div>
   );
 }
