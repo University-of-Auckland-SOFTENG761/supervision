@@ -1,11 +1,6 @@
 import React from 'react';
-import { ScrollArea, SimpleGrid, Stack, Textarea } from '@mantine/core';
-import {
-  PatientInputs,
-  RecallsTable,
-  PatientRecords,
-  PatientTabs,
-} from '@components';
+import { ScrollArea, SimpleGrid } from '@mantine/core';
+import { PatientInputs, PatientRecords, PatientTabs } from '@components';
 
 export type IPatient = {
   uid: string;
@@ -28,7 +23,6 @@ export type IPatient = {
   phoneNumber?: string;
   email?: string;
   notes?: string;
-  recalls?: string[];
 };
 
 export const PatientDetailsPage = () => {
@@ -55,7 +49,6 @@ export const PatientDetailsPage = () => {
       phoneNumber: '+64 9 12345678',
       email: 'yulia@gmail.com',
       notes: 'Nothing to add',
-      recalls: ['22/08/2022', '22/08/2023'],
     },
     {
       uid: 'c7695a78-33ae-4f71-9c54-4a3336628965',
@@ -105,15 +98,6 @@ export const PatientDetailsPage = () => {
             patient={currentPatient}
             onUpdatePatient={handleUpdatePatient}
           />
-          <Stack>
-            <Textarea
-              label="Admin Notes"
-              placeholder="Type here..."
-              autosize
-              minRows={3}
-            />
-            <RecallsTable />
-          </Stack>
         </SimpleGrid>
         <PatientRecords className="py-5" />
       </ScrollArea>
