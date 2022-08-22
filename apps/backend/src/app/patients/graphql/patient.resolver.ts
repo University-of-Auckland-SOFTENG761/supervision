@@ -1,34 +1,36 @@
 import { Args, Query, Resolver, Mutation } from '@nestjs/graphql';
 import { IReplicationResolver, ReplicationArgs } from '@supervision/shared';
 import { PatientModel } from './patient.model';
-import { PatientService } from '@supervision/patients/patient.service';
+import { PatientService } from '@supervision/patients/patients.service';
+import { CreatePatientInput } from '../dto/create-patient.input';
 
 @Resolver(() => PatientModel)
 export class PatientResolver implements IReplicationResolver<PatientModel> {
-  constructor(private userService: PatientService) {}
+  constructor(private patientService: PatientService) {}
 
   @Query(() => [PatientModel], { name: 'patientReplicationFeed' })
-  async replicationFeed(@Args() args: ReplicationArgs): Promise<PatientModel[]> {
-    return this.userService.getUpdatedPatients(
+  async replicationFeed(
+    @Args() args: ReplicationArgs
+  ): Promise<PatientModel[]> {
+    return this.patientService.getUpdatedPatients(
       args.minUpdatedAt,
       args.lastId,
       args.limit
     );
   }
 
-  @Mutation(returns => PatientModel)
+  // WIP
+  @Mutation(() => PatientModel)
   async createPatient(
-    @Args('') field_name : string,
+    @Args('createPatientInput') createPatientInput: CreatePatientInput
     // TODO: add all fields once finalised
-
   ): Promise<PatientModel> {
-    return await this.patientService.create({}) // TODO
+    return await this.patientService.create(createPatientInput); // TODO
   }
 
-  @Query(returns => PatientModel)
-  async patient(@Args('id') id:string): Promise<PatientModel> {
+  // WIP
+  @Query(() => PatientModel)
+  async patient(@Args('id') id: string): Promise<PatientModel> {
     return await this.patientService.findOne(id);
   }
-
-  
 }

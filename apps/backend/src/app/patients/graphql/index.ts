@@ -1,2 +1,2 @@
-export * from './user.model';
-export * from './user.resolver';
+export * from './patient.model';
+export * from './patient.resolver';
