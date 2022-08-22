@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Group,
   NumberInput,
-  Radio,
+  Select,
   Stack,
   Textarea,
   TextInput,
@@ -30,6 +30,8 @@ export const PatientInputs = ({
   const form = useForm({
     initialValues: {
       ...patient,
+      gender: patient.gender ?? null,
+      ethnicity: patient.ethnicity ?? null,
       dob: patient.dob !== undefined ? new Date(patient.dob) : null,
     },
   });
@@ -45,8 +47,8 @@ export const PatientInputs = ({
         lastName: patient.lastName ?? '',
         dob: patient.dob ? new Date(patient.dob) : null,
         patientId: patient.patientId ?? '',
-        ethnicity: patient.ethnicity ?? '',
-        sex: patient.sex,
+        ethnicity: patient.ethnicity ?? null,
+        gender: patient.gender ?? null,
         school: patient.school ?? '',
         year: patient.year,
         room: patient.room ?? '',
@@ -80,6 +82,8 @@ export const PatientInputs = ({
       debounceTimeout.current = null;
       onUpdatePatient({
         ...form.values,
+        gender: form.values.gender ?? undefined,
+        ethnicity: form.values.ethnicity ?? undefined,
         dob: form.values.dob ? form.values.dob.toISOString() : undefined,
       });
     }, 500);
@@ -111,16 +115,45 @@ export const PatientInputs = ({
           {...form.getInputProps('patientId')}
           disabled
         />
-        <Group className="justify-between">
-          <TextInput label="Ethnicity:" {...form.getInputProps('ethnicity')} />
-          <Radio.Group
-            label="Sex:"
-            {...form.getInputProps('sex', { type: 'checkbox' })}
-          >
-            <Radio value="F" label="F" />
-            <Radio value="M" label="M" />
-          </Radio.Group>
-        </Group>
+        <Select
+          label="Ethnicity:"
+          placeholder="Pick one"
+          data={[
+            { value: 'nz european', label: 'NZ European' },
+            { value: 'other european', label: 'Other European' },
+            { value: 'nz maori', label: 'NZ Maori' },
+            { value: 'samoan', label: 'Samoan' },
+            { value: 'cook island maori', label: 'Cook Island Maori' },
+            { value: 'tongan', label: 'Tongan' },
+            { value: 'niuean', label: 'Niuean' },
+            { value: 'tokelauan', label: 'Tokelauan' },
+            { value: 'fijian', label: 'Fijian' },
+            { value: 'other pacific island', label: 'Other Pacific Island' },
+            { value: 'south east asian', label: 'South East Asian' },
+            { value: 'chinese', label: 'Chinese' },
+            { value: 'indian', label: 'Indian' },
+            { value: 'other asian', label: 'Other Asian' },
+            { value: 'middle eastern', label: 'Middle Eastern' },
+            {
+              value: 'latin america hispanic',
+              label: 'Latin America Hispanic',
+            },
+            { value: 'african', label: 'African' },
+            { value: 'other ethnicity', label: 'Other Ethnicity' },
+          ]}
+          {...form.getInputProps('ethnicity')}
+        />
+        <Select
+          label="Gender:"
+          placeholder="Pick one"
+          data={[
+            { value: 'female', label: 'Female' },
+            { value: 'male', label: 'Male' },
+            { value: 'other', label: 'Other' },
+            { value: 'prefer not to say', label: 'Prefer not to say' },
+          ]}
+          {...form.getInputProps('gender')}
+        />
         <TextInput label="School" {...form.getInputProps('school')} />
         <Group className="w-full">
           <NumberInput

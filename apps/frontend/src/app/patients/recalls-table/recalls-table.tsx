@@ -6,7 +6,7 @@ export const RecallsTable = () => {
     <Table striped theme={TableTheme.Primary}>
       <thead>
         <tr>
-          <th>Recalls:</th>
+          <th>RECALLS</th>
         </tr>
       </thead>
       <tbody>

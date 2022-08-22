@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollArea, SimpleGrid } from '@mantine/core';
+import { Button, ScrollArea, SimpleGrid } from '@mantine/core';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
@@ -11,7 +11,7 @@ export type IPatient = {
   dob?: string;
   patientId?: string;
   ethnicity?: string;
-  sex?: boolean;
+  gender?: string;
   school?: string;
   year?: number;
   room?: string;
@@ -36,8 +36,8 @@ export const PatientDetailsPage = () => {
       lastName: 'Pechorina',
       dob: '2001-02-21',
       patientId: '12345',
-      ethnicity: 'European',
-      sex: true,
+      ethnicity: 'other european',
+      gender: 'female',
       school: 'The University of Auckland',
       year: 4,
       room: 'N/A',
@@ -58,7 +58,7 @@ export const PatientDetailsPage = () => {
       lastName: 'Cudi',
       dob: '1984-01-30',
       patientId: '54321',
-      sex: true,
+      gender: 'male',
     },
   ]);
 
@@ -101,7 +101,10 @@ export const PatientDetailsPage = () => {
             onUpdatePatient={handleUpdatePatient}
           />
         </SimpleGrid>
-        <PatientRecords className="py-5" />
+        <div className="flex mt-5 -mb-5 justify-end w-full">
+          <Button className="ml-auto">CREATE NEW RECORD</Button>
+        </div>
+        <PatientRecords className="pb-5" />
       </ScrollArea>
     </>
   );
