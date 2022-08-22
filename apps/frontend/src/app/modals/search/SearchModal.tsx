@@ -1,16 +1,25 @@
 import { PatientRecordsTable } from '@components';
 import { ActionIcon, Modal, TextInput } from '@mantine/core';
 import { IconSearch, IconUserPlus } from '@tabler/icons';
-import { useState } from 'react';
-import styles from './SearchModal.module.scss';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 
-export function SearchModal() {
+export interface SearchModalRef {
+  show(): void;
+}
+
+export const SearchModal = forwardRef((props, ref) => {
   const [opened, setOpened] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    show() {
+      setOpened(true);
+    },
+  }));
 
   return (
     <Modal
       size="xl"
-      opened={true}
+      opened={opened}
       onClose={() => setOpened(false)}
       title={
         <TextInput
@@ -32,4 +41,4 @@ export function SearchModal() {
       </div>
     </Modal>
   );
-}
+});

@@ -102,7 +102,6 @@ export const PatientDetailsPage = () => {
         </SimpleGrid>
         <PatientRecords className="py-5" />
       </ScrollArea>
-      <SearchModal />
     </>
   );
 };
