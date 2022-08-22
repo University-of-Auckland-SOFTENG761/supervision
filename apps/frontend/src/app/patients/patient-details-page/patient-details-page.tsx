@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, ScrollArea, SimpleGrid } from '@mantine/core';
+import { ScrollArea, SimpleGrid } from '@mantine/core';
+import { Button } from '@shared';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
