@@ -39,6 +39,7 @@ const EthnicitySelect = ({ value, onChange }: EthnicitySelectProps) => {
           }
         )
       )}
+      searchable
       value={value}
       onChange={onChange}
     />

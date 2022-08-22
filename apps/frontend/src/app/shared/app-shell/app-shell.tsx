@@ -1,6 +1,6 @@
 import { AppShell as MantineAppShell } from '@mantine/core';
 import React from 'react';
-import { Header } from '@shared';
+import { Header } from '../header';
 
 export interface AppShellProps {
   children?: React.ReactNode;

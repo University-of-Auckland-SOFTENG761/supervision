@@ -9,6 +9,7 @@ import EthnicitySelect from '../ethnicity-select';
 import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import SchoolAutocomplete from '../school-autocomplete';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
@@ -33,8 +34,6 @@ export const PatientInputs = ({
       dob: patient.dob !== undefined ? new Date(patient.dob) : null,
     },
   });
-
-  console.log(form.values.dob);
 
   useEffect(() => {
     if (patient.uid !== patientUid) {
@@ -116,7 +115,7 @@ export const PatientInputs = ({
         />
         <EthnicitySelect {...form.getInputProps('ethnicity')} />
         <GenderSelect {...form.getInputProps('gender')} />
-        <TextInput label="School" {...form.getInputProps('school')} />
+        <SchoolAutocomplete label="School" {...form.getInputProps('school')} />
         <Group className="w-full">
           <NumberInput
             label="Year:"
