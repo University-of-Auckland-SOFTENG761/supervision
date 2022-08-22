@@ -1,4 +1,4 @@
-import { PatientRecordsTable } from '@components';
+import { PatientRecordsTable } from '@patients';
 import { ActionIcon, Modal, TextInput } from '@mantine/core';
 import { IconSearch, IconUserPlus } from '@tabler/icons';
 import { ForwardedRef, forwardRef, useImperativeHandle, useState } from 'react';
