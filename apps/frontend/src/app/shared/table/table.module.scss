@@ -1,0 +1,39 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #eaebec;
+
+  thead {
+    font-weight: 700;
+  }
+
+  tbody tr:nth-of-type(2n + 1) {
+    background-color: #ffffff;
+  }
+
+  &.primary thead {
+    background-color: #e0ecf0;
+
+    &,
+    th {
+      color: #073b4c;
+    }
+  }
+
+  &.secondary thead {
+    background-color: #e3f2ee;
+
+    &,
+    th {
+      color: #035842;
+    }
+  }
+}

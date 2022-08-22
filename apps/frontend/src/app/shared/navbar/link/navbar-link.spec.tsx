@@ -1,15 +1,13 @@
+import { IconTestPipe } from '@tabler/icons';
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import App from './app';
 
-describe('App', () => {
+import NavbarLink from './navbar-link';
+
+describe('Navbar', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <NavbarLink icon={IconTestPipe} label="test" />
     );
-
     expect(baseElement).toBeTruthy();
   });
 });

@@ -9,7 +9,7 @@
 </div>
 
 <details open="open">
-<summary>Table of Contents</summary>
+<summary>Button of Contents</summary>
 
 - [About](#about)
   - [Built With](#built-with)

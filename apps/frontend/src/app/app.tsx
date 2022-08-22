@@ -1,53 +1,47 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.scss';
-
-import { Route, Routes, Link } from 'react-router-dom';
-import { Button } from '@mantine/core';
-import { HeroTitle } from './nx-welcome';
+import { Navbar, Stack } from '@mantine/core';
+import { IconPill, IconSearch, IconStethoscope, IconUser } from '@tabler/icons';
+import { AppShell } from './shared';
+import { useRef } from 'react';
+import {
+  SearchModal,
+  SearchModalRef,
+} from './shared/modals/search/SearchModal';
+import NavbarLink from './shared/navbar/link/navbar-link';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export function App() {
-  return (
-    <>
-      <HeroTitle />
-      <div />
+  const navigate = useNavigate();
+  const searchModal = useRef<SearchModalRef>(null);
 
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <div role="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
-      </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
-    </>
+  return (
+    <AppShell
+      navbar={
+        <Navbar width={{ base: 60 }} py={8}>
+          <Navbar.Section grow>
+            <Stack justify="center" align="center">
+              <NavbarLink
+                label="Search"
+                icon={IconSearch}
+                onClick={() => searchModal.current?.show()}
+              ></NavbarLink>
+              <NavbarLink
+                label="Patients"
+                icon={IconUser}
+                onClick={() => navigate('/patient-details')}
+              ></NavbarLink>
+              <NavbarLink
+                label="Consultations"
+                icon={IconStethoscope}
+              ></NavbarLink>
+              <NavbarLink label="Dispense" icon={IconPill}></NavbarLink>
+            </Stack>
+          </Navbar.Section>
+        </Navbar>
+      }
+    >
+      <Outlet />
+      <SearchModal ref={searchModal} />
+    </AppShell>
   );
 }
 
