@@ -1,13 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Navbar, Stack } from '@mantine/core';
-import {
-  IconGauge,
-  IconPill,
-  IconSearch,
-  IconStethoscope,
-  IconUser,
-} from '@tabler/icons';
-import styles from './app.module.scss';
+import { IconPill, IconSearch, IconStethoscope, IconUser } from '@tabler/icons';
 import { AppShell } from '@shared';
 import NavbarLink from './shared/navbar/link/navbar-link';
 import { Outlet, useNavigate } from 'react-router-dom';
