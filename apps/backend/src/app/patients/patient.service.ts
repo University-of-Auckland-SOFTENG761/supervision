@@ -1,34 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@supervision/users/database';
+import { PatientEntity } from '@supervision/patients/database';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class PatientService {
   constructor(
     @InjectRepository(PatientEntity)
-    private usersRepository: Repository<PatientEntity>
+    private patientsRepository: Repository<PatientEntity>
   ) {}
 
-  async getUpdatedUsers(
+  async getUpdatedpatients(
     minUpdatedAt: Date | null,
     lastId: string | null,
     limit: number
-  ): Promise<UserEntity[]> {
-    let query: SelectQueryBuilder<UserEntity>;
+  ): Promise<PatientEntity[]> {
+    let query: SelectQueryBuilder<PatientEntity>;
     if (minUpdatedAt === undefined || lastId === undefined) {
-      query = this.usersRepository.createQueryBuilder('user');
+      query = this.patientsRepository.createQueryBuilder('patient');
     } else {
-      query = this.usersRepository
-        .createQueryBuilder('user')
+      query = this.patientsRepository
+        .createQueryBuilder('patient')
         .where(
-          `date_trunc('second',"user"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
+          `date_trunc('second',"patient"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
           {
             minUpdatedAt,
           }
         )
         .orWhere(
-          `date_trunc('second', "user"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND user.id > :lastId`,
+          `date_trunc('second', "patient"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND patient.id > :lastId`,
           {
             minUpdatedAt,
             lastId,
@@ -37,8 +37,8 @@ export class PatientService {
     }
 
     return await query
-      .orderBy('user.updatedAt', 'DESC')
-      .addOrderBy('user.id')
+      .orderBy('patient.updatedAt', 'DESC')
+      .addOrderBy('patient.id')
       .take(limit)
       .withDeleted()
       .getMany();
