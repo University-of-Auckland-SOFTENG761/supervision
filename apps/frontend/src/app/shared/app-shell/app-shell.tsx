@@ -1,11 +1,6 @@
-import {
-  ActionIcon,
-  AppShell as MantineAppShell,
-  ColorScheme,
-  Group,
-} from '@mantine/core';
+import { AppShell as MantineAppShell } from '@mantine/core';
 import React from 'react';
-import { Header, Logo } from '@shared';
+import { Header } from '../header';
 
 export interface AppShellProps {
   children?: React.ReactNode;

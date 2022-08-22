@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollArea, SimpleGrid } from '@mantine/core';
 import { PatientInputs, PatientRecords, PatientTabs } from '@components';
-import { SearchModal } from '../../modals/search/SearchModal';
+import { SearchModal } from '../../shared/modals/search/SearchModal';
 
 export type IPatient = {
   uid: string;

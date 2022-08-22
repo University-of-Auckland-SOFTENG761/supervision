@@ -1,7 +1,5 @@
 import { render } from '@testing-library/react';
-
 import { BrowserRouter } from 'react-router-dom';
-
 import App from './app';
 
 describe('App', () => {
@@ -13,15 +11,5 @@ describe('App', () => {
     );
 
     expect(baseElement).toBeTruthy();
-  });
-
-  it('should have a mantine message as the title', () => {
-    const { getByText } = render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-
-    expect(getByText(/React components and hooks library/gi)).toBeTruthy();
   });
 });

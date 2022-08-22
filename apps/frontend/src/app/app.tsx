@@ -1,8 +1,11 @@
 import { Navbar, Stack } from '@mantine/core';
 import { IconPill, IconSearch, IconStethoscope, IconUser } from '@tabler/icons';
-import { AppShell } from '@shared';
+import { AppShell } from './shared';
 import { useRef } from 'react';
-import { SearchModal, SearchModalRef } from './modals/search/SearchModal';
+import {
+  SearchModal,
+  SearchModalRef,
+} from './shared/modals/search/SearchModal';
 import NavbarLink from './shared/navbar/link/navbar-link';
 import { Outlet, useNavigate } from 'react-router-dom';
 
