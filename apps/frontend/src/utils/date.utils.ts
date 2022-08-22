@@ -1,4 +1,4 @@
-// Calculate age from birthday as a string in format DD/MM/YYYY
+// Calculate age from birthday
 export const calculateAge = (birthdayDate?: Date) => {
   if (!birthdayDate) {
     return undefined;

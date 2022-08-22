@@ -8,10 +8,10 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IPatient } from '@pages';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
+import { IPatient } from '../patient-details-page';
 
 type PatientInputsProps = {
   patient: IPatient;

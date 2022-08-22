@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ActionIcon, Group, Tabs } from '@mantine/core';
 import { IconMenu2, IconPlus } from '@tabler/icons';
-import { IPatient } from '@pages';
+import { IPatient } from '../patient-details-page';
 
 type PatientTabsProps = {
   patients: IPatient[];

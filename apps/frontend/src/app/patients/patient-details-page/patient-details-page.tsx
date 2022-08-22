@@ -1,6 +1,8 @@
 import React from 'react';
 import { ScrollArea, SimpleGrid } from '@mantine/core';
-import { PatientInputs, PatientRecords, PatientTabs } from '@components';
+import { PatientTabs } from '../patient-tabs';
+import { PatientInputs } from '../patient-inputs';
+import { PatientRecords } from '../patient-records';
 
 export type IPatient = {
   uid: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import App from 'app/app';
 import { Route, Routes as RRRoutes } from 'react-router-dom';
-import { PatientDetailsPage } from '../patient-details';
+import { PatientDetailsPage } from '@patients';
 
 const Routes = () => {
   return (
