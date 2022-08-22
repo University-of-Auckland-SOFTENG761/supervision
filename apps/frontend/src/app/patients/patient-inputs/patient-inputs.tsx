@@ -1,17 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Group,
-  NumberInput,
-  Select,
-  Stack,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
+import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
 import { IPatient } from '../patient-details-page';
+import EthnicitySelect from '../ethnicity-select';
+import GenderSelect from '../gender-select';
 
 type PatientInputsProps = {
   patient: IPatient;
@@ -115,45 +110,8 @@ export const PatientInputs = ({
           {...form.getInputProps('patientId')}
           disabled
         />
-        <Select
-          label="Ethnicity:"
-          placeholder="Pick one"
-          data={[
-            { value: 'nz european', label: 'NZ European' },
-            { value: 'other european', label: 'Other European' },
-            { value: 'nz maori', label: 'NZ Maori' },
-            { value: 'samoan', label: 'Samoan' },
-            { value: 'cook island maori', label: 'Cook Island Maori' },
-            { value: 'tongan', label: 'Tongan' },
-            { value: 'niuean', label: 'Niuean' },
-            { value: 'tokelauan', label: 'Tokelauan' },
-            { value: 'fijian', label: 'Fijian' },
-            { value: 'other pacific island', label: 'Other Pacific Island' },
-            { value: 'south east asian', label: 'South East Asian' },
-            { value: 'chinese', label: 'Chinese' },
-            { value: 'indian', label: 'Indian' },
-            { value: 'other asian', label: 'Other Asian' },
-            { value: 'middle eastern', label: 'Middle Eastern' },
-            {
-              value: 'latin america hispanic',
-              label: 'Latin America Hispanic',
-            },
-            { value: 'african', label: 'African' },
-            { value: 'other ethnicity', label: 'Other Ethnicity' },
-          ]}
-          {...form.getInputProps('ethnicity')}
-        />
-        <Select
-          label="Gender:"
-          placeholder="Pick one"
-          data={[
-            { value: 'female', label: 'Female' },
-            { value: 'male', label: 'Male' },
-            { value: 'other', label: 'Other' },
-            { value: 'prefer not to say', label: 'Prefer not to say' },
-          ]}
-          {...form.getInputProps('gender')}
-        />
+        <EthnicitySelect {...form.getInputProps('ethnicity')} />
+        <GenderSelect {...form.getInputProps('gender')} />
         <TextInput label="School" {...form.getInputProps('school')} />
         <Group className="w-full">
           <NumberInput
