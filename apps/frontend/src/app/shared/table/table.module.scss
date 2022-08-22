@@ -21,11 +21,19 @@
 
   &.primary thead {
     background-color: #e0ecf0;
-    color: #073b4c;
+
+    &,
+    th {
+      color: #073b4c;
+    }
   }
 
   &.secondary thead {
     background-color: #e3f2ee;
-    color: #035842;
+
+    &,
+    th {
+      color: #035842;
+    }
   }
 }

@@ -17,7 +17,7 @@ export const PatientTabs = (props: PatientTabsProps) => {
   };
 
   return (
-    <Group className="px-4 py-1 m-0 bg-white border-b border-black-[20]">
+    <Group className="px-4 py-1 m-0 bg-white border-b border-black">
       <ActionIcon color="dark.2 " variant="subtle" className="p-1">
         <IconPlus size={24} />
       </ActionIcon>
