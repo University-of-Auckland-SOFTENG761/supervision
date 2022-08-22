@@ -7,6 +7,9 @@ import { calculateAge } from 'utils/date.utils';
 import { IPatient } from '../patient-details-page';
 import EthnicitySelect from '../ethnicity-select';
 import GenderSelect from '../gender-select';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
   patient: IPatient;
@@ -96,6 +99,7 @@ export const PatientInputs = ({
             {...form.getInputProps('dob')}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
+            dateParser={(date: string) => dayjs(date, 'DD/MM/YYYY').toDate()}
             placeholder="DD/MM/YYYY"
           />
           <NumberInput
