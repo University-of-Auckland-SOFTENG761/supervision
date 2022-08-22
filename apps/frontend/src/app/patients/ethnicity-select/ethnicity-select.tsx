@@ -6,34 +6,39 @@ type EthnicitySelectProps = {
   onChange: (value: string | null) => void;
 };
 
+enum Ethnicities {
+  'NZ European' = 'nz european',
+  'Other European' = 'other european',
+  'NZ Maori' = 'nz maori',
+  'Samoan' = 'samoan',
+  'Cook Island Maori' = 'cook island maori',
+  'Tongan' = 'tongan',
+  'Niuean' = 'niuean',
+  'Tokelauan' = 'tokelauan',
+  'Fijian' = 'fijian',
+  'Other Pacific Island' = 'other pacific island',
+  'South East Asian' = 'south east asian',
+  'Chinese' = 'chinese',
+  'Indian' = 'indian',
+  'Other Asian' = 'other asian',
+  'Middle Eastern' = 'middle eastern',
+  'Latin American Hispanic' = 'latin american hispanic',
+  'African' = 'african',
+  'Other Ethnicity' = 'other ethnicity',
+}
+
 const EthnicitySelect = ({ value, onChange }: EthnicitySelectProps) => {
   return (
     <Select
       label="Ethnicity:"
       placeholder="Pick one"
-      data={[
-        { value: 'nz european', label: 'NZ European' },
-        { value: 'other european', label: 'Other European' },
-        { value: 'nz maori', label: 'NZ Maori' },
-        { value: 'samoan', label: 'Samoan' },
-        { value: 'cook island maori', label: 'Cook Island Maori' },
-        { value: 'tongan', label: 'Tongan' },
-        { value: 'niuean', label: 'Niuean' },
-        { value: 'tokelauan', label: 'Tokelauan' },
-        { value: 'fijian', label: 'Fijian' },
-        { value: 'other pacific island', label: 'Other Pacific Island' },
-        { value: 'south east asian', label: 'South East Asian' },
-        { value: 'chinese', label: 'Chinese' },
-        { value: 'indian', label: 'Indian' },
-        { value: 'other asian', label: 'Other Asian' },
-        { value: 'middle eastern', label: 'Middle Eastern' },
-        {
-          value: 'latin america hispanic',
-          label: 'Latin America Hispanic',
-        },
-        { value: 'african', label: 'African' },
-        { value: 'other ethnicity', label: 'Other Ethnicity' },
-      ]}
+      data={Array.from(
+        (Object.keys(Ethnicities) as Array<keyof typeof Ethnicities>).map(
+          (key) => {
+            return { value: Ethnicities[key], label: key };
+          }
+        )
+      )}
       value={value}
       onChange={onChange}
     />
