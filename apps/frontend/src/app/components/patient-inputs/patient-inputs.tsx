@@ -10,6 +10,7 @@ import {
 import { useForm } from '@mantine/form';
 import { IPatient } from '@pages';
 import { RecallsTable } from '../recalls-table';
+import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
 
 type PatientInputsProps = {
@@ -22,26 +23,32 @@ export const PatientInputs = ({
   onUpdatePatient,
 }: PatientInputsProps) => {
   const [patientUid, setPatientUid] = useState(patient.uid);
-  const [patientAge, setPatientAge] = useState(calculateAge(patient.dob));
+  const [patientAge, setPatientAge] = useState(
+    patient.dob ? calculateAge(new Date(patient.dob)) : undefined
+  );
 
   const form = useForm({
-    initialValues: patient,
+    initialValues: {
+      ...patient,
+      dob: patient.dob !== undefined ? new Date(patient.dob) : null,
+    },
   });
+
+  console.log(form.values.dob);
 
   useEffect(() => {
     if (patient.uid !== patientUid) {
       setPatientUid(patient.uid);
-
       form.setValues({
         uid: patient.uid,
         firstName: patient.firstName ?? '',
         lastName: patient.lastName ?? '',
-        dob: patient.dob ?? '',
+        dob: patient.dob ? new Date(patient.dob) : null,
         patientId: patient.patientId ?? '',
         ethnicity: patient.ethnicity ?? '',
-        sex: patient.sex ?? undefined,
+        sex: patient.sex,
         school: patient.school ?? '',
-        year: patient.year ?? undefined,
+        year: patient.year,
         room: patient.room ?? '',
         address: patient.address ?? {
           street: '',
@@ -58,7 +65,9 @@ export const PatientInputs = ({
   }, [form, patientUid, patient]);
 
   useEffect(() => {
-    setPatientAge(calculateAge(form.values.dob));
+    setPatientAge(
+      form.values.dob ? calculateAge(new Date(form.values.dob)) : undefined
+    );
   }, [form.values.dob]);
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -69,7 +78,10 @@ export const PatientInputs = ({
     }
     debounceTimeout.current = setTimeout(() => {
       debounceTimeout.current = null;
-      onUpdatePatient(form.values);
+      onUpdatePatient({
+        ...form.values,
+        dob: form.values.dob ? form.values.dob.toISOString() : undefined,
+      });
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values]);
@@ -80,13 +92,31 @@ export const PatientInputs = ({
         <TextInput label="First name:" {...form.getInputProps('firstName')} />
         <TextInput label="Last name:" {...form.getInputProps('lastName')} />
         <Group className="justify-between">
-          <TextInput label="Date of birth:" {...form.getInputProps('dob')} />
-          <NumberInput label="Age:" className="w-20" value={patientAge} />
+          <DatePicker
+            label="Date of birth:"
+            {...form.getInputProps('dob')}
+            allowFreeInput
+            inputFormat="DD/MM/YYYY"
+            placeholder="DD/MM/YYYY"
+          />
+          <NumberInput
+            label="Age:"
+            className="w-20"
+            value={patientAge}
+            disabled
+          />
         </Group>
-        <TextInput label="Patient ID:" {...form.getInputProps('patientId')} />
+        <TextInput
+          label="Patient ID:"
+          {...form.getInputProps('patientId')}
+          disabled
+        />
         <Group className="justify-between">
           <TextInput label="Ethnicity:" {...form.getInputProps('ethnicity')} />
-          <Radio.Group label="Sex:" {...form.getInputProps('sex')}>
+          <Radio.Group
+            label="Sex:"
+            {...form.getInputProps('sex', { type: 'checkbox' })}
+          >
             <Radio value="F" label="F" />
             <Radio value="M" label="M" />
           </Radio.Group>
