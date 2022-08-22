@@ -8,7 +8,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 export function App() {
   const navigate = useNavigate();
-  const searchModal = useRef<SearchModalRef>();
+  const searchModal = useRef<SearchModalRef>(null);
 
   return (
     <AppShell
