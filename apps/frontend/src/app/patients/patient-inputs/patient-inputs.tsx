@@ -100,6 +100,7 @@ export const PatientInputs = ({
             inputFormat="DD/MM/YYYY"
             dateParser={(date: string) => dayjs(date, 'DD/MM/YYYY').toDate()}
             placeholder="DD/MM/YYYY"
+            initialMonth={new Date('2009-01-01')}
           />
           <NumberInput
             label="Age:"
