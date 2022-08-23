@@ -58,7 +58,7 @@ export class PatientEntity extends BaseEntity {
   })
   school: string;
 
-  @Column('int2', { nullable: true })
+  @Column('smallint', { nullable: true })
   yearLevel: number;
 
   @Column('date', { nullable: true })
@@ -90,10 +90,6 @@ export class PatientEntity extends BaseEntity {
 
   @Column('varchar', { length: 5, nullable: true })
   postcode: string;
-
-  // TODO: relational, garbage
-  // consults: [Consult];
-  // dispensing: [Dispensing];
 
   @Column('varchar', { array: true, nullable: true })
   recalls: [string];
