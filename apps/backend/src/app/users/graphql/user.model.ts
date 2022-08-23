@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
 import { UserRole } from '@supervision/users';
 
