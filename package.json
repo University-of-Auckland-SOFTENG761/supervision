@@ -84,9 +84,11 @@
     "react-router-dom": "6.3.0",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
-    "rxjs": "^7.0.0",
+    "rxdb": "^12.7.16",
+    "rxjs": "^7.5.6",
     "tslib": "^2.3.0",
     "typeorm": "^0.3.7",
+    "uuidv4": "^6.2.13",
     "webpack-merge": "^5.8.0",
     "workbox-webpack-plugin": "^6.5.4"
   }
