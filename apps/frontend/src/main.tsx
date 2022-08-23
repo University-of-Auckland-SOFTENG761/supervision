@@ -3,8 +3,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import MantineTheme from './mantine.config';
-import App from './app/app';
-import Routes from 'app/pages/routes';
+import Routes from 'app/routes';
 
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {

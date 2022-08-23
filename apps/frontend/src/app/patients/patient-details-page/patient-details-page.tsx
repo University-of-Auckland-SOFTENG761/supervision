@@ -1,7 +1,9 @@
 import React from 'react';
 import { ScrollArea, SimpleGrid } from '@mantine/core';
-import { PatientInputs, PatientRecords, PatientTabs } from '@components';
-import { SearchModal } from '../../shared/modals/search/SearchModal';
+import { Button } from '@shared';
+import { PatientTabs } from '../patient-tabs';
+import { PatientInputs } from '../patient-inputs';
+import { PatientRecords } from '../patient-records';
 
 export type IPatient = {
   uid: string;
@@ -10,7 +12,7 @@ export type IPatient = {
   dob?: string;
   patientId?: string;
   ethnicity?: string;
-  sex?: boolean;
+  gender?: string;
   school?: string;
   year?: number;
   room?: string;
@@ -33,10 +35,10 @@ export const PatientDetailsPage = () => {
       uid: '8c78e8d5-26e5-4a99-a112-0b8602bf2c1b',
       firstName: 'Yulia',
       lastName: 'Pechorina',
-      dob: '21/02/2001',
+      dob: '2001-02-21',
       patientId: '12345',
-      ethnicity: 'European',
-      sex: true,
+      ethnicity: 'other european',
+      gender: 'female',
       school: 'The University of Auckland',
       year: 4,
       room: 'N/A',
@@ -55,9 +57,9 @@ export const PatientDetailsPage = () => {
       uid: 'c7695a78-33ae-4f71-9c54-4a3336628965',
       firstName: 'Kid',
       lastName: 'Cudi',
-      dob: '30/01/1984',
+      dob: '1984-01-30',
       patientId: '54321',
-      sex: true,
+      gender: 'male',
     },
   ]);
 
@@ -100,7 +102,10 @@ export const PatientDetailsPage = () => {
             onUpdatePatient={handleUpdatePatient}
           />
         </SimpleGrid>
-        <PatientRecords className="py-5" />
+        <div className="flex mt-5 -mb-5 justify-end w-full">
+          <Button className="ml-auto">CREATE NEW RECORD</Button>
+        </div>
+        <PatientRecords className="pb-5" />
       </ScrollArea>
     </>
   );

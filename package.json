@@ -51,6 +51,7 @@
     "postcss": "8.4.16",
     "prettier": "^2.6.2",
     "react-test-renderer": "18.2.0",
+    "resize-observer-polyfill": "^1.5.1",
     "tailwindcss": "3.1.8",
     "ts-jest": "27.1.4",
     "ts-node": "10.9.1",
@@ -59,6 +60,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@mantine/core": "^5.1.4",
+    "@mantine/dates": "^5.2.0",
     "@mantine/form": "^5.2.0",
     "@mantine/hooks": "^5.1.4",
     "@nestjs/apollo": "^10.0.19",
@@ -73,6 +75,7 @@
     "@tabler/icons": "^1.83.1",
     "apollo-server-express": "^3.10.1",
     "core-js": "^3.6.5",
+    "dayjs": "^1.11.5",
     "graphql": "^16.5.0",
     "joi": "^17.6.0",
     "pg": "^8.7.3",

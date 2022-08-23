@@ -1,5 +1,5 @@
-import { Table, TableTheme } from '@shared';
 import React from 'react';
+import { Table, TableTheme } from '@shared';
 
 export const DispensingRecordsTable = () => {
   // TODO: Replace with actual data

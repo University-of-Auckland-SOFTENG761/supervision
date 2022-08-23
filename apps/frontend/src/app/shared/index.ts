@@ -3,3 +3,4 @@ export * from './logo';
 export * from './header';
 export * from './navbar';
 export * from './table';
+export * from './button';

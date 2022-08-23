@@ -7,10 +7,11 @@ import {
   SearchModalRef,
 } from './shared/modals/search/SearchModal';
 import NavbarLink from './shared/navbar/link/navbar-link';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 export function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const searchModal = useRef<SearchModalRef>(null);
 
   return (
@@ -28,6 +29,7 @@ export function App() {
                 label="Patients"
                 icon={IconUser}
                 onClick={() => navigate('/patient-details')}
+                active={location.pathname === '/patient-details'}
               ></NavbarLink>
               <NavbarLink
                 label="Consultations"

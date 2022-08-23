@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Group,
-  NumberInput,
-  Radio,
-  Stack,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
+import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IPatient } from '@pages';
 import { RecallsTable } from '../recalls-table';
+import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
+import { IPatient } from '../patient-details-page';
+import EthnicitySelect from '../ethnicity-select';
+import GenderSelect from '../gender-select';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import SchoolAutocomplete from '../school-autocomplete';
+dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
   patient: IPatient;
@@ -22,26 +22,32 @@ export const PatientInputs = ({
   onUpdatePatient,
 }: PatientInputsProps) => {
   const [patientUid, setPatientUid] = useState(patient.uid);
-  const [patientAge, setPatientAge] = useState(calculateAge(patient.dob));
+  const [patientAge, setPatientAge] = useState(
+    patient.dob ? calculateAge(new Date(patient.dob)) : undefined
+  );
 
   const form = useForm({
-    initialValues: patient,
+    initialValues: {
+      ...patient,
+      gender: patient.gender ?? null,
+      ethnicity: patient.ethnicity ?? null,
+      dob: patient.dob !== undefined ? new Date(patient.dob) : null,
+    },
   });
 
   useEffect(() => {
     if (patient.uid !== patientUid) {
       setPatientUid(patient.uid);
-
       form.setValues({
         uid: patient.uid,
         firstName: patient.firstName ?? '',
         lastName: patient.lastName ?? '',
-        dob: patient.dob ?? '',
+        dob: patient.dob ? new Date(patient.dob) : null,
         patientId: patient.patientId ?? '',
-        ethnicity: patient.ethnicity ?? '',
-        sex: patient.sex ?? undefined,
+        ethnicity: patient.ethnicity ?? null,
+        gender: patient.gender ?? null,
         school: patient.school ?? '',
-        year: patient.year ?? undefined,
+        year: patient.year,
         room: patient.room ?? '',
         address: patient.address ?? {
           street: '',
@@ -58,7 +64,9 @@ export const PatientInputs = ({
   }, [form, patientUid, patient]);
 
   useEffect(() => {
-    setPatientAge(calculateAge(form.values.dob));
+    setPatientAge(
+      form.values.dob ? calculateAge(new Date(form.values.dob)) : undefined
+    );
   }, [form.values.dob]);
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -69,7 +77,12 @@ export const PatientInputs = ({
     }
     debounceTimeout.current = setTimeout(() => {
       debounceTimeout.current = null;
-      onUpdatePatient(form.values);
+      onUpdatePatient({
+        ...form.values,
+        gender: form.values.gender ?? undefined,
+        ethnicity: form.values.ethnicity ?? undefined,
+        dob: form.values.dob ? form.values.dob.toISOString() : undefined,
+      });
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values]);
@@ -80,18 +93,30 @@ export const PatientInputs = ({
         <TextInput label="First name:" {...form.getInputProps('firstName')} />
         <TextInput label="Last name:" {...form.getInputProps('lastName')} />
         <Group className="justify-between">
-          <TextInput label="Date of birth:" {...form.getInputProps('dob')} />
-          <NumberInput label="Age:" className="w-20" value={patientAge} />
+          <DatePicker
+            label="Date of birth:"
+            {...form.getInputProps('dob')}
+            allowFreeInput
+            inputFormat="DD/MM/YYYY"
+            dateParser={(date: string) => dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()}
+            placeholder="DD/MM/YYYY"
+            initialMonth={new Date('2009-01-01')}
+          />
+          <NumberInput
+            label="Age:"
+            className="w-20"
+            value={patientAge}
+            disabled
+          />
         </Group>
-        <TextInput label="Patient ID:" {...form.getInputProps('patientId')} />
-        <Group className="justify-between">
-          <TextInput label="Ethnicity:" {...form.getInputProps('ethnicity')} />
-          <Radio.Group label="Sex:" {...form.getInputProps('sex')}>
-            <Radio value="F" label="F" />
-            <Radio value="M" label="M" />
-          </Radio.Group>
-        </Group>
-        <TextInput label="School" {...form.getInputProps('school')} />
+        <TextInput
+          label="Patient ID:"
+          {...form.getInputProps('patientId')}
+          disabled
+        />
+        <EthnicitySelect {...form.getInputProps('ethnicity')} />
+        <GenderSelect {...form.getInputProps('gender')} />
+        <SchoolAutocomplete label="School" {...form.getInputProps('school')} />
         <Group className="w-full">
           <NumberInput
             label="Year:"
