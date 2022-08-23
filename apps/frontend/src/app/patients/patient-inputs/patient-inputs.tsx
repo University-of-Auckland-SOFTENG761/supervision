@@ -98,7 +98,7 @@ export const PatientInputs = ({
             {...form.getInputProps('dob')}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
-            dateParser={(date: string) => dayjs(date, 'DD/MM/YYYY').toDate()}
+            dateParser={(date: string) => dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()}
             placeholder="DD/MM/YYYY"
             initialMonth={new Date('2009-01-01')}
           />
