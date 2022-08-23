@@ -1,7 +1,7 @@
 import { Args, Query, Resolver, Mutation } from '@nestjs/graphql';
 import { IReplicationResolver, ReplicationArgs } from '@supervision/shared';
 import { PatientModel } from './patient.model';
-import { PatientService } from '@supervision/patients/patients.service';
+import { PatientService } from '@supervision/patient/patients.service';
 import { CreatePatientInput } from '../dto/create-patient.input';
 
 @Resolver(() => PatientModel)

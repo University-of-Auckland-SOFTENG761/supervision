@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PatientEntity } from '@supervision/patients/database';
+import { PatientEntity } from '@supervision/patient/database';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreatePatientInput } from './dto/create-patient.input';
 
