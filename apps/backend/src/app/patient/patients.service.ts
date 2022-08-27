@@ -19,7 +19,7 @@ export class PatientService {
 
   // WIP
   async findOne(id: string): Promise<PatientEntity> {
-    return await this.patientsRepository.findOne(id);
+    return await this.patientsRepository.findOneBy({id: id});
   }
 
   async getUpdatedPatients(
