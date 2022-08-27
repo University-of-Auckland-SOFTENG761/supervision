@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { Sex, Ethnicity } from '@supervision/patient/database/patient.entity'
+import { Sex, Ethnicity } from '@supervision/patient/database/patient.entity';
 
 @InputType()
 export class CreatePatientInput {
