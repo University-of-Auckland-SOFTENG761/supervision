@@ -1,75 +1,66 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-
-enum Sex {
-  'Female',
-  'Male',
-  'Other',
-  'PreferNotToSay',
-}
-
-enum Ethnicity {
-  'NZEUROPEAN',
-  'OTHEREUROPEAN',
-  'NZMAORI',
-  'SAMOAN',
-  'COOKISLANDMAORI',
-  'TONGAN',
-  'NIUEAN',
-  'TOKELAUAN',
-  'FIJIAN',
-  'OTHERPACIFICISLAND',
-  'SOUTHEASTASIAN',
-  'CHINESE',
-  'INDIAN',
-  'OTHERASIAN',
-  'MIDDLEEASTERN',
-  'LATAMHISPANIC',
-  'AFRICAN',
-  'OTHERETHNICITY',
-}
+import { InputType, Field } from '@nestjs/graphql';
+import { Sex, Ethnicity } from '@supervision/patient/database/patient.entity'
 
 @InputType()
 export class CreatePatientInput {
-  // TODO: Add descriptions to fields and add consults and dispensing types
-  @Field(() => String, { description: 'First name of the patient' })
+  // TODO: add field descriptions
+  @Field(() => String, { nullable: false })
   firstName: string;
-  @Field(() => String, { description: 'Last name of the patient' })
+
+  @Field(() => String, { nullable: false })
   lastName: string;
-  @Field()
-  dateOFBirth: Date; // Not sure if this is the right data type
-  @Field(() => Sex, { description: 'Sex of the patient' })
+
+  @Field(() => Date, { nullable: false })
+  dateOfBirth: Date;
+
+  @Field(() => Sex)
   sex: Sex;
-  @Field(() => String, { description: 'School of the patient' })
+
+  @Field(() => Ethnicity)
+  ethnicity: Ethnicity;
+
+  @Field(() => String)
   school: string;
-  @Field(() => Int, { description: 'Year level of patient at school' })
+
+  @Field(() => String)
   yearLevel: number;
-  @Field(() => String, { description: 'School room of the patient' })
-  schoolRoom: string;
-  @Field(() => String, { description: "Patient caregiver's first name" })
+
+  @Field(() => Date)
+  yearLevelLastUpdated: Date;
+
+  @Field(() => String)
+  room: string;
+
+  @Field(() => String)
   caregiverFirstName: string;
-  @Field(() => String, { description: "Patient caregiver's last name" })
+
+  @Field(() => String)
   caregiverLastName: string;
-  @Field(() => String, { description: 'Phone number of the patient' })
+
+  @Field(() => String)
   phoneNumber: string;
-  @Field(() => String, { description: 'Email of the patient' })
+
+  @Field(() => String)
   email: string;
-  @Field(() => String, { description: 'Street Address of the patient' })
+
+  @Field(() => String)
   streetAddress: string;
-  @Field(() => String, { description: 'City of the patient' })
+
+  @Field(() => String)
+  suburb: string;
+
+  @Field(() => String)
   city: string;
-  @Field(() => String, { description: 'Postcode of the patient' })
+
+  @Field(() => String)
   postcode: string;
 
-  // Change consults and dispensing
-  @Field(() => [String], { description: 'Consults of the patient' })
-  consults: string[];
-  @Field(() => [String], { description: 'Dispensing of the patient' })
-  dispensing: string[];
+  @Field(() => [String])
+  recalls: [string];
 
-  @Field(() => [String], { description: 'Recalls of the patient' })
-  recalls: string[];
-  @Field(() => String, { description: 'Admin notes of the patient' })
+  @Field(() => String)
   adminNotes: string;
-  @Field(() => String, { description: 'Screening list of the patient' })
+
+  @Field(() => String)
   screeningList: string;
 }
