@@ -22,6 +22,10 @@ export class PatientService {
     return await this.patientsRepository.findOneBy({ id: id });
   }
 
+  async findAll(): Promise<PatientEntity[]> {
+    return await this.patientsRepository.find();
+  }
+
   async getUpdatedPatients(
     minUpdatedAt: Date | null,
     lastId: string | null,

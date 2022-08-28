@@ -23,14 +23,17 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   @Mutation(() => PatientModel)
   async createPatient(
     @Args('createPatientInput') createPatientInput: CreatePatientInput
-    // TODO: add all fields once finalised
   ): Promise<PatientModel> {
-    return await this.patientService.create(createPatientInput); // TODO
+    return await this.patientService.create(createPatientInput);
   }
 
-  // WIP
   @Query(() => PatientModel)
   async patient(@Args('id') id: string): Promise<PatientModel> {
     return await this.patientService.findOne(id);
+  }
+
+  @Query(() => [PatientModel])
+  async patients(): Promise<PatientModel[]> {
+    return await this.patientService.findAll();
   }
 }
