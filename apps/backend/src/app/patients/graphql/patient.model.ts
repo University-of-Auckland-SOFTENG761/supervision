@@ -1,6 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
-import { Ethnicity, Sex } from '@supervision/patient';
+import { Ethnicity, Sex } from '@supervision/patients';
 
 registerEnumType(Ethnicity, {
   name: 'Ethnicity',
@@ -64,7 +64,7 @@ export class PatientModel extends BaseModel {
   postcode: string;
 
   @Field()
-  recalls: [string];
+  recalls: string;
 
   @Field()
   adminNotes: string;

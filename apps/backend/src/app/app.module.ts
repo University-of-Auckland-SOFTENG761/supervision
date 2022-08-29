@@ -9,6 +9,7 @@ import configuration, {
 } from '@supervision/config';
 import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
+import { PatientsModule } from '@supervision/patients';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UsersModule } from '@supervision/users';
     }),
     HealthModule,
     UsersModule,
+    PatientsModule,
   ],
 })
 export class AppModule {}
