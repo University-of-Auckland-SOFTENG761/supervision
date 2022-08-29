@@ -91,8 +91,8 @@ export class PatientEntity extends BaseEntity {
   @Column('varchar', { length: 5, nullable: true })
   postcode: string;
 
-  @Column('varchar', { nullable: true })
-  recalls: string;
+  @Column('varchar', { array: true, nullable: true })
+  recalls: [string];
 
   @Column('varchar', { nullable: true })
   adminNotes: string;

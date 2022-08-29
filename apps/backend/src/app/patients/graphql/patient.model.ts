@@ -63,8 +63,8 @@ export class PatientModel extends BaseModel {
   @Field()
   postcode: string;
 
-  @Field()
-  recalls: string;
+  @Field(() => [String])
+  recalls: [string];
 
   @Field()
   adminNotes: string;

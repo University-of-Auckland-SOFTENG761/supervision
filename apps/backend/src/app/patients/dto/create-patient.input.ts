@@ -55,8 +55,8 @@ export class CreatePatientInput {
   @Field(() => String)
   postcode: string;
 
-  @Field(() => String)
-  recalls: string;
+  @Field(() => [String])
+  recalls: [string];
 
   @Field(() => String)
   adminNotes: string;
