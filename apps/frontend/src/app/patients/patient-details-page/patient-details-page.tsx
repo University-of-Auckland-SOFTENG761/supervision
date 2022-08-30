@@ -31,7 +31,9 @@ export type IPatient = {
 };
 
 export const PatientDetailsPage = () => {
-  const [currentPatientUid, setCurrentPatientUid] = useState<string | undefined>();
+  const [currentPatientUid, setCurrentPatientUid] = useState<
+    string | undefined
+  >();
 
   const handlePatientChange = (uid: string) => {
     setCurrentPatientUid(uid);
@@ -39,7 +41,10 @@ export const PatientDetailsPage = () => {
 
   return (
     <>
-      <PatientTabs currentPatientUid={currentPatientUid} onPatientChange={handlePatientChange} />
+      <PatientTabs
+        currentPatientUid={currentPatientUid}
+        onPatientChange={handlePatientChange}
+      />
       <ScrollArea className="h-full p-8">
         <SimpleGrid
           cols={3}
@@ -50,9 +55,7 @@ export const PatientDetailsPage = () => {
           ]}
         >
           {currentPatientUid && (
-            <PatientInputs
-              patientUid={currentPatientUid}
-            />
+            <PatientInputs patientUid={currentPatientUid} />
           )}
         </SimpleGrid>
         <div className="flex mt-5 -mb-5 justify-end w-full">

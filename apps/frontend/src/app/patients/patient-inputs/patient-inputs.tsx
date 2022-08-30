@@ -17,37 +17,40 @@ type PatientInputsProps = {
   patientUid?: string;
 };
 
-export const PatientInputs = ({
-  patientUid,
-}: PatientInputsProps) => {
+export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
   const { patients, updatePatient } = usePatients();
-  const patient = patientUid ? patients.find((p) => p.uid === patientUid) : undefined;
+  const patient = patientUid
+    ? patients.find((p) => p.uid === patientUid)
+    : undefined;
   const [patientAge, setPatientAge] = useState(
     patient?.dob ? calculateAge(new Date(patient?.dob)) : undefined
   );
 
-  const buildFormValues = useCallback(() => ({
-    uid: patient?.uid,
-    firstName: patient?.firstName ?? '',
-    lastName: patient?.lastName ?? '',
-    dob: patient?.dob ? new Date(patient?.dob) : null,
-    patientId: patient?.patientId ?? '',
-    ethnicity: patient?.ethnicity ?? null,
-    gender: patient?.gender ?? null,
-    school: patient?.school ?? '',
-    year: patient?.year,
-    room: patient?.room ?? '',
-    address: patient?.address ?? {
-      street: '',
-      suburb: '',
-      city: '',
-      postCode: '',
-    },
-    caregiverFirstName: patient.caregiverFirstName ?? '',
-    caregiverLastName: patient.caregiverLastName ?? '',
-    email: patient?.email ?? '',
-    notes: patient?.notes ?? '',
-  }), [patient]);
+  const buildFormValues = useCallback(
+    () => ({
+      uid: patient?.uid,
+      firstName: patient?.firstName ?? '',
+      lastName: patient?.lastName ?? '',
+      dob: patient?.dob ? new Date(patient?.dob) : null,
+      patientId: patient?.patientId ?? '',
+      ethnicity: patient?.ethnicity ?? null,
+      gender: patient?.gender ?? null,
+      school: patient?.school ?? '',
+      year: patient?.year,
+      room: patient?.room ?? '',
+      address: patient?.address ?? {
+        street: '',
+        suburb: '',
+        city: '',
+        postCode: '',
+      },
+      caregiverFirstName: patient.caregiverFirstName ?? '',
+      caregiverLastName: patient.caregiverLastName ?? '',
+      email: patient?.email ?? '',
+      notes: patient?.notes ?? '',
+    }),
+    [patient]
+  );
 
   const form = useForm({
     initialValues: buildFormValues(),

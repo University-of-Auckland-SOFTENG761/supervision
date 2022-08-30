@@ -7,7 +7,10 @@ type PatientTabsProps = {
   onPatientChange: (patientUID: string) => void;
 };
 
-export const PatientTabs = ({ currentPatientUid, onPatientChange }: PatientTabsProps) => {
+export const PatientTabs = ({
+  currentPatientUid,
+  onPatientChange,
+}: PatientTabsProps) => {
   const { patients, newPatient } = usePatients();
 
   const handleTabChange = (patientUID: string) => onPatientChange(patientUID);
