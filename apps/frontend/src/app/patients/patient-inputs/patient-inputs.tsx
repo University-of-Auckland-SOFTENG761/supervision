@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
@@ -10,59 +10,54 @@ import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
+import usePatients from 'app/hooks/usePatients';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
-  patient: IPatient;
-  onUpdatePatient: (updatedPatient: IPatient) => void;
+  patientUid?: string;
 };
 
 export const PatientInputs = ({
-  patient,
-  onUpdatePatient,
+  patientUid,
 }: PatientInputsProps) => {
-  const [patientUid, setPatientUid] = useState(patient.uid);
+  const { patients, updatePatient } = usePatients();
+  const patient = patientUid ? patients.find((p) => p.uid === patientUid) : undefined;
   const [patientAge, setPatientAge] = useState(
-    patient.dob ? calculateAge(new Date(patient.dob)) : undefined
+    patient?.dob ? calculateAge(new Date(patient?.dob)) : undefined
   );
 
-  const form = useForm({
-    initialValues: {
-      ...patient,
-      gender: patient.gender ?? null,
-      ethnicity: patient.ethnicity ?? null,
-      dob: patient.dob !== undefined ? new Date(patient.dob) : null,
+  const buildFormValues = useCallback(() => ({
+    uid: patient?.uid,
+    firstName: patient?.firstName ?? '',
+    lastName: patient?.lastName ?? '',
+    dob: patient?.dob ? new Date(patient?.dob) : null,
+    patientId: patient?.patientId ?? '',
+    ethnicity: patient?.ethnicity ?? null,
+    gender: patient?.gender ?? null,
+    school: patient?.school ?? '',
+    year: patient?.year,
+    room: patient?.room ?? '',
+    address: patient?.address ?? {
+      street: '',
+      suburb: '',
+      city: '',
+      postCode: '',
     },
+    caregiverFirstName: patient.caregiverFirstName ?? '',
+    caregiverLastName: patient.caregiverLastName ?? '',
+    email: patient?.email ?? '',
+    notes: patient?.notes ?? '',
+  }), [patient]);
+
+  const form = useForm({
+    initialValues: buildFormValues(),
   });
 
   useEffect(() => {
-    if (patient.uid !== patientUid) {
-      setPatientUid(patient.uid);
-      form.setValues({
-        uid: patient.uid,
-        firstName: patient.firstName ?? '',
-        lastName: patient.lastName ?? '',
-        dob: patient.dob ? new Date(patient.dob) : null,
-        patientId: patient.patientId ?? '',
-        ethnicity: patient.ethnicity ?? null,
-        gender: patient.gender ?? null,
-        school: patient.school ?? '',
-        year: patient.year,
-        room: patient.room ?? '',
-        address: patient.address ?? {
-          street: '',
-          suburb: '',
-          city: '',
-          postCode: '',
-        },
-        caregiverFirstName: patient.caregiverFirstName ?? '',
-        caregiverLastName: patient.caregiverLastName ?? '',
-        phoneNumber: patient.phoneNumber ?? '',
-        email: patient.email ?? '',
-        notes: patient.notes ?? '',
-      });
-    }
-  }, [form, patientUid, patient]);
+    form.setValues(buildFormValues());
+    console.log(patient);
+    // if (patient) patient.lastName = "asdf";
+  }, [patient]);
 
   useEffect(() => {
     setPatientAge(
@@ -72,18 +67,28 @@ export const PatientInputs = ({
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const buildPatient = () => {
+    const newPatient = {
+      ...form.values,
+      uid: patient?.uid ?? '',
+      gender: form.values.gender ?? undefined,
+      ethnicity: form.values.ethnicity ?? undefined,
+      dob: form.values.dob ? form.values.dob.toISOString() : undefined,
+    };
+    if (newPatient.uid === undefined) return undefined;
+    return newPatient;
+  };
+
   useEffect(() => {
     if (debounceTimeout.current != null) {
       clearTimeout(debounceTimeout.current);
     }
     debounceTimeout.current = setTimeout(() => {
       debounceTimeout.current = null;
-      onUpdatePatient({
-        ...form.values,
-        gender: form.values.gender ?? undefined,
-        ethnicity: form.values.ethnicity ?? undefined,
-        dob: form.values.dob ? form.values.dob.toISOString() : undefined,
-      });
+      const newPatient = buildPatient();
+      if (newPatient) {
+        updatePatient(newPatient);
+      }
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values]);

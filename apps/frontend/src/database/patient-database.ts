@@ -1,6 +1,8 @@
 import { addRxPlugin, createRxDatabase, RxDatabase } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
 import patientSchema from './patient-schema';
+import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+addRxPlugin(RxDBUpdatePlugin);
 
 const initializePatientDatabase = async () => {
   if (process.env['NODE_ENV'] !== 'production') {

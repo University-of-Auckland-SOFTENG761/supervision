@@ -68,7 +68,7 @@ const patientSchema: RxJsonSchema<any> = {
       type: 'string',
     },
   },
-  required: ['firstName', 'lastName', 'uid'],
+  required: ['uid', 'firstName', 'lastName'],
 };
 
 export default patientSchema;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ScrollArea, SimpleGrid } from '@mantine/core';
 import { Button } from '@shared';
 import { PatientTabs } from '../patient-tabs';
@@ -31,29 +31,15 @@ export type IPatient = {
 };
 
 export const PatientDetailsPage = () => {
-  const { patients, updatePatient } = usePatients();
-
-  const [currentPatient, setCurrentPatient] = useState<IPatient | undefined>(
-    patients[0]
-  );
-
-  useEffect(() => console.log(patients), [patients]);
+  const [currentPatientUid, setCurrentPatientUid] = useState<string | undefined>();
 
   const handlePatientChange = (uid: string) => {
-    const patient = patients.find((p) => p.uid === uid);
-    if (patient) {
-      setCurrentPatient(patient);
-    }
-  };
-
-  const handleUpdatePatient = (updatedPatient: IPatient) => {
-    setCurrentPatient(updatedPatient);
-    updatePatient(updatedPatient);
+    setCurrentPatientUid(uid);
   };
 
   return (
     <>
-      <PatientTabs patients={patients} onPatientChange={handlePatientChange} />
+      <PatientTabs currentPatientUid={currentPatientUid} onPatientChange={handlePatientChange} />
       <ScrollArea className="h-full p-8">
         <SimpleGrid
           cols={3}
@@ -63,10 +49,9 @@ export const PatientDetailsPage = () => {
             { maxWidth: 1280, cols: 3, spacing: 100 },
           ]}
         >
-          {currentPatient && (
+          {currentPatientUid && (
             <PatientInputs
-              patient={currentPatient}
-              onUpdatePatient={handleUpdatePatient}
+              patientUid={currentPatientUid}
             />
           )}
         </SimpleGrid>

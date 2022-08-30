@@ -1,24 +1,18 @@
-import { useState } from 'react';
 import { ActionIcon, Group, Tabs } from '@mantine/core';
 import { IconMenu2, IconPlus } from '@tabler/icons';
-import { IPatient } from '../patient-details-page';
 import usePatients from 'app/hooks/usePatients';
 
 type PatientTabsProps = {
-  patients: IPatient[];
+  currentPatientUid?: string;
   onPatientChange: (patientUID: string) => void;
 };
 
-export const PatientTabs = ({ onPatientChange }: PatientTabsProps) => {
+export const PatientTabs = ({ currentPatientUid, onPatientChange }: PatientTabsProps) => {
   const { patients, newPatient } = usePatients();
-  const [activeTab, setActiveTab] = useState<string | undefined>(
-    patients[0]?.uid
-  );
 
-  const handleTabChange = (patientUID: string) => {
-    setActiveTab(patientUID);
-    onPatientChange(patientUID);
-  };
+  const handleTabChange = (patientUID: string) => onPatientChange(patientUID);
+
+  const handleNewPatient = () => handleTabChange(newPatient());
 
   return (
     <Group className="px-4 py-1 m-0 bg-white border-0 border-b-[1px] border-solid border-gray-200">
@@ -26,7 +20,7 @@ export const PatientTabs = ({ onPatientChange }: PatientTabsProps) => {
         color="dark.2 "
         variant="subtle"
         className="p-1"
-        onClick={() => newPatient()}
+        onClick={() => handleNewPatient()}
       >
         <IconPlus size={24} />
       </ActionIcon>
@@ -36,7 +30,7 @@ export const PatientTabs = ({ onPatientChange }: PatientTabsProps) => {
       <Tabs
         variant="pills"
         color="blue"
-        value={activeTab}
+        value={currentPatientUid}
         onTabChange={handleTabChange}
         classNames={{
           root: 'grow',

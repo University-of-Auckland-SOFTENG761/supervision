@@ -2,7 +2,7 @@ import { IPatient } from '@patients';
 import { uuid } from 'uuidv4';
 import PatientDatabase from 'database/patient-database';
 import { useState, useEffect, useCallback } from 'react';
-import { RxDatabase } from 'rxdb';
+import { RxDatabase, RxDocument } from 'rxdb';
 
 //  {
 //       uid: '8c78e8d5-26e5-4a99-a112-0b8602bf2c1b',
@@ -46,50 +46,23 @@ const usePatients = () => {
       lastName: '',
     };
     patientsDb?.['patients'].insert(newPatient);
+    return newPatient.uid;
   }, [patientsDb]);
 
-  const updatePatient = (patient: IPatient) =>
-    patientsDb?.['patients'].upsert(patient);
-
-  const parseAndSetPatients = (patients: any[]) => {
-    const parsedPatients = patients.map<IPatient>((patient: any) => {
-      const {
-        uid,
-        firstName,
-        lastName,
-        dob,
-        patientId,
-        ethnicity,
-        gender,
-        school,
-        year,
-        room,
-        address,
-        parentName,
-        phoneNumber,
-        email,
-        notes,
-      } = patient;
-      return {
-        uid,
-        firstName,
-        lastName,
-        dob,
-        patientId,
-        ethnicity,
-        gender,
-        school,
-        year,
-        room,
-        address,
-        parentName,
-        phoneNumber,
-        email,
-        notes,
-      } as IPatient;
-    });
-    setPatients(parsedPatients);
-  };
+  const updatePatient = (patient: IPatient) => {
+    patientsDb?.['patients'].findOne({
+      selector: {
+        uid: patient.uid,
+      }
+    }).exec().then((result: RxDocument) => {
+      if (result) {
+        result.update(patient);
+      }
+    }).catch(err => {
+      console.log(err);
+    }
+    );
+  }
 
   useEffect(() => {
     PatientDatabase.get()
@@ -107,7 +80,7 @@ const usePatients = () => {
   useEffect(() => {
     if (patientsDb) {
       patientsDb['patients'].find().$.subscribe((patients) => {
-        parseAndSetPatients(patients);
+        setPatients(patients);
       });
     }
     return () => {
