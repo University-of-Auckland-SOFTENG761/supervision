@@ -11,15 +11,47 @@ export class PatientService {
     private patientsRepository: Repository<PatientEntity>
   ) {}
 
-  // WIP
   async create(patient: CreatePatientInput): Promise<PatientEntity> {
     const newPatient = this.patientsRepository.create(patient);
     return await this.patientsRepository.save(newPatient);
   }
 
-  // WIP
   async findOne(id: string): Promise<PatientEntity> {
     return await this.patientsRepository.findOneBy({ id: id });
+  }
+
+  // Find patient by first or last name
+  // TODO: Check why date can't be read in query
+  // https://stackoverflow.com/questions/58622522/date-field-returned-as-null-on-graphql-query-despite-data-existing
+  async findOneBy(
+    firstName: string,
+    lastName: string | null
+  ): Promise<PatientEntity[]> {
+    let query: SelectQueryBuilder<PatientEntity>;
+
+    firstName = firstName.toUpperCase();
+    if (lastName !== undefined) {
+      lastName = lastName.toUpperCase();
+    }
+
+    // TypeORM query for finding patient by text pattern using Like operator
+    const firstNameTextPattern = `%${firstName}%`; // Pattern for names that contain this text
+    const lastNameTextPattern = `%${lastName}%`;
+    query = this.patientsRepository
+      .createQueryBuilder('patient')
+      .where('upper(patient.firstName) LIKE :firstNameTextPattern', {
+        firstNameTextPattern,
+      });
+    if (lastName !== undefined) {
+      query = query.orWhere(
+        'upper(patient.lastName) LIKE :lastNameTextPattern',
+        {
+          lastNameTextPattern,
+        }
+      );
+    }
+
+    return await query.getMany();
   }
 
   async findAll(): Promise<PatientEntity[]> {

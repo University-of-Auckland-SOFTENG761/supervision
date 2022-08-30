@@ -3,6 +3,7 @@ import { IReplicationResolver, ReplicationArgs } from '@supervision/shared';
 import { PatientModel } from './patient.model';
 import { PatientService } from '@supervision/patients/patients.service';
 import { CreatePatientInput } from '../dto/create-patient.input';
+import { PatientEntity } from '../database';
 
 @Resolver(() => PatientModel)
 export class PatientResolver implements IReplicationResolver<PatientModel> {
@@ -30,6 +31,14 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   @Query(() => PatientModel)
   async patient(@Args('id') id: string): Promise<PatientModel> {
     return await this.patientService.findOne(id);
+  }
+
+  @Query(() => [PatientModel])
+  async findPatientByName(
+    @Args('firstName') firstName: string,
+    @Args('lastName') lastName: string | null = null
+  ): Promise<PatientEntity[]> {
+    return await this.patientService.findOneBy(firstName, lastName);
   }
 
   @Query(() => [PatientModel])
