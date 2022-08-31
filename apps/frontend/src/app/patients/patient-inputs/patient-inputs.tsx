@@ -4,13 +4,13 @@ import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
-import { IPatient } from '../patient-details-page';
 import EthnicitySelect from '../ethnicity-select';
 import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
-import usePatients from 'app/hooks/usePatients';
+import { usePatients } from 'app/hooks/usePatients';
+import { IPatient } from '../patient-details-page';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
@@ -20,7 +20,7 @@ type PatientInputsProps = {
 export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
   const { patients, updatePatient } = usePatients();
   const patient = patientUid
-    ? patients.find((p) => p.uid === patientUid)
+    ? patients.find((p: IPatient) => p.uid === patientUid)
     : undefined;
   const [patientAge, setPatientAge] = useState(
     patient?.dob ? calculateAge(new Date(patient?.dob)) : undefined
@@ -58,9 +58,8 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
 
   useEffect(() => {
     form.setValues(buildFormValues());
-    console.log(patient);
-    // if (patient) patient.lastName = "asdf";
-  }, [patient]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buildFormValues, patient]);
 
   useEffect(() => {
     setPatientAge(

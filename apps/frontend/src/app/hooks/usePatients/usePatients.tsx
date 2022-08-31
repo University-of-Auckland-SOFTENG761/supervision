@@ -1,10 +1,10 @@
 import { IPatient } from '@patients';
 import { uuid } from 'uuidv4';
-import PatientDatabase from 'database/patient-database';
 import { useState, useEffect, useCallback } from 'react';
 import { RxDatabase, RxDocument } from 'rxdb';
+import { patientDatabase } from 'database';
 
-const usePatients = () => {
+export const usePatients = () => {
   const [patientsDb, setPatientsDb] = useState<RxDatabase>();
   const [patients, setPatients] = useState<IPatient[]>([]);
 
@@ -37,11 +37,12 @@ const usePatients = () => {
   };
 
   useEffect(() => {
-    PatientDatabase.get()
-      .then((db) => {
+    patientDatabase
+      .get()
+      ?.then((db: RxDatabase) => {
         setPatientsDb(db);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         console.log(error);
       })
       .finally(() => {

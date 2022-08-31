@@ -1,6 +1,7 @@
 import { ActionIcon, Group, Tabs } from '@mantine/core';
 import { IconMenu2, IconPlus } from '@tabler/icons';
-import usePatients from 'app/hooks/usePatients';
+import { usePatients } from 'app/hooks/usePatients';
+import { IPatient } from '../patient-details-page';
 
 type PatientTabsProps = {
   currentPatientUid?: string;
@@ -44,7 +45,7 @@ export const PatientTabs = ({
         })}
       >
         <Tabs.List>
-          {patients.map((patient) => (
+          {patients.map((patient: IPatient) => (
             <Tabs.Tab key={'patient-' + patient.uid} value={patient.uid}>
               {!patient.firstName && !patient.lastName
                 ? 'New Patient'

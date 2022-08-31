@@ -4,7 +4,6 @@ import { Button } from '@shared';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
-import usePatients from 'app/hooks/usePatients';
 
 export type IPatient = {
   uid: string;
