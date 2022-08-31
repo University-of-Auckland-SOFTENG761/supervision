@@ -2,6 +2,12 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@supervision/*": ["app/*"]
+    }
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"
