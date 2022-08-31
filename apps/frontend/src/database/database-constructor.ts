@@ -1,20 +1,21 @@
 import { RxDatabase } from 'rxdb';
 
 class DatabaseConstructor {
-  private _db: RxDatabase | null;
-  private _databaseConstructor: () => Promise<RxDatabase>;
-  constructor(databaseConstructor: () => Promise<RxDatabase>) {
-    this._databaseConstructor = databaseConstructor;
-    this._db = null;
-    this.get = async (): Promise<RxDatabase> => {
-      if (!this._db) {
-        this._db = await this._databaseConstructor();
-      }
-      return this._db;
-    };
+  private _blocked = false;
+  private _db: RxDatabase | null = null;
+  private _dbInitializer: () => Promise<RxDatabase>;
+
+  public async get(): Promise<RxDatabase | null> {
+    if (!this._db && !this._blocked) {
+      this._blocked = true;
+      this._db = await this._dbInitializer();
+      this._blocked = false;
+    }
+    return Promise.resolve(this._db);
   }
-  get(): Promise<RxDatabase> | null {
-    return null;
+
+  constructor(dbInitializer: () => Promise<RxDatabase>) {
+    this._dbInitializer = dbInitializer;
   }
 }
 

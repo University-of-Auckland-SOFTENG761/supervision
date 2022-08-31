@@ -39,8 +39,8 @@ export const usePatients = () => {
   useEffect(() => {
     patientDatabase
       .get()
-      ?.then((db: RxDatabase) => {
-        setPatientsDb(db);
+      ?.then((db: RxDatabase | null) => {
+        db && setPatientsDb(db);
       })
       .catch((error: Error) => {
         console.log(error);
