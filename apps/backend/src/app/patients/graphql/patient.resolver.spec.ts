@@ -70,6 +70,10 @@ describe('patient resolver', () => {
           ];
         }
       ),
+
+    patients: jest.fn().mockImplementation(async () => {
+      return [{ ...fakePatient, id: Date() }];
+    }),
   };
 
   beforeEach(async () => {
@@ -117,5 +121,12 @@ describe('patient resolver', () => {
       lastName: 'Eater',
     });
     expect(mockService.findOneBy).toBeCalled();
+  });
+
+  it('should get all patients', async () => {
+    expect(await patientResolver.patients()).toContainEqual({
+      ...fakePatient,
+      id: expect.any(String),
+    });
   });
 });
