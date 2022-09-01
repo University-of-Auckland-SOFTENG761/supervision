@@ -90,7 +90,7 @@ describe('patient service', () => {
       where: jest.fn().mockImplementation(() => mockCreateQueryBuilder),
       orWhere: jest.fn().mockImplementation(() => mockCreateQueryBuilder),
       getMany: jest.fn().mockImplementation(async () => {
-        return [{ ...fakePatient, nameParams }];
+        return { ...fakePatient, ...nameParams };
       }),
     };
     mockRepository.createQueryBuilder = jest
@@ -100,5 +100,4 @@ describe('patient service', () => {
       await patientService.findOneBy(nameParams.firstName, nameParams.lastName)
     ).toMatchObject({ ...fakePatient, ...nameParams });
   });
-  expect(mockRepository.createQueryBuilder).toBeCalled();
 });
