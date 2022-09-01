@@ -4,7 +4,7 @@ import { CreatePatientInput } from '@supervision/patients/dto/create-patient.inp
 import { PatientService } from '@supervision/patients';
 import { TestingModule } from '@nestjs/testing';
 
-describe('patient service', () => {
+describe('patient resolver', () => {
   let patientResolver: PatientResolver;
 
   const fakePatient = {
@@ -49,9 +49,11 @@ describe('patient service', () => {
           };
         }
       ),
+
     findAll: jest.fn().mockImplementation(async () => {
       return [{ ...fakePatient, id: Date() }];
     }),
+
     getUpdatedPatients: jest
       .fn()
       .mockImplementation(
@@ -87,26 +89,24 @@ describe('patient service', () => {
 
   it('should get a replication feed', async () => {
     expect(
-      patientResolver.replicationFeed({
-        lastId: 'an_id',
+      await patientResolver.replicationFeed({
+        lastId: 'id_string',
         minUpdatedAt: null,
         limit: 5,
       })
-    ).toEqual(
-      expect.arrayContaining([
-        {
-          ...fakePatient,
-          id: expect.any(String),
-        },
-      ])
-    );
+    ).toContainEqual({
+      ...fakePatient,
+      id: 'id_string',
+    });
+    expect(mockService.getUpdatedPatients).toBeCalled();
   });
 
   it('should query a patient by id', async () => {
-    expect(await patientResolver.patient('an_id')).toEqual({
+    expect(await patientResolver.patient('id_string')).toEqual({
       ...fakePatient,
-      id: 'an_id',
+      id: 'id_string',
     });
+    expect(mockService.findOne).toBeCalled();
   });
 
   it('should query a patient by id', async () => {
@@ -116,5 +116,6 @@ describe('patient service', () => {
       firstName: 'Bean',
       lastName: 'Eater',
     });
+    expect(mockService.findOneBy).toBeCalled();
   });
 });
