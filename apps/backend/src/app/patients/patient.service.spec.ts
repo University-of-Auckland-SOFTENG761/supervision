@@ -1,5 +1,6 @@
-import { PatientService } from '@supervision/patients';
+import { PatientEntity, PatientService } from '@supervision/patients';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('patient service', () => {
   let patientService: PatientService;
@@ -30,27 +31,29 @@ describe('patient service', () => {
   const mockRepository = {
     create: jest.fn().mockImplementation((dto) => dto),
 
-    save: jest.fn().mockImplementation(
-      (patient) => {
-        return { ...patient, id: 'an_id_string' };
-      }
-      // Promise.resolve({ ...patient, id: "an_id_string" })
-    ),
+    save: jest.fn().mockImplementation((patient) => {
+      return { ...patient, id: 'an_id_string' };
+    }),
 
     findOneBy: jest
       .fn()
-      .mockImplementation((id: string) =>
+      .mockImplementation(({ id }: { id: string }) =>
         Promise.resolve({ ...fakePatient, id: id })
       ),
+
+    createQueryBuilder: jest.fn(),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PatientService],
-    })
-      .overrideProvider(PatientService)
-      .useValue(mockRepository)
-      .compile();
+      providers: [
+        PatientService,
+        {
+          provide: getRepositoryToken(PatientEntity),
+          useValue: mockRepository,
+        },
+      ],
+    }).compile();
 
     patientService = module.get<PatientService>(PatientService);
   });
@@ -60,18 +63,11 @@ describe('patient service', () => {
   });
 
   it('should create a new patient', async () => {
-    // const returnedPatient = await patientService.create(fakePatient);
-    //
-    // expect(returnedPatient.id).toEqual(expect.any(String));
-    // expect(returnedPatient.dateOfBirth).toEqual(expect.any(Date));
-    // expect(returnedPatient.firstName).toEqual('Davo');
-
-    expect(await patientService.create(fakePatient)).toBeDefined(); //.toEqual({
-    //   ...fakePatient,
-    //   id: expect.any(String),
-    //   dateOfBirth: expect.any(Date),
-    // });
-
+    expect(await patientService.create(fakePatient)).toMatchObject({
+      ...fakePatient,
+      id: expect.any(String),
+      dateOfBirth: expect.any(Date),
+    });
     expect(mockRepository.create).toBeCalled();
     expect(mockRepository.save).toBeCalled();
   });
@@ -81,9 +77,6 @@ describe('patient service', () => {
       ...fakePatient,
       id: 'id_string',
     });
-    // const returnedPatient = await patientService.findOne("id_string");
-    // expect(returnedPatient.id).toEqual("id_string");
-
     expect(mockRepository.findOneBy).toBeCalled();
   });
 
@@ -100,9 +93,12 @@ describe('patient service', () => {
         return [{ ...fakePatient, nameParams }];
       }),
     };
-    jest.fn().mockImplementation(() => mockCreateQueryBuilder);
+    mockRepository.createQueryBuilder = jest
+      .fn()
+      .mockImplementation(() => mockCreateQueryBuilder);
     expect(
       await patientService.findOneBy(nameParams.firstName, nameParams.lastName)
-    );
+    ).toMatchObject({ ...fakePatient, ...nameParams });
   });
+  expect(mockRepository.createQueryBuilder).toBeCalled();
 });
