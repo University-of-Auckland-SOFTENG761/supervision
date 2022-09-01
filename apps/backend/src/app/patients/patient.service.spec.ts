@@ -41,6 +41,10 @@ describe('patient service', () => {
         Promise.resolve({ ...fakePatient, id: id })
       ),
 
+    find: jest.fn().mockImplementation(() => {
+      return [{ ...fakePatient }];
+    }),
+
     createQueryBuilder: jest.fn(),
   };
 
@@ -99,5 +103,10 @@ describe('patient service', () => {
     expect(
       await patientService.findOneBy(nameParams.firstName, nameParams.lastName)
     ).toMatchObject({ ...fakePatient, ...nameParams });
+  });
+
+  it('should get all patients', async () => {
+    expect(await patientService.findAll()).toContainEqual({ ...fakePatient });
+    expect(mockRepository.find).toBeCalled();
   });
 });
