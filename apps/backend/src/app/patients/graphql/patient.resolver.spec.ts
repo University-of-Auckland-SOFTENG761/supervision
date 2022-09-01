@@ -109,7 +109,7 @@ describe('patient resolver', () => {
     expect(mockService.findOne).toBeCalled();
   });
 
-  it('should query a patient by id', async () => {
+  it('should query a patient by name', async () => {
     expect(await patientResolver.findPatientByName('Bean', 'Eater')).toEqual({
       ...fakePatient,
       id: expect.any(String),
