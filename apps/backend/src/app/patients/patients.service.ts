@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PatientEntity } from '@supervision/patients/database';
+import { PatientEntity } from '@supervision/patients';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreatePatientInput } from './dto/create-patient.input';
+import { UpdatePatientInput } from './dto/update-patient.input';
 
 @Injectable()
 export class PatientService {
@@ -12,8 +13,23 @@ export class PatientService {
   ) {}
 
   async create(patient: CreatePatientInput): Promise<PatientEntity> {
-    const newPatient = this.patientsRepository.create(patient);
-    return await this.patientsRepository.save(newPatient);
+    const x = await this.patientsRepository.save(patient);
+    // console.log(x);
+    return x;
+  }
+
+  async update(
+    id: string,
+    updatedPatient: UpdatePatientInput
+  ): Promise<PatientEntity> {
+    const patient = await this.patientsRepository.preload({
+      id: id,
+      ...updatedPatient,
+    });
+    if (!patient) {
+      throw new Error(`Patient #${id} not found`);
+    }
+    return await this.patientsRepository.save(patient);
   }
 
   async findOne(id: string): Promise<PatientEntity> {
