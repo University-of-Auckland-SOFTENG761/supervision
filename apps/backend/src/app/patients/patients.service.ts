@@ -13,9 +13,8 @@ export class PatientService {
   ) {}
 
   async create(patient: CreatePatientInput): Promise<PatientEntity> {
-    const x = await this.patientsRepository.save(patient);
-    // console.log(x);
-    return x;
+    const newPatient = await this.patientsRepository.create(patient);
+    return await this.patientsRepository.save(newPatient);
   }
 
   async update(
@@ -39,7 +38,7 @@ export class PatientService {
   // Find patient by first or last name
   // TODO: Check why date can't be read in query
   // https://stackoverflow.com/questions/58622522/date-field-returned-as-null-on-graphql-query-despite-data-existing
-  async findOneBy(
+  async findOneByName(
     firstName: string,
     lastName: string | null = null
   ): Promise<PatientEntity[]> {
@@ -53,7 +52,6 @@ export class PatientService {
     // TypeORM query for finding patient by text pattern using Like operator
     const firstNameTextPattern = `%${firstName}%`; // Pattern for names that contain this text
     const lastNameTextPattern = `%${lastName}%`;
-    console.log('fName ptn: ' + firstNameTextPattern);
     query = this.patientsRepository
       .createQueryBuilder('patient')
       .where('upper(patient.firstName) LIKE :firstNameTextPattern', {

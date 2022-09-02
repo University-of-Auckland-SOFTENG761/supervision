@@ -37,7 +37,7 @@ describe('patient resolver', () => {
     findOne: jest.fn().mockImplementation(async (id: string) => {
       return { ...fakePatient, id: id };
     }),
-    findOneBy: jest
+    findOneByName: jest
       .fn()
       .mockImplementation(
         async (firstName: string, lastName: string | null) => {
@@ -120,7 +120,7 @@ describe('patient resolver', () => {
       firstName: 'Bean',
       lastName: 'Eater',
     });
-    expect(mockService.findOneBy).toBeCalled();
+    expect(mockService.findOneByName).toBeCalled();
   });
 
   it('should get all patients', async () => {

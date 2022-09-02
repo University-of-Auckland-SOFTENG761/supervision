@@ -48,7 +48,7 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
     @Args('firstName') firstName: string,
     @Args('lastName') lastName: string | null = null
   ): Promise<PatientEntity[]> {
-    return await this.patientService.findOneBy(firstName, lastName);
+    return await this.patientService.findOneByName(firstName, lastName);
   }
 
   @Query(() => [PatientModel])

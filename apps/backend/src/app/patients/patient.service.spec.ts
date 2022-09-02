@@ -101,7 +101,10 @@ describe('patient service', () => {
       .fn()
       .mockImplementation(() => mockCreateQueryBuilder);
     expect(
-      await patientService.findOneBy(nameParams.firstName, nameParams.lastName)
+      await patientService.findOneByName(
+        nameParams.firstName,
+        nameParams.lastName
+      )
     ).toMatchObject({ ...fakePatient, ...nameParams });
   });
 
