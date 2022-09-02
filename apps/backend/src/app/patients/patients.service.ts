@@ -53,6 +53,7 @@ export class PatientService {
     // TypeORM query for finding patient by text pattern using Like operator
     const firstNameTextPattern = `%${firstName}%`; // Pattern for names that contain this text
     const lastNameTextPattern = `%${lastName}%`;
+    console.log('fName ptn: ' + firstNameTextPattern);
     query = this.patientsRepository
       .createQueryBuilder('patient')
       .where('upper(patient.firstName) LIKE :firstNameTextPattern', {
