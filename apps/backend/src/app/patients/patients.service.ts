@@ -41,7 +41,7 @@ export class PatientService {
   // https://stackoverflow.com/questions/58622522/date-field-returned-as-null-on-graphql-query-despite-data-existing
   async findOneBy(
     firstName: string,
-    lastName: string | null
+    lastName: string | null = null
   ): Promise<PatientEntity[]> {
     let query: SelectQueryBuilder<PatientEntity>;
 
@@ -58,7 +58,7 @@ export class PatientService {
       .where('upper(patient.firstName) LIKE :firstNameTextPattern', {
         firstNameTextPattern,
       });
-    if (lastName !== undefined) {
+    if (lastName.length > 0) {
       query = query.orWhere(
         'upper(patient.lastName) LIKE :lastNameTextPattern',
         {

@@ -30,10 +30,12 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
 
   @Mutation(() => PatientModel)
   async updatePatient(
-    @Args('id') id: string,
     @Args('updatePatientInput') updatePatientInput: UpdatePatientInput
   ): Promise<PatientModel> {
-    return await this.patientService.update(id, updatePatientInput);
+    return await this.patientService.update(
+      updatePatientInput.id,
+      updatePatientInput
+    );
   }
 
   @Query(() => PatientModel)
