@@ -3,6 +3,6 @@ import { CreatePatientInput } from './create-patient.input';
 
 @InputType()
 export class UpdatePatientInput extends PartialType(CreatePatientInput) {
-  @Field(() => String)
+  @Field(() => String, { nullable: false })
   id: string;
 }

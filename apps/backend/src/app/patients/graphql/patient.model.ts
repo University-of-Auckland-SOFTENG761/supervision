@@ -21,54 +21,54 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: false })
   dateOfBirth: Date;
 
-  @Field(() => Sex)
+  @Field(() => Sex, { nullable: true })
   sex: Sex;
 
-  @Field(() => Ethnicity)
+  @Field(() => Ethnicity, { nullable: true })
   ethnicity: Ethnicity;
 
-  @Field()
+  @Field({ nullable: true })
   school: string;
 
-  @Field()
+  @Field({ nullable: true })
   yearLevel: number;
 
-  @Field()
+  @Field({ nullable: true })
   yearLevelLastUpdated: Date;
 
-  @Field()
+  @Field({ nullable: true })
   room: string;
 
-  @Field()
+  @Field({ nullable: true })
   caregiverFirstName: string;
 
-  @Field()
+  @Field({ nullable: true })
   caregiverLastName: string;
 
-  @Field()
+  @Field({ nullable: true })
   phoneNumber: string;
 
-  @Field()
+  @Field({ nullable: true })
   email: string;
 
-  @Field()
+  @Field({ nullable: true })
   streetAddress: string;
 
-  @Field()
+  @Field({ nullable: true })
   suburb: string;
 
-  @Field()
+  @Field({ nullable: true })
   city: string;
 
-  @Field()
+  @Field({ nullable: true })
   postcode: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   recalls: [string];
 
-  @Field()
+  @Field({ nullable: true })
   adminNotes: string;
 
-  @Field()
+  @Field({ nullable: true })
   screeningList: string;
 }

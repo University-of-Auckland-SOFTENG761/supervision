@@ -13,54 +13,54 @@ export class CreatePatientInput {
   @Field(() => Date, { nullable: false })
   dateOfBirth: Date;
 
-  @Field(() => Sex)
+  @Field(() => Sex, { nullable: true })
   sex: Sex;
 
-  @Field(() => Ethnicity)
+  @Field(() => Ethnicity, { nullable: true })
   ethnicity: Ethnicity;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   school: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   yearLevel: number;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   yearLevelLastUpdated: Date;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   room: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   caregiverFirstName: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   caregiverLastName: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   phoneNumber: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   email: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   streetAddress: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   suburb: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   city: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   postcode: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   recalls: [string];
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   adminNotes: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   screeningList: string;
 }
