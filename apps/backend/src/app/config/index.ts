@@ -15,6 +15,12 @@ export default () => ({
   auth0: {
     issuer_url: process.env.AUTH0_ISSUER_URL,
     audience: process.env.AUTH0_AUDIENCE,
+    domain: process.env.AUTH0_DOMAIN,
+    client: {
+      id: process.env.AUTH0_CLIENT_ID,
+      secret: process.env.AUTH0_CLIENT_SECRET,
+      connection: process.env.AUTH0_CLIENT_CONNECTION,
+    },
   },
 });
 
@@ -33,6 +39,12 @@ export const configSchema = Joi.object({
   auth0: Joi.object({
     issuer_url: Joi.string().uri().required(),
     audience: Joi.string().required(),
+    domain: Joi.string().uri().required(),
+    client: Joi.object({
+      id: Joi.string().required(),
+      secret: Joi.string().required(),
+      connection: Joi.string().required(),
+    }),
   }),
 });
 

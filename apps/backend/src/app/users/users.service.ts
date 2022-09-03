@@ -1,50 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthService } from '@supervision/auth';
 import { UserEntity } from '@supervision/users/database';
+import { User } from '@supervision/users/user.interface';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class UserService {
+  private connection: string;
+
   constructor(
-    @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>
-  ) {}
-
-  async getUpdatedUsers(
-    minUpdatedAt: Date | null,
-    lastId: string | null,
-    limit: number
-  ): Promise<UserEntity[]> {
-    let query: SelectQueryBuilder<UserEntity>;
-    if (minUpdatedAt === undefined || lastId === undefined) {
-      query = this.usersRepository.createQueryBuilder('user');
-    } else {
-      query = this.usersRepository
-        .createQueryBuilder('user')
-        .where(
-          `date_trunc('second',"user"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
-          {
-            minUpdatedAt,
-          }
-        )
-        .orWhere(
-          `date_trunc('second', "user"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND user.id > :lastId`,
-          {
-            minUpdatedAt,
-            lastId,
-          }
-        );
-    }
-
-    return await query
-      .orderBy('user.updatedAt', 'DESC')
-      .addOrderBy('user.id')
-      .take(limit)
-      .withDeleted()
-      .getMany();
+    private authService: AuthService,
+    private configService: ConfigService
+  ) {
+    this.connection = this.configService.get('auth0.client.connection');
   }
 
-  async findOneById(id: string): Promise<UserEntity> {
-    return this.usersRepository.findOneBy({ id });
+  async createUser(name: string, email: string): Promise<User> {
+    return this.authService.managementClient.createUser({
+      name,
+      email,
+      connection: this.connection,
+    });
+  }
+
+  async findOneById(id: string): Promise<User> {
+    return this.authService.managementClient.getUser({ id });
+  }
+
+  async getUsers(): Promise<User[]> {
+    return this.authService.managementClient.getUsers();
   }
 }
