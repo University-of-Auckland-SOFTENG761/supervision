@@ -43,4 +43,8 @@ export class UserService {
       .withDeleted()
       .getMany();
   }
+
+  findById(id: string) {
+    return this.usersRepository.findOneBy({ id });
+  }
 }

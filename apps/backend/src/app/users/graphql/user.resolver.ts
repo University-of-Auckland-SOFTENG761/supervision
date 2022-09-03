@@ -1,5 +1,9 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthGuard } from '@supervision/auth/GqlAuth.guard';
 import { IReplicationResolver, ReplicationArgs } from '@supervision/shared';
+import { CurrentUser } from '@supervision/shared';
+import { UserEntity } from '@supervision/users';
 import { UserModel } from './user.model';
 import { UserService } from '@supervision/users/users.service';
 
@@ -14,5 +18,11 @@ export class UserResolver implements IReplicationResolver<UserModel> {
       args.lastId,
       args.limit
     );
+  }
+
+  @Query(() => UserModel)
+  @UseGuards(GqlAuthGuard)
+  me(@CurrentUser() user: UserEntity) {
+    return this.userService.findById(user.id);
   }
 }
