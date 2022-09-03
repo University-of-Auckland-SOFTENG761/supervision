@@ -22,7 +22,7 @@ export class UserResolver implements IReplicationResolver<UserModel> {
 
   @Query(() => UserModel)
   @UseGuards(GqlAuthGuard)
-  me(@CurrentUser() user: UserEntity) {
-    return this.userService.findById(user.id);
+  async me(@CurrentUser() user: UserEntity) {
+    return this.userService.findOneById(user.id);
   }
 }

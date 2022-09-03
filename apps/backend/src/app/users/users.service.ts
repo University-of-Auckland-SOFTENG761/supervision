@@ -44,7 +44,7 @@ export class UserService {
       .getMany();
   }
 
-  findById(id: string) {
+  async findOneById(id: string): Promise<UserEntity> {
     return this.usersRepository.findOneBy({ id });
   }
 }
