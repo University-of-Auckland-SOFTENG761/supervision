@@ -3,6 +3,7 @@ import { PatientResolver } from '@supervision/patients';
 import { CreatePatientInput } from '@supervision/patients/dto/create-patient.input';
 import { PatientService } from '@supervision/patients';
 import { TestingModule } from '@nestjs/testing';
+import { UpdatePatientInput } from '@supervision/patients/dto/update-patient.input';
 
 describe('patient resolver', () => {
   let patientResolver: PatientResolver;
@@ -74,6 +75,17 @@ describe('patient resolver', () => {
     patients: jest.fn().mockImplementation(async () => {
       return [{ ...fakePatient, id: Date() }];
     }),
+
+    update: jest
+      .fn()
+      .mockImplementation(
+        (id: string, updatePatientInput: UpdatePatientInput) => {
+          return {
+            ...fakePatient,
+            ...updatePatientInput,
+          };
+        }
+      ),
   };
 
   beforeEach(async () => {
@@ -128,5 +140,20 @@ describe('patient resolver', () => {
       ...fakePatient,
       id: expect.any(String),
     });
+  });
+
+  it('should update a patient', async () => {
+    const updatePatientInput: UpdatePatientInput = {
+      id: 'id_string',
+      firstName: 'Rick',
+      school: 'Auckland High',
+    };
+
+    expect(await patientResolver.updatePatient(updatePatientInput)).toEqual({
+      ...fakePatient,
+      ...updatePatientInput,
+    });
+
+    expect(mockService.update).toBeCalled();
   });
 });
