@@ -140,4 +140,18 @@ describe('patient service', () => {
     expect(mockRepository.preload).toBeCalled();
     expect(mockRepository.save).toBeCalled();
   });
+
+  it('should fail to get a nonexistent patient', async () => {
+    const id = 'a_nonexistent_id';
+    const updatePatientInput: UpdatePatientInput = {
+      id: id,
+      firstName: 'batman',
+    };
+    mockRepository.preload = jest.fn().mockImplementation(() => {
+      return undefined;
+    });
+    await expect(
+      patientService.update(id, updatePatientInput)
+    ).rejects.toThrow();
+  });
 });
