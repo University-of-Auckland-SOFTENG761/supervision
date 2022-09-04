@@ -1,6 +1,7 @@
 import { PatientEntity, PatientService } from '@supervision/patients';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { UpdatePatientInput } from '@supervision/patients/dto/update-patient.input';
 
 describe('patient service', () => {
   let patientService: PatientService;
@@ -46,6 +47,15 @@ describe('patient service', () => {
     }),
 
     createQueryBuilder: jest.fn(),
+
+    preload: jest
+      .fn()
+      .mockImplementation((updatePatientInput: UpdatePatientInput) => {
+        return {
+          ...fakePatient,
+          ...updatePatientInput,
+        };
+      }),
   };
 
   beforeEach(async () => {
@@ -111,5 +121,23 @@ describe('patient service', () => {
   it('should get all patients', async () => {
     expect(await patientService.findAll()).toContainEqual({ ...fakePatient });
     expect(mockRepository.find).toBeCalled();
+  });
+
+  it('should update a patient', async () => {
+    const id = 'an_id_string';
+    const updatePatientInput: UpdatePatientInput = {
+      id: id,
+      firstName: 'Rick',
+      school: 'Auckland High',
+    };
+
+    expect(await patientService.update(id, updatePatientInput)).toEqual({
+      ...fakePatient,
+      id: id,
+      firstName: 'Rick',
+      school: 'Auckland High',
+    });
+    expect(mockRepository.preload).toBeCalled();
+    expect(mockRepository.save).toBeCalled();
   });
 });
