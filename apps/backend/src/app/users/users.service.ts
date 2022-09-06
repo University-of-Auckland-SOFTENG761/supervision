@@ -10,6 +10,10 @@ export class UserService {
     private usersRepository: Repository<UserEntity>
   ) {}
 
+  async findAll(): Promise<UserEntity[]> {
+    return await this.usersRepository.find();
+  }
+
   async getUpdatedUsers(
     minUpdatedAt: Date | null,
     lastId: string | null,

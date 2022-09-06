@@ -7,6 +7,11 @@ import { UserService } from '@supervision/users/users.service';
 export class UserResolver implements IReplicationResolver<UserModel> {
   constructor(private userService: UserService) {}
 
+  @Query(() => [UserModel])
+  async users(): Promise<UserModel[]> {
+    return await this.userService.findAll();
+  }
+
   @Query(() => [UserModel], { name: 'userReplicationFeed' })
   async replicationFeed(@Args() args: ReplicationArgs): Promise<UserModel[]> {
     return this.userService.getUpdatedUsers(
