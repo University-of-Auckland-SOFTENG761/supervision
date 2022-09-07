@@ -113,6 +113,13 @@ export class ConsultModel extends BaseModel {
   @Field({ nullable: true })
   spectacleNotes: string;
 
+  // RECALL COULD BE SUBJECT TO CHANGE
+  @Field({ nullable: true })
+  recallDate: Date;
+
+  @Field({ nullable: true })
+  recallDescription: string;
+
   @Field({ nullable: true })
   prevSpecRxGivenRightEyeSphere: number;
 

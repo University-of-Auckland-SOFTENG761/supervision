@@ -114,8 +114,11 @@ export class ConsultEntity extends BaseEntity {
   spectacleNotes: string;
 
   // RECALL COULD BE SUBJECT TO CHANGE
-  @Column('varchar', { length: 60, nullable: true })
-  recallInfo: string;
+  @Column('date', { nullable: true })
+  recallDate: Date;
+
+  @Column('varchar', { nullable: true })
+  recallDescription: string;
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   prevSpecRxGivenRightEyeSphere: number;
