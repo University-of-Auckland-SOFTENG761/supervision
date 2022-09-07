@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@supervision/users/database';
+import { AuthService } from '@supervision/auth';
+import { UserEntity, UserRole } from '@supervision/users/database';
+import { CreateUserDto } from '@supervision/users/graphql/dto/createUser.dto';
+import { User } from 'auth0';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>
+    private usersRepository: Repository<UserEntity>,
+
+    @Inject(forwardRef(() => AuthService))
+    private authService: AuthService
   ) {}
 
   async getUpdatedUsers(
@@ -42,6 +48,28 @@ export class UserService {
       .take(limit)
       .withDeleted()
       .getMany();
+  }
+
+  async createUser(data: CreateUserDto): Promise<UserEntity> {
+    let auth0User: User;
+    try {
+      auth0User = await this.authService.createUser({
+        name: {
+          surname: data.lastName,
+          first: data.firstName,
+        },
+        ...data,
+      });
+    } catch (error) {
+      auth0User = await this.authService.getUserByEmail(data.email);
+    }
+
+    const databaseUser = new UserEntity();
+    databaseUser.role = data.role ?? UserRole.STUDENT;
+    databaseUser.auth0Id = auth0User.user_id;
+    databaseUser.firstName = data.firstName;
+    databaseUser.lastName = data.lastName;
+    return this.usersRepository.save(databaseUser);
   }
 
   async findOneById(id: string): Promise<UserEntity | null> {

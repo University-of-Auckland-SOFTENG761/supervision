@@ -8,7 +8,7 @@ export class SupervisorGuard extends AuthGuard {
     super.handleRequest(err, user, info, context, status);
 
     if (user.role != UserRole.SUPERVISOR) {
-      throw new UnauthorizedException('must be a supervisor');
+      throw new UnauthorizedException('user is not a supervisor');
     }
 
     return user;

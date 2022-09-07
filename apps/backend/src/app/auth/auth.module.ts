@@ -1,13 +1,15 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { AuthGuard } from '@supervision/auth/Auth.guard';
+import { AuthGuard, SupervisorGuard } from '@supervision/auth/guards';
 import { AuthService } from '@supervision/auth/auth.service';
-import { SupervisorGuard } from '@supervision/auth/Supervisor.guard';
 import { UsersModule } from '@supervision/users';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'jwt' }), UsersModule],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    forwardRef(() => UsersModule),
+  ],
   providers: [JwtStrategy, AuthGuard, SupervisorGuard, AuthService],
   exports: [PassportModule, AuthGuard, SupervisorGuard, AuthService],
 })

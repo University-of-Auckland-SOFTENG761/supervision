@@ -18,8 +18,11 @@ export default () => ({
     domain: process.env.AUTH0_DOMAIN,
     client: {
       id: process.env.AUTH0_CLIENT_ID,
-      secret: process.env.AUTH0_CLIENT_SECRET,
-      connection: process.env.AUTH0_CLIENT_CONNECTION,
+    },
+    management: {
+      id: process.env.AUTH0_MANAGEMENT_ID,
+      secret: process.env.AUTH0_MANAGEMENT_SECRET,
+      connection: process.env.AUTH0_MANAGEMENT_CONNECTION,
     },
   },
 });

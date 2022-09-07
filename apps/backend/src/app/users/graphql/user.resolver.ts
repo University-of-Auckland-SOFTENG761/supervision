@@ -1,9 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
-import { AuthGuard } from '@supervision/auth/Auth.guard';
-import { SupervisorGuard } from '@supervision/auth/Supervisor.guard';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { SupervisorGuard, AuthGuard } from '@supervision/auth/guards';
 import { CurrentUser } from '@supervision/shared';
 import { UserEntity } from '@supervision/users';
+import { CreateUserDto } from '@supervision/users/graphql/dto/createUser.dto';
 import { UserModel } from './user.model';
 import { UserService } from '@supervision/users/users.service';
 
@@ -15,6 +15,12 @@ export class UserResolver {
   @UseGuards(SupervisorGuard)
   async users() {
     return this.userService.findAll();
+  }
+
+  @Mutation(() => UserModel)
+  @UseGuards(SupervisorGuard)
+  async createUser(@Args('createUserInput') createUserInput: CreateUserDto) {
+    return this.userService.createUser(createUserInput);
   }
 
   @Query(() => UserModel)
