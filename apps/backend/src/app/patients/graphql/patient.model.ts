@@ -64,9 +64,6 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: true })
   postcode: string;
 
-  @Field(() => [String], { nullable: true })
-  recalls: [string];
-
   @Field({ nullable: true })
   adminNotes: string;
 

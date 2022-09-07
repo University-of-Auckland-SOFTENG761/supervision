@@ -95,10 +95,6 @@ export class PatientEntity extends BaseEntity {
   @Column('varchar', { length: 5, nullable: true })
   postcode: string;
 
-  // THIS INFO IS CURRENTLY STORED WITHIN CONSULT ENTRIES
-  @Column('varchar', { array: true, nullable: true })
-  recalls: [string];
-
   @Column('varchar', { nullable: true })
   adminNotes: string;
 
