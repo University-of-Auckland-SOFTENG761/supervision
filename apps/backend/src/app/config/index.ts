@@ -16,8 +16,10 @@ export default () => ({
     issuer_url: process.env.AUTH0_ISSUER_URL,
     audience: process.env.AUTH0_AUDIENCE,
     domain: process.env.AUTH0_DOMAIN,
+    redirect_uri: process.env.AUTH0_REDIRECT_URI,
     client: {
       id: process.env.AUTH0_CLIENT_ID,
+      secret: process.env.AUTH0_CLIENT_SECRET,
     },
     management: {
       id: process.env.AUTH0_MANAGEMENT_ID,
