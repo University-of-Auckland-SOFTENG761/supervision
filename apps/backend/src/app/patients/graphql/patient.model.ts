@@ -1,13 +1,13 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
-import { Ethnicity, Sex } from '@supervision/patient';
+import { Ethnicity, Gender } from '@supervision/patients';
 
 registerEnumType(Ethnicity, {
   name: 'Ethnicity',
 });
 
-registerEnumType(Sex, {
-  name: 'Sex',
+registerEnumType(Gender, {
+  name: 'Gender',
 });
 
 @ObjectType({ description: 'patient' })
@@ -21,54 +21,54 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: false })
   dateOfBirth: Date;
 
-  @Field(() => Sex)
-  sex: Sex;
+  @Field(() => Gender, { nullable: true })
+  gender: Gender;
 
-  @Field(() => Ethnicity)
+  @Field(() => Ethnicity, { nullable: true })
   ethnicity: Ethnicity;
 
-  @Field()
+  @Field({ nullable: true })
   school: string;
 
-  @Field()
+  @Field({ nullable: true })
   yearLevel: number;
 
-  @Field()
+  @Field({ nullable: true })
   yearLevelLastUpdated: Date;
 
-  @Field()
+  @Field({ nullable: true })
   room: string;
 
-  @Field()
+  @Field({ nullable: true })
   caregiverFirstName: string;
 
-  @Field()
+  @Field({ nullable: true })
   caregiverLastName: string;
 
-  @Field()
+  @Field({ nullable: true })
   phoneNumber: string;
 
-  @Field()
+  @Field({ nullable: true })
   email: string;
 
-  @Field()
+  @Field({ nullable: true })
   streetAddress: string;
 
-  @Field()
+  @Field({ nullable: true })
   suburb: string;
 
-  @Field()
+  @Field({ nullable: true })
   city: string;
 
-  @Field()
+  @Field({ nullable: true })
   postcode: string;
 
-  @Field()
+  @Field(() => [String], { nullable: true })
   recalls: [string];
 
-  @Field()
+  @Field({ nullable: true })
   adminNotes: string;
 
-  @Field()
+  @Field({ nullable: true })
   screeningList: string;
 }

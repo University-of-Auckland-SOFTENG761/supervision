@@ -22,7 +22,8 @@ export type IPatient = {
     city?: string;
     postCode?: string;
   };
-  parentName?: string;
+  caregiverFirstName?: string;
+  caregiverLastName?: string;
   phoneNumber?: string;
   email?: string;
   notes?: string;
@@ -48,7 +49,8 @@ export const PatientDetailsPage = () => {
         city: 'New York',
         postCode: '10028',
       },
-      parentName: 'John Doe',
+      caregiverFirstName: 'John',
+      caregiverLastName: 'Doe',
       phoneNumber: '+64 9 12345678',
       email: 'yulia@gmail.com',
       notes: 'Nothing to add',

@@ -55,7 +55,8 @@ export const PatientInputs = ({
           city: '',
           postCode: '',
         },
-        parentName: patient.parentName ?? '',
+        caregiverFirstName: patient.caregiverFirstName ?? '',
+        caregiverLastName: patient.caregiverLastName ?? '',
         phoneNumber: patient.phoneNumber ?? '',
         email: patient.email ?? '',
         notes: patient.notes ?? '',
@@ -98,7 +99,9 @@ export const PatientInputs = ({
             {...form.getInputProps('dob')}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
-            dateParser={(date: string) => dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()}
+            dateParser={(date: string) =>
+              dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
+            }
             placeholder="DD/MM/YYYY"
             initialMonth={new Date('2009-01-01')}
           />
@@ -151,8 +154,12 @@ export const PatientInputs = ({
           {...form.getInputProps('address.postCode')}
         />
         <TextInput
-          label="Parent Full Name:"
-          {...form.getInputProps('parentName')}
+          label="Caregiver First Name:"
+          {...form.getInputProps('caregiverFirstName')}
+        />
+        <TextInput
+          label="Caregiver Last Name:"
+          {...form.getInputProps('caregiverLastName')}
         />
         <TextInput label="Phone:" {...form.getInputProps('phoneNumber')} />
         <TextInput label="Email:" {...form.getInputProps('email')} />

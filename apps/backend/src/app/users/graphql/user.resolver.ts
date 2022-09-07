@@ -11,6 +11,16 @@ import { UserService } from '@supervision/users/users.service';
 export class UserResolver {
   constructor(private userService: UserService) {}
 
+  @Query(() => [UserModel], { name: 'userReplicationFeed' })
+  @UseGuards(SupervisorGuard)
+  async replicationFeed(@Args() args: ReplicationArgs): Promise<UserModel[]> {
+    return this.userService.getUpdatedUsers(
+      args.minUpdatedAt,
+      args.lastId,
+      args.limit
+    );
+  }
+
   @Query(() => [UserModel])
   @UseGuards(SupervisorGuard)
   async users() {

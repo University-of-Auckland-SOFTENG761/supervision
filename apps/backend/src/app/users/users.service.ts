@@ -16,6 +16,10 @@ export class UserService {
     private authService: AuthService
   ) {}
 
+  async findAll(): Promise<UserEntity[]> {
+    return await this.usersRepository.find();
+  }
+
   async getUpdatedUsers(
     minUpdatedAt: Date | null,
     lastId: string | null,
@@ -78,9 +82,5 @@ export class UserService {
 
   async findUserFromAuth0(auth0Id: string): Promise<UserEntity | null> {
     return this.usersRepository.findOneBy({ auth0Id });
-  }
-
-  findAll() {
-    return this.usersRepository.find();
   }
 }

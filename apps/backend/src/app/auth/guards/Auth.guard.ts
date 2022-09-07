@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
-import { UserEntity } from '@supervision/users';
+import { UserEntity } from '@supervision/users/database';
 
 @Injectable()
 export class AuthGuard extends NestAuthGuard('jwt') {
@@ -14,7 +14,7 @@ export class AuthGuard extends NestAuthGuard('jwt') {
     return ctx.getContext().req;
   }
 
-  handleRequest(err, user, info, context, status) {
+  handleRequest(err, user, info) {
     if (err || !user) {
       throw err ?? new UnauthorizedException(info?.message);
     }
