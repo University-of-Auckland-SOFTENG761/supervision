@@ -59,7 +59,7 @@ export class PatientEntity extends BaseEntity {
   })
   school: string;
 
-  @OneToMany(() => ConsultEntity, (consult) => consult.user)
+  @OneToMany(() => ConsultEntity, (consult) => consult.patient)
   consults: ConsultEntity[];
 
   @Column('smallint', { nullable: true })
