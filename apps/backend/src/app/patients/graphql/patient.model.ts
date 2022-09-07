@@ -1,13 +1,13 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
-import { Ethnicity, Sex } from '@supervision/patients';
+import { Ethnicity, Gender } from '@supervision/patients';
 
 registerEnumType(Ethnicity, {
   name: 'Ethnicity',
 });
 
-registerEnumType(Sex, {
-  name: 'Sex',
+registerEnumType(Gender, {
+  name: 'Gender',
 });
 
 @ObjectType({ description: 'patient' })
@@ -21,8 +21,8 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: false })
   dateOfBirth: Date;
 
-  @Field(() => Sex, { nullable: true })
-  sex: Sex;
+  @Field(() => Gender, { nullable: true })
+  gender: Gender;
 
   @Field(() => Ethnicity, { nullable: true })
   ethnicity: Ethnicity;
