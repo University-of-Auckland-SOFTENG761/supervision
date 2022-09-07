@@ -14,10 +14,10 @@ export class ConsultEntity extends BaseEntity {
   @Column('date', { nullable: true })
   dateConsentGiven: Date;
 
-  @Column('varchar', { length: 280 })
+  @Column('varchar', { nullable: true })
   history: string;
 
-  @Column('varchar', { length: 80, nullable: true })
+  @Column('varchar', { nullable: true })
   medication: string;
 
   @Column('varchar', { length: 10, nullable: true })
@@ -80,22 +80,22 @@ export class ConsultEntity extends BaseEntity {
   @Column('date', { nullable: true })
   tropicamideTimestamp: Date;
 
-  @Column('varchar', { length: 280, nullable: true })
+  @Column('varchar', { nullable: true })
   binocularVision: string;
 
-  @Column('varchar', { length: 280, nullable: true })
+  @Column('varchar', { nullable: true })
   anteriorHealth: string;
 
-  @Column('varchar', { length: 280, nullable: true })
+  @Column('varchar', { nullable: true })
   posteriorHealth: string;
 
-  @Column('varchar', { length: 280, nullable: true })
+  @Column('varchar', { nullable: true })
   diagnosis: string;
 
-  @Column('varchar', { length: 280, nullable: true })
+  @Column('varchar', { nullable: true })
   management: string;
 
-  @Column('varchar', { length: 280, nullable: true })
+  @Column('varchar', { nullable: true })
   layPersonNotes: string;
 
   @Column('varchar', { length: 20, nullable: true })
@@ -110,7 +110,7 @@ export class ConsultEntity extends BaseEntity {
   @Column('varchar', { length: 20, nullable: true, default: 'Datum' })
   spectacleHeights: string;
 
-  @Column('varchar', { length: 140, nullable: true })
+  @Column('varchar', { nullable: true })
   spectacleNotes: string;
 
   // RECALL COULD BE SUBJECT TO CHANGE
