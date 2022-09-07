@@ -1,7 +1,7 @@
 import { BaseEntity } from '@supervision/shared';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { UserEntity } from '@supervision/users/database/user.entity';
-import { PatientEntity } from '@supervision/patient/database/patient.entity';
+import { PatientEntity } from '@supervision/patients/database/patient.entity';
 
 @Entity({ name: 'consult' })
 export class ConsultEntity extends BaseEntity {

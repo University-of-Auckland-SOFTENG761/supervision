@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { PatientModel } from '@supervision/patient/graphql/patient.model';
+import { PatientModel } from '@supervision/patients/graphql/patient.model';
 import { BaseModel } from '@supervision/shared';
 import { UserModel } from '@supervision/users/graphql/user.model';
 
