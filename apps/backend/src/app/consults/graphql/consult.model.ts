@@ -1,10 +1,21 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { PatientModel } from '@supervision/patient/graphql/patient.model';
 import { BaseModel } from '@supervision/shared';
+import { UserModel } from '@supervision/users/graphql/user.model';
 
 @ObjectType({ description: 'consult' })
 export class ConsultModel extends BaseModel {
+  @Field(() => UserModel, { nullable: false })
+  user: UserModel;
+
+  @Field(() => PatientModel, { nullable: false })
+  patient: PatientModel;
+
   @Field({ nullable: true })
   history: string;
+
+  @Field({ nullable: true })
+  medication: string;
 
   @Field({ nullable: true })
   visualAcuityLeft: string;
@@ -25,13 +36,10 @@ export class ConsultModel extends BaseModel {
   nearAcuityBoth: string;
 
   @Field({ nullable: true })
-  coverTestDistance: number;
+  coverTestDistance: string;
 
   @Field({ nullable: true })
-  coverTestNear: number;
-
-  @Field({ nullable: true })
-  medication: string;
+  coverTestNear: string;
 
   @Field({ nullable: true })
   nearPointOfConvergence: string;
@@ -46,25 +54,28 @@ export class ConsultModel extends BaseModel {
   pupillaryDistance: number;
 
   @Field({ nullable: true })
-  other: string;
+  otherField: string;
 
   @Field({ nullable: true })
   eyePressureLeft: number;
 
   @Field({ nullable: true })
-  eyePressureLeftTimestamp: Date;
-
-  @Field({ nullable: true })
   eyePressureRight: number;
 
   @Field({ nullable: true })
-  eyePressureRightTimestamp: Date;
+  eyePressureTimestamp: Date;
 
   @Field({ nullable: true })
   isCyclopentolate: boolean;
 
   @Field({ nullable: true })
+  cyclopentolateTimestamp: Date;
+
+  @Field({ nullable: true })
   isTropicamide: boolean;
+
+  @Field({ nullable: true })
+  tropicamideTimestamp: Date;
 
   @Field({ nullable: true })
   binocularVision: string;
@@ -99,9 +110,6 @@ export class ConsultModel extends BaseModel {
   @Field({ nullable: true })
   spectacleNotes: string;
 
-  // NEED TO CHECK TYPES WITH VEERAN
-  // SHOULD THESE BE ARRAYS OR SOMETHING?
-
   @Field({ nullable: true })
   prevSpecRxGivenRightEyeSphere: number;
 
@@ -112,7 +120,10 @@ export class ConsultModel extends BaseModel {
   prevSpecRxGivenRightAxis: number;
 
   @Field({ nullable: true })
-  prevSpecRxGivenRightVA: number;
+  prevSpecRxGivenRightVA: string;
+
+  @Field({ nullable: true })
+  prevSpecRxGivenRightAdd: string;
 
   @Field({ nullable: true })
   prevSpecRxGivenLeftEyeSphere: number;
@@ -124,7 +135,13 @@ export class ConsultModel extends BaseModel {
   prevSpecRxGivenLeftAxis: number;
 
   @Field({ nullable: true })
-  prevSpecRxGivenLeftVA: number;
+  prevSpecRxGivenLeftVA: string;
+
+  @Field({ nullable: true })
+  prevSpecRxGivenLeftAdd: string;
+
+  @Field({ nullable: true })
+  prevSpecRxGivenBVA: string;
 
   @Field({ nullable: true })
   habitualRightEyeSphere: number;
@@ -136,7 +153,10 @@ export class ConsultModel extends BaseModel {
   habitualRightAxis: number;
 
   @Field({ nullable: true })
-  habitualRightVA: number;
+  habitualRightVA: string;
+
+  @Field({ nullable: true })
+  habitualRightAdd: string;
 
   @Field({ nullable: true })
   habitualLeftEyeSphere: number;
@@ -148,7 +168,10 @@ export class ConsultModel extends BaseModel {
   habitualLeftAxis: number;
 
   @Field({ nullable: true })
-  habitualLeftVA: number;
+  habitualLeftVA: string;
+
+  @Field({ nullable: true })
+  habitualLeftAdd: string;
 
   @Field({ nullable: true })
   dryRetinoscopyRightEyeSphere: number;
@@ -160,7 +183,10 @@ export class ConsultModel extends BaseModel {
   dryRetinoscopyRightAxis: number;
 
   @Field({ nullable: true })
-  dryRetinoscopyRightVA: number;
+  dryRetinoscopyRightVA: string;
+
+  @Field({ nullable: true })
+  dryRetinoscopyRightAdd: string;
 
   @Field({ nullable: true })
   dryRetinoscopyLeftEyeSphere: number;
@@ -172,7 +198,10 @@ export class ConsultModel extends BaseModel {
   dryRetinoscopyLeftAxis: number;
 
   @Field({ nullable: true })
-  dryRetinoscopyLeftVA: number;
+  dryRetinoscopyLeftVA: string;
+
+  @Field({ nullable: true })
+  dryRetinoscopyLeftAdd: string;
 
   @Field({ nullable: true })
   autoRefractionRightEyeSphere: number;
@@ -184,7 +213,10 @@ export class ConsultModel extends BaseModel {
   autoRefractionRightAxis: number;
 
   @Field({ nullable: true })
-  autoRefractionRightVA: number;
+  autoRefractionRightVA: string;
+
+  @Field({ nullable: true })
+  autoRefractionRightAdd: string;
 
   @Field({ nullable: true })
   autoRefractionLeftEyeSphere: number;
@@ -196,7 +228,10 @@ export class ConsultModel extends BaseModel {
   autoRefractionLeftAxis: number;
 
   @Field({ nullable: true })
-  autoRefractionLeftVA: number;
+  autoRefractionLeftVA: string;
+
+  @Field({ nullable: true })
+  autoRefractionLeftAdd: string;
 
   @Field({ nullable: true })
   wetRefractionRightEyeSphere: number;
@@ -208,7 +243,10 @@ export class ConsultModel extends BaseModel {
   wetRefractionRightAxis: number;
 
   @Field({ nullable: true })
-  wetRefractionRightVA: number;
+  wetRefractionRightVA: string;
+
+  @Field({ nullable: true })
+  wetRefractionRightAdd: string;
 
   @Field({ nullable: true })
   wetRefractionLeftEyeSphere: number;
@@ -220,7 +258,10 @@ export class ConsultModel extends BaseModel {
   wetRefractionLeftAxis: number;
 
   @Field({ nullable: true })
-  wetRefractionLeftVA: number;
+  wetRefractionLeftVA: string;
+
+  @Field({ nullable: true })
+  wetRefractionLeftAdd: string;
 
   @Field({ nullable: true })
   subjectiveRefractionRightEyeSphere: number;
@@ -232,7 +273,10 @@ export class ConsultModel extends BaseModel {
   subjectiveRefractionRightAxis: number;
 
   @Field({ nullable: true })
-  subjectiveRefractionRightVA: number;
+  subjectiveRefractionRightVA: string;
+
+  @Field({ nullable: true })
+  subjectiveRefractionRightAdd: string;
 
   @Field({ nullable: true })
   subjectiveRefractionLeftEyeSphere: number;
@@ -244,7 +288,10 @@ export class ConsultModel extends BaseModel {
   subjectiveRefractionLeftAxis: number;
 
   @Field({ nullable: true })
-  subjectiveRefractionLeftVA: number;
+  subjectiveRefractionLeftVA: string;
+
+  @Field({ nullable: true })
+  subjectiveRefractionLeftAdd: string;
 
   @Field({ nullable: true })
   givenRefractionRightEyeSphere: number;
@@ -256,7 +303,10 @@ export class ConsultModel extends BaseModel {
   givenRefractionRightAxis: number;
 
   @Field({ nullable: true })
-  givenRefractionRightVA: number;
+  givenRefractionRightVA: string;
+
+  @Field({ nullable: true })
+  givenRefractionRightAdd: string;
 
   @Field({ nullable: true })
   givenRefractionLeftEyeSphere: number;
@@ -268,5 +318,11 @@ export class ConsultModel extends BaseModel {
   givenRefractionLeftAxis: number;
 
   @Field({ nullable: true })
-  givenRefractionLeftVA: number;
+  givenRefractionLeftVA: string;
+
+  @Field({ nullable: true })
+  givenRefractionLeftAdd: string;
+
+  @Field({ nullable: true })
+  givenRefractionBVA: string;
 }

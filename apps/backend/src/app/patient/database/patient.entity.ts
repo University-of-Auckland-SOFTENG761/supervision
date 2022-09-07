@@ -1,5 +1,6 @@
+import { ConsultEntity } from '@supervision/consults/database/consult.entity';
 import { BaseEntity } from '@supervision/shared';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 export enum Ethnicity {
   NZEUROPEAN = 'nz european',
@@ -58,6 +59,9 @@ export class PatientEntity extends BaseEntity {
   })
   school: string;
 
+  @OneToMany(() => ConsultEntity, (consult) => consult.user)
+  consults: ConsultEntity[];
+
   @Column('smallint', { nullable: true })
   yearLevel: number;
 
@@ -91,6 +95,7 @@ export class PatientEntity extends BaseEntity {
   @Column('varchar', { length: 5, nullable: true })
   postcode: string;
 
+  // THIS INFO IS CURRENTLY STORED WITHIN CONSULT ENTRIES
   @Column('varchar', { array: true, nullable: true })
   recalls: [string];
 

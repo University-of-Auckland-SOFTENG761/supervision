@@ -1,37 +1,45 @@
 import { BaseEntity } from '@supervision/shared';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
+import { UserEntity } from '@supervision/users/database/user.entity';
+import { PatientEntity } from '@supervision/patient/database/patient.entity';
 
 @Entity({ name: 'consult' })
 export class ConsultEntity extends BaseEntity {
-  @Column('varchar', { length: 140 })
+  @ManyToOne(() => UserEntity, (user) => user.consults)
+  user: UserEntity;
+
+  @ManyToOne(() => PatientEntity, (patient) => patient.consults)
+  patient: PatientEntity;
+
+  @Column('varchar', { length: 280 })
   history: string;
 
-  @Column('varchar', { length: 8, nullable: true })
+  @Column('varchar', { length: 80, nullable: true })
+  medication: string;
+
+  @Column('varchar', { length: 10, nullable: true })
   visualAcuityLeft: string;
 
-  @Column('varchar', { length: 8, nullable: true })
+  @Column('varchar', { length: 10, nullable: true })
   visualAcuityRight: string;
 
-  @Column('varchar', { length: 8, nullable: true })
+  @Column('varchar', { length: 10, nullable: true })
   visualAcuityBoth: string;
 
-  @Column('varchar', { length: 8, nullable: true })
+  @Column('varchar', { length: 10, nullable: true })
   nearAcuityLeft: string;
 
-  @Column('varchar', { length: 8, nullable: true })
+  @Column('varchar', { length: 10, nullable: true })
   nearAcuityRight: string;
 
-  @Column('varchar', { length: 8, nullable: true })
+  @Column('varchar', { length: 10, nullable: true })
   nearAcuityBoth: string;
 
-  @Column('int', { nullable: true })
-  coverTestDistance: number;
-
-  @Column('int', { nullable: true })
-  coverTestNear: number;
+  @Column('varchar', { length: 40, nullable: true })
+  coverTestDistance: string;
 
   @Column('varchar', { length: 40, nullable: true })
-  medication: string;
+  coverTestNear: string;
 
   @Column('varchar', { length: 8, nullable: true })
   nearPointOfConvergence: string;
@@ -42,43 +50,46 @@ export class ConsultEntity extends BaseEntity {
   @Column('varchar', { length: 8, nullable: true })
   pupils: string;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   pupillaryDistance: number;
 
   @Column('varchar', { length: 20, nullable: true })
-  other: string;
+  otherField: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   eyePressureLeft: number;
 
-  @Column('date', { nullable: true })
-  eyePressureLeftTimestamp: Date;
-
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   eyePressureRight: number;
 
   @Column('date', { nullable: true })
-  eyePressureRightTimestamp: Date;
+  eyePressureTimestamp: Date;
 
   @Column('boolean', { nullable: true })
   isCyclopentolate: boolean;
 
+  @Column('date', { nullable: true })
+  cyclopentolateTimestamp: Date;
+
   @Column('boolean', { nullable: true })
   isTropicamide: boolean;
 
-  @Column('varchar', { length: 20, nullable: true })
+  @Column('date', { nullable: true })
+  tropicamideTimestamp: Date;
+
+  @Column('varchar', { length: 280, nullable: true })
   binocularVision: string;
 
-  @Column('varchar', { length: 20, nullable: true })
+  @Column('varchar', { length: 280, nullable: true })
   anteriorHealth: string;
 
-  @Column('varchar', { length: 20, nullable: true })
+  @Column('varchar', { length: 280, nullable: true })
   posteriorHealth: string;
 
-  @Column('varchar', { length: 140, nullable: true })
+  @Column('varchar', { length: 280, nullable: true })
   diagnosis: string;
 
-  @Column('varchar', { length: 140, nullable: true })
+  @Column('varchar', { length: 280, nullable: true })
   management: string;
 
   @Column('varchar', { length: 280, nullable: true })
@@ -93,180 +104,229 @@ export class ConsultEntity extends BaseEntity {
   @Column('varchar', { length: 20, nullable: true })
   spectacleLensType: string;
 
-  @Column('varchar', { length: 20, nullable: true })
+  @Column('varchar', { length: 20, nullable: true, default: 'Datum' })
   spectacleHeights: string;
 
   @Column('varchar', { length: 140, nullable: true })
   spectacleNotes: string;
 
-  // NEED TO CHECK TYPES WITH VEERAN
-  // SHOULD THESE BE ARRAYS OR SOMETHING?
+  // RECALL COULD BE SUBJECT TO CHANGE
+  @Column('varchar', { length: 60, nullable: true })
+  recallInfo: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   prevSpecRxGivenRightEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   prevSpecRxGivenRightCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   prevSpecRxGivenRightAxis: number;
 
-  @Column('int', { nullable: true })
-  prevSpecRxGivenRightVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  prevSpecRxGivenRightVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  prevSpecRxGivenRightAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   prevSpecRxGivenLeftEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   prevSpecRxGivenLeftCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   prevSpecRxGivenLeftAxis: number;
 
-  @Column('int', { nullable: true })
-  prevSpecRxGivenLeftVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  prevSpecRxGivenLeftVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  prevSpecRxGivenLeftAdd: number;
+
+  @Column('varchar', { length: 10, nullable: true })
+  prevSpecRxGivenBVA: string;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   habitualRightEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   habitualRightCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   habitualRightAxis: number;
 
-  @Column('int', { nullable: true })
-  habitualRightVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  habitualRightVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  habitualRightAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   habitualLeftEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   habitualLeftCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   habitualLeftAxis: number;
 
-  @Column('int', { nullable: true })
-  habitualLeftVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  habitualLeftVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  habitualLeftAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   dryRetinoscopyRightEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   dryRetinoscopyRightCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   dryRetinoscopyRightAxis: number;
 
-  @Column('int', { nullable: true })
-  dryRetinoscopyRightVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  dryRetinoscopyRightVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  dryRetinoscopyRightAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   dryRetinoscopyLeftEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   dryRetinoscopyLeftCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   dryRetinoscopyLeftAxis: number;
 
-  @Column('int', { nullable: true })
-  dryRetinoscopyLeftVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  dryRetinoscopyLeftVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  dryRetinoscopyLeftAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   autoRefractionRightEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   autoRefractionRightCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   autoRefractionRightAxis: number;
 
-  @Column('int', { nullable: true })
-  autoRefractionRightVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  autoRefractionRightVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  autoRefractionRightAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   autoRefractionLeftEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   autoRefractionLeftCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   autoRefractionLeftAxis: number;
 
-  @Column('int', { nullable: true })
-  autoRefractionLeftVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  autoRefractionLeftVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  autoRefractionLeftAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   wetRefractionRightEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   wetRefractionRightCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   wetRefractionRightAxis: number;
 
-  @Column('int', { nullable: true })
-  wetRefractionRightVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  wetRefractionRightVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  wetRefractionRightAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   wetRefractionLeftEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   wetRefractionLeftCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   wetRefractionLeftAxis: number;
 
-  @Column('int', { nullable: true })
-  wetRefractionLeftVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  wetRefractionLeftVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  wetRefractionLeftAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   subjectiveRefractionRightEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   subjectiveRefractionRightCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   subjectiveRefractionRightAxis: number;
 
-  @Column('int', { nullable: true })
-  subjectiveRefractionRightVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  subjectiveRefractionRightVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  subjectiveRefractionRightAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   subjectiveRefractionLeftEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   subjectiveRefractionLeftCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   subjectiveRefractionLeftAxis: number;
 
-  @Column('int', { nullable: true })
-  subjectiveRefractionLeftVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  subjectiveRefractionLeftVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  subjectiveRefractionLeftAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   givenRefractionRightEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   givenRefractionRightCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   givenRefractionRightAxis: number;
 
-  @Column('int', { nullable: true })
-  givenRefractionRightVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  givenRefractionRightVA: string;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  givenRefractionRightAdd: number;
+
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   givenRefractionLeftEyeSphere: number;
 
-  @Column('int', { nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   givenRefractionLeftCylinder: number;
 
-  @Column('int', { nullable: true })
+  @Column('smallint', { nullable: true })
   givenRefractionLeftAxis: number;
 
-  @Column('int', { nullable: true })
-  givenRefractionLeftVA: number;
+  @Column('varchar', { length: 10, nullable: true })
+  givenRefractionLeftVA: string;
+
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  givenRefractionLeftAdd: number;
+
+  @Column('varchar', { length: 10, nullable: true })
+  givenRefractionBVA: string;
 }
