@@ -6,8 +6,8 @@ import { UserResolver } from '@supervision/users/graphql';
 import { UserService } from '@supervision/users/users.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), AuthModule],
-  exports: [TypeOrmModule],
+  imports: [TypeOrmModule.forFeature([UserEntity])],
+  exports: [TypeOrmModule, UserService],
   providers: [UserService, UserResolver],
 })
 export class UsersModule {}

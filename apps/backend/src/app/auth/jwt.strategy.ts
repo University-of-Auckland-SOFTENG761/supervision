@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { UserEntity, UserService } from '@supervision/users';
 import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private configService: ConfigService) {
-    const audience = configService.get('auth0.audience');
+  constructor(
+    private configService: ConfigService,
+    private userService: UserService
+  ) {
+    const audience = configService.get('auth0.client.id');
     const issuer = configService.get('auth0.issuer_url');
 
     super({
@@ -25,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  validate(payload: unknown): unknown {
-    return payload;
+  async validate(payload: unknown): Promise<UserEntity> {
+    return this.userService.findUserFromAuth0(payload['sub']);
   }
 }

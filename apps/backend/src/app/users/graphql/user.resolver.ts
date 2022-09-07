@@ -14,7 +14,7 @@ export class UserResolver {
   @Query(() => [UserModel])
   @UseGuards(SupervisorGuard)
   async users() {
-    return this.userService.getUsers();
+    return this.userService.findAll();
   }
 
   @Query(() => UserModel)
