@@ -11,6 +11,9 @@ export class ConsultEntity extends BaseEntity {
   @ManyToOne(() => PatientEntity, (patient) => patient.consults)
   patient: PatientEntity;
 
+  @Column('date', { nullable: true })
+  dateConsentGiven: Date;
+
   @Column('varchar', { length: 280 })
   history: string;
 

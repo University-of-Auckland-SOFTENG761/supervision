@@ -11,6 +11,9 @@ export class ConsultModel extends BaseModel {
   @Field(() => PatientModel, { nullable: false })
   patient: PatientModel;
 
+  @Field({ nullable: false })
+  dateConsentGiven: Date;
+
   @Field({ nullable: true })
   history: string;
 
