@@ -10,7 +10,7 @@ describe('patient service', () => {
     firstName: 'Davo',
     lastName: 'Smith',
     dateOfBirth: new Date(),
-    sex: null,
+    gender: null,
     ethnicity: null,
     school: null,
     yearLevel: null,
