@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { SupervisorGuard, AuthGuard } from '@supervision/auth/guards';
-import { CurrentUser } from '@supervision/shared';
+import { CurrentUser, ReplicationArgs } from '@supervision/shared';
 import { UserEntity } from '@supervision/users';
 import { CreateUserDto } from '@supervision/users/graphql/dto/createUser.dto';
 import { UserModel } from './user.model';

@@ -4,8 +4,8 @@ import { UserRole } from '@supervision/users/database/user.entity';
 
 @Injectable()
 export class SupervisorGuard extends AuthGuard {
-  handleRequest(err, user, info, context, status) {
-    super.handleRequest(err, user, info, context, status);
+  handleRequest(err, user, info) {
+    super.handleRequest(err, user, info);
 
     if (user.role != UserRole.SUPERVISOR) {
       throw new UnauthorizedException('user is not a supervisor');
