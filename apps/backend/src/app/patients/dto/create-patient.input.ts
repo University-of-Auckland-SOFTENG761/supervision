@@ -1,5 +1,8 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { Sex, Ethnicity } from '@supervision/patients/database/patient.entity';
+import {
+  Gender,
+  Ethnicity,
+} from '@supervision/patients/database/patient.entity';
 
 @InputType()
 export class CreatePatientInput {
@@ -13,8 +16,8 @@ export class CreatePatientInput {
   @Field(() => Date, { nullable: false })
   dateOfBirth: Date;
 
-  @Field(() => Sex, { nullable: true })
-  sex: Sex;
+  @Field(() => Gender, { nullable: true })
+  gender: Gender;
 
   @Field(() => Ethnicity, { nullable: true })
   ethnicity: Ethnicity;

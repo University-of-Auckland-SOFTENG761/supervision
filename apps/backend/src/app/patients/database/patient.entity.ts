@@ -23,7 +23,7 @@ export enum Ethnicity {
   OTHERETHNICITY = 'other ethnicity',
 }
 
-export enum Sex {
+export enum Gender {
   FEMALE = 'female',
   MALE = 'male',
   OTHER = 'other',
@@ -42,10 +42,10 @@ export class PatientEntity extends BaseEntity {
   dateOfBirth: Date;
 
   @Column('enum', {
-    enum: Sex,
+    enum: Gender,
     nullable: true,
   })
-  sex: Sex;
+  gender: Gender;
 
   @Column('enum', {
     enum: Ethnicity,
