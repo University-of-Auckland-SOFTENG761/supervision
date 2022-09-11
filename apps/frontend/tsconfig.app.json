@@ -6,7 +6,8 @@
     "baseUrl": "./src",
     "paths": {
       "@shared": ["app/shared/index.ts"],
-      "@patients": ["app/patients/index.ts"]
+      "@patients": ["app/patients/index.ts"],
+      "@login": ["app/login/index.ts"]
     }
   },
   "files": [
@@ -24,11 +25,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": [
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "src/app/patients/patient-details-page"
-  ]
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }
