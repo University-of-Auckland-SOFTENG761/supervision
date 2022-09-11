@@ -10,19 +10,19 @@ export const usePatients = () => {
 
   const newPatient = useCallback(() => {
     const newPatient = {
-      uid: uuid(),
+      id: uuid(),
       firstName: '',
       lastName: '',
     };
     patientsDb?.['patients'].insert(newPatient);
-    return newPatient.uid;
+    return newPatient.id;
   }, [patientsDb]);
 
   const updatePatient = (patient: IPatient) => {
     patientsDb?.['patients']
       .findOne({
         selector: {
-          uid: patient.uid,
+          id: patient.id,
         },
       })
       .exec()

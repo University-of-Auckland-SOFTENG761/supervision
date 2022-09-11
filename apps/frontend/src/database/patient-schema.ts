@@ -4,12 +4,12 @@ import { RxJsonSchema } from 'rxdb';
 const patientSchema: RxJsonSchema<any> = {
   title: 'RxDB Patient Schema',
   version: 0,
-  primaryKey: 'uid',
+  primaryKey: 'id',
   type: 'object',
   properties: {
-    uid: {
+    id: {
       type: 'string',
-      maxLength: 36, // <- GraphQL UUID max length
+      maxLength: 64, // <- GraphQL UUID max length
     },
     firstName: {
       type: 'string',
@@ -68,7 +68,7 @@ const patientSchema: RxJsonSchema<any> = {
       type: 'string',
     },
   },
-  required: ['uid', 'firstName', 'lastName'],
+  required: ['id', 'firstName', 'lastName'],
 };
 
 export default patientSchema;

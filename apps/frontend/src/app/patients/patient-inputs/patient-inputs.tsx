@@ -20,7 +20,7 @@ type PatientInputsProps = {
 export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
   const { patients, updatePatient } = usePatients();
   const patient = patientUid
-    ? patients.find((p: IPatient) => p.uid === patientUid)
+    ? patients.find((p: IPatient) => p.id === patientUid)
     : undefined;
   const [patientAge, setPatientAge] = useState(
     patient?.dob ? calculateAge(new Date(patient?.dob)) : undefined
@@ -28,7 +28,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
 
   const buildFormValues = useCallback(
     () => ({
-      uid: patient?.uid,
+      id: patient?.id,
       firstName: patient?.firstName ?? '',
       lastName: patient?.lastName ?? '',
       dob: patient?.dob ? new Date(patient?.dob) : null,
@@ -72,12 +72,12 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
   const buildPatient = () => {
     const newPatient = {
       ...form.values,
-      uid: patient?.uid ?? '',
+      id: patient?.id ?? '',
       gender: form.values.gender ?? undefined,
       ethnicity: form.values.ethnicity ?? undefined,
       dob: form.values.dob ? form.values.dob.toISOString() : undefined,
     };
-    if (newPatient.uid === undefined) return undefined;
+    if (newPatient.id === undefined) return undefined;
     return newPatient;
   };
 

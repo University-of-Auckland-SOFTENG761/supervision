@@ -46,7 +46,7 @@ export const PatientTabs = ({
       >
         <Tabs.List>
           {patients.map((patient: IPatient) => (
-            <Tabs.Tab key={'patient-' + patient.uid} value={patient.uid}>
+            <Tabs.Tab key={'patient-' + patient.id} value={patient.id}>
               {!patient.firstName && !patient.lastName
                 ? 'New Patient'
                 : patient.firstName + ' ' + patient.lastName}

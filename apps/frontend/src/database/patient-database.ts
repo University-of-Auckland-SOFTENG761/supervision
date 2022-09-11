@@ -22,40 +22,46 @@ const pullQueryBuilder = (doc: RxDocument<any>) => {
   if (!doc) {
     doc = {
       id: '',
-      updatedAt: 0,
+      updatedAt: new Date(0).toISOString(),
     };
   }
 
+  doc = {
+    ...doc,
+    updatedAt: new Date(doc.updatedAt).toISOString(),
+  };
+
   const query = `{
-    userReplicationFeed(lastId: "${doc.id}", minUpdatedAt: ${doc.updatedAt}, limit: 5) {
+    patientReplicationFeed(minUpdatedAt: "${doc.updatedAt}", limit: 5) {
       id,
+      revision,
+      createdAt,
+      deletedAt,
+      updatedAt,
       firstName,
       lastName,
-      updatedAt,
-      deletedAt,
+      gender,
+      ethnicity,
+      school,
+      yearLevel,
+      yearLevelLastUpdated,
+      room,
+      caregiverFirstName,
+      caregiverLastName,
+      phoneNumber,
+      email,
+      streetAddress,
+      suburb,
+      city,
+      postcode,
+      adminNotes,
+      screeningList,
     }
   }`;
 
   return {
     query,
     variables: {},
-  };
-};
-
-const pushQueryBuilder = (docs: RxDocument[]) => {
-  const query = `
-      mutation CreatePatient($patients: [CreatePatientInput]) {
-          setPatients(patients: $patients) {
-              id # GraphQL does not allow returning void, so we return one id.
-          }
-      }
-  `;
-  const variables = {
-    patients: docs,
-  };
-  return {
-    query,
-    variables,
   };
 };
 
@@ -75,11 +81,6 @@ const initializePatientDatabase = async () => {
     pull: {
       queryBuilder: pullQueryBuilder, // the queryBuilder from above
       batchSize: 5,
-    },
-    push: {
-      queryBuilder: pushQueryBuilder,
-      batchSize: 5,
-      modifier: (doc) => doc,
     },
     deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
     live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done

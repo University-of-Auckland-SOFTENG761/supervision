@@ -6,7 +6,7 @@ import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
 
 export type IPatient = {
-  uid: string;
+  id: string;
   firstName?: string;
   lastName?: string;
   dob?: string;
