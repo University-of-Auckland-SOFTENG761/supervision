@@ -34,6 +34,8 @@ export function App() {
               <NavbarLink
                 label="Consultations"
                 icon={IconStethoscope}
+                onClick={() => navigate('/consult-details')}
+                active={location.pathname === '/consult-details'}
               ></NavbarLink>
               <NavbarLink label="Dispense" icon={IconPill}></NavbarLink>
             </Stack>
