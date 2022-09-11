@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button, Select, Stack, Text, Title } from '@mantine/core';
 import { Logo } from '@shared';
+import { useAuth0 } from '@auth0/auth0-react';
 
 // TODO: Replace with actual data from database
 const locations = ['University of Auckland', 'Harvard University', 'MIT'];
 
 export const LoginPage = () => {
+  const { loginWithRedirect } = useAuth0();
+
   return (
     <Stack className="items-center justify-center h-full m-auto w-1/4">
       <Logo size="sm" />
@@ -20,13 +23,7 @@ export const LoginPage = () => {
         className="w-full"
         searchable
       />
-      <Button
-        component="a"
-        href="https://dev-6mx9ad29.us.auth0.com/authorize?response_type=code&client_id=SiqwTzesySraxm8Ml8t7wModRdckoh0c&redirect_uri=https://localhost:3333&scope=openid"
-        uppercase
-        fullWidth
-        size="lg"
-      >
+      <Button uppercase fullWidth size="lg" onClick={() => loginWithRedirect()}>
         Login with Auth0
       </Button>
     </Stack>
