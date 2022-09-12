@@ -65,6 +65,9 @@ const patientSchema: RxJsonSchema<any> = {
     adminNotes: {
       type: 'string',
     },
+    deletedAt: {
+      type: 'string',
+    },
   },
   required: ['id'],
 };

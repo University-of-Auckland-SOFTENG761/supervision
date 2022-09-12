@@ -150,8 +150,10 @@ const pushQueryBuilder = (docs: RxDocument<any>[]) => {
 const deletionFilter = (doc: RxDocument<any>) => {
   doc = {
     ...doc,
-    deletedAt: new Date(doc.deletedAt).getTime() ? doc.deletedAt : null,
-    _deleted: new Date(doc.deletedAt).getTime() ? true : false,
+    deletedAt:
+      doc.deletedAt && new Date(doc.deletedAt) !== new Date(0)
+        ? doc.deletedAt
+        : undefined,
   };
   return doc;
 };
