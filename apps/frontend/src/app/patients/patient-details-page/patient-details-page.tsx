@@ -13,7 +13,7 @@ export type IPatient = {
   ethnicity?: string;
   gender?: string;
   school?: string;
-  year?: number;
+  yearLevel?: number;
   room?: string;
   streetAddress?: string;
   suburb?: string;

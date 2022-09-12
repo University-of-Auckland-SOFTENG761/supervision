@@ -4,6 +4,8 @@ import patientSchema from './patient-schema';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 import DatabaseConstructor from './database-constructor';
 import { RxDBReplicationGraphQLPlugin } from 'rxdb/plugins/replication-graphql';
+import { Ethnicities } from 'app/patients/ethnicity-select/ethnicity-select';
+import { Gender } from 'app/patients/gender-select/gender-select';
 
 const addPlugins = async () => {
   addRxPlugin(RxDBReplicationGraphQLPlugin);
@@ -15,6 +17,51 @@ const addPlugins = async () => {
       addRxPlugin((module as any).RxDBDevModePlugin);
     });
   }
+};
+
+const toEnumCase = (str: Ethnicities | Gender) =>
+  str.toUpperCase().replaceAll(' ', '');
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serializeEnums = (doc: RxDocument<any>) => {
+  doc.ethnicity =
+    doc.ethnicity && typeof doc.ethnicity == 'string'
+      ? toEnumCase(doc.ethnicity)
+      : undefined;
+  doc.gender =
+    doc.gender && typeof doc.gender == 'string'
+      ? toEnumCase(doc.gender)
+      : undefined;
+  return doc;
+};
+
+const deserializeEnums = (doc: RxDocument<any>) => {
+  const ethnicityArray = Array.from(
+    (Object.keys(Ethnicities) as Array<keyof typeof Ethnicities>).map((key) => {
+      return { key, value: toEnumCase(Ethnicities[key]) };
+    })
+  );
+  if (doc.ethnicity) {
+    const ethnicityKey = ethnicityArray?.find(
+      ({ key, value }) => value === doc.ethnicity
+    )?.key;
+    doc.ethnicity = ethnicityKey ? Ethnicities[ethnicityKey] : undefined;
+  }
+
+  const genderArray = Array.from(
+    (Object.keys(Gender) as Array<keyof typeof Gender>).map((key) => {
+      return { key, value: toEnumCase(Gender[key]) };
+    })
+  );
+
+  if (doc.gender) {
+    const genderKey = genderArray?.find(
+      ({ key, value }) => value === doc.gender
+    )?.key;
+    doc.gender = genderKey ? Gender[genderKey] : undefined;
+  }
+
+  return doc;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,7 +124,8 @@ const pushQueryBuilder = (docs: RxDocument<any>[]) => {
     return rest;
   });
 
-  console.log(docs);
+  // Make enum values uppercase and remove whitespace
+  docs = docs.map((doc) => serializeEnums(doc));
 
   const query = `
           mutation SetPatient($patients: [SetPatientInput!]) {
@@ -122,12 +170,12 @@ const initializePatientDatabase = async () => {
     pull: {
       queryBuilder: pullQueryBuilder, // the queryBuilder from above
       batchSize: 5,
-      modifier: deletionFilter,
+      modifier: (doc) => deserializeEnums(deletionFilter(doc)),
     },
     push: {
       queryBuilder: pushQueryBuilder,
       batchSize: 5,
-      modifier: deletionFilter,
+      modifier: (doc) => deserializeEnums(deletionFilter(doc)),
     },
     deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
     live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done

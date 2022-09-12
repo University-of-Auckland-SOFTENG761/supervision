@@ -6,7 +6,7 @@ type EthnicitySelectProps = {
   onChange: (value: string | null) => void;
 };
 
-enum Ethnicities {
+export enum Ethnicities {
   'NZ European' = 'nz european',
   'Other European' = 'other european',
   'NZ Maori' = 'nz maori',

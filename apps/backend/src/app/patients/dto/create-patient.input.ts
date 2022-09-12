@@ -25,7 +25,7 @@ export class CreatePatientInput {
   @Field(() => String, { nullable: true })
   school: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => Number, { nullable: true })
   yearLevel: number;
 
   @Field(() => Date, { nullable: true })

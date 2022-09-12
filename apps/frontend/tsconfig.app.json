@@ -7,7 +7,8 @@
     "paths": {
       "@shared": ["app/shared/index.ts"],
       "@patients": ["app/patients/index.ts"]
-    }
+    },
+    "lib": ["es2021"]
   },
   "files": [
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",

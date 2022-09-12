@@ -37,14 +37,15 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
       ethnicity: patient?.ethnicity ?? null,
       gender: patient?.gender ?? null,
       school: patient?.school ?? '',
-      year: patient?.year,
+      yearLevel: patient?.yearLevel,
       room: patient?.room ?? '',
       streetAddress: patient?.streetAddress ?? '',
       suburb: patient?.suburb ?? '',
       city: patient?.city ?? '',
-      postcode: '',
+      postcode: patient?.postcode ?? '',
       caregiverFirstName: patient?.caregiverFirstName ?? '',
       caregiverLastName: patient?.caregiverLastName ?? '',
+      phoneNumber: patient?.phoneNumber ?? '',
       email: patient?.email ?? '',
       adminNotes: patient?.adminNotes ?? '',
     }),
@@ -134,7 +135,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
           <NumberInput
             label="Year:"
             className="w-20"
-            {...form.getInputProps('year')}
+            {...form.getInputProps('yearLevel')}
           />
           <TextInput
             label="Room:"
@@ -147,22 +148,13 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
         <TextInput
           label="Address:"
           placeholder="Street Address"
-          {...form.getInputProps('address.street')}
+          {...form.getInputProps('streetAddress')}
         />
         <Group className="w-full" grow>
-          <TextInput
-            placeholder="Suburb"
-            {...form.getInputProps('address.suburb')}
-          />
-          <TextInput
-            placeholder="City"
-            {...form.getInputProps('address.city')}
-          />
+          <TextInput placeholder="Suburb" {...form.getInputProps('suburb')} />
+          <TextInput placeholder="City" {...form.getInputProps('city')} />
         </Group>
-        <TextInput
-          placeholder="Postcode"
-          {...form.getInputProps('address.postcode')}
-        />
+        <TextInput placeholder="Postcode" {...form.getInputProps('postcode')} />
         <TextInput
           label="Caregiver First Name:"
           {...form.getInputProps('caregiverFirstName')}
@@ -180,7 +172,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
           placeholder="Type here..."
           autosize
           minRows={3}
-          {...form.getInputProps('notes')}
+          {...form.getInputProps('adminNotes')}
         />
         <RecallsTable />
       </Stack>

@@ -32,7 +32,7 @@ const patientSchema: RxJsonSchema<any> = {
     school: {
       type: 'string',
     },
-    year: {
+    yearLevel: {
       type: 'number',
     },
     room: {
@@ -50,7 +50,10 @@ const patientSchema: RxJsonSchema<any> = {
     postcode: {
       type: 'string',
     },
-    parentName: {
+    caregiverFirstName: {
+      type: 'string',
+    },
+    caregiverLastName: {
       type: 'string',
     },
     phoneNumber: {
