@@ -12,6 +12,20 @@ export const LoginPage = () => {
   const { loginWithRedirect } = useAuth0();
   const online = useNetwork();
 
+  const [location, setLocation] = React.useState<string | null>(null);
+  const [selectErrorMessage, setSelectErrorMessage] = React.useState<
+    string | undefined
+  >(undefined);
+
+  const handleClickLogin = () => {
+    if (location === null) {
+      setSelectErrorMessage('Please select a location');
+    } else {
+      setSelectErrorMessage(undefined);
+      loginWithRedirect();
+    }
+  };
+
   if (!online) {
     return <OfflineLoginPage />;
   } else {
@@ -26,15 +40,14 @@ export const LoginPage = () => {
           label="Select a location:"
           placeholder="Pick one"
           data={locations}
+          value={location}
+          onChange={(value) => setLocation(value)}
           className="w-full"
           searchable
+          required
+          error={selectErrorMessage}
         />
-        <Button
-          uppercase
-          fullWidth
-          size="lg"
-          onClick={() => loginWithRedirect()}
-        >
+        <Button uppercase fullWidth size="lg" onClick={handleClickLogin}>
           Login with Auth0
         </Button>
       </Stack>
