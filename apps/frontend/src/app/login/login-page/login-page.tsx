@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Select, Stack, Text, Title } from '@mantine/core';
-import { Logo } from '@shared';
+import { Select, Stack, Text, Title } from '@mantine/core';
+import { Button, Logo } from '@shared';
 import { useAuth0 } from '@auth0/auth0-react';
 
 // TODO: Replace with actual data from database
