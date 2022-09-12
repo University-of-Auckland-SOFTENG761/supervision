@@ -115,8 +115,10 @@ const pullQueryBuilder = (doc: RxDocument<any>) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const pushQueryBuilder = (docs: RxDocument<any>[]) => {
-  // Ensure that the backend's required fields are not null or undefined or empty string
-  docs = docs.filter((doc) => doc.id);
+  // Ensure that the doc has at least an id field and one of firstName, lastName, or dateOfBirth
+  docs = docs.filter(
+    (doc) => doc.id && (doc.firstName || doc.lastName || doc.dateOfBirth)
+  );
 
   // Remove the "_meta" field from the documents
   docs = docs.map((doc) => {

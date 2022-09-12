@@ -39,7 +39,7 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
     );
   }
 
-  @Mutation(() => PatientModel)
+  @Mutation(() => PatientModel, { nullable: true })
   async setPatients(
     @Args({
       name: 'setPatientsInput',
@@ -47,7 +47,7 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
       nullable: true,
     })
     setPatientsInput: SetPatientInput[]
-  ): Promise<PatientModel> {
+  ): Promise<PatientModel | null> {
     return await this.patientService.set(setPatientsInput);
   }
 
