@@ -73,7 +73,7 @@ const pushQueryBuilder = (docs: RxDocument<any>[]) => {
 
   // Remove the "_meta" field from the documents
   docs = docs.map((doc) => {
-    const { _meta, ...rest } = doc;
+    const { _meta, _deleted, ...rest } = doc;
     return rest;
   });
 
@@ -90,12 +90,20 @@ const pushQueryBuilder = (docs: RxDocument<any>[]) => {
     patients: docs,
   };
 
-  console.log('pushQueryBuilder', query, variables);
-
   return {
     query,
     variables,
   };
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const deletionFilter = (doc: RxDocument<any>) => {
+  doc = {
+    ...doc,
+    deletedAt: new Date(doc.deletedAt).getTime() ? doc.deletedAt : null,
+    _deleted: new Date(doc.deletedAt).getTime() ? true : false,
+  };
+  return doc;
 };
 
 const initializePatientDatabase = async () => {
@@ -114,16 +122,21 @@ const initializePatientDatabase = async () => {
     pull: {
       queryBuilder: pullQueryBuilder, // the queryBuilder from above
       batchSize: 5,
+      modifier: deletionFilter,
     },
     push: {
       queryBuilder: pushQueryBuilder,
       batchSize: 5,
-      modifier: (doc) => doc,
+      modifier: deletionFilter,
     },
     deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
     live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
   });
   replicationState.run();
+  replicationState.error$.subscribe((err) => {
+    console.error(err);
+    console.log(err.innerErrors);
+  });
   return db;
 };
 

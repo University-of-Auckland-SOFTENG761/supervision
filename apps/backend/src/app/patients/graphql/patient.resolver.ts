@@ -39,7 +39,7 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
     );
   }
 
-  @Mutation(() => [PatientModel])
+  @Mutation(() => PatientModel)
   async setPatients(
     @Args({
       name: 'setPatientsInput',
