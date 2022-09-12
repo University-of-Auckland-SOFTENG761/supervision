@@ -6,10 +6,10 @@ type Auth0ProviderProps = {
   children: React.ReactNode;
 };
 
-const AUTH0_DOMAIN =
+const AUTH0_CLIENT_ID =
   process.env['NODE_ENV'] === 'development'
-    ? process.env['NX_AUTH0_DOMAIN_DEV']
-    : process.env['NX_AUTH0_DOMAIN_PROD'];
+    ? process.env['NX_AUTH0_CLIENT_ID_DEV']
+    : process.env['NX_AUTH0_CLIENT_ID_PROD'];
 
 const AUTH0_REDIRECT_URI =
   process.env['NODE_ENV'] === 'development'
@@ -19,8 +19,8 @@ const AUTH0_REDIRECT_URI =
 export const Auth0Provider = (props: Auth0ProviderProps) => {
   return (
     <Auth0ReactProvider
-      domain={AUTH0_DOMAIN!}
-      clientId={process.env['NX_AUTH0_CLIENT_ID']!}
+      domain={process.env['NX_AUTH0_DOMAIN']!}
+      clientId={AUTH0_CLIENT_ID!}
       redirectUri={AUTH0_REDIRECT_URI!}
       responseType="code"
       scope="openid"

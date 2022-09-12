@@ -24,11 +24,11 @@ root.render(
       withNormalizeCSS
       theme={MantineTheme}
     >
-      <Auth0Provider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Auth0Provider>
           <Routes />
-        </BrowserRouter>
-      </Auth0Provider>
+        </Auth0Provider>
+      </BrowserRouter>
     </MantineProvider>
   </StrictMode>
 );
