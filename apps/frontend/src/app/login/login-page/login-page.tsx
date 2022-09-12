@@ -2,7 +2,7 @@ import React from 'react';
 import { Select, Stack, Text, Title } from '@mantine/core';
 import { Button, Logo } from '@shared';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useNetwork } from 'app/hooks';
+import { useNetwork } from '@shared';
 import { OfflineLoginPage } from '../offline-login-page';
 
 // TODO: Replace with actual data from database
