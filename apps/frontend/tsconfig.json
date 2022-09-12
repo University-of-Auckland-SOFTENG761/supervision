@@ -15,7 +15,8 @@
     "paths": {
       "@shared": ["app/shared/index.ts"],
       "@components": ["app/components/index.ts"],
-      "@pages": ["app/pages/index.ts"]
+      "@pages": ["app/pages/index.ts"],
+      "@hooks": ["app/hooks/index.ts"]
     }
   },
   "files": [],
