@@ -9,7 +9,7 @@ const patientSchema: RxJsonSchema<any> = {
   properties: {
     id: {
       type: 'string',
-      maxLength: 64, // <- GraphQL UUID max length
+      maxLength: 32, // <- GraphQL UUID max length
     },
     firstName: {
       type: 'string',
@@ -17,7 +17,7 @@ const patientSchema: RxJsonSchema<any> = {
     lastName: {
       type: 'string',
     },
-    dob: {
+    dateOfBirth: {
       type: 'string',
     },
     patientId: {
@@ -38,22 +38,17 @@ const patientSchema: RxJsonSchema<any> = {
     room: {
       type: 'string',
     },
-    address: {
-      type: 'object',
-      properties: {
-        street: {
-          type: 'string',
-        },
-        suburb: {
-          type: 'string',
-        },
-        city: {
-          type: 'string',
-        },
-        postCode: {
-          type: 'string',
-        },
-      },
+    streetAddress: {
+      type: 'string',
+    },
+    suburb: {
+      type: 'string',
+    },
+    city: {
+      type: 'string',
+    },
+    postcode: {
+      type: 'string',
     },
     parentName: {
       type: 'string',
@@ -64,11 +59,11 @@ const patientSchema: RxJsonSchema<any> = {
     email: {
       type: 'string',
     },
-    notes: {
+    adminNotes: {
       type: 'string',
     },
   },
-  required: ['id', 'firstName', 'lastName'],
+  required: ['id'],
 };
 
 export default patientSchema;

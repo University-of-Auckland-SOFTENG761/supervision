@@ -9,24 +9,21 @@ export type IPatient = {
   id: string;
   firstName?: string;
   lastName?: string;
-  dob?: string;
-  patientId?: string;
+  dateOfBirth?: string;
   ethnicity?: string;
   gender?: string;
   school?: string;
   year?: number;
   room?: string;
-  address?: {
-    street?: string;
-    suburb?: string;
-    city?: string;
-    postCode?: string;
-  };
+  streetAddress?: string;
+  suburb?: string;
+  city?: string;
+  postcode?: string;
   caregiverFirstName?: string;
   caregiverLastName?: string;
   phoneNumber?: string;
   email?: string;
-  notes?: string;
+  adminNotes?: string;
 };
 
 export const PatientDetailsPage = () => {

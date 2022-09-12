@@ -23,7 +23,9 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
     ? patients.find((p: IPatient) => p.id === patientUid)
     : undefined;
   const [patientAge, setPatientAge] = useState(
-    patient?.dob ? calculateAge(new Date(patient?.dob)) : undefined
+    patient?.dateOfBirth
+      ? calculateAge(new Date(patient?.dateOfBirth))
+      : undefined
   );
 
   const buildFormValues = useCallback(
@@ -31,23 +33,20 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
       id: patient?.id,
       firstName: patient?.firstName ?? '',
       lastName: patient?.lastName ?? '',
-      dob: patient?.dob ? new Date(patient?.dob) : null,
-      patientId: patient?.patientId ?? '',
+      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
       ethnicity: patient?.ethnicity ?? null,
       gender: patient?.gender ?? null,
       school: patient?.school ?? '',
       year: patient?.year,
       room: patient?.room ?? '',
-      address: patient?.address ?? {
-        street: '',
-        suburb: '',
-        city: '',
-        postCode: '',
-      },
+      streetAddress: patient?.streetAddress ?? '',
+      suburb: patient?.suburb ?? '',
+      city: patient?.city ?? '',
+      postcode: '',
       caregiverFirstName: patient?.caregiverFirstName ?? '',
       caregiverLastName: patient?.caregiverLastName ?? '',
       email: patient?.email ?? '',
-      notes: patient?.notes ?? '',
+      adminNotes: patient?.adminNotes ?? '',
     }),
     [patient]
   );
@@ -63,9 +62,11 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
 
   useEffect(() => {
     setPatientAge(
-      form.values.dob ? calculateAge(new Date(form.values.dob)) : undefined
+      form.values.dateOfBirth
+        ? calculateAge(new Date(form.values.dateOfBirth))
+        : undefined
     );
-  }, [form.values.dob]);
+  }, [form.values.dateOfBirth]);
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -75,7 +76,9 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
       id: patient?.id ?? '',
       gender: form.values.gender ?? undefined,
       ethnicity: form.values.ethnicity ?? undefined,
-      dob: form.values.dob ? form.values.dob.toISOString() : undefined,
+      dateOfBirth: form.values.dateOfBirth
+        ? form.values.dateOfBirth.toISOString()
+        : undefined,
     };
     if (newPatient.id === undefined) return undefined;
     return newPatient;
@@ -103,7 +106,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
         <Group className="justify-between">
           <DatePicker
             label="Date of birth:"
-            {...form.getInputProps('dob')}
+            {...form.getInputProps('dateOfBirth')}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
             dateParser={(date: string) =>
@@ -158,7 +161,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
         </Group>
         <TextInput
           placeholder="Postcode"
-          {...form.getInputProps('address.postCode')}
+          {...form.getInputProps('address.postcode')}
         />
         <TextInput
           label="Caregiver First Name:"

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PatientEntity } from '@supervision/patients';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreatePatientInput } from './dto/create-patient.input';
+import { SetPatientInput } from './dto/set-patient-input';
 import { UpdatePatientInput } from './dto/update-patient.input';
 
 @Injectable()
@@ -29,6 +30,11 @@ export class PatientService {
       throw new Error(`Patient #${id} not found`);
     }
     return await this.patientsRepository.save(patient);
+  }
+
+  async set(patients: SetPatientInput[]): Promise<PatientEntity> {
+    const newPatients = await this.patientsRepository.save(patients);
+    return newPatients[newPatients.length - 1];
   }
 
   async findOne(id: string): Promise<PatientEntity> {

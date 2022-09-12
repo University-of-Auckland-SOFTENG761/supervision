@@ -40,6 +40,7 @@ const pullQueryBuilder = (doc: RxDocument<any>) => {
       updatedAt,
       firstName,
       lastName,
+      dateOfBirth,
       gender,
       ethnicity,
       school,
@@ -65,6 +66,38 @@ const pullQueryBuilder = (doc: RxDocument<any>) => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const pushQueryBuilder = (docs: RxDocument<any>[]) => {
+  // Ensure that the backend's required fields are not null or undefined or empty string
+  docs = docs.filter((doc) => doc.id);
+
+  // Remove the "_meta" field from the documents
+  docs = docs.map((doc) => {
+    const { _meta, ...rest } = doc;
+    return rest;
+  });
+
+  console.log(docs);
+
+  const query = `
+          mutation SetPatient($patients: [SetPatientInput!]) {
+            setPatients(setPatientsInput: $patients) {
+              id # GraphQL does not allow returning void, so we return one id.
+            }
+          }
+  `;
+  const variables = {
+    patients: docs,
+  };
+
+  console.log('pushQueryBuilder', query, variables);
+
+  return {
+    query,
+    variables,
+  };
+};
+
 const initializePatientDatabase = async () => {
   await addPlugins();
   const db = await createRxDatabase({
@@ -82,12 +115,14 @@ const initializePatientDatabase = async () => {
       queryBuilder: pullQueryBuilder, // the queryBuilder from above
       batchSize: 5,
     },
+    push: {
+      queryBuilder: pushQueryBuilder,
+      batchSize: 5,
+      modifier: (doc) => doc,
+    },
     deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
     live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
   });
-  replicationState.received$.subscribe((response) =>
-    console.log('response from graphql', response)
-  );
   replicationState.run();
   return db;
 };
