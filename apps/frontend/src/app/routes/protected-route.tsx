@@ -8,9 +8,7 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute = ({ component }: ProtectedRouteProps): JSX.Element => {
-  const { isLoading, user, isAuthenticated } = useAuth0();
-
-  console.log(isAuthenticated, user);
+  const { isLoading, isAuthenticated } = useAuth0();
 
   if (isLoading) {
     return (

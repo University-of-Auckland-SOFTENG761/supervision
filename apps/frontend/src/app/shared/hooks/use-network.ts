@@ -18,7 +18,6 @@ const ping = async () => {
 
 export const useNetwork = () => {
   const [online, setOnline] = useState(navigator.onLine);
-  console.log(online);
 
   const checkOnline = async () => {
     // Ping google.com to check for internet connection (navigator.onLine only checks network connection)
