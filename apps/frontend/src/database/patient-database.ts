@@ -24,14 +24,8 @@ const toEnumCase = (str: Ethnicities | Gender) =>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const serializeEnums = (doc: RxDocument<any>) => {
-  doc.ethnicity =
-    doc.ethnicity && typeof doc.ethnicity == 'string'
-      ? toEnumCase(doc.ethnicity)
-      : undefined;
-  doc.gender =
-    doc.gender && typeof doc.gender == 'string'
-      ? toEnumCase(doc.gender)
-      : undefined;
+  doc.ethnicity = doc.ethnicity ? toEnumCase(doc.ethnicity) : undefined;
+  doc.gender = doc.gender ? toEnumCase(doc.gender) : undefined;
   return doc;
 };
 
@@ -179,7 +173,7 @@ const initializePatientDatabase = async () => {
     push: {
       queryBuilder: pushQueryBuilder,
       batchSize: 5,
-      modifier: (doc) => deserializeEnums(deletionFilter(doc)),
+      modifier: (doc) => serializeEnums(deletionFilter(doc)),
     },
     deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
     live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
