@@ -8,11 +8,21 @@ import {
 } from './shared/modals/search/SearchModal';
 import NavbarLink from './shared/navbar/link/navbar-link';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import {
+  ReconnectedLoginModal,
+  ReconnectedLoginModalRef,
+} from './login/reconnected-login-modal';
 
 export function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const searchModal = useRef<SearchModalRef>(null);
+  const reconnectedLoginModal = useRef<ReconnectedLoginModalRef>(null);
+
+  // TODO: Call this when the user is reconnected
+  const openReconnectedLoginModal = () => {
+    reconnectedLoginModal.current?.show();
+  };
 
   return (
     <AppShell
@@ -45,6 +55,7 @@ export function App() {
     >
       <Outlet />
       <SearchModal ref={searchModal} />
+      <ReconnectedLoginModal ref={reconnectedLoginModal} />
     </AppShell>
   );
 }
