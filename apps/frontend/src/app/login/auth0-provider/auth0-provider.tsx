@@ -22,8 +22,9 @@ export const Auth0Provider = (props: Auth0ProviderProps) => {
       domain={process.env['NX_AUTH0_DOMAIN']!}
       clientId={AUTH0_CLIENT_ID!}
       redirectUri={AUTH0_REDIRECT_URI!}
-      responseType="code"
       scope="openid"
+      responseType="token"
+      cacheLocation="localstorage"
     >
       {props.children}
     </Auth0ReactProvider>
