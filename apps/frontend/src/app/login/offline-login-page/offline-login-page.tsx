@@ -1,7 +1,8 @@
 import React from 'react';
-import { Stack, TextInput, Title } from '@mantine/core';
+import { Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import { Button, Logo } from '@shared';
 import { useNavigate } from 'react-router-dom';
+import { IconWifiOff } from '@tabler/icons';
 
 export const OfflineLoginPage = () => {
   const navigate = useNavigate();
@@ -31,6 +32,13 @@ export const OfflineLoginPage = () => {
       <Title color="blue.9" order={4} className="w-full font-extrabold">
         Welcome to SuperVision!
       </Title>
+      <Group className="w-full flex-nowrap" spacing={0}>
+        <IconWifiOff size={36} className="mx-4" />
+        <Text>
+          Your device is offline <br /> Please enter your university email
+          address to identify yourself.
+        </Text>
+      </Group>
       <TextInput
         label="Your email"
         placeholder="Enter your email"
