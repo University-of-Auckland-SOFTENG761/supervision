@@ -22,6 +22,7 @@ export const OfflineLoginPage = () => {
       setErrorMessage('Invalid email - please ensure you enter a UoA email');
     } else {
       setErrorMessage(undefined);
+      sessionStorage.setItem('userEmail', email);
       navigate('/patient-details');
     }
   };

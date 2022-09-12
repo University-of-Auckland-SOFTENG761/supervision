@@ -10,7 +10,7 @@ const locations = ['University of Auckland', 'Harvard University', 'MIT'];
 
 export const LoginPage = () => {
   const { loginWithRedirect } = useAuth0();
-  const online = useNetwork();
+  const { online } = useNetwork();
 
   const [location, setLocation] = React.useState<string | null>(null);
   const [selectErrorMessage, setSelectErrorMessage] = React.useState<

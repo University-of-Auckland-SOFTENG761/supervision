@@ -18,6 +18,7 @@ const ping = async () => {
 
 export const useNetwork = () => {
   const [online, setOnline] = useState(navigator.onLine);
+  const [isLoading, setIsLoading] = useState(false);
 
   const checkOnline = async () => {
     // Ping google.com to check for internet connection (navigator.onLine only checks network connection)
@@ -29,15 +30,17 @@ export const useNetwork = () => {
   const goOnline = () => setOnline(true);
 
   useEffect(() => {
+    setIsLoading(true);
     window.addEventListener('online', goOnline);
     window.addEventListener('offline', goOffline);
 
     checkOnline();
+    setIsLoading(false);
     return () => {
       window.removeEventListener('online', goOnline);
       window.removeEventListener('offline', goOffline);
     };
   }, []);
 
-  return online;
+  return { online, isLoading };
 };
