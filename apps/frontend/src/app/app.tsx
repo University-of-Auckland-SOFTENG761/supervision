@@ -12,6 +12,7 @@ import {
   ReconnectedLoginModal,
   ReconnectedLoginModalRef,
 } from './login/reconnected-login-modal';
+import { UserAvatar } from './shared/user-avatar';
 
 export function App() {
   const navigate = useNavigate();
@@ -48,6 +49,9 @@ export function App() {
                 ></NavbarLink>
                 <NavbarLink label="Dispense" icon={IconPill}></NavbarLink>
               </Stack>
+            </Navbar.Section>
+            <Navbar.Section className="w-full justify-center">
+              <UserAvatar />
             </Navbar.Section>
           </Navbar>
         )
