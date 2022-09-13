@@ -1,9 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDto } from '@supervision/auth/dto/createUser.dto';
 import { ManagementClient, User } from 'auth0';
 import { randomBytes } from 'crypto';
 import { AuthenticationClient } from 'auth0';
+
+export interface CreateUserOptions {
+  name: {
+    first: string;
+    surname: string;
+  };
+  email: string;
+  username: string;
+  password: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -27,7 +36,7 @@ export class AuthService {
     return randomBytes(32).toString('hex');
   }
 
-  public createUser(data: CreateUserDto): Promise<User> {
+  public createUser(data: CreateUserOptions): Promise<User> {
     return this.managementClient.createUser({
       family_name: data.name.surname,
       given_name: data.name.first,
