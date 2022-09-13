@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY --chown=node:node . .
-RUN npx nx build backend:production
+RUN npx nx run backend:build:production
 RUN npm prune --production
 
 # ---
@@ -25,4 +25,5 @@ COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=builder --chown=node:node /home/node/dist/ ./dist/
 
 EXPOSE 3333
+LABEL org.opencontainers.image.source https://github.com/University-of-Auckland-SOFTENG761/project-team-1
 CMD ["node", "dist/apps/backend/main.js"]
