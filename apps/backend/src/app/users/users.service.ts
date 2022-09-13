@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from '@supervision/auth';
 import { UserEntity, UserRole } from '@supervision/users/database';
-import { CreateUserDto } from '@supervision/users/graphql/dto/createUser.dto';
+import { CreateUserInput } from '@supervision/users/graphql/dto/create-user.input';
 import { User } from 'auth0';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
@@ -54,7 +54,7 @@ export class UserService {
       .getMany();
   }
 
-  async createUser(data: CreateUserDto): Promise<UserEntity> {
+  async createUser(data: CreateUserInput): Promise<UserEntity> {
     let auth0User: User;
     try {
       auth0User = await this.authService.createUser({

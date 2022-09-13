@@ -2,7 +2,7 @@ import { UserRole } from '@supervision/users';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateUserDto {
+export class CreateUserInput {
   @Field(() => String, { nullable: false })
   firstName: string;
 
@@ -18,6 +18,6 @@ export class CreateUserDto {
   @Field(() => String, { nullable: false })
   password: string;
 
-  @Field(() => String, { nullable: true, defaultValue: UserRole.STUDENT })
+  @Field(() => UserRole, { nullable: true, defaultValue: UserRole.STUDENT })
   role: UserRole;
 }
