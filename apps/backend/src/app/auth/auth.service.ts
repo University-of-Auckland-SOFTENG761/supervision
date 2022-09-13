@@ -10,7 +10,6 @@ export interface CreateUserOptions {
     surname: string;
   };
   email: string;
-  username: string;
   password: string;
 }
 

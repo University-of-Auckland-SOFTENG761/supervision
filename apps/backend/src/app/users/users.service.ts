@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from '@supervision/auth';
 import { UserEntity, UserRole } from '@supervision/users/database';
@@ -8,6 +8,8 @@ import { Repository, SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
@@ -65,7 +67,13 @@ export class UserService {
         ...data,
       });
     } catch (error) {
-      auth0User = await this.authService.getUserByEmail(data.email);
+      if (error.name === 'Conflict' && error.statusCode === 409) {
+        this.logger.warn(
+          'Auth0 conflict on user creation, will use existing user',
+          error
+        );
+        auth0User = await this.authService.getUserByEmail(data.email);
+      } else throw error;
     }
 
     const databaseUser = new UserEntity();

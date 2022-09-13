@@ -13,9 +13,6 @@ export class CreateUserInput {
   email: string;
 
   @Field(() => String, { nullable: false })
-  username: string;
-
-  @Field(() => String, { nullable: false })
   password: string;
 
   @Field(() => UserRole, { nullable: true, defaultValue: UserRole.STUDENT })
