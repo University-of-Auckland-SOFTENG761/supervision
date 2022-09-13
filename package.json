@@ -12,7 +12,7 @@
   "private": true,
   "engines": {
     "node": "16",
-    "npm": "8.x <=8.5.5"
+    "npm": "8"
   },
   "devDependencies": {
     "@nestjs/schematics": "^9.0.0",
