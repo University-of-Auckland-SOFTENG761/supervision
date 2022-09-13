@@ -7,6 +7,7 @@ import configuration, {
   configSchema,
   TypeOrmConfigService,
 } from '@supervision/config';
+import { ConsultsModule } from '@supervision/consults/consults.module';
 import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 import { PatientsModule } from '@supervision/patients';
@@ -28,6 +29,7 @@ import { PatientsModule } from '@supervision/patients';
     HealthModule,
     UsersModule,
     PatientsModule,
+    ConsultsModule,
   ],
 })
 export class AppModule {}
