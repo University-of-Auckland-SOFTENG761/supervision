@@ -22,7 +22,7 @@ export const LoginPage = () => {
         <Logo size="sm" />
         <Title
           color="blue.9"
-          order={4}
+          order={3}
           className="w-full font-extrabold text-center"
         >
           Welcome to SuperVision!

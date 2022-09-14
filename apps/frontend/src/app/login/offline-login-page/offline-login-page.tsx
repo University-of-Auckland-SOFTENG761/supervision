@@ -30,7 +30,11 @@ export const OfflineLoginPage = () => {
   return (
     <Stack className="items-center justify-center h-full m-auto w-1/4 2xl:w-1/6">
       <Logo size="sm" />
-      <Title color="blue.9" order={4} className="w-full font-extrabold">
+      <Title
+        color="blue.9"
+        order={3}
+        className="w-full font-extrabold text-center"
+      >
         Welcome to SuperVision!
       </Title>
       <Group className="w-full flex-nowrap" spacing={0}>
