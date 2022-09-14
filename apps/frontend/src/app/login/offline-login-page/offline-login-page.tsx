@@ -28,7 +28,7 @@ export const OfflineLoginPage = () => {
   };
 
   return (
-    <Stack className="items-center justify-center h-full m-auto w-1/4">
+    <Stack className="items-center justify-center h-full m-auto w-1/4 2xl:w-1/6">
       <Logo size="sm" />
       <Title color="blue.9" order={4} className="w-full font-extrabold">
         Welcome to SuperVision!
