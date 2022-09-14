@@ -9,4 +9,7 @@ export class SetPatientInput extends PartialType(UpdatePatientInput) {
 
   @Field({ nullable: true })
   deletedAt: Date;
+
+  @Field({ nullable: true })
+  updatedAt: Date;
 }

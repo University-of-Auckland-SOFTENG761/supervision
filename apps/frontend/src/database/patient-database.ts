@@ -6,6 +6,10 @@ import DatabaseConstructor from './database-constructor';
 import { RxDBReplicationGraphQLPlugin } from 'rxdb/plugins/replication-graphql';
 import { Ethnicities } from 'app/patients/ethnicity-select/ethnicity-select';
 import { Gender } from 'app/patients/gender-select/gender-select';
+import {
+  indexedDB as fakeIndexedDB,
+  IDBKeyRange as fakeIDBKeyRange,
+} from 'fake-indexeddb';
 
 const addPlugins = async () => {
   addRxPlugin(RxDBReplicationGraphQLPlugin);
@@ -154,9 +158,16 @@ const deletionFilter = (doc: RxDocument<any>) => {
 
 const initializePatientDatabase = async () => {
   await addPlugins();
+  // Check if indexedDB is supported
+  const storage =
+    (window.indexedDB && getRxStorageDexie()) ||
+    getRxStorageDexie({
+      indexedDB: fakeIndexedDB,
+      IDBKeyRange: fakeIDBKeyRange,
+    });
   const db = await createRxDatabase({
     name: 'patientdb',
-    storage: getRxStorageDexie(),
+    storage,
   });
   await db.addCollections({
     patients: {
