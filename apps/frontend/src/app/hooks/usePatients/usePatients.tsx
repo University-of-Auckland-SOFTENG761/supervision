@@ -16,8 +16,16 @@ export const usePatients = () => {
     return newPatient.id;
   }, [patientsDb]);
 
-  const updatePatient = (patient: IPatient) =>
+  const updatePatient = (patient: IPatient) => {
+    const oldPatient = patients.find((p) => p.id === patient.id);
+    if (oldPatient) {
+      // Check for deep equality
+      if (JSON.stringify(oldPatient) === JSON.stringify(patient)) {
+        return;
+      }
+    }
     patientsDb?.['patients'].atomicUpsert(patient);
+  };
 
   useEffect(() => {
     if (!patientsDb) {
