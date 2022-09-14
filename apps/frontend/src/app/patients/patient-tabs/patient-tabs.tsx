@@ -1,6 +1,7 @@
 import { ActionIcon, Group, Tabs } from '@mantine/core';
 import { IconMenu2, IconPlus } from '@tabler/icons';
 import { usePatients } from 'app/hooks/usePatients';
+import { useEffect } from 'react';
 import { IPatient } from '../patient-details-page';
 
 type PatientTabsProps = {
@@ -17,6 +18,12 @@ export const PatientTabs = ({
   const handleTabChange = (patientUID: string) => onPatientChange(patientUID);
 
   const handleNewPatient = () => handleTabChange(newPatient());
+
+  useEffect(() => {
+    if (patients && patients.length > 0 && !currentPatientUid) {
+      handleTabChange(patients[0].id);
+    }
+  });
 
   return (
     <Group className="px-4 py-1 m-0 bg-white border-0 border-b-[1px] border-solid border-gray-200">
