@@ -20,7 +20,7 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: true })
   lastName: string;
 
-  @Field((type) => DateOfBirthScalar, { nullable: true })
+  @Field(() => DateOfBirthScalar, { nullable: true })
   dateOfBirth: Date;
 
   @Field(() => Gender, { nullable: true })

@@ -10,9 +10,6 @@ export const DateOfBirthScalar = new GraphQLScalarType({
     if (value instanceof Date) {
       return value.toISOString(); // value sent to the client
     }
-    if (typeof value === 'string') {
-      return new Date(value).toISOString();
-    }
     return new Date(value).toISOString();
   },
   parseLiteral(ast) {

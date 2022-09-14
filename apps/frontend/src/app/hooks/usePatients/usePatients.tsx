@@ -1,7 +1,7 @@
 import { IPatient } from '@patients';
 import { uuid } from 'uuidv4';
 import { useState, useEffect, useCallback } from 'react';
-import { RxDatabase, RxDocument } from 'rxdb';
+import { RxDatabase } from 'rxdb';
 import { patientDatabase } from 'database';
 
 export const usePatients = () => {
@@ -11,54 +11,27 @@ export const usePatients = () => {
   const newPatient = useCallback(() => {
     const newPatient = {
       id: uuid(),
-      firstName: '',
-      lastName: '',
     };
     patientsDb?.['patients'].insert(newPatient);
     return newPatient.id;
   }, [patientsDb]);
 
-  const updatePatient = (patient: IPatient) => {
-    patientsDb?.['patients']
-      .findOne({
-        selector: {
-          id: patient.id,
-        },
-      })
-      .exec()
-      .then((result: RxDocument) => {
-        if (result) {
-          result.update(patient);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const updatePatient = (patient: IPatient) =>
+    patientsDb?.['patients'].atomicUpsert(patient);
 
   useEffect(() => {
-    patientDatabase
-      .get()
-      ?.then((db: RxDatabase | null) => {
-        db && setPatientsDb(db);
-      })
-      .catch((error: Error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        console.log('database loaded');
-      });
-  }, []);
-
-  useEffect(() => {
-    if (patientsDb) {
-      patientsDb['patients'].find().$.subscribe((patients) => {
-        setPatients(patients);
-      });
+    if (!patientsDb) {
+      patientDatabase
+        .get()
+        ?.then((db: RxDatabase | null) => {
+          db && setPatientsDb(db);
+          db && db['patients'].find().$.subscribe(setPatients);
+          return () => db?.['patients'].find().$.unsubscribe();
+        })
+        .catch((error: Error) => {
+          console.error(error);
+        });
     }
-    return () => {
-      patientsDb?.['patients'].find().$.unsubscribe();
-    };
   }, [patientsDb]);
 
   return { patients, newPatient, updatePatient };

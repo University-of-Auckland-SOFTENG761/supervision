@@ -1,8 +1,8 @@
-import { addRxPlugin, createRxDatabase, RxDocument } from 'rxdb';
+import { addRxPlugin, createRxDatabase, RxDatabase, RxDocument } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
-import patientSchema from './patient-schema';
+import patientSchema, { PatientDocType } from './patient-schema';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
-import DatabaseConstructor from './database-constructor';
+import DatabaseConstructor from '../database-constructor';
 import { RxDBReplicationGraphQLPlugin } from 'rxdb/plugins/replication-graphql';
 import { Ethnicities } from 'app/patients/ethnicity-select/ethnicity-select';
 import { Gender } from 'app/patients/gender-select/gender-select';
@@ -10,6 +10,14 @@ import {
   indexedDB as fakeIndexedDB,
   IDBKeyRange as fakeIDBKeyRange,
 } from 'fake-indexeddb';
+
+type ObjectWithRxdbMetaField = {
+  _meta?: {
+    [key: string]: unknown;
+  };
+};
+
+type PatientDocument = RxDocument<PatientDocType> & ObjectWithRxdbMetaField;
 
 const addPlugins = async () => {
   addRxPlugin(RxDBReplicationGraphQLPlugin);
@@ -23,17 +31,21 @@ const addPlugins = async () => {
   }
 };
 
-const toEnumCase = (str: Ethnicities | Gender) =>
+const stripMetadata = (doc: PatientDocument) => {
+  const { _meta, ...rest } = doc;
+  return rest;
+};
+
+const toEnumCase = (str: Ethnicities | Gender | string) =>
   str.toUpperCase().replaceAll(' ', '');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const serializeEnums = (doc: RxDocument<any>) => {
+const serializeEnums = (doc: PatientDocument) => {
   doc.ethnicity = doc.ethnicity ? toEnumCase(doc.ethnicity) : undefined;
   doc.gender = doc.gender ? toEnumCase(doc.gender) : undefined;
   return doc;
 };
 
-const deserializeEnums = (doc: RxDocument<any>) => {
+const deserializeEnums = (doc: PatientDocument) => {
   const ethnicityArray = Array.from(
     (Object.keys(Ethnicities) as Array<keyof typeof Ethnicities>).map((key) => {
       return { key, value: toEnumCase(Ethnicities[key]) };
@@ -62,22 +74,13 @@ const deserializeEnums = (doc: RxDocument<any>) => {
   return doc;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const pullQueryBuilder = (doc: RxDocument<any>) => {
-  if (!doc) {
-    doc = {
-      id: '',
-      updatedAt: new Date(0).toISOString(),
-    };
-  }
-
-  doc = {
-    ...doc,
-    updatedAt: new Date(doc.updatedAt).toISOString(),
-  };
+const pullQueryBuilder = (doc: PatientDocument) => {
+  const updatedAt = doc?.updatedAt
+    ? new Date(doc.updatedAt).toISOString()
+    : new Date(0).toISOString();
 
   const query = `{
-    patientReplicationFeed(minUpdatedAt: "${doc.updatedAt}", limit: 5) {
+    patientReplicationFeed(minUpdatedAt: "${updatedAt}", limit: 5) {
       id,
       revision,
       createdAt,
@@ -111,21 +114,13 @@ const pullQueryBuilder = (doc: RxDocument<any>) => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const pushQueryBuilder = (docs: RxDocument<any>[]) => {
+const pushQueryBuilder = (docs: PatientDocument[]) => {
   // Ensure that the doc has at least an id field and one of firstName, lastName, or dateOfBirth
   docs = docs.filter(
     (doc) => doc.id && (doc.firstName || doc.lastName || doc.dateOfBirth)
   );
 
-  // Remove the "_meta" field from the documents
-  docs = docs.map((doc) => {
-    const { _meta, _deleted, ...rest } = doc;
-    return rest;
-  });
-
-  // Make enum values uppercase and remove whitespace
-  docs = docs.map((doc) => serializeEnums(doc));
+  docs = docs.map((doc) => stripMetadata(serializeEnums(doc)));
 
   const query = `
           mutation SetPatient($patients: [SetPatientInput!]) {
@@ -144,8 +139,7 @@ const pushQueryBuilder = (docs: RxDocument<any>[]) => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const deletionFilter = (doc: RxDocument<any>) => {
+const deletionFilter = (doc: PatientDocument) => {
   doc = {
     ...doc,
     deletedAt:
@@ -156,25 +150,8 @@ const deletionFilter = (doc: RxDocument<any>) => {
   return doc;
 };
 
-const initializePatientDatabase = async () => {
-  await addPlugins();
-  // Check if indexedDB is supported
-  const storage =
-    (window.indexedDB && getRxStorageDexie()) ||
-    getRxStorageDexie({
-      indexedDB: fakeIndexedDB,
-      IDBKeyRange: fakeIDBKeyRange,
-    });
-  const db = await createRxDatabase({
-    name: 'patientdb',
-    storage,
-  });
-  await db.addCollections({
-    patients: {
-      schema: patientSchema,
-    },
-  });
-  const replicationState = db.collections['patients'].syncGraphQL({
+const buildReplicationState = (database: RxDatabase) => {
+  return database.collections['patients'].syncGraphQL({
     url: 'http://localhost:3333/graphql', // url to the GraphQL endpoint
     pull: {
       queryBuilder: pullQueryBuilder, // the queryBuilder from above
@@ -189,11 +166,38 @@ const initializePatientDatabase = async () => {
     deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
     live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
   });
+};
+
+const initializePatientDatabase = async () => {
+  await addPlugins();
+
+  // Use fake indexedDB if in node environment
+  const storage =
+    (window.indexedDB && getRxStorageDexie()) ||
+    getRxStorageDexie({
+      indexedDB: fakeIndexedDB,
+      IDBKeyRange: fakeIDBKeyRange,
+    });
+
+  const db = await createRxDatabase({
+    name: 'patientdb',
+    storage,
+  });
+
+  await db.addCollections({
+    patients: {
+      schema: patientSchema,
+    },
+  });
+
+  const replicationState = buildReplicationState(db);
   replicationState.run();
+
   replicationState.error$.subscribe((err) => {
     console.error(err);
-    console.log(err.innerErrors);
+    console.error(err.innerErrors);
   });
+
   return db;
 };
 

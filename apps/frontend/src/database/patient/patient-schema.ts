@@ -1,7 +1,10 @@
-import { RxJsonSchema } from 'rxdb';
+import {
+  toTypedRxJsonSchema,
+  ExtractDocumentTypeFromTypedRxJsonSchema,
+  RxJsonSchema,
+} from 'rxdb';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const patientSchema: RxJsonSchema<any> = {
+export const patientSchemaLiteral = {
   title: 'RxDB Patient Schema',
   version: 0,
   primaryKey: 'id',
@@ -68,8 +71,17 @@ const patientSchema: RxJsonSchema<any> = {
     deletedAt: {
       type: 'string',
     },
+    updatedAt: {
+      type: 'string',
+    },
   },
   required: ['id'],
-};
+} as const;
+
+const patientSchemaTyped = toTypedRxJsonSchema(patientSchemaLiteral);
+export type PatientDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
+  typeof patientSchemaTyped
+>;
+const patientSchema: RxJsonSchema<PatientDocType> = patientSchemaLiteral;
 
 export default patientSchema;

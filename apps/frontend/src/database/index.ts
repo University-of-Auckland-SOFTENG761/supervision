@@ -1,2 +1,2 @@
-export { patientDatabase } from './patient-database';
+export * from './patient';
 export * from './database-constructor';
