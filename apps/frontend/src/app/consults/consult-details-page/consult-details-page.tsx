@@ -1,43 +1,46 @@
 import React from 'react';
-import { ScrollArea, SimpleGrid, Tabs } from '@mantine/core';
-import {
-  IconEyeglass,
-  IconReportMedical,
-  IconStethoscope,
-} from '@tabler/icons';
-import { ConsultNotesTable } from '../consult-notes-table';
-import { SpectacleDetailsTable } from '../spectacle-details-table';
-import { GeneralInfoTable } from '../general-info-table';
+import { ConsultInputs } from '../consult-inputs';
 
 export type IConsult = {
-  uid: string;
+  uid: string; // TODO: add all other fields
 };
 
 export const ConsultDetailsPage = () => {
-  return (
-    <Tabs variant="outline" defaultValue="consult" className="Text here lol">
-      <Tabs.List>
-        <Tabs.Tab value="general info" icon={<IconReportMedical size={20} />}>
-          General Info
-        </Tabs.Tab>
-        <Tabs.Tab value="consult notes" icon={<IconStethoscope size={20} />}>
-          Consult Notes
-        </Tabs.Tab>
-        <Tabs.Tab value="spectacle details" icon={<IconEyeglass size={20} />}>
-          Spectacle Details
-        </Tabs.Tab>
-      </Tabs.List>
+  const [consults, setConsults] = React.useState<IConsult[]>([
+    {
+      uid: '9c78e8d5-26e5-4a99-a112-0b8602bf2c1c',
+    },
+  ]);
 
-      <Tabs.Panel value="general info" className="p-3">
-        <GeneralInfoTable />
-      </Tabs.Panel>
-      <Tabs.Panel value="consult notes" className="p-3">
-        <ConsultNotesTable />
-      </Tabs.Panel>
-      <Tabs.Panel value="spectacle details" className="p-3">
-        <SpectacleDetailsTable />
-      </Tabs.Panel>
-    </Tabs>
+  const [currentConsult, setCurrentConsult] = React.useState<IConsult>(
+    consults[0]
+  );
+
+  const handleConsultChange = (uid: string) => {
+    const consult = consults.find((c) => c.uid === uid);
+    if (consult) {
+      setCurrentConsult(consult);
+    }
+  };
+
+  const handleUpdateConsult = (updatedConsult: IConsult) => {
+    setCurrentConsult(updatedConsult);
+    const newConsults = consults.map((c) => {
+      if (c.uid === updatedConsult.uid) {
+        return updatedConsult;
+      }
+      return c;
+    });
+    setConsults(newConsults);
+  };
+
+  return (
+    <>
+      <ConsultInputs
+        consult={currentConsult}
+        onUpdateConsult={handleUpdateConsult}
+      />
+    </>
   );
 };
 
