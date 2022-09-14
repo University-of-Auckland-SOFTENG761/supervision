@@ -32,13 +32,13 @@ export enum Gender {
 
 @Entity({ name: 'patient' })
 export class PatientEntity extends BaseEntity {
-  @Column('varchar', { length: 40 })
+  @Column('varchar', { length: 40, nullable: true })
   firstName: string;
 
-  @Column('varchar', { length: 40 })
+  @Column('varchar', { length: 40, nullable: true })
   lastName: string;
 
-  @Column('date')
+  @Column('date', { nullable: true })
   dateOfBirth: Date;
 
   @Column('enum', {

@@ -10,6 +10,7 @@ import configuration, {
 import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 import { PatientsModule } from '@supervision/patients';
+import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PatientsModule } from '@supervision/patients';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      resolvers: { DateOfBirth: DateOfBirthScalar },
     }),
     HealthModule,
     UsersModule,
