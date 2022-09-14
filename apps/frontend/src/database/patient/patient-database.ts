@@ -10,6 +10,7 @@ import {
   indexedDB as fakeIndexedDB,
   IDBKeyRange as fakeIDBKeyRange,
 } from 'fake-indexeddb';
+import { v4 as uuidv4 } from 'uuid';
 
 type ObjectWithRxdbMetaField = {
   _meta?: {
@@ -78,9 +79,13 @@ const pullQueryBuilder = (doc: PatientDocument) => {
   const updatedAt = doc?.updatedAt
     ? new Date(doc.updatedAt).toISOString()
     : new Date(0).toISOString();
+  const minUpdatedAtField = `minUpdatedAt: "${updatedAt}", `;
+
+  const lastId = doc?.id ? doc.id : uuidv4();
+  const lastIdField = `lastId: "${lastId}", `;
 
   const query = `{
-    patientReplicationFeed(minUpdatedAt: "${updatedAt}", limit: 5) {
+    patientReplicationFeed(${minUpdatedAtField}${lastIdField}limit: 5) {
       id,
       revision,
       createdAt,

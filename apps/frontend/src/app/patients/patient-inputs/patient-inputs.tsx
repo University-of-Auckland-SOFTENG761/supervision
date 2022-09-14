@@ -59,7 +59,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
   useEffect(() => {
     form.setValues(buildFormValues());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buildFormValues, patient]);
+  }, [buildFormValues, patients]);
 
   useEffect(() => {
     setPatientAge(
