@@ -106,7 +106,7 @@ export class PatientService {
     }
 
     return await query
-      .orderBy('patient.updatedAt', 'DESC')
+      .orderBy('patient.updatedAt', 'ASC')
       .addOrderBy('patient.id')
       .take(limit)
       .withDeleted()
