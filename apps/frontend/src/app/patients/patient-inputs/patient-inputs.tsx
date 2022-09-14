@@ -102,10 +102,19 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
   return (
     <>
       <Stack>
-        <TextInput label="First name:" {...form.getInputProps('firstName')} />
-        <TextInput label="Last name:" {...form.getInputProps('lastName')} />
+        <TextInput
+          required
+          label="First name:"
+          {...form.getInputProps('firstName')}
+        />
+        <TextInput
+          required
+          label="Last name:"
+          {...form.getInputProps('lastName')}
+        />
         <Group className="justify-between">
           <DatePicker
+            required
             label="Date of birth:"
             {...form.getInputProps('dateOfBirth')}
             allowFreeInput
