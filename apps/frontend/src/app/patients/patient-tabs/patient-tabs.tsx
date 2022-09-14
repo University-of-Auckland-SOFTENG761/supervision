@@ -1,6 +1,6 @@
 import { ActionIcon, Group, Tabs } from '@mantine/core';
+import { usePatients } from '@shared';
 import { IconMenu2, IconPlus } from '@tabler/icons';
-import { usePatients } from 'app/hooks/usePatients';
 import { useEffect } from 'react';
 import { IPatient } from '../patient-details-page';
 

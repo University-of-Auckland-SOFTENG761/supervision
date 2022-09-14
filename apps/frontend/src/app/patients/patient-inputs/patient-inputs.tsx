@@ -9,8 +9,8 @@ import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
-import { usePatients } from 'app/hooks/usePatients';
 import { IPatient } from '../patient-details-page';
+import { usePatients } from '@shared';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
