@@ -4,29 +4,37 @@ import { Button } from '@shared';
 import React, {
   ForwardedRef,
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useState,
 } from 'react';
 
 export interface ReconnectedLoginModalRef {
   show(): void;
+  hide(): void;
 }
 
 export const ReconnectedLoginModal = forwardRef(
   (props, ref: ForwardedRef<ReconnectedLoginModalRef>) => {
-    const { loginWithPopup } = useAuth0();
+    const { loginWithPopup, isAuthenticated, isLoading } = useAuth0();
     const [opened, setOpened] = useState(false);
 
     useImperativeHandle(ref, () => ({
       show() {
         setOpened(true);
       },
+      hide() {
+        setOpened(false);
+      },
     }));
 
-    const login = () => {
-      setOpened(false);
-      loginWithPopup();
+    const login = async () => {
+      await loginWithPopup();
     };
+
+    useEffect(() => {
+      if (opened && isAuthenticated) setOpened(false);
+    }, [opened, isAuthenticated, isLoading]);
 
     return (
       <Modal

@@ -19,7 +19,7 @@ const ProtectedRoute = ({ component }: ProtectedRouteProps): JSX.Element => {
         <Loader />
       </Center>
     );
-  } else if (isAuthenticated || (!online && userEmail)) {
+  } else if (isAuthenticated || userEmail) {
     return component;
   } else {
     return <Navigate to="/" />;

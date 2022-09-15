@@ -20,7 +20,7 @@ type PatientInputsProps = {
 export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
   const { patients, updatePatient } = usePatients();
   const patient = patientUid
-    ? patients.find((p: IPatient) => p.id === patientUid)
+    ? patients?.find((p: IPatient) => p.id === patientUid)
     : undefined;
   const [patientAge, setPatientAge] = useState(
     patient?.dateOfBirth
@@ -92,7 +92,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
     debounceTimeout.current = setTimeout(() => {
       debounceTimeout.current = null;
       const newPatient = buildPatient();
-      if (newPatient) {
+      if (newPatient && updatePatient) {
         updatePatient(newPatient);
       }
     }, 500);

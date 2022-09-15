@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Center, ScrollArea, SimpleGrid, Text } from '@mantine/core';
 import { Button } from '@shared';
 import { PatientTabs } from '../patient-tabs';
@@ -31,9 +31,9 @@ export const PatientDetailsPage = () => {
     string | undefined
   >();
 
-  const handlePatientChange = (uid: string) => {
+  const handlePatientChange = useCallback((uid: string) => {
     setCurrentPatientUid(uid);
-  };
+  }, []);
 
   return (
     <>

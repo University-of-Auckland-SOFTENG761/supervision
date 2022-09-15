@@ -1,7 +1,7 @@
 import { Navbar, Stack } from '@mantine/core';
 import { IconPill, IconSearch, IconStethoscope, IconUser } from '@tabler/icons';
-import { AppShell } from './shared';
-import { useRef } from 'react';
+import { AppShell, usePatients } from './shared';
+import { useEffect, useRef } from 'react';
 import {
   SearchModal,
   SearchModalRef,
@@ -19,11 +19,17 @@ export function App() {
   const location = useLocation();
   const searchModal = useRef<SearchModalRef>(null);
   const reconnectedLoginModal = useRef<ReconnectedLoginModalRef>(null);
+  const { connectionStatus } = usePatients();
 
-  // TODO: Call this when the user is reconnected
-  const openReconnectedLoginModal = () => {
-    reconnectedLoginModal.current?.show();
-  };
+  const openReconnectedLoginModal = () => reconnectedLoginModal.current?.show();
+
+  const hideReconnectedLoginModal = () => reconnectedLoginModal.current?.hide();
+
+  useEffect(() => {
+    if (connectionStatus === 'unauthenticated' && location.pathname !== '/')
+      openReconnectedLoginModal();
+    else hideReconnectedLoginModal();
+  }, [connectionStatus, location.pathname]);
 
   return (
     <AppShell

@@ -11,6 +11,7 @@ import {
   IDBKeyRange as fakeIDBKeyRange,
 } from 'fake-indexeddb';
 import { v4 as uuidv4 } from 'uuid';
+import { getGraphQlHeaders } from 'database/authorisation';
 
 type ObjectWithRxdbMetaField = {
   _meta?: {
@@ -155,7 +156,7 @@ const deletionFilter = (doc: PatientDocument) => {
   return doc;
 };
 
-const buildReplicationState = (database: RxDatabase) => {
+export const buildReplicationState = async (database: RxDatabase) => {
   return database.collections['patients'].syncGraphQL({
     url: 'http://localhost:3333/graphql', // url to the GraphQL endpoint
     pull: {
@@ -170,6 +171,7 @@ const buildReplicationState = (database: RxDatabase) => {
     },
     deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
     live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
+    headers: await getGraphQlHeaders(),
   });
 };
 
@@ -195,15 +197,10 @@ const initializePatientDatabase = async () => {
     },
   });
 
-  const replicationState = buildReplicationState(db);
+  const replicationState = await buildReplicationState(db);
   replicationState.run();
 
-  replicationState.error$.subscribe((err) => {
-    console.error(err);
-    console.error(err.innerErrors);
-  });
-
-  return db;
+  return { db, replicationState };
 };
 
 export const patientDatabase = new DatabaseConstructor(
