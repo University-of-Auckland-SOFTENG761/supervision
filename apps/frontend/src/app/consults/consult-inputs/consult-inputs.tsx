@@ -4,6 +4,7 @@ import { useForm } from '@mantine/form';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
+import { IPatient } from '@patients';
 
 type ConsultDetailsProps = {
   consult: IConsult;
@@ -49,10 +50,8 @@ export const ConsultInputs = ({
   return (
     <Stack>
       <ConsultDetailsUpper
-        onChange={() => {
-          return null;
-        }}
-        value={null}
+        onUpdateConsult={onUpdateConsult}
+        consult={consult}
       />
       <ConsultDetailsLower
         onChange={() => {
