@@ -1,8 +1,52 @@
 import React from 'react';
 import { ConsultInputs } from '../consult-inputs';
+import { ScrollArea, Stack } from '@mantine/core';
 
 export type IConsult = {
-  uid: string; // TODO: add all other fields
+  uid: string;
+  // Column 1
+  history?: string;
+  medication?: string;
+  rightVisualAcuity?: string;
+  leftVisualAcuity?: string;
+  bothVisualAcuity?: string;
+  rightNearAcuity?: string;
+  leftNearAcuity?: string;
+  bothNearAcuity?: string;
+  distanceCoverTest?: string;
+  nearCoverTest?: string;
+  // Column 2
+  npc?: string;
+  motility?: string;
+  pupils?: string;
+  pupilDistance?: string;
+  fieldsColourVisionOther?: string;
+  eyePressureRight?: string;
+  eyePressureLeft?: string;
+  eyePressureTimeStamp?: Date;
+  isCyclopentolate?: boolean;
+  cyclopentolateTimestamp?: Date;
+  isTropicamide?: boolean;
+  tropicamideTimestamp?: Date;
+  // Column 3
+  binocularVision?: string;
+  diagnosis?: string;
+  // Column 4
+  anteriorHealth?: string;
+  management?: string;
+  // Column 3/4
+  spectacleCode?: string;
+  colour?: string;
+  lensType?: string;
+  heights?: string;
+  spectacleNote?: string;
+  // Column 5
+  posteriorHealth?: string;
+  laypersonNotes?: string;
+  recallDate?: Date;
+  recallDescription?: string;
+
+  // TODO: add fields for Joel's section
 };
 
 export const ConsultDetailsPage = () => {
@@ -16,13 +60,6 @@ export const ConsultDetailsPage = () => {
     consults[0]
   );
 
-  const handleConsultChange = (uid: string) => {
-    const consult = consults.find((c) => c.uid === uid);
-    if (consult) {
-      setCurrentConsult(consult);
-    }
-  };
-
   const handleUpdateConsult = (updatedConsult: IConsult) => {
     setCurrentConsult(updatedConsult);
     const newConsults = consults.map((c) => {
@@ -35,12 +72,14 @@ export const ConsultDetailsPage = () => {
   };
 
   return (
-    <>
-      <ConsultInputs
-        consult={currentConsult}
-        onUpdateConsult={handleUpdateConsult}
-      />
-    </>
+    <ScrollArea className="h-full p-8">
+      <Stack>
+        <ConsultInputs
+          consult={currentConsult}
+          onUpdateConsult={handleUpdateConsult}
+        />
+      </Stack>
+    </ScrollArea>
   );
 };
 
