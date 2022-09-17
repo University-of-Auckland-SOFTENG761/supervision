@@ -8,10 +8,14 @@ import configuration, {
   configSchema,
   TypeOrmConfigService,
 } from '@supervision/config';
-import { HealthModule } from '@supervision/health';
-import { UsersModule } from '@supervision/users';
-import { PatientsModule } from '@supervision/patients';
+import { HealthModule } from '@supervision/health/health.module';
+import { UsersModule } from '@supervision/users/users.module';
+import { PatientsModule } from '@supervision/patients/patients.module';
+import { ConsultsModule } from '@supervision/consults/consults.module';
 import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
+import { ConsultsService } from './consults';
+import { UserService } from './users';
+import { PatientService } from './patients';
 
 @Module({
   imports: [
@@ -31,7 +35,9 @@ import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
     HealthModule,
     UsersModule,
     PatientsModule,
+    ConsultsModule,
     AuthModule,
   ],
+  providers: [UserService, PatientService, ConsultsService],
 })
 export class AppModule {}

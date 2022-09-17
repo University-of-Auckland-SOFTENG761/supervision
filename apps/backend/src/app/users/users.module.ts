@@ -7,8 +7,12 @@ import { UserService } from '@supervision/users/users.service';
 
 @Module({
   imports: [
+
     TypeOrmModule.forFeature([UserEntity]),
     forwardRef(() => AuthModule),
+  ,
+    TypeOrmModule.forFeature([PatientEntity]),
+    TypeOrmModule.forFeature([ConsultEntity]),
   ],
   exports: [TypeOrmModule, UserService],
   providers: [UserService, UserResolver],
