@@ -1,14 +1,22 @@
 import { BaseEntity } from '@supervision/shared';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToOne } from 'typeorm';
 import { UserEntity } from '@supervision/users/database/user.entity';
 import { PatientEntity } from '@supervision/patients/database/patient.entity';
 
 @Entity({ name: 'consult' })
 export class ConsultEntity extends BaseEntity {
-  @ManyToOne(() => UserEntity, (user) => user.consults)
+  @JoinTable()
+  @ManyToOne(() => UserEntity, (user) => user.consults, {
+    nullable: false,
+    eager: true,
+  })
   user: UserEntity;
 
-  @ManyToOne(() => PatientEntity, (patient) => patient.consults)
+  @ManyToOne(() => PatientEntity, (patient) => patient.consults, {
+    nullable: false,
+    eager: true,
+  })
+  @JoinTable()
   patient: PatientEntity;
 
   @Column('date', { nullable: true })
