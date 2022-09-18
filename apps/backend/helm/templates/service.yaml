@@ -4,7 +4,7 @@ metadata:
   name: {{ include "helm.fullname" . }}
   labels: {{- include "helm.labels" . | nindent 4 }}
   annotations:
-    cloud.google.com/network-tier: standard
+    cloud.google.com/network-tier: Standard
 spec:
   type: LoadBalancer
   ports:
@@ -16,4 +16,4 @@ spec:
       targetPort: 3333
       protocol: TCP
       name: http
-  selector: { { - include "helm.selectorLabels" . | nindent 4 } }
+  selector: {{- include "helm.selectorLabels" . | nindent 4 }}
