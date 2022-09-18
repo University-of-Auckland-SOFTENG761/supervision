@@ -46,7 +46,84 @@ export type IConsult = {
   recallDate?: Date;
   recallDescription?: string;
 
-  // TODO: add fields for Joel's section
+  // Bottom Table Fields
+  // prevSpecRxGiven
+  prevSpecRxGivenRightEyeSphere?: number;
+  prevSpecRxGivenRightCylinder?: number;
+  prevSpecRxGivenRightAxis?: number;
+  prevSpecRxGivenRightVA?: string;
+  prevSpecRxGivenRightAdd?: number;
+  prevSpecRxGivenLeftEyeSphere?: number;
+  prevSpecRxGivenLeftCylinder?: number;
+  prevSpecRxGivenLeftAxis?: number;
+  prevSpecRxGivenLeftVA?: string;
+  prevSpecRxGivenLeftAdd?: number;
+  // habitual
+  habitualRightEyeSphere?: number;
+  habitualRightCylinder?: number;
+  habitualRightAxis?: number;
+  habitualRightVA?: string;
+  habitualRightAdd?: number;
+  habitualLeftEyeSphere?: number;
+  habitualLeftCylinder?: number;
+  habitualLeftAxis?: number;
+  habitualLeftVA?: string;
+  habitualLeftAdd?: number;
+  // dryRetinoscopy
+  dryRetinoscopyRightEyeSphere?: number;
+  dryRetinoscopyRightCylinder?: number;
+  dryRetinoscopyRightAxis?: number;
+  dryRetinoscopyRightVA?: string;
+  dryRetinoscopyRightAdd?: number;
+  dryRetinoscopyLeftEyeSphere?: number;
+  dryRetinoscopyLeftCylinder?: number;
+  dryRetinoscopyLeftAxis?: number;
+  dryRetinoscopyLeftVA?: string;
+  dryRetinoscopyLeftAdd?: number;
+  // autoRefraction
+  autoRefractionRightEyeSphere?: number;
+  autoRefractionRightCylinder?: number;
+  autoRefractionRightAxis?: number;
+  autoRefractionRightVA?: string;
+  autoRefractionRightAdd?: number;
+  autoRefractionLeftEyeSphere?: number;
+  autoRefractionLeftCylinder?: number;
+  autoRefractionLeftAxis?: number;
+  autoRefractionLeftVA?: string;
+  autoRefractionLeftAdd?: number;
+  // wetRefraction
+  wetRefractionRightEyeSphere?: number;
+  wetRefractionRightCylinder?: number;
+  wetRefractionRightAxis?: number;
+  wetRefractionRightVA?: string;
+  wetRefractionRightAdd?: number;
+  wetRefractionLeftEyeSphere?: number;
+  wetRefractionLeftCylinder?: number;
+  wetRefractionLeftAxis?: number;
+  wetRefractionLeftVA?: string;
+  wetRefractionLeftAdd?: number;
+  // subjectiveRefraction
+  subjectiveRefractionRightEyeSphere?: number;
+  subjectiveRefractionRightCylinder?: number;
+  subjectiveRefractionRightAxis?: number;
+  subjectiveRefractionRightVA?: string;
+  subjectiveRefractionRightAdd?: number;
+  subjectiveRefractionLeftEyeSphere?: number;
+  subjectiveRefractionLeftCylinder?: number;
+  subjectiveRefractionLeftAxis?: number;
+  subjectiveRefractionLeftVA?: string;
+  subjectiveRefractionLeftAdd?: number;
+  // givenRefraction
+  RightEyeSphere?: number;
+  RightCylinder?: number;
+  RightAxis?: number;
+  RightVA?: string;
+  RightAdd?: number;
+  LeftEyeSphere?: number;
+  LeftCylinder?: number;
+  LeftAxis?: number;
+  LeftVA?: string;
+  LeftAdd?: number;
 };
 
 export const ConsultDetailsPage = () => {

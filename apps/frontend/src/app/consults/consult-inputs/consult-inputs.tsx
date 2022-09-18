@@ -54,10 +54,8 @@ export const ConsultInputs = ({
         consult={consult}
       />
       <ConsultDetailsLower
-        onChange={() => {
-          return null;
-        }}
-        value={null}
+        onUpdateConsult={onUpdateConsult}
+        consult={consult}
       />
     </Stack>
   );
