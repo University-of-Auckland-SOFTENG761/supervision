@@ -1,5 +1,4 @@
 import {
-  Text,
   Checkbox,
   Grid,
   SimpleGrid,
@@ -12,7 +11,7 @@ import {
 import React from 'react';
 import { useForm } from '@mantine/form';
 import { IConsult } from '../consult-details-page';
-import { DatePicker } from '@mantine/dates';
+import { DatePicker, TimeInput } from '@mantine/dates';
 import dayjs from 'dayjs';
 
 type ConsultDetailsUpperProps = {
@@ -125,15 +124,50 @@ export const ConsultDetailsUpper = ({
               {...form.getInputProps('leftEyePressure')}
             />
           </SimpleGrid>
-          {/*TODO: add time administered*/}
-          <Checkbox
-            {...form.getInputProps('cyclopentolate')}
-            label="Cyclopentolate 1.0%"
-          />
-          <Checkbox
-            {...form.getInputProps('Tropicamide')}
-            label="Tropicamide 1.0%"
-          />
+          <Title order={6} className="-mb-3">
+            Cyclopentolate
+          </Title>
+          <Group>
+            <Checkbox
+              {...form.getInputProps('isCyclopentolate')}
+              onChange={(event) => {
+                const checked: boolean = event.currentTarget.checked;
+                const timestamp = checked ? new Date() : undefined;
+                form.setFieldValue('isCyclopentolate', checked);
+                form.setFieldValue('cyclopentolateTimestamp', timestamp);
+              }}
+            />
+            <TimeInput
+              label="Administered:"
+              format="12"
+              withSeconds
+              className="w-32"
+              disabled
+              {...form.getInputProps('cyclopentolateTimestamp')}
+            />
+          </Group>
+          <Title order={6} className="-mb-3">
+            Tropicamide
+          </Title>
+          <Group>
+            <Checkbox
+              {...form.getInputProps('isTropicamide')}
+              onChange={(event) => {
+                const checked: boolean = event.currentTarget.checked;
+                const timestamp = checked ? new Date() : undefined;
+                form.setFieldValue('isTropicamide', checked);
+                form.setFieldValue('tropicamideTimestamp', timestamp);
+              }}
+            />
+            <TimeInput
+              label="Administered:"
+              format="12"
+              withSeconds
+              className="w-32"
+              disabled
+              {...form.getInputProps('tropicamideTimestamp')}
+            />
+          </Group>
         </Stack>
       </Grid.Col>
       {/*Column 3 and 4*/}
