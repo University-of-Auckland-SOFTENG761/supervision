@@ -7,19 +7,21 @@ on:
       - 'feat/deploy'
     tags:
       - 'v*'
-  workflow_dispatch:
-    inputs: {}
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: supervision
 
 jobs:
-  build-and-push-image:
+  build-backend:
+    name: Build Backend
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+
+    outputs:
+      imageTag: ${{ steps.meta.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -47,6 +49,13 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  deploy-backend:
+    name: Deploy Backend
+    environment: development
+    runs-on: ubuntu-latest
+    needs: build-backend
+
+    steps:
       - id: 'auth'
         uses: google-github-actions/auth@v0
         with:
@@ -60,3 +69,8 @@ jobs:
         with:
           cluster_name: 'supervision-backend-dev'
           location: 'australia-southeast1'
+
+      - uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+        id: install
