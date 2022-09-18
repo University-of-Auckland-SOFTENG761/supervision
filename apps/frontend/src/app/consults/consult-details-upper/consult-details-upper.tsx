@@ -11,8 +11,12 @@ import {
 import React from 'react';
 import { useForm } from '@mantine/form';
 import { IConsult } from '../consult-details-page';
+import { VisualAcuityInputs } from './visual-acuity-inputs';
 import { DatePicker, TimeInput } from '@mantine/dates';
 import dayjs from 'dayjs';
+import { NearAcuityInputs } from './near-acuity-inputs';
+import { CoverTestInputs } from './cover-test-inputs';
+import { EyePressureInputs } from './eye-pressure-inputs';
 
 type ConsultDetailsUpperProps = {
   consult: IConsult;
@@ -47,54 +51,26 @@ export const ConsultDetailsUpper = ({
             {...form.getInputProps('medication')}
             required
           />
-          {/*TODO: improve spacing below title*/}
-          <Title order={6} className="-mb-3">
-            Visual Acuity
-          </Title>
-          <SimpleGrid cols={3}>
-            <TextInput
-              label="Right:"
-              {...form.getInputProps('rightVisualAcuity')}
-              required
-            />
-            <TextInput
-              label="Left:"
-              {...form.getInputProps('leftVisualAcuity')}
-              required
-            />
-            <TextInput
-              label="Both:"
-              {...form.getInputProps('bothVisualAcuity')}
-            />
-          </SimpleGrid>
-          <Title order={6} className="-mb-3">
-            Near Acuity
-          </Title>
-          <SimpleGrid cols={3}>
-            <TextInput
-              label="Right:"
-              {...form.getInputProps('rightNearAcuity')}
-            />
-            <TextInput
-              label="Left:"
-              {...form.getInputProps('leftNearAcuity')}
-            />
-            <TextInput
-              label="Both:"
-              {...form.getInputProps('bothNearAcuity')}
-            />
-          </SimpleGrid>
-          <Title order={6} className="-mb-3">
-            Cover Test
-          </Title>
-          <SimpleGrid cols={3}>
-            <TextInput
-              label="Distance:"
-              classNames={{ label: 'whitespace-nowrap' }}
-              {...form.getInputProps('distanceCoverTest')}
-            />
-            <TextInput label="Near:" {...form.getInputProps('nearCoverTest')} />
-          </SimpleGrid>
+          <VisualAcuityInputs
+            {...{
+              ...form.getInputProps('rightVisualAcuity'),
+              ...form.getInputProps('leftVisualAcuity'),
+              ...form.getInputProps('bothVisualAcuity'),
+            }}
+          />
+          <NearAcuityInputs
+            {...{
+              ...form.getInputProps('rightNearAcuity'),
+              ...form.getInputProps('leftNearAcuity'),
+              ...form.getInputProps('bothNearAcuity'),
+            }}
+          />
+          <CoverTestInputs
+            {...{
+              ...form.getInputProps('distanceCoverTest'),
+              ...form.getInputProps('nearCoverTest'),
+            }}
+          />
         </Stack>
       </Grid.Col>
       {/*Column 2*/}
@@ -111,62 +87,59 @@ export const ConsultDetailsUpper = ({
             label="Fields/Colour Vision/Other:"
             {...form.getInputProps('fieldsColourVisionOther')}
           />
-          <Title order={6} className="-mb-3">
-            Eye Pressures (mmHg)
-          </Title>
-          <SimpleGrid cols={3}>
-            <TextInput
-              label="Right:"
-              {...form.getInputProps('rightEyePressure')}
-            />
-            <TextInput
-              label="Left:"
-              {...form.getInputProps('leftEyePressure')}
-            />
-          </SimpleGrid>
-          <Title order={6} className="-mb-3">
-            Cyclopentolate
-          </Title>
+          {/*TODO: add timestamp for eye pressure*/}
+          <EyePressureInputs
+            {...{
+              ...form.getInputProps('eyePressureRight'),
+              ...form.getInputProps('eyePressureLeft'),
+            }}
+          />
+          {/*TODO: Refactor cyclopentolate/tropicamide into a separate file*/}
           <Group>
-            <Checkbox
-              {...form.getInputProps('isCyclopentolate')}
-              onChange={(event) => {
-                const checked: boolean = event.currentTarget.checked;
-                const timestamp = checked ? new Date() : undefined;
-                form.setFieldValue('isCyclopentolate', checked);
-                form.setFieldValue('cyclopentolateTimestamp', timestamp);
-              }}
-            />
-            <TimeInput
-              label="Administered:"
-              format="12"
-              withSeconds
-              className="w-32"
-              disabled
-              {...form.getInputProps('cyclopentolateTimestamp')}
-            />
-          </Group>
-          <Title order={6} className="-mb-3">
-            Tropicamide
-          </Title>
-          <Group>
-            <Checkbox
-              {...form.getInputProps('isTropicamide')}
-              onChange={(event) => {
-                const checked: boolean = event.currentTarget.checked;
-                const timestamp = checked ? new Date() : undefined;
-                form.setFieldValue('isTropicamide', checked);
-                form.setFieldValue('tropicamideTimestamp', timestamp);
-              }}
-            />
-            <TimeInput
-              label="Administered:"
-              format="12"
-              withSeconds
-              className="w-32"
-              disabled
-              {...form.getInputProps('tropicamideTimestamp')}
-            />
+            <Stack>
+              <Title order={6} className="-mb-3">
+                Cyclopentolate
+              </Title>
+              <Group>
+                <Checkbox
+                  {...form.getInputProps('isCyclopentolate')}
+                  onChange={(event) => {
+                    const checked: boolean = event.currentTarget.checked;
+                    const timestamp = checked ? new Date() : undefined;
+                    form.setFieldValue('isCyclopentolate', checked);
+                    form.setFieldValue('cyclopentolateTimestamp', timestamp);
+                  }}
+                />
+                <TimeInput
+                  label="Administered:"
+                  format="12"
+                  className="w-28"
+                  {...form.getInputProps('cyclopentolateTimestamp')}
+                />
+              </Group>
+            </Stack>
+            <Stack>
+              <Title order={6} className="-mb-3">
+                Tropicamide
+              </Title>
+              <Group>
+                <Checkbox
+                  {...form.getInputProps('isTropicamide')}
+                  onChange={(event) => {
+                    const checked: boolean = event.currentTarget.checked;
+                    const timestamp = checked ? new Date() : undefined;
+                    form.setFieldValue('isTropicamide', checked);
+                    form.setFieldValue('tropicamideTimestamp', timestamp);
+                  }}
+                />
+                <TimeInput
+                  label="Administered:"
+                  format="12"
+                  className="w-28"
+                  {...form.getInputProps('tropicamideTimestamp')}
+                />
+              </Group>
+            </Stack>
           </Group>
         </Stack>
       </Grid.Col>
@@ -263,7 +236,6 @@ export const ConsultDetailsUpper = ({
             minRows={11}
             {...form.getInputProps('laypersonNotes')}
           />
-          {/*TODO: figure out what's going on with the recall box (it should probably be two boxes)*/}
           <Title order={6} className="-mb-3">
             Recall
           </Title>
