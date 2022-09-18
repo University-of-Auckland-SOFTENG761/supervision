@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '@supervision/shared';
+import { ConsultEntity } from '@supervision/consults/database/consult.entity';
 
 export enum UserRole {
   SUPERVISOR = 'supervisor',
@@ -24,4 +25,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => ConsultEntity, (consult) => consult.user)
+  consults: ConsultEntity[];
 }

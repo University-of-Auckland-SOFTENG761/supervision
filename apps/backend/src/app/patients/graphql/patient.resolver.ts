@@ -7,6 +7,7 @@ import { PatientService } from '@supervision/patients/patients.service';
 import { CreatePatientInput } from '../dto/create-patient.input';
 import { PatientEntity } from '../database';
 import { UpdatePatientInput } from '../dto/update-patient.input';
+import { SetPatientInput } from '../dto/set-patient-input';
 
 @Resolver(() => PatientModel)
 export class PatientResolver implements IReplicationResolver<PatientModel> {
@@ -41,6 +42,18 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
       updatePatientInput.id,
       updatePatientInput
     );
+  }
+
+  @Mutation(() => PatientModel, { nullable: true })
+  async setPatients(
+    @Args({
+      name: 'setPatientsInput',
+      type: () => [SetPatientInput],
+      nullable: true,
+    })
+    setPatientsInput: SetPatientInput[]
+  ): Promise<PatientModel | null> {
+    return await this.patientService.set(setPatientsInput);
   }
 
   @Query(() => PatientModel)

@@ -7,13 +7,13 @@ import {
 @InputType()
 export class CreatePatientInput {
   // TODO: add field descriptions
-  @Field(() => String, { nullable: false })
+  @Field(() => String, { nullable: true })
   firstName: string;
 
-  @Field(() => String, { nullable: false })
+  @Field(() => String, { nullable: true })
   lastName: string;
 
-  @Field(() => Date, { nullable: false })
+  @Field(() => Date, { nullable: true })
   dateOfBirth: Date;
 
   @Field(() => Gender, { nullable: true })
@@ -25,7 +25,7 @@ export class CreatePatientInput {
   @Field(() => String, { nullable: true })
   school: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => Number, { nullable: true })
   yearLevel: number;
 
   @Field(() => Date, { nullable: true })

@@ -1,114 +1,68 @@
-import React from 'react';
-import { ScrollArea, SimpleGrid } from '@mantine/core';
+import { useState } from 'react';
+import { Center, ScrollArea, SimpleGrid, Text } from '@mantine/core';
 import { Button } from '@shared';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
 
 export type IPatient = {
-  uid: string;
+  id: string;
   firstName?: string;
   lastName?: string;
-  dob?: string;
-  patientId?: string;
+  dateOfBirth?: string;
   ethnicity?: string;
   gender?: string;
   school?: string;
-  year?: number;
+  yearLevel?: number;
   room?: string;
-  address?: {
-    street?: string;
-    suburb?: string;
-    city?: string;
-    postCode?: string;
-  };
+  streetAddress?: string;
+  suburb?: string;
+  city?: string;
+  postcode?: string;
   caregiverFirstName?: string;
   caregiverLastName?: string;
   phoneNumber?: string;
   email?: string;
-  notes?: string;
+  adminNotes?: string;
 };
 
 export const PatientDetailsPage = () => {
-  // TODO: Replace with actual data
-  const [patients, setPatients] = React.useState<IPatient[]>([
-    {
-      uid: '8c78e8d5-26e5-4a99-a112-0b8602bf2c1b',
-      firstName: 'Yulia',
-      lastName: 'Pechorina',
-      dob: '2001-02-21',
-      patientId: '12345',
-      ethnicity: 'other european',
-      gender: 'female',
-      school: 'The University of Auckland',
-      year: 4,
-      room: 'N/A',
-      address: {
-        street: '1000 Fifth Avenue',
-        suburb: 'Manhattan',
-        city: 'New York',
-        postCode: '10028',
-      },
-      caregiverFirstName: 'John',
-      caregiverLastName: 'Doe',
-      phoneNumber: '+64 9 12345678',
-      email: 'yulia@gmail.com',
-      notes: 'Nothing to add',
-    },
-    {
-      uid: 'c7695a78-33ae-4f71-9c54-4a3336628965',
-      firstName: 'Kid',
-      lastName: 'Cudi',
-      dob: '1984-01-30',
-      patientId: '54321',
-      gender: 'male',
-    },
-  ]);
-
-  const [currentPatient, setCurrentPatient] = React.useState<IPatient>(
-    patients[0]
-  );
+  const [currentPatientUid, setCurrentPatientUid] = useState<
+    string | undefined
+  >();
 
   const handlePatientChange = (uid: string) => {
-    const patient = patients.find((p) => p.uid === uid);
-    if (patient) {
-      setCurrentPatient(patient);
-    }
-  };
-
-  const handleUpdatePatient = (updatedPatient: IPatient) => {
-    setCurrentPatient(updatedPatient);
-    const newPatients = patients.map((p) => {
-      if (p.uid === updatedPatient.uid) {
-        return updatedPatient;
-      }
-      return p;
-    });
-    setPatients(newPatients);
+    setCurrentPatientUid(uid);
   };
 
   return (
     <>
-      <PatientTabs patients={patients} onPatientChange={handlePatientChange} />
-      <ScrollArea className="h-full p-8">
-        <SimpleGrid
-          cols={3}
-          spacing={180}
-          breakpoints={[
-            { maxWidth: 1024, cols: 2, spacing: 100 },
-            { maxWidth: 1280, cols: 3, spacing: 100 },
-          ]}
-        >
-          <PatientInputs
-            patient={currentPatient}
-            onUpdatePatient={handleUpdatePatient}
-          />
-        </SimpleGrid>
-        <div className="flex mt-5 -mb-5 justify-end w-full">
-          <Button className="ml-auto">CREATE NEW RECORD</Button>
-        </div>
-        <PatientRecords className="pb-5" />
-      </ScrollArea>
+      <PatientTabs
+        currentPatientUid={currentPatientUid}
+        onPatientChange={handlePatientChange}
+      />
+      {currentPatientUid ? (
+        <ScrollArea className="h-full p-8">
+          <SimpleGrid
+            cols={3}
+            spacing={180}
+            breakpoints={[
+              { maxWidth: 1024, cols: 2, spacing: 100 },
+              { maxWidth: 1280, cols: 3, spacing: 100 },
+            ]}
+          >
+            <PatientInputs patientUid={currentPatientUid} />
+          </SimpleGrid>
+          <div className="flex mt-5 -mb-5 justify-end w-full">
+            <Button className="ml-auto">CREATE NEW RECORD</Button>
+          </div>
+          <PatientRecords className="pb-5" />
+        </ScrollArea>
+      ) : (
+        <Center className="h-full">
+          <Text>Click on a patient to view their details</Text>
+        </Center>
+      )}
     </>
   );
 };

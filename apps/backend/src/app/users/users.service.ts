@@ -28,7 +28,12 @@ export class UserService {
     limit: number
   ): Promise<UserEntity[]> {
     let query: SelectQueryBuilder<UserEntity>;
-    if (minUpdatedAt === undefined || lastId === undefined) {
+    if (
+      minUpdatedAt === undefined ||
+      lastId === undefined ||
+      minUpdatedAt?.getTime() === 0 ||
+      lastId === ''
+    ) {
       query = this.usersRepository.createQueryBuilder('user');
     } else {
       query = this.usersRepository
