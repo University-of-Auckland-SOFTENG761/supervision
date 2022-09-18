@@ -10,7 +10,7 @@ export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @VersionColumn()
+  @VersionColumn({ default: 0 })
   revision: number;
 
   @CreateDateColumn({ type: 'timestamptz' })

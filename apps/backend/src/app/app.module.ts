@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from '@supervision/auth';
 import configuration, {
   configSchema,
   TypeOrmConfigService,
@@ -30,6 +31,7 @@ import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
     HealthModule,
     UsersModule,
     PatientsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
