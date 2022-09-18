@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: supervision
+  IMAGE_NAME: University-of-Auckland-SOFTENG761/supervision
 
 jobs:
   build-backend:
