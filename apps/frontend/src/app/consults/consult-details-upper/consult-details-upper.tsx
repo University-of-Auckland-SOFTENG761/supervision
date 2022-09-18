@@ -7,10 +7,13 @@ import {
   Textarea,
   TextInput,
   Title,
+  Group,
 } from '@mantine/core';
 import React from 'react';
 import { useForm } from '@mantine/form';
 import { IConsult } from '../consult-details-page';
+import { DatePicker } from '@mantine/dates';
+import dayjs from 'dayjs';
 
 type ConsultDetailsUpperProps = {
   consult: IConsult;
@@ -46,7 +49,9 @@ export const ConsultDetailsUpper = ({
             required
           />
           {/*TODO: improve spacing below title*/}
-          <Title order={6}>Visual Acuity</Title>
+          <Title order={6} className="-mb-3">
+            Visual Acuity
+          </Title>
           <SimpleGrid cols={3}>
             <TextInput
               label="Right:"
@@ -63,7 +68,9 @@ export const ConsultDetailsUpper = ({
               {...form.getInputProps('bothVisualAcuity')}
             />
           </SimpleGrid>
-          <Title order={6}>Near Acuity</Title>
+          <Title order={6} className="-mb-3">
+            Near Acuity
+          </Title>
           <SimpleGrid cols={3}>
             <TextInput
               label="Right:"
@@ -78,10 +85,13 @@ export const ConsultDetailsUpper = ({
               {...form.getInputProps('bothNearAcuity')}
             />
           </SimpleGrid>
-          <Title order={6}>Cover Test</Title>
+          <Title order={6} className="-mb-3">
+            Cover Test
+          </Title>
           <SimpleGrid cols={3}>
             <TextInput
               label="Distance:"
+              classNames={{ label: 'whitespace-nowrap' }}
               {...form.getInputProps('distanceCoverTest')}
             />
             <TextInput label="Near:" {...form.getInputProps('nearCoverTest')} />
@@ -102,7 +112,9 @@ export const ConsultDetailsUpper = ({
             label="Fields/Colour Vision/Other:"
             {...form.getInputProps('fieldsColourVisionOther')}
           />
-          <Title order={6}>Eye Pressures (mmHg)</Title>
+          <Title order={6} className="-mb-3">
+            Eye Pressures (mmHg)
+          </Title>
           <SimpleGrid cols={3}>
             <TextInput
               label="Right:"
@@ -141,6 +153,7 @@ export const ConsultDetailsUpper = ({
                 placeholder="Type here..."
                 autosize
                 minRows={4}
+                required
                 {...form.getInputProps('diagnosis')}
               />
             </Stack>
@@ -152,14 +165,16 @@ export const ConsultDetailsUpper = ({
                 placeholder="Type here..."
                 autosize
                 minRows={4}
+                required
                 {...form.getInputProps('anteriorHealth')}
               />
               <Textarea
-                label="Management:"
+                label="Posterior Health:"
                 placeholder="Type here..."
                 autosize
                 minRows={4}
-                {...form.getInputProps('management')}
+                required
+                {...form.getInputProps('posteriorHealth')}
               />
             </Stack>
           </Grid.Col>
@@ -169,9 +184,14 @@ export const ConsultDetailsUpper = ({
             <Stack>
               <TextInput
                 label="Spectacle Code:"
+                classNames={{ label: 'whitespace-nowrap' }}
                 {...form.getInputProps('spectacleCode')}
               />
-              <TextInput label="Heights:" {...form.getInputProps('heights')} />
+              <TextInput
+                label="Heights:"
+                {...form.getInputProps('heights')}
+                placeholder="Datum"
+              />
             </Stack>
           </Grid.Col>
           <Grid.Col span={2}>
@@ -195,21 +215,42 @@ export const ConsultDetailsUpper = ({
       <Grid.Col lg={1} md={5}>
         <Stack>
           <Textarea
-            label="Posterior Health:"
+            label="Management:"
             placeholder="Type here..."
             autosize
             minRows={4}
-            {...form.getInputProps('posteriorHealth')}
+            required
+            {...form.getInputProps('management')}
           />
           <Textarea
             label="Layperson Notes:"
-            placeholder="Type here..."
+            placeholder="Include the diagnosis, management plan and prognosis/recall in lay terms"
             autosize
             minRows={11}
             {...form.getInputProps('laypersonNotes')}
           />
           {/*TODO: figure out what's going on with the recall box (it should probably be two boxes)*/}
-          <TextInput label="Recall:" {...form.getInputProps('recall')} />
+          <Title order={6} className="-mb-3">
+            Recall
+          </Title>
+          <Group>
+            <DatePicker
+              label="Date:"
+              className="w-32"
+              allowFreeInput
+              inputFormat="DD/MM/YYYY"
+              dateParser={(date: string) =>
+                dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
+              }
+              placeholder="DD/MM/YYYY"
+              initialMonth={new Date()}
+              {...form.getInputProps('recallDate')}
+            />
+            <TextInput
+              label="Reason:"
+              {...form.getInputProps('recallDescription')}
+            />
+          </Group>
         </Stack>
       </Grid.Col>
     </Grid>
