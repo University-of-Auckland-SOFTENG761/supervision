@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Avatar, Center, Popover, Text } from '@mantine/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../button';
 import { useNetwork } from '../hooks';
@@ -20,6 +20,20 @@ export const UserAvatar = () => {
     }
   };
 
+  const userInitials = useMemo(() => {
+    if (user && (user.given_name || user.family_name)) {
+      return `${user?.given_name?.charAt(0).toUpperCase()}${user?.family_name
+        ?.charAt(0)
+        .toUpperCase()}`;
+    }
+    if (userEmail) {
+      return `${userEmail.charAt(0).toUpperCase()}${userEmail
+        .charAt(1)
+        .toUpperCase()}`;
+    }
+    return 'NA';
+  }, [user, userEmail]);
+
   if (isLoading || onlineStatusLoading) {
     return null;
   } else {
@@ -36,8 +50,7 @@ export const UserAvatar = () => {
             className="m-auto"
             src={null}
           >
-            {user?.given_name?.charAt(0)}
-            {user?.family_name?.charAt(0)}
+            {userInitials}
           </Avatar>
         </Popover.Target>
         <Popover.Dropdown>

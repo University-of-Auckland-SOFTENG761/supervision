@@ -10,7 +10,7 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({ component }: ProtectedRouteProps): JSX.Element => {
   const { isLoading, isAuthenticated } = useAuth0();
-  const { online, isLoading: onlineStatusLoading } = useNetwork();
+  const { isLoading: onlineStatusLoading } = useNetwork();
   const userEmail = sessionStorage.getItem('userEmail');
 
   if (isLoading || onlineStatusLoading) {
