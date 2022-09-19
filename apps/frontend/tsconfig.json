@@ -10,13 +10,7 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@shared": ["app/shared/index.ts"],
-      "@components": ["app/components/index.ts"],
-      "@pages": ["app/pages/index.ts"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "files": [],
   "include": [],

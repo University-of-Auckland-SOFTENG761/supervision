@@ -1,3 +1,4 @@
+import environment from '@environment';
 import { addRxPlugin, createRxDatabase, RxDatabase, RxDocument } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
 import patientSchema, { PatientDocType } from './patient-schema';
@@ -157,7 +158,7 @@ const deletionFilter = (doc: PatientDocument) => {
 
 const buildReplicationState = (database: RxDatabase) => {
   return database.collections['patients'].syncGraphQL({
-    url: 'http://localhost:3333/graphql', // url to the GraphQL endpoint
+    url: new URL('graphql', environment.api_url).toString(), // url to the GraphQL endpoint
     pull: {
       queryBuilder: pullQueryBuilder, // the queryBuilder from above
       batchSize: 5,
