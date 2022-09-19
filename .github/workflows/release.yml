@@ -81,4 +81,4 @@ jobs:
 
       - name: Deploy Helm
         run: |-
-          helm upgrade apps/backend/helm -f prod-config.yaml
+          helm upgrade supervision apps/backend/helm -f prod-config.yaml
