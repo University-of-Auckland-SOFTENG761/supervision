@@ -52,7 +52,7 @@ jobs:
   #  deploy-backend:
   #    name: Deploy Backend
   #    environment:
-  #      name: development
+  #      name: production (backend)
   #      url: https://api.uoa-supervision.org
   #
   #    runs-on: ubuntu-latest
@@ -89,9 +89,13 @@ jobs:
   #        run: |-
   #          helm upgrade supervision ./apps/backend/helm -f prod-config.yaml --set image.tag=${{needs.build-backend.outputs.imageTag}}
 
-  build-frontend:
-    name: Build Frontend
+  build-deploy-frontend:
+    name: Build & Deploy Frontend
     runs-on: ubuntu-latest
+    environment:
+      name: production (frontend)
+      url: https://uoa-supervision.org
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -108,7 +112,20 @@ jobs:
         env:
           NODE_ENV: production
 
-      - uses: actions/upload-artifact@v3
+      - id: 'auth'
+        uses: google-github-actions/auth@v0
         with:
-          name: bundle
-          path: dist/apps/frontend
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v0
+
+      - name: 'Delete Existing Files'
+        run: gcloud storage rm -r "gs://uoa-supervision.org/**/*"
+
+      - uses: 'google-github-actions/upload-cloud-storage@v0'
+        with:
+          path: '/dist/apps/frontend'
+          destination: 'uoa-supervision.org'
+          parent: false
+
