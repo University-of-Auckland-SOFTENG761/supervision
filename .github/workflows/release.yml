@@ -27,8 +27,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - run: ls
-
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
@@ -61,6 +59,9 @@ jobs:
     needs: build-backend
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - id: 'auth'
         uses: google-github-actions/auth@v0
         with:
@@ -86,4 +87,4 @@ jobs:
 
       - name: Deploy Helm
         run: |-
-          ls
+          helm upgrade supervision ./apps/backend/helm -f prod-config.yaml --set image.tag=${{needs.build-backend.outputs.imageTag}}
