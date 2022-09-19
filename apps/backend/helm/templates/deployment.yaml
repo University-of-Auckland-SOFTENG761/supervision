@@ -32,11 +32,55 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "DATABASE_USERNAME"
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: database-config
+            - name: "DATABASE_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: database-config
+            - name: "DATABASE_HOST"
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: database-config
+            - name: "AUTH0_ISSUER_URL"
+              value: "https://dev-6mx9ad29.us.auth0.com/"
+            - name: "AUTH0_AUDIENCE"
+              value: "api.akl-bus.vision"
+            - name: "AUTH0_DOMAIN"
+              value: "dev-6mx9ad29.us.auth0.com"
+            - name: "AUTH0_CLIENT_ID"
+              value: "CDkY8YlRlOcYqtLLtVw5XWhLeO8ds88B"
+            - name: "AUTH0_CLIENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: auth0-config
+            - name: "AUTH0_MANAGEMENT_ID"
+              value: "CLOYoi5aQWrdYwOUqvoE08AVFw6U7Hpo"
+            - name: "AUTH0_MANAGEMENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key: management_secret
+                  name: auth0-config
+            - name: "AUTH0_MANAGEMENT_CONNECTION"
+              value: "Username-Password-Authentication"
+            - name: "AUTH0_REDIRECT_URI"
+              value: "https://uoa-supervision.org"
           ports:
             - name: http
               containerPort: 3333
               protocol: TCP
           livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
             httpGet:
               path: /health
               port: http

@@ -59,7 +59,7 @@ jobs:
       - id: 'auth'
         uses: google-github-actions/auth@v0
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: 'Set up Cloud SDK'
         uses: google-github-actions/setup-gcloud@v0
@@ -74,3 +74,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
         id: install
+
+      - name: Get Configuration
+        run: |-
+          "${{ secrets.PROD_HELM_CONFIG }}" | base64 --decode > prod-config.yaml
+
+      - name: Deploy Helm
+        run: |-
+          helm upgrade apps/backend/helm -f prod-config.yaml

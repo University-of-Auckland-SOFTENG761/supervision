@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-{{ include "helm.fullname" . }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+  annotations:
+    cloud.google.com/network-tier: Standard
+    kubernetes.io/ingress.global-static-ip-name: "api-uoa-supervision-org"
+spec:
+  defaultBackend:
+    service:
+      name: web-{{ include "helm.fullname" . }}
+      port:
+        number: 80

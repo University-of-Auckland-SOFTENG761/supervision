@@ -14,6 +14,15 @@ imageCredentials:
   username: null
   password: null
 
+secrets:
+  database:
+    username: ""
+    password: ""
+    host: ""
+  auth0:
+    client_secret: ""
+    management_secret: ""
+
 imagePullSecrets: [{'name':'dockerconfigjson-github'}]
 nameOverride: ''
 fullnameOverride: ''
