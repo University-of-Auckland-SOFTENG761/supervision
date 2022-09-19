@@ -6,7 +6,7 @@ export const PatientRecordsTable = () => {
   const patientRecords = [
     {
       name: 'Jackson Chadfield',
-      dob: new Date(2000, 11, 17),
+      dateOfBirth: new Date(2000, 11, 17),
       school: 'University of Auckland',
       lastSeenBy: 'Veeran',
     },
@@ -26,7 +26,7 @@ export const PatientRecordsTable = () => {
         {patientRecords.map((record) => (
           <tr key={record.name}>
             <td>{record.name}</td>
-            <td>{record.dob.toLocaleString()}</td>
+            <td>{record.dateOfBirth.toLocaleString()}</td>
             <td>{record.school}</td>
             <td>{record.lastSeenBy}</td>
           </tr>

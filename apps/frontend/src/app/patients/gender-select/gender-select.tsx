@@ -6,7 +6,7 @@ type GenderSelectProps = {
   onChange: (value: string | null) => void;
 };
 
-enum Gender {
+export enum Gender {
   'Female' = 'female',
   'Male' = 'male',
   'Other' = 'other',

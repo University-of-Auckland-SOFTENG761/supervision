@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from '@supervision/auth';
 import configuration, {
   configSchema,
   TypeOrmConfigService,
@@ -11,6 +12,7 @@ import { ConsultsModule } from '@supervision/consults/consults.module';
 import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 import { PatientsModule } from '@supervision/patients';
+import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
 
 @Module({
   imports: [
@@ -25,10 +27,12 @@ import { PatientsModule } from '@supervision/patients';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      resolvers: { DateOfBirth: DateOfBirthScalar },
     }),
     HealthModule,
     UsersModule,
     PatientsModule,
+    AuthModule,
     ConsultsModule,
   ],
 })

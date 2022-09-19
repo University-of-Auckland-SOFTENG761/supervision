@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import MantineTheme from './mantine.config';
 import Routes from 'app/routes';
+import { Auth0Provider } from '@login';
 
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
@@ -24,7 +25,9 @@ root.render(
       theme={MantineTheme}
     >
       <BrowserRouter>
-        <Routes />
+        <Auth0Provider>
+          <Routes />
+        </Auth0Provider>
       </BrowserRouter>
     </MantineProvider>
   </StrictMode>

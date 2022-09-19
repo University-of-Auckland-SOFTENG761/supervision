@@ -16,7 +16,7 @@ async function bootstrap() {
   const port = configService.get<number>('app.port');
 
   await app.listen(port);
-  Logger.log(`🚀 Application is running on: http://localhost:${port}`);
+  Logger.log(`🚀 Application is running on: http://localhost:${port}/graphql`);
 }
 
 bootstrap();
