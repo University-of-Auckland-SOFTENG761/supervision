@@ -9,9 +9,7 @@ const ping = async () => {
 
   try {
     const url = new URL('health', environment.api_url);
-    const response = await fetch(url, {
-      mode: 'no-cors',
-    });
+    const response = await fetch(url);
     return response.ok;
   } catch (error) {
     return false;

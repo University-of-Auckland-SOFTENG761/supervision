@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import environment from '@environment';
 import React from 'react';
 import { Auth0Provider as Auth0ReactProvider } from '@auth0/auth0-react';
 
@@ -19,9 +20,9 @@ const AUTH0_REDIRECT_URI =
 export const Auth0Provider = (props: Auth0ProviderProps) => {
   return (
     <Auth0ReactProvider
-      domain={process.env['NX_AUTH0_DOMAIN']!}
-      clientId={AUTH0_CLIENT_ID!}
-      redirectUri={AUTH0_REDIRECT_URI!}
+      domain={environment.auth0.domain}
+      clientId={environment.auth0.client_id}
+      redirectUri={environment.auth0.redirect_uri}
       scope="openid"
       responseType="token"
       cacheLocation="localstorage"
