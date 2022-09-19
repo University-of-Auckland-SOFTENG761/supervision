@@ -9,8 +9,8 @@ const ping = async () => {
 
   try {
     const url = new URL('health', environment.api_url);
-    const response = await fetch(url);
-    return response.ok;
+    await fetch(url);
+    return true;
   } catch (error) {
     return false;
   }
