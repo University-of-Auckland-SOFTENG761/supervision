@@ -27,6 +27,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - run: ls
+
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
@@ -54,7 +56,7 @@ jobs:
     environment:
       name: development
       url: api.uoa-supervision.org
-      
+
     runs-on: ubuntu-latest
     needs: build-backend
 
@@ -84,4 +86,4 @@ jobs:
 
       - name: Deploy Helm
         run: |-
-          helm upgrade supervision apps/backend/helm -f prod-config.yaml
+          ls
