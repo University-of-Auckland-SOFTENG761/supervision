@@ -13,82 +13,81 @@ env:
   IMAGE_NAME: University-of-Auckland-SOFTENG761/supervision
 
 jobs:
-#  build-backend:
-#    name: Build Backend
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: read
-#      packages: write
-#
-#    outputs:
-#      imageTag: ${{ steps.meta.outputs.version }}
-#
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v3
-#
-#      - name: Log in to the Container registry
-#        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-#        with:
-#          registry: ${{ env.REGISTRY }}
-#          username: ${{ github.actor }}
-#          password: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Extract metadata (tags, labels) for Docker
-#        id: meta
-#        uses: docker/metadata-action@v4
-#        with:
-#          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-#
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: .
-#          file: ./apps/backend/Dockerfile
-#          push: true
-#          tags: ${{ steps.meta.outputs.tags }}
-#          labels: ${{ steps.meta.outputs.labels }}
-#
-#  deploy-backend:
-#    name: Deploy Backend
-#    environment:
-#      name: development
-#      url: https://api.uoa-supervision.org
-#
-#    runs-on: ubuntu-latest
-#    needs: build-backend
-#
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v3
-#
-#      - id: 'auth'
-#        uses: google-github-actions/auth@v0
-#        with:
-#          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-#
-#      - name: 'Set up Cloud SDK'
-#        uses: google-github-actions/setup-gcloud@v0
-#
-#      - id: 'get-credentials'
-#        uses: 'google-github-actions/get-gke-credentials@v0'
-#        with:
-#          cluster_name: 'supervision-backend-dev'
-#          location: 'australia-southeast1'
-#
-#      - uses: azure/setup-helm@v3
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#        id: install
-#
-#      - name: Get Configuration
-#        run: |-
-#          "${{ secrets.PROD_HELM_CONFIG }}" | base64 --decode > prod-config.yaml
-#
-#      - name: Deploy Helm
-#        run: |-
-#          helm upgrade supervision ./apps/backend/helm -f prod-config.yaml --set image.tag=${{needs.build-backend.outputs.imageTag}}
-
+  #  build-backend:
+  #    name: Build Backend
+  #    runs-on: ubuntu-latest
+  #    permissions:
+  #      contents: read
+  #      packages: write
+  #
+  #    outputs:
+  #      imageTag: ${{ steps.meta.outputs.version }}
+  #
+  #    steps:
+  #      - name: Checkout repository
+  #        uses: actions/checkout@v3
+  #
+  #      - name: Log in to the Container registry
+  #        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+  #        with:
+  #          registry: ${{ env.REGISTRY }}
+  #          username: ${{ github.actor }}
+  #          password: ${{ secrets.GITHUB_TOKEN }}
+  #
+  #      - name: Extract metadata (tags, labels) for Docker
+  #        id: meta
+  #        uses: docker/metadata-action@v4
+  #        with:
+  #          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+  #
+  #      - name: Build and push Docker image
+  #        uses: docker/build-push-action@v3
+  #        with:
+  #          context: .
+  #          file: ./apps/backend/Dockerfile
+  #          push: true
+  #          tags: ${{ steps.meta.outputs.tags }}
+  #          labels: ${{ steps.meta.outputs.labels }}
+  #
+  #  deploy-backend:
+  #    name: Deploy Backend
+  #    environment:
+  #      name: development
+  #      url: https://api.uoa-supervision.org
+  #
+  #    runs-on: ubuntu-latest
+  #    needs: build-backend
+  #
+  #    steps:
+  #      - name: Checkout repository
+  #        uses: actions/checkout@v3
+  #
+  #      - id: 'auth'
+  #        uses: google-github-actions/auth@v0
+  #        with:
+  #          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+  #
+  #      - name: 'Set up Cloud SDK'
+  #        uses: google-github-actions/setup-gcloud@v0
+  #
+  #      - id: 'get-credentials'
+  #        uses: 'google-github-actions/get-gke-credentials@v0'
+  #        with:
+  #          cluster_name: 'supervision-backend-dev'
+  #          location: 'australia-southeast1'
+  #
+  #      - uses: azure/setup-helm@v3
+  #        with:
+  #          token: ${{ secrets.GITHUB_TOKEN }}
+  #        id: install
+  #
+  #      - name: Get Configuration
+  #        run: |-
+  #          "${{ secrets.PROD_HELM_CONFIG }}" | base64 --decode > prod-config.yaml
+  #
+  #      - name: Deploy Helm
+  #        run: |-
+  #          helm upgrade supervision ./apps/backend/helm -f prod-config.yaml --set image.tag=${{needs.build-backend.outputs.imageTag}}
 
   build-frontend:
     name: Build Frontend
@@ -105,7 +104,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: nx run frontend:build:production --production --parallel=true --baseHref=uoa-supervision.org
+        run: npx nx run frontend:build:production --production --parallel=true --baseHref=uoa-supervision.org
         env:
           NODE_ENV: production
 
