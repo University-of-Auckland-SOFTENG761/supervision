@@ -85,7 +85,7 @@ jobs:
 
       - name: Deploy Helm
         run: |-
-          helm upgrade supervision ./apps/backend/helm -f prod-config.yaml --set image.tag=${{needs.build-backend.outputs.imageTag}}
+          helm upgrade supervision ./apps/backend/helm -f prod-config.yaml --set image.tag=${{needs.build-backend.outputs.imageTag}},imageCredentials.username=${{github.actor}},imageCredentials.password=${{secrets.GITHUB_TOKEN}}
 
   build-deploy-frontend:
     name: Build & Deploy Frontend
