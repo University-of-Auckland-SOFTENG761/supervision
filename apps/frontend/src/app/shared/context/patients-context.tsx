@@ -58,7 +58,8 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
     err: RxReplicationError<PatientDocType>
   ) => {
     console.error(err);
-    err.innerErrors.forEach((e: Error) => console.error(e));
+    err.innerErrors?.length > 0 &&
+      err.innerErrors.forEach((e: Error) => console.error(e));
 
     if (err.message === 'Failed to fetch') {
       setConnectionStatus('disconnected');
