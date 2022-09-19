@@ -56,6 +56,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-backend
 
+    permissions:
+      contents: read
+      packages: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
