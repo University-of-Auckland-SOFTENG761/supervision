@@ -34,7 +34,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   @Query(() => ConsultModel)
   @UseGuards(AuthGuard)
   async consult(@Args('id') id: string): Promise<ConsultModel> {
-    return await this.consultService.findOne(id);
+    return await this.consultService.findOneByID(id);
   }
 
   @Query(() => [ConsultModel])
