@@ -14,7 +14,11 @@ export class ConsultsService {
   ) {}
 
   async create(consult: CreateConsultInput): Promise<ConsultEntity> {
-    const newConsult = await this.consultsRepository.create(consult);
+    const newConsult = await this.consultsRepository.create({
+      patient: { id: consult.patientId },
+      user: { id: consult.userId },
+      ...consult,
+    });
     return await this.consultsRepository.save(newConsult);
   }
 

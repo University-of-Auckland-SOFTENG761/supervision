@@ -1,14 +1,12 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { UserModel } from '@supervision/users';
-import { PatientModel } from '@supervision/patients';
 
 @InputType('ConsultInput')
 export class CreateConsultInput {
-  @Field(() => UserModel, { nullable: false })
-  user!: UserModel;
+  @Field({ nullable: false })
+  userId!: string;
 
-  @Field(() => PatientModel, { nullable: false })
-  patient!: PatientModel;
+  @Field({ nullable: false })
+  patientId!: string;
 
   @Field({ nullable: false })
   dateConsentGiven: Date;
