@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import environment from '@environment';
 import React from 'react';
-import environment from '@environment';
 import { Auth0Provider as Auth0ReactProvider } from '@auth0/auth0-react';
 
 type Auth0ProviderProps = {
