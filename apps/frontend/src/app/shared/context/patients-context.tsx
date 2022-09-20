@@ -57,10 +57,6 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
   const handleReplicationError = async (
     err: RxReplicationError<PatientDocType>
   ) => {
-    console.error(err);
-    err.innerErrors?.length > 0 &&
-      err.innerErrors.forEach((e: Error) => console.error(e));
-
     if (err.message === 'Failed to fetch') {
       setConnectionStatus('disconnected');
       return;
@@ -79,6 +75,7 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
         connectionStatus !== 'disconnected'
       ) {
         setConnectionStatus('unauthenticated');
+        return;
       } else if (
         err.innerErrors?.some(
           (innerError: { message?: string }) =>
@@ -87,8 +84,14 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
         )
       ) {
         await restartReplication();
+        return;
       }
     }
+
+    // Display unhandled errors
+    console.error(err);
+    err.innerErrors?.length > 0 &&
+      err.innerErrors.forEach((e: Error) => console.error(e));
   };
 
   const handleReplicationResponse = () => {
