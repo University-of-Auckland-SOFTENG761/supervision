@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-{{ include "helm.fullname" . }}
+  labels: {{- include "helm.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "api-uoa-supervision-org"
+    networking.gke.io/managed-certificates: managed-cert
+    kubernetes.io/ingress.class: "gce"
+spec:
+  defaultBackend:
+    service:
+      name: web-{{ include "helm.fullname" . }}
+      port:
+        number: 3333
+
+---
+
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: managed-cert
+spec:
+  domains:
+    - api.uoa-supervision.org

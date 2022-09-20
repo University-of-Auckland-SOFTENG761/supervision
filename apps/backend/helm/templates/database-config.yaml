@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-config
+type: generic
+stringData:
+  username: "{{- .Values.secrets.database.username }}"
+  password: "{{- .Values.secrets.database.password }}"
+  host: "{{- .Values.secrets.database.host }}"

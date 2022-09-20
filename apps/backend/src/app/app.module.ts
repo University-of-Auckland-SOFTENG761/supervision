@@ -7,11 +7,10 @@ import { AuthModule } from '@supervision/auth';
 import configuration, {
   configSchema,
   TypeOrmConfigService,
-} from '@supervision/config';
-import { HealthModule } from '@supervision/health/health.module';
-import { UsersModule } from '@supervision/users/users.module';
-import { PatientsModule } from '@supervision/patients/patients.module';
 import { ConsultsModule } from '@supervision/consults/consults.module';
+import { HealthModule } from '@supervision/health';
+import { UsersModule } from '@supervision/users';
+import { PatientsModule } from '@supervision/patients';
 import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
 import { ConsultsService } from './consults';
 import { UserService } from './users';
@@ -31,12 +30,14 @@ import { PatientService } from './patients';
       driver: ApolloDriver,
       autoSchemaFile: true,
       resolvers: { DateOfBirth: DateOfBirthScalar },
+      cache: 'bounded',
     }),
     HealthModule,
     UsersModule,
     PatientsModule,
     ConsultsModule,
     AuthModule,
+    ConsultsModule,
   ],
   providers: [UserService, PatientService, ConsultsService],
 })
