@@ -45,6 +45,7 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   }
 
   @Mutation(() => PatientModel, { nullable: true })
+  @UseGuards(AuthGuard)
   async setPatients(
     @Args({
       name: 'setPatientsInput',
