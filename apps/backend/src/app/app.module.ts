@@ -28,6 +28,7 @@ import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
       driver: ApolloDriver,
       autoSchemaFile: true,
       resolvers: { DateOfBirth: DateOfBirthScalar },
+      cache: 'bounded',
     }),
     HealthModule,
     UsersModule,
