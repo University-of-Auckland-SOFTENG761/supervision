@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
+import environment from '@environment';
 
 /*
-Pings google.com to check for internet connection.
+Pings api to check for internet connection.
  */
 const ping = async () => {
   if (!navigator.onLine) return false;
 
   try {
-    await fetch('https://www.google.com/', {
-      mode: 'no-cors',
-    });
+    const url = new URL('health', environment.api_url);
+    await fetch(url);
     return true;
   } catch (error) {
     return false;
@@ -21,7 +21,7 @@ export const useNetwork = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const checkOnline = async () => {
-    // Ping google.com to check for internet connection (navigator.onLine only checks network connection)
+    // Ping api to check for internet connection (navigator.onLine only checks network connection)
     const online = await ping();
     setOnline(online);
   };

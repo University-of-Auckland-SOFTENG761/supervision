@@ -3,12 +3,6 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": ["node"],
-    "baseUrl": "./src",
-    "paths": {
-      "@shared": ["app/shared/index.ts"],
-      "@patients": ["app/patients/index.ts"],
-      "@login": ["app/login/index.ts"]
-    },
     "lib": ["es2021"]
   },
   "files": [

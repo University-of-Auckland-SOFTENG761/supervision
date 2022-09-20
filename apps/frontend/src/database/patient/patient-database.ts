@@ -1,3 +1,4 @@
+import environment from '@environment';
 import { addRxPlugin, createRxDatabase, RxDatabase, RxDocument } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
 import patientSchema, { PatientDocType } from './patient-schema';
@@ -11,6 +12,7 @@ import {
   IDBKeyRange as fakeIDBKeyRange,
 } from 'fake-indexeddb';
 import { v4 as uuidv4 } from 'uuid';
+import { getGraphQlHeaders } from 'database/authorisation';
 
 type ObjectWithRxdbMetaField = {
   _meta?: {
@@ -24,7 +26,7 @@ const addPlugins = async () => {
   addRxPlugin(RxDBReplicationGraphQLPlugin);
   addRxPlugin(RxDBUpdatePlugin);
 
-  if (process.env['NODE_ENV'] !== 'production') {
+  if (!environment.production) {
     await import('rxdb/plugins/dev-mode').then((module) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       addRxPlugin((module as any).RxDBDevModePlugin);
@@ -155,22 +157,26 @@ const deletionFilter = (doc: PatientDocument) => {
   return doc;
 };
 
-const buildReplicationState = (database: RxDatabase) => {
-  return database.collections['patients'].syncGraphQL({
-    url: 'http://localhost:3333/graphql', // url to the GraphQL endpoint
-    pull: {
-      queryBuilder: pullQueryBuilder, // the queryBuilder from above
-      batchSize: 5,
-      modifier: (doc) => deserializeEnums(deletionFilter(doc)),
-    },
-    push: {
-      queryBuilder: pushQueryBuilder,
-      batchSize: 5,
-      modifier: (doc) => serializeEnums(deletionFilter(doc)),
-    },
-    deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
-    live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
-  });
+export const buildReplicationState = async (database: RxDatabase) => {
+  const headers = await getGraphQlHeaders();
+  return headers
+    ? database.collections['patients'].syncGraphQL({
+        url: new URL('graphql', environment.api_url).toString(), // url to the GraphQL endpoint
+        pull: {
+          queryBuilder: pullQueryBuilder, // the queryBuilder from above
+          batchSize: 5,
+          modifier: (doc) => deserializeEnums(deletionFilter(doc)),
+        },
+        push: {
+          queryBuilder: pushQueryBuilder,
+          batchSize: 5,
+          modifier: (doc) => serializeEnums(deletionFilter(doc)),
+        },
+        deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
+        live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
+        headers,
+      })
+    : undefined;
 };
 
 const initializePatientDatabase = async () => {
@@ -195,15 +201,10 @@ const initializePatientDatabase = async () => {
     },
   });
 
-  const replicationState = buildReplicationState(db);
-  replicationState.run();
+  const replicationState = await buildReplicationState(db);
+  replicationState?.run();
 
-  replicationState.error$.subscribe((err) => {
-    console.error(err);
-    console.error(err.innerErrors);
-  });
-
-  return db;
+  return { db, replicationState };
 };
 
 export const patientDatabase = new DatabaseConstructor(

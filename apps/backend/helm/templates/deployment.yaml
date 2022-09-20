@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "DATABASE_USERNAME"
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: database-config
+            - name: "DATABASE_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: database-config
+            - name: "DATABASE_HOST"
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: database-config
+            - name: "AUTH0_ISSUER_URL"
+              value: "https://dev-6mx9ad29.us.auth0.com/"
+            - name: "AUTH0_AUDIENCE"
+              value: "api.akl-bus.vision"
+            - name: "AUTH0_DOMAIN"
+              value: "dev-6mx9ad29.us.auth0.com"
+            - name: "AUTH0_CLIENT_ID"
+              value: "CDkY8YlRlOcYqtLLtVw5XWhLeO8ds88B"
+            - name: "AUTH0_CLIENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: auth0-config
+            - name: "AUTH0_MANAGEMENT_ID"
+              value: "CLOYoi5aQWrdYwOUqvoE08AVFw6U7Hpo"
+            - name: "AUTH0_MANAGEMENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key: management_secret
+                  name: auth0-config
+            - name: "AUTH0_MANAGEMENT_CONNECTION"
+              value: "Username-Password-Authentication"
+            - name: "AUTH0_REDIRECT_URI"
+              value: "https://uoa-supervision.org"
+          ports:
+            - name: http
+              containerPort: 3333
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
