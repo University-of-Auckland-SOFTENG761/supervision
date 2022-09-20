@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Avatar, Center, Popover, Text } from '@mantine/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../button';
 import { useNetwork } from '../hooks';
@@ -20,6 +20,34 @@ export const UserAvatar = () => {
     }
   };
 
+  const userInitials = useMemo(() => {
+    if (user && (user.given_name || user.family_name)) {
+      return `${user?.given_name?.charAt(0).toUpperCase()}${user?.family_name
+        ?.charAt(0)
+        .toUpperCase()}`;
+    }
+    if (user && user.name) {
+      return `${user?.name?.substring(0, 2).toUpperCase()}`;
+    }
+    if (userEmail) {
+      return `${userEmail.substring(0, 2).toUpperCase()}`;
+    }
+    return '?';
+  }, [user, userEmail]);
+
+  const userName = useMemo(() => {
+    if (user && (user.given_name || user.family_name)) {
+      return `${user?.given_name + ' ' ?? ''}${user?.family_name ?? ''}`;
+    }
+    if (user && user.name) {
+      return `${user?.name}`;
+    }
+    if (userEmail) {
+      return `${userEmail}`;
+    }
+    return 'Unknown User';
+  }, [user, userEmail]);
+
   if (isLoading || onlineStatusLoading) {
     return null;
   } else {
@@ -36,8 +64,7 @@ export const UserAvatar = () => {
             className="m-auto"
             src={null}
           >
-            {user?.given_name?.charAt(0)}
-            {user?.family_name?.charAt(0)}
+            {userInitials}
           </Avatar>
         </Popover.Target>
         <Popover.Dropdown>
@@ -45,10 +72,7 @@ export const UserAvatar = () => {
             color="white"
             className="font-bold w-fit text-center mb-4 whitespace-nowrap"
           >
-            Logged in as
-            {!online
-              ? ' ' + userEmail
-              : ' ' + user?.given_name + ' ' + user?.family_name}
+            Logged in as {` ${userName}`}
           </Text>
           <Center>
             <Button
