@@ -1,9 +1,4 @@
-import {
-  Field,
-  InputType,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
 import { ConsultModel } from '@supervision/consults/graphql/consult.model';
 import { Ethnicity, Gender } from '@supervision/patients';
@@ -18,7 +13,6 @@ registerEnumType(Gender, {
 });
 
 @ObjectType({ description: 'patient' })
-@InputType('patientModel')
 export class PatientModel extends BaseModel {
   @Field({ nullable: true })
   firstName: string;

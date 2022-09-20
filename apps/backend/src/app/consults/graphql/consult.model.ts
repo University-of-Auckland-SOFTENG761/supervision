@@ -1,10 +1,9 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { PatientModel } from '@supervision/patients/graphql/patient.model';
 import { BaseModel } from '@supervision/shared';
 import { UserModel } from '@supervision/users/graphql/user.model';
 
 @ObjectType({ description: 'consult' })
-@InputType('consultModel')
 export class ConsultModel extends BaseModel {
   @Field(() => UserModel, { nullable: false })
   user: UserModel;
