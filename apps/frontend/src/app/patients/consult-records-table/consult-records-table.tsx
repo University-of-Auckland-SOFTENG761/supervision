@@ -7,7 +7,13 @@ export const ConsultRecordsTable = () => {
     {
       date: '21/08/2022',
       rxRight: '+4.00/-3.00x180',
+      rxRightEyeSphere: '+4.00',
+      rxRightCylinder: '-3.00',
+      rxRightAxis: '180',
       rxLeft: '+4.00/-3.00x180',
+      rxLeftEyeSphere: '+4.00',
+      rxLeftCylinder: '-3.00',
+      rxLeftAxis: '180',
       pd: '62',
       diagnosis: 'Myopia',
       management: 'Glasses',
@@ -15,7 +21,13 @@ export const ConsultRecordsTable = () => {
     {
       date: '18/02/2019',
       rxRight: '+4.00/-3.00x180',
+      rxRightEyeSphere: '+4.00',
+      rxRightCylinder: '-3.00',
+      rxRightAxis: '180',
       rxLeft: '+4.00/-3.00x180',
+      rxLeftEyeSphere: '+4.00',
+      rxLeftCylinder: '-3.00',
+      rxLeftAxis: '180',
       pd: '62',
       diagnosis: 'Myopia',
       management: 'Contact Lenses',
@@ -37,8 +49,20 @@ export const ConsultRecordsTable = () => {
         {consultRecords.map((record) => (
           <tr key={record.date}>
             <td>{record.date}</td>
-            <td>{record.rxRight}</td>
-            <td>{record.rxLeft}</td>
+            <td>
+              {record.rxRightEyeSphere +
+                '/' +
+                record.rxRightCylinder +
+                'x' +
+                record.rxRightAxis}
+            </td>
+            <td>
+              {record.rxLeftEyeSphere +
+                '/' +
+                record.rxLeftCylinder +
+                'x' +
+                record.rxLeftAxis}
+            </td>
             <td>{record.diagnosis}</td>
             <td>{record.management}</td>
           </tr>
