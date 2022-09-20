@@ -1,5 +1,6 @@
 import { addRxPlugin, createRxDatabase, RxDatabase, RxDocument } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
+import environment from '@environment';
 import patientSchema, { PatientDocType } from './patient-schema';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 import DatabaseConstructor from '../database-constructor';
@@ -25,7 +26,7 @@ const addPlugins = async () => {
   addRxPlugin(RxDBReplicationGraphQLPlugin);
   addRxPlugin(RxDBUpdatePlugin);
 
-  if (process.env['NODE_ENV'] !== 'production') {
+  if (!environment.production) {
     await import('rxdb/plugins/dev-mode').then((module) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       addRxPlugin((module as any).RxDBDevModePlugin);
@@ -113,7 +114,7 @@ const pullQueryBuilder = (doc: PatientDocument) => {
       screeningList,
     }
   }`;
-  
+
   return {
     query,
     variables: {},
@@ -138,7 +139,7 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   const variables = {
     patients: docs,
   };
-  
+
   return {
     query,
     variables,
@@ -160,7 +161,7 @@ export const buildReplicationState = async (database: RxDatabase) => {
   const headers = await getGraphQlHeaders();
   return headers
     ? database.collections['patients'].syncGraphQL({
-        url: 'http://localhost:3333/graphql', // url to the GraphQL endpoint
+        url: new URL('graphql', environment.api_url).toString(), // url to the GraphQL endpoint
         pull: {
           queryBuilder: pullQueryBuilder, // the queryBuilder from above
           batchSize: 5,

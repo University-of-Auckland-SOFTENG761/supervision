@@ -15,7 +15,10 @@
     "paths": {
       "@shared": ["app/shared/index.ts"],
       "@components": ["app/components/index.ts"],
-      "@pages": ["app/pages/index.ts"]
+      "@pages": ["app/pages/index.ts"],
+      "@environment": ["environments/environment.ts"],
+      "@patients": ["app/patients/index.ts"],
+      "@login": ["app/login/index.ts"]
     }
   },
   "files": [],
