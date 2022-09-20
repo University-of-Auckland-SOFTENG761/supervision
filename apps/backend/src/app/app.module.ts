@@ -13,10 +13,6 @@ import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 import { PatientsModule } from '@supervision/patients';
 import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
-import { ConsultsService } from './consults';
-import { UserService } from './users';
-import { PatientService } from './patients';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +35,5 @@ import { PatientService } from './patients';
     AuthModule,
     ConsultsModule,
   ],
-  providers: [UserService, PatientService, ConsultsService],
 })
 export class AppModule {}
