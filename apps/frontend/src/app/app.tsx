@@ -1,5 +1,5 @@
 import { Navbar, Stack } from '@mantine/core';
-import { IconPill, IconSearch, IconStethoscope, IconUser } from '@tabler/icons';
+import { IconEyeglass, IconSearch, IconEye, IconUser } from '@tabler/icons';
 import { AppShell } from './shared';
 import { useRef } from 'react';
 import {
@@ -33,11 +33,12 @@ export function App() {
               ></NavbarLink>
               <NavbarLink
                 label="Consultations"
-                icon={IconStethoscope}
+                //icon={IconStethoscope}
+                icon={IconEye}
                 onClick={() => navigate('/consult-details')}
                 active={location.pathname === '/consult-details'}
               ></NavbarLink>
-              <NavbarLink label="Dispense" icon={IconPill}></NavbarLink>
+              <NavbarLink label="Dispense" icon={IconEyeglass}></NavbarLink>
             </Stack>
           </Navbar.Section>
         </Navbar>
