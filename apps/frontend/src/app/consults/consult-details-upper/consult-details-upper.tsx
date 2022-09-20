@@ -7,12 +7,13 @@ import {
   TextInput,
   Title,
   Group,
+  Select,
 } from '@mantine/core';
 import React from 'react';
 import { useForm } from '@mantine/form';
 import { IConsult } from '../consult-details-page';
 import { VisualAcuityInputs } from './visual-acuity-inputs';
-import { DatePicker, TimeInput } from '@mantine/dates';
+import { TimeInput } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
@@ -93,6 +94,16 @@ export const ConsultDetailsUpper = ({
               ...form.getInputProps('eyePressureRight'),
               ...form.getInputProps('eyePressureLeft'),
             }}
+            eyePressureRightProps={{
+              ...form.getInputProps('eyePressureRight'),
+            }}
+            eyePressureLeftProps={{ ...form.getInputProps('eyePressureLeft') }}
+            eyePressureTimestampProps={{
+              ...form.getInputProps('eyePressureTimeStamp'),
+            }}
+            setEyePressureTimestamp={(timestamp: Date) => {
+              form.setFieldValue('eyePressureTimeStamp', timestamp);
+            }}
           />
           {/*TODO: Refactor cyclopentolate/tropicamide into a separate file*/}
           <Group>
@@ -102,7 +113,9 @@ export const ConsultDetailsUpper = ({
               </Title>
               <Group>
                 <Checkbox
-                  {...form.getInputProps('isCyclopentolate')}
+                  {...form.getInputProps('isCyclopentolate', {
+                    type: 'checkbox',
+                  })}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
                     const timestamp = checked ? new Date() : undefined;
@@ -124,7 +137,7 @@ export const ConsultDetailsUpper = ({
               </Title>
               <Group>
                 <Checkbox
-                  {...form.getInputProps('isTropicamide')}
+                  {...form.getInputProps('isTropicamide', { type: 'checkbox' })}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
                     const timestamp = checked ? new Date() : undefined;
@@ -240,17 +253,24 @@ export const ConsultDetailsUpper = ({
             Recall
           </Title>
           <Group>
-            <DatePicker
+            <Select
               label="Date:"
               className="w-32"
-              allowFreeInput
-              inputFormat="DD/MM/YYYY"
-              dateParser={(date: string) =>
-                dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
-              }
-              placeholder="DD/MM/YYYY"
-              initialMonth={new Date()}
-              {...form.getInputProps('recallDate')}
+              clearable
+              data={[
+                { value: '1', label: '1M' },
+                { value: '3', label: '3M' },
+                { value: '6', label: '6M' },
+                { value: '12', label: '1Y' },
+                { value: '24', label: '2Y' },
+              ]}
+              placeholder="Select one"
+              onChange={(value) => {
+                const nextDate = value
+                  ? dayjs().add(parseInt(value), 'month')
+                  : undefined;
+                form.setFieldValue('recallDate', nextDate?.toDate());
+              }}
             />
             <TextInput
               label="Reason:"
