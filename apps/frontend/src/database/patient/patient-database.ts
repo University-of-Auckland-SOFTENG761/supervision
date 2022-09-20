@@ -113,7 +113,7 @@ const pullQueryBuilder = (doc: PatientDocument) => {
       screeningList,
     }
   }`;
-  console.log('pulling');
+  
   return {
     query,
     variables: {},
@@ -138,7 +138,7 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   const variables = {
     patients: docs,
   };
-  console.log('pushing');
+  
   return {
     query,
     variables,
