@@ -51,7 +51,7 @@ export const ConsultDetailsLower = ({
   ];
 
   return (
-    <Grid columns={10}>
+    <Grid columns={10} align="flex-end">
       <Grid.Col lg={9} md={10}>
         <Table theme={TableTheme.Primary}>
           <thead>
@@ -73,7 +73,7 @@ export const ConsultDetailsLower = ({
               <th>CYLINDER</th>
               <th></th>
               <th>AXIS</th>
-              <th>LEFT VA</th>
+              <th>VA</th>
               <th>ADD</th>
               <th>BVA</th>
             </tr>
@@ -112,7 +112,93 @@ export const ConsultDetailsLower = ({
                   />
                 </td>
                 <td>
-                  {index !== consultRows.length - 1 && <IconArrowAutofitDown />}
+                  {index !== consultRows.length - 1 && (
+                    <Button compact variant="subtle">
+                      <IconArrowAutofitDown
+                        onClick={() => {
+                          const valRightEyeSphere = {
+                            ...form.getInputProps(row.code + 'RightEyeSphere'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'RightEyeSphere',
+                            valRightEyeSphere
+                          );
+
+                          const valRightCylinder = {
+                            ...form.getInputProps(row.code + 'RightCylinder'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'RightCylinder',
+                            valRightCylinder
+                          );
+
+                          const valRightAxis = {
+                            ...form.getInputProps(row.code + 'RightAxis'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'RightAxis',
+                            valRightAxis
+                          );
+
+                          const valRightVA = {
+                            ...form.getInputProps(row.code + 'RightVA'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'RightVA',
+                            valRightVA
+                          );
+
+                          const valRightAdd = {
+                            ...form.getInputProps(row.code + 'RightAdd'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'RightAdd',
+                            valRightAdd
+                          );
+
+                          const valLeftEyeSphere = {
+                            ...form.getInputProps(row.code + 'LeftEyeSphere'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'LeftEyeSphere',
+                            valLeftEyeSphere
+                          );
+
+                          const valLeftCylinder = {
+                            ...form.getInputProps(row.code + 'LeftCylinder'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'LeftCylinder',
+                            valLeftCylinder
+                          );
+
+                          const valLeftAxis = {
+                            ...form.getInputProps(row.code + 'LeftAxis'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'LeftAxis',
+                            valLeftAxis
+                          );
+
+                          const valLeftVA = {
+                            ...form.getInputProps(row.code + 'LeftVA'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'LeftVA',
+                            valLeftVA
+                          );
+
+                          const valLeftAdd = {
+                            ...form.getInputProps(row.code + 'LeftAdd'),
+                          }.value;
+                          form.setFieldValue(
+                            consultRows[index + 1].code + 'LeftAdd',
+                            valLeftAdd
+                          );
+                        }}
+                      />
+                    </Button>
+                  )}
                 </td>
                 <td>
                   <TextInput
