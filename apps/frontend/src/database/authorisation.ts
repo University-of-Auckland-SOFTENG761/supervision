@@ -25,7 +25,8 @@ export const getIdToken = async () => {
 
 export const getGraphQlHeaders = async () => {
   const idToken = await getIdToken();
-  return idToken
+  const userEmail = sessionStorage.getItem('userEmail');
+  return idToken || userEmail
     ? {
         Authorization: `Bearer ${idToken}`,
       }

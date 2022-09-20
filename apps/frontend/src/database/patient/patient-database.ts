@@ -113,7 +113,7 @@ const pullQueryBuilder = (doc: PatientDocument) => {
       screeningList,
     }
   }`;
-
+  console.log('pulling');
   return {
     query,
     variables: {},
@@ -138,7 +138,7 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   const variables = {
     patients: docs,
   };
-
+  console.log('pushing');
   return {
     query,
     variables,
@@ -157,22 +157,25 @@ const deletionFilter = (doc: PatientDocument) => {
 };
 
 export const buildReplicationState = async (database: RxDatabase) => {
-  return database.collections['patients'].syncGraphQL({
-    url: 'http://localhost:3333/graphql', // url to the GraphQL endpoint
-    pull: {
-      queryBuilder: pullQueryBuilder, // the queryBuilder from above
-      batchSize: 5,
-      modifier: (doc) => deserializeEnums(deletionFilter(doc)),
-    },
-    push: {
-      queryBuilder: pushQueryBuilder,
-      batchSize: 5,
-      modifier: (doc) => serializeEnums(deletionFilter(doc)),
-    },
-    deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
-    live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
-    headers: await getGraphQlHeaders(),
-  });
+  const headers = await getGraphQlHeaders();
+  return headers
+    ? database.collections['patients'].syncGraphQL({
+        url: 'http://localhost:3333/graphql', // url to the GraphQL endpoint
+        pull: {
+          queryBuilder: pullQueryBuilder, // the queryBuilder from above
+          batchSize: 5,
+          modifier: (doc) => deserializeEnums(deletionFilter(doc)),
+        },
+        push: {
+          queryBuilder: pushQueryBuilder,
+          batchSize: 5,
+          modifier: (doc) => serializeEnums(deletionFilter(doc)),
+        },
+        deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
+        live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
+        headers,
+      })
+    : undefined;
 };
 
 const initializePatientDatabase = async () => {
@@ -198,7 +201,7 @@ const initializePatientDatabase = async () => {
   });
 
   const replicationState = await buildReplicationState(db);
-  replicationState.run();
+  replicationState?.run();
 
   return { db, replicationState };
 };

@@ -5,15 +5,16 @@ import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-g
 class DatabaseConstructor {
   private _blocked = false;
   private _db: RxDatabase | null = null;
-  private _replicationState: RxGraphQLReplicationState<any> | null = null;
+  private _replicationState: RxGraphQLReplicationState<any> | null | undefined =
+    null;
   private _dbInitializer: () => Promise<{
     db: RxDatabase;
-    replicationState: RxGraphQLReplicationState<any>;
+    replicationState: RxGraphQLReplicationState<any> | undefined;
   }>;
 
   public async get(): Promise<{
     db: RxDatabase | null;
-    replicationState: RxGraphQLReplicationState<any> | null;
+    replicationState: RxGraphQLReplicationState<any> | null | undefined;
   }> {
     if (!this._db && !this._blocked) {
       this._blocked = true;
@@ -31,7 +32,7 @@ class DatabaseConstructor {
   constructor(
     dbInitializer: () => Promise<{
       db: RxDatabase;
-      replicationState: RxGraphQLReplicationState<any>;
+      replicationState: RxGraphQLReplicationState<any> | undefined;
     }>
   ) {
     this._dbInitializer = dbInitializer;

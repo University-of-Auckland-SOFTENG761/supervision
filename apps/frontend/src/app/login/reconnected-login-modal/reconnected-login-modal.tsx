@@ -33,7 +33,10 @@ export const ReconnectedLoginModal = forwardRef(
     };
 
     useEffect(() => {
-      if (opened && isAuthenticated) setOpened(false);
+      if (opened && isAuthenticated) {
+        sessionStorage.removeItem('userEmail');
+        setOpened(false);
+      }
     }, [opened, isAuthenticated, isLoading]);
 
     return (

@@ -19,17 +19,20 @@ export function App() {
   const location = useLocation();
   const searchModal = useRef<SearchModalRef>(null);
   const reconnectedLoginModal = useRef<ReconnectedLoginModalRef>(null);
-  const { connectionStatus } = usePatients();
+  const { connectionStatus: patientsDbConnectionStatus } = usePatients();
 
   const openReconnectedLoginModal = () => reconnectedLoginModal.current?.show();
 
   const hideReconnectedLoginModal = () => reconnectedLoginModal.current?.hide();
 
   useEffect(() => {
-    if (connectionStatus === 'unauthenticated' && location.pathname !== '/')
+    if (
+      patientsDbConnectionStatus === 'unauthenticated' &&
+      location.pathname !== '/'
+    )
       openReconnectedLoginModal();
     else hideReconnectedLoginModal();
-  }, [connectionStatus, location.pathname]);
+  }, [patientsDbConnectionStatus, location.pathname]);
 
   return (
     <AppShell

@@ -46,6 +46,7 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
   const { isAuthenticated, isLoading } = useAuth0();
 
   const restartReplication = async () => {
+    console.log('Restarting replication');
     await patientsReplicationState?.cancel();
     const newReplicationState =
       patientsDb && (await buildReplicationState(patientsDb));
@@ -99,12 +100,14 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
   };
 
   useEffect(() => {
-    patientsReplicationState &&
+    if (patientsReplicationState) {
       patientsReplicationState.error$.subscribe(handleReplicationError);
-    patientsReplicationState &&
       patientsReplicationState.received$.subscribe(handleReplicationResponse);
+    } else if (isAuthenticated) {
+      restartReplication();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patientsReplicationState]);
+  }, [patientsReplicationState, isAuthenticated]);
 
   const newPatient = useCallback(() => {
     const newPatient = {
@@ -171,7 +174,10 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
             replicationState,
           }: {
             db: RxDatabase | null;
-            replicationState: RxGraphQLReplicationState<PatientDocType> | null;
+            replicationState:
+              | RxGraphQLReplicationState<PatientDocType>
+              | null
+              | undefined;
           }) => {
             db && setPatientsDb(db);
             replicationState && setPatientsReplicationState(replicationState);
