@@ -43,14 +43,6 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
     return await this.consultService.findAll();
   }
 
-  @Query(() => [ConsultModel])
-  @UseGuards(AuthGuard)
-  async findConsultsForPatient(
-    @Args('patientId') patientId: string
-  ): Promise<ConsultModel[]> {
-    return await this.consultService.findConsultsForPatient(patientId);
-  }
-
   @Query(() => [ConsultModel], { name: 'consultReplicationFeed' })
   @UseGuards(AuthGuard)
   async replicationFeed(
