@@ -85,7 +85,7 @@ jobs:
 
       - name: Get Configuration
         run: |-
-          "${{ secrets.PROD_HELM_CONFIG }}" | base64 --decode > prod-config.yaml
+          echo "${{ secrets.PROD_HELM_CONFIG }}" | base64 --decode > prod-config.yaml
 
       - name: Deploy Helm
         run: |-
