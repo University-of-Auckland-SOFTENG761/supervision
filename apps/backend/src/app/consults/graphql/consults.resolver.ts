@@ -5,12 +5,15 @@ import { CreateConsultInput } from '../dto/create-consult.input';
 import { UpdateConsultInput } from '../dto/update-consult.input';
 import { SetConsultInput } from '../dto/set-consult.input';
 import { ConsultModel } from './consult.model';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@supervision/auth/guards';
 
 @Resolver(() => ConsultModel)
 export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   constructor(private consultService: ConsultsService) {}
 
   @Mutation(() => ConsultModel)
+  @UseGuards(AuthGuard)
   async createConsult(
     @Args('createConsultInput') createConsultInput: CreateConsultInput
   ): Promise<ConsultModel> {
@@ -18,6 +21,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   }
 
   @Mutation(() => ConsultModel)
+  @UseGuards(AuthGuard)
   async updateConsult(
     @Args('updateConsultInput') updateConsultInput: UpdateConsultInput
   ): Promise<ConsultModel> {
@@ -28,16 +32,19 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   }
 
   @Query(() => ConsultModel)
+  @UseGuards(AuthGuard)
   async consult(@Args('id') id: string): Promise<ConsultModel> {
     return await this.consultService.findOne(id);
   }
 
   @Query(() => [ConsultModel])
+  @UseGuards(AuthGuard)
   async consults(): Promise<ConsultModel[]> {
     return await this.consultService.findAll();
   }
 
   @Query(() => [ConsultModel])
+  @UseGuards(AuthGuard)
   async findConsultsForPatient(
     @Args('patientId') patientId: string
   ): Promise<ConsultModel[]> {
@@ -45,6 +52,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   }
 
   @Query(() => [ConsultModel], { name: 'consultReplicationFeed' })
+  @UseGuards(AuthGuard)
   async replicationFeed(
     @Args() args: ReplicationArgs
   ): Promise<ConsultModel[]> {
@@ -56,6 +64,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   }
 
   @Mutation(() => ConsultModel, { nullable: true })
+  @UseGuards(AuthGuard)
   async setConsults(
     @Args({
       name: 'setConsultInputArray',
