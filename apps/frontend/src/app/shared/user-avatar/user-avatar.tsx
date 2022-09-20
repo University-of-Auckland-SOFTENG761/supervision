@@ -26,12 +26,26 @@ export const UserAvatar = () => {
         ?.charAt(0)
         .toUpperCase()}`;
     }
-    if (userEmail) {
-      return `${userEmail.charAt(0).toUpperCase()}${userEmail
-        .charAt(1)
-        .toUpperCase()}`;
+    if (user && user.name) {
+      return `${user?.name?.substring(0, 2).toUpperCase()}`;
     }
-    return 'NA';
+    if (userEmail) {
+      return `${userEmail.substring(0, 2).toUpperCase()}`;
+    }
+    return '?';
+  }, [user, userEmail]);
+
+  const userName = useMemo(() => {
+    if (user && (user.given_name || user.family_name)) {
+      return `${user?.given_name + ' ' ?? ''}${user?.family_name ?? ''}`;
+    }
+    if (user && user.name) {
+      return `${user?.name}`;
+    }
+    if (userEmail) {
+      return `${userEmail}`;
+    }
+    return 'Unknown User';
   }, [user, userEmail]);
 
   if (isLoading || onlineStatusLoading) {
@@ -58,10 +72,7 @@ export const UserAvatar = () => {
             color="white"
             className="font-bold w-fit text-center mb-4 whitespace-nowrap"
           >
-            Logged in as
-            {!online
-              ? ' ' + userEmail
-              : ' ' + user?.given_name + ' ' + user?.family_name}
+            Logged in as {` ${userName}`}
           </Text>
           <Center>
             <Button
