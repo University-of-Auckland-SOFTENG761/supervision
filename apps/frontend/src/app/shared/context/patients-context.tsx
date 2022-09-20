@@ -73,7 +73,11 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
           innerError.extensions?.code === 'UNAUTHENTICATED'
       )
     ) {
-      if (!isAuthenticated && !isLoading) {
+      if (
+        !isAuthenticated &&
+        !isLoading &&
+        connectionStatus !== 'disconnected'
+      ) {
         setConnectionStatus('unauthenticated');
       } else if (
         err.innerErrors?.some(
