@@ -37,7 +37,7 @@ export class ConsultsService {
     return await this.consultsRepository.save(consult);
   }
 
-  async findOne(id: string): Promise<ConsultEntity> {
+  async findOneByID(id: string): Promise<ConsultEntity> {
     return await this.consultsRepository.findOneBy({ id: id });
   }
 
