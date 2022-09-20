@@ -58,7 +58,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   @Mutation(() => ConsultModel, { nullable: true })
   async setConsults(
     @Args({
-      name: 'setConsultsInput',
+      name: 'setConsultInputArray',
       type: () => [SetConsultInput],
       nullable: true,
     })
