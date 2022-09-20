@@ -1,6 +1,6 @@
+import environment from '@environment';
 import { addRxPlugin, createRxDatabase, RxDatabase, RxDocument } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
-import environment from '@environment';
 import patientSchema, { PatientDocType } from './patient-schema';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 import DatabaseConstructor from '../database-constructor';
