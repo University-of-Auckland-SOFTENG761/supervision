@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ConsultEntity } from './database';
 import { CreateConsultInput } from './dto';
 import { UpdateConsultInput } from './dto';
@@ -58,20 +58,39 @@ export class ConsultsService {
 
   async getUpdatedConsults(
     minUpdatedAt: Date | null,
-    lastId: string | null, // This is copied from patientsReplication, not sure what lastId means tbh
+    lastId: string | null,
     limit: number
   ): Promise<ConsultEntity[]> {
-    let query = this.consultsRepository
-      .createQueryBuilder('consult')
-      .where('consult.updatedAt > :minUpdated', { minUpdatedAt })
-      .orderBy('consult.updatedAt', 'ASC')
-      .addOrderBy('consult.id', 'ASC')
-      .limit(limit);
-
-    if (lastId) {
-      query = query.andWhere('consult.id > :lastId', { lastId });
+    let query: SelectQueryBuilder<ConsultEntity>;
+    if (minUpdatedAt === undefined || lastId === undefined) {
+      query = this.consultsRepository
+        .createQueryBuilder('consult')
+        // Load in the patient and user entities (SelectQueryBuilder does not do this by default)
+        .leftJoinAndSelect('consult.patient', 'patient')
+        .leftJoinAndSelect('consult.user', 'user');
+    } else {
+      query = this.consultsRepository
+        .createQueryBuilder('consult')
+        .where(
+          `date_trunc('second',"consult"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
+          {
+            minUpdatedAt,
+          }
+        )
+        .orWhere(
+          `date_trunc('second', "consult"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND consult.id > :lastId`,
+          {
+            minUpdatedAt,
+            lastId,
+          }
+        );
     }
 
-    return await query.withDeleted().getMany();
+    return await query
+      .orderBy('consult.updatedAt', 'ASC')
+      .addOrderBy('consult.id')
+      .take(limit)
+      .withDeleted()
+      .getMany();
   }
 }
