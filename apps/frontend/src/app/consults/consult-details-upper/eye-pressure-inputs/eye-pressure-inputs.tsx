@@ -1,18 +1,25 @@
 import { SimpleGrid, TextInput, Title } from '@mantine/core';
+import { TimeInput } from '@mantine/dates';
 import React from 'react';
 
 type EyePressureInputsProps = {
-  rightEyePressure: string;
-  onUpdateRightEyePressure: (value: string | null) => void;
-  leftEyePressure: string;
-  onUpdateLeftEyePressure: (value: string | null) => void;
+  eyePressureRightProps: {
+    value: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement> | null) => void;
+  };
+  eyePressureLeftProps: {
+    value: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement> | null) => void;
+  };
+  eyePressureTimestampProps: any;
+  setEyePressureTimestamp: (timestamp: Date | undefined) => void;
 };
 
 export const EyePressureInputs = ({
-  rightEyePressure,
-  onUpdateRightEyePressure,
-  leftEyePressure,
-  onUpdateLeftEyePressure,
+  eyePressureRightProps,
+  eyePressureLeftProps,
+  eyePressureTimestampProps,
+  setEyePressureTimestamp,
 }: EyePressureInputsProps) => {
   return (
     <>
@@ -22,13 +29,35 @@ export const EyePressureInputs = ({
       <SimpleGrid cols={3}>
         <TextInput
           label="Right:"
-          {...{ rightEyePressure, onUpdateRightEyePressure }}
+          onChange={(event) => {
+            eyePressureRightProps.onChange(event);
+            if (event.target.value || eyePressureLeftProps.value) {
+              !eyePressureTimestampProps.value &&
+                setEyePressureTimestamp(new Date());
+            } else {
+              setEyePressureTimestamp(undefined);
+            }
+          }}
         />
         <TextInput
           label="Left:"
-          {...{ leftEyePressure, onUpdateLeftEyePressure }}
+          onChange={(event) => {
+            eyePressureLeftProps.onChange(event);
+            if (event.target.value || eyePressureRightProps.value) {
+              !eyePressureTimestampProps.value &&
+                setEyePressureTimestamp(new Date());
+            } else {
+              setEyePressureTimestamp(undefined);
+            }
+          }}
         />
       </SimpleGrid>
+      <TimeInput
+        format="12"
+        size="xs"
+        className="w-28 -mt-2"
+        {...eyePressureTimestampProps}
+      />
     </>
   );
 };
