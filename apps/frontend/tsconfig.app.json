@@ -9,6 +9,7 @@
       "@patients": ["app/patients/index.ts"],
       "@consults": ["app/consults/index.ts"]
     }
+    "lib": ["es2021"]
   },
   "files": [
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
@@ -25,11 +26,5 @@
     "**/*.spec.jsx",
     "**/*.test.jsx"
   ],
-  "include": [
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "src/app/patients/patient-details-page"
-  ]
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }

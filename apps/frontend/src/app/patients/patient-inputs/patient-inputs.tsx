@@ -1,76 +1,89 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
-import { IPatient } from '../patient-details-page';
 import EthnicitySelect from '../ethnicity-select';
 import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
+import { IPatient } from '../patient-details-page';
+import { usePatients } from '@shared';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
-  patient: IPatient;
-  onUpdatePatient: (updatedPatient: IPatient) => void;
+  patientUid?: string;
 };
 
-export const PatientInputs = ({
-  patient,
-  onUpdatePatient,
-}: PatientInputsProps) => {
-  const [patientUid, setPatientUid] = useState(patient.uid);
+export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
+  const { patients, updatePatient } = usePatients();
+  const patient = patientUid
+    ? patients?.find((p: IPatient) => p.id === patientUid)
+    : undefined;
   const [patientAge, setPatientAge] = useState(
-    patient.dob ? calculateAge(new Date(patient.dob)) : undefined
+    patient?.dateOfBirth
+      ? calculateAge(new Date(patient?.dateOfBirth))
+      : undefined
+  );
+
+  const buildFormValues = useCallback(
+    () => ({
+      id: patient?.id,
+      firstName: patient?.firstName ?? '',
+      lastName: patient?.lastName ?? '',
+      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
+      ethnicity: patient?.ethnicity ?? null,
+      gender: patient?.gender ?? null,
+      school: patient?.school ?? '',
+      yearLevel: patient?.yearLevel,
+      room: patient?.room ?? '',
+      streetAddress: patient?.streetAddress ?? '',
+      suburb: patient?.suburb ?? '',
+      city: patient?.city ?? '',
+      postcode: patient?.postcode ?? '',
+      caregiverFirstName: patient?.caregiverFirstName ?? '',
+      caregiverLastName: patient?.caregiverLastName ?? '',
+      phoneNumber: patient?.phoneNumber ?? '',
+      email: patient?.email ?? '',
+      adminNotes: patient?.adminNotes ?? '',
+    }),
+    [patient]
   );
 
   const form = useForm({
-    initialValues: {
-      ...patient,
-      gender: patient.gender ?? null,
-      ethnicity: patient.ethnicity ?? null,
-      dob: patient.dob !== undefined ? new Date(patient.dob) : null,
-    },
+    initialValues: buildFormValues(),
   });
 
   useEffect(() => {
-    if (patient.uid !== patientUid) {
-      setPatientUid(patient.uid);
-      form.setValues({
-        uid: patient.uid,
-        firstName: patient.firstName ?? '',
-        lastName: patient.lastName ?? '',
-        dob: patient.dob ? new Date(patient.dob) : null,
-        patientId: patient.patientId ?? '',
-        ethnicity: patient.ethnicity ?? null,
-        gender: patient.gender ?? null,
-        school: patient.school ?? '',
-        year: patient.year,
-        room: patient.room ?? '',
-        address: patient.address ?? {
-          street: '',
-          suburb: '',
-          city: '',
-          postCode: '',
-        },
-        caregiverFirstName: patient.caregiverFirstName ?? '',
-        caregiverLastName: patient.caregiverLastName ?? '',
-        phoneNumber: patient.phoneNumber ?? '',
-        email: patient.email ?? '',
-        notes: patient.notes ?? '',
-      });
-    }
-  }, [form, patientUid, patient]);
+    form.setValues(buildFormValues());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buildFormValues, patients]);
 
   useEffect(() => {
     setPatientAge(
-      form.values.dob ? calculateAge(new Date(form.values.dob)) : undefined
+      form.values.dateOfBirth
+        ? calculateAge(new Date(form.values.dateOfBirth))
+        : undefined
     );
-  }, [form.values.dob]);
+  }, [form.values.dateOfBirth]);
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const buildPatient = () => {
+    const newPatient = {
+      ...form.values,
+      id: patient?.id ?? '',
+      gender: form.values.gender ?? undefined,
+      ethnicity: form.values.ethnicity ?? undefined,
+      dateOfBirth: form.values.dateOfBirth
+        ? form.values.dateOfBirth.toISOString()
+        : undefined,
+    };
+    if (newPatient.id === undefined) return undefined;
+    return newPatient;
+  };
 
   useEffect(() => {
     if (debounceTimeout.current != null) {
@@ -78,12 +91,10 @@ export const PatientInputs = ({
     }
     debounceTimeout.current = setTimeout(() => {
       debounceTimeout.current = null;
-      onUpdatePatient({
-        ...form.values,
-        gender: form.values.gender ?? undefined,
-        ethnicity: form.values.ethnicity ?? undefined,
-        dob: form.values.dob ? form.values.dob.toISOString() : undefined,
-      });
+      const newPatient = buildPatient();
+      if (newPatient && updatePatient) {
+        updatePatient(newPatient);
+      }
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values]);
@@ -91,12 +102,21 @@ export const PatientInputs = ({
   return (
     <>
       <Stack>
-        <TextInput label="First name:" {...form.getInputProps('firstName')} />
-        <TextInput label="Last name:" {...form.getInputProps('lastName')} />
+        <TextInput
+          required
+          label="First name:"
+          {...form.getInputProps('firstName')}
+        />
+        <TextInput
+          required
+          label="Last name:"
+          {...form.getInputProps('lastName')}
+        />
         <Group className="justify-between">
           <DatePicker
+            required
             label="Date of birth:"
-            {...form.getInputProps('dob')}
+            {...form.getInputProps('dateOfBirth')}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
             dateParser={(date: string) =>
@@ -124,7 +144,7 @@ export const PatientInputs = ({
           <NumberInput
             label="Year:"
             className="w-20"
-            {...form.getInputProps('year')}
+            {...form.getInputProps('yearLevel')}
           />
           <TextInput
             label="Room:"
@@ -137,22 +157,13 @@ export const PatientInputs = ({
         <TextInput
           label="Address:"
           placeholder="Street Address"
-          {...form.getInputProps('address.street')}
+          {...form.getInputProps('streetAddress')}
         />
         <Group className="w-full" grow>
-          <TextInput
-            placeholder="Suburb"
-            {...form.getInputProps('address.suburb')}
-          />
-          <TextInput
-            placeholder="City"
-            {...form.getInputProps('address.city')}
-          />
+          <TextInput placeholder="Suburb" {...form.getInputProps('suburb')} />
+          <TextInput placeholder="City" {...form.getInputProps('city')} />
         </Group>
-        <TextInput
-          placeholder="Postcode"
-          {...form.getInputProps('address.postCode')}
-        />
+        <TextInput placeholder="Postcode" {...form.getInputProps('postcode')} />
         <TextInput
           label="Caregiver First Name:"
           {...form.getInputProps('caregiverFirstName')}
@@ -170,7 +181,7 @@ export const PatientInputs = ({
           placeholder="Type here..."
           autosize
           minRows={3}
-          {...form.getInputProps('notes')}
+          {...form.getInputProps('adminNotes')}
         />
         <RecallsTable />
       </Stack>

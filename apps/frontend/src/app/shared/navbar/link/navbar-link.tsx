@@ -1,4 +1,4 @@
-import { ActionIcon, Tooltip, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Tooltip } from '@mantine/core';
 import { TablerIcon } from '@tabler/icons';
 
 export interface NavbarLinkProps {
