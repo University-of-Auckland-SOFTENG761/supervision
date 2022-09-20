@@ -8,7 +8,7 @@
       "@shared": ["app/shared/index.ts"],
       "@patients": ["app/patients/index.ts"],
       "@consults": ["app/consults/index.ts"]
-    }
+    },
     "lib": ["es2021"]
   },
   "files": [
