@@ -2,9 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ConsultEntity } from './database';
-import { CreateConsultInput } from './dto';
-import { UpdateConsultInput } from './dto';
-import { SetConsultInput } from './dto';
+import { CreateConsultInput, UpdateConsultInput, SetConsultInput } from './dto';
 
 @Injectable()
 export class ConsultsService {
