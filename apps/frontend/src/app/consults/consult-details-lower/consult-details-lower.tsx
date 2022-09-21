@@ -244,8 +244,8 @@ export const ConsultDetailsLower = ({
       </Grid.Col>
       <Grid.Col lg={1} md={3}>
         <Stack>
-          <Button color="green">APPROVE RECORD</Button>
-          <Button color="red">DELETE RECORD</Button>
+          <Button color="green">APPROVE</Button>
+          <Button color="red">DELETE</Button>
           <Button>REFER</Button>
         </Stack>
       </Grid.Col>
