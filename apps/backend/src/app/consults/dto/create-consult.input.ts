@@ -110,7 +110,6 @@ export class CreateConsultInput {
   @Field({ nullable: true })
   spectacleNotes: string;
 
-  // RECALL COULD BE SUBJECT TO CHANGE
   @Field({ nullable: true })
   recallDate: Date;
 
