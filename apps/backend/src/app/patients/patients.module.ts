@@ -1,16 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PatientEntity } from '@supervision/patients/database';
-import { PatientResolver } from '@supervision/patients/graphql';
+import { PatientEntity } from '@supervision/patients/database/patient.entity';
+import { PatientResolver } from '@supervision/patients/graphql/patient.resolver';
 import { PatientService } from '@supervision/patients/patients.service';
-import { ConsultEntity } from '@supervision/consults';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([PatientEntity]),
-    TypeOrmModule.forFeature([ConsultEntity]),
-  ],
-  exports: [TypeOrmModule],
+  imports: [TypeOrmModule.forFeature([PatientEntity])],
   providers: [PatientService, PatientResolver],
 })
 export class PatientsModule {}

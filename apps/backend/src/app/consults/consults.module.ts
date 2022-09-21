@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConsultEntity } from '@supervision/consults/database';
+import { ConsultEntity } from '@supervision/consults/database/consult.entity';
+import { ConsultsResolver } from '@supervision/consults/graphql/consults.resolver';
+import { ConsultsService } from '@supervision/consults/consults.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ConsultEntity])],
-  exports: [TypeOrmModule],
+  providers: [ConsultsService, ConsultsResolver],
 })
 export class ConsultsModule {}
