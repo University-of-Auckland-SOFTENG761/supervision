@@ -13,7 +13,6 @@ import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 import { PatientsModule } from '@supervision/patients';
 import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
-
 @Module({
   imports: [
     ConfigModule.forRoot({

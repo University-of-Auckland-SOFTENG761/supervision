@@ -6,7 +6,6 @@ import {
 
 @InputType()
 export class CreatePatientInput {
-  // TODO: add field descriptions
   @Field(() => String, { nullable: true })
   firstName: string;
 
