@@ -1,5 +1,5 @@
 import { Tabs } from '@mantine/core';
-import { IconPill, IconReportMedical } from '@tabler/icons';
+import { IconEye, IconEyeglass } from '@tabler/icons';
 import React from 'react';
 import { ConsultRecordsTable } from '../consult-records-table';
 import { DispensingRecordsTable } from '../dispensing-records-table';
@@ -11,10 +11,10 @@ export const PatientRecords = (props: PatientRecordsProps) => {
   return (
     <Tabs variant="outline" defaultValue="consult" className={props.className}>
       <Tabs.List>
-        <Tabs.Tab value="consult" icon={<IconReportMedical size={20} />}>
+        <Tabs.Tab value="consult" icon={<IconEye size={20} />}>
           Consult Records
         </Tabs.Tab>
-        <Tabs.Tab value="dispensing" icon={<IconPill size={20} />}>
+        <Tabs.Tab value="dispensing" icon={<IconEyeglass size={20} />}>
           Dispensing Records
         </Tabs.Tab>
       </Tabs.List>

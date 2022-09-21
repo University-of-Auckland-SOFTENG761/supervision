@@ -18,7 +18,9 @@
       "@pages": ["app/pages/index.ts"],
       "@environment": ["environments/environment.ts"],
       "@patients": ["app/patients/index.ts"],
-      "@login": ["app/login/index.ts"]
+      "@login": ["app/login/index.ts"],
+      "@consults": ["app/consults/index.ts"],
+      "@routes": ["app/routes/index.ts"]
     }
   },
   "files": [],
