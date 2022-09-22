@@ -1,4 +1,4 @@
-import { Controller, Get, Header } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import {
   DiskHealthIndicator,
   HealthCheck,
@@ -18,7 +18,6 @@ export class HealthController {
 
   @Get()
   @HealthCheck()
-  @Header('health-check', 'test-abc')
   check() {
     return this.health.check([
       () => this.http.pingCheck('google', 'https://google.com'), // Reliable website to test
