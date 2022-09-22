@@ -7,9 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from '@supervision/auth';
-import { UserEntity, UserRole } from '@supervision/users/database';
+import { UserEntity } from '@supervision/users/database';
 import { CreateUserInput } from '@supervision/users/graphql/dto/create-user.input';
-import { User } from 'auth0';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
