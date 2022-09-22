@@ -19,7 +19,7 @@ export class AuthGuard extends NestAuthGuard('jwt') {
       throw err ?? new UnauthorizedException(info?.message);
     }
 
-    if (!(user as UserEntity).isActive)
+    if (user && !(user as UserEntity).isActive)
       throw new UnauthorizedException('user is not active');
 
     return user;
