@@ -8,10 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from '@supervision/auth';
 import { UserEntity, UserRole } from '@supervision/users/database';
-import {
-  CreateUserInput,
-  ICreateUserInput,
-} from '@supervision/users/graphql/dto/create-user.input';
+import { CreateUserInput } from '@supervision/users/graphql/dto/create-user.input';
 import { User } from 'auth0';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
@@ -70,7 +67,7 @@ export class UserService {
       .getMany();
   }
 
-  async createUser(data: ICreateUserInput): Promise<UserEntity> {
+  async createUser(data: CreateUserInput): Promise<UserEntity> {
     let auth0UserId: string;
     if (!('auth0id' in data)) {
       if (!('password' in data)) {

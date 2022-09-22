@@ -21,19 +21,3 @@ export class CreateUserInput {
   @Field(() => String, { nullable: true })
   auth0id?: string;
 }
-
-export type ICreateUserInput =
-  | {
-      firstName: string;
-      lastName: string;
-      email: string;
-      password: string;
-      role: UserRole;
-    }
-  | {
-      firstName: string;
-      lastName: string;
-      email: string;
-      auth0id: string;
-      role: UserRole;
-    };

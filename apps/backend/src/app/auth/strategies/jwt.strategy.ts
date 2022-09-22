@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { UserEntity, UserRole, UserService } from '@supervision/users';
@@ -7,9 +7,10 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+  private readonly logger = new Logger(JwtStrategy.name);
+
   constructor(
     private configService: ConfigService,
-
     @Inject(forwardRef(() => UserService))
     private userService: UserService
   ) {
@@ -36,7 +37,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (user) {
       return user;
     } else {
-      return this.userService.createUser({
+      const user = await this.userService.createUser({
         firstName:
           payload['given_name'] ?? payload['name'] ?? payload['nickname'],
         lastName: payload['family_name'] ?? '',
@@ -44,6 +45,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         auth0id: payload['sub'],
         role: UserRole.STUDENT,
       });
+      this.logger.log(
+        'user not found locally; creating a new user from token info',
+        {
+          payload,
+          user: user.id,
+        }
+      );
+      return user;
     }
   }
 }
