@@ -1,1 +1,2 @@
-export * from './patient-database';
+export * from './patient-replication';
+export * from './patient-schema';

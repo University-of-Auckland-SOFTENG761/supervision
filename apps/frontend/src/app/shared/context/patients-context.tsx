@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { IPatient } from '@patients';
-import { buildReplicationState, patientDatabase } from 'database';
-import { PatientDocType } from 'database/patient/patient-schema';
+import { runPatientReplication, getSuperVisionDatabase } from 'database';
+import { PatientDocument } from 'database/rxdb-utils';
 import {
   createContext,
   useCallback,
@@ -15,18 +15,10 @@ import { RxReplicationError } from 'rxdb/dist/types/plugins/replication';
 import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-graphql';
 import { uuid } from 'uuidv4';
 
-export type ConnectionStatus =
-  | 'connected'
-  | 'connecting'
-  | 'disconnected'
-  | 'unauthenticated'
-  | 'unknown';
-
 interface IPatientsContext {
   patients: IPatient[];
   newPatient: () => string;
   updatePatient: (patient: IPatient) => void;
-  connectionStatus: ConnectionStatus;
 }
 
 const PatientsContext = createContext<Partial<IPatientsContext>>({});
@@ -36,57 +28,32 @@ type PatientsProviderProps = {
 };
 
 export const PatientsProvider = ({ children }: PatientsProviderProps) => {
-  const [patientsDb, setPatientsDb] = useState<RxDatabase | null | undefined>();
-  const [patientsReplicationState, setPatientsReplicationState] = useState<
-    RxGraphQLReplicationState<PatientDocType> | null | undefined
-  >();
+  const [superVisionDb, setSuperVisionDb] = useState<RxDatabase | null>(null);
+  const [patientsReplicationState, setPatientsReplicationState] =
+    useState<RxGraphQLReplicationState<PatientDocument> | null>(null);
   const [patients, setPatients] = useState<IPatient[]>([]);
-  const [connectionStatus, setConnectionStatus] =
-    useState<ConnectionStatus>('unknown');
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   const restartReplication = async () => {
     console.log('Restarting replication');
     await patientsReplicationState?.cancel();
     const newReplicationState =
-      patientsDb && (await buildReplicationState(patientsDb));
-    newReplicationState?.run();
+      superVisionDb && (await runPatientReplication(superVisionDb));
     setPatientsReplicationState(newReplicationState);
-    setConnectionStatus('connecting');
   };
 
   const handleReplicationError = async (
-    err: RxReplicationError<PatientDocType>
+    err: RxReplicationError<PatientDocument>
   ) => {
-    if (err.message === 'Failed to fetch') {
-      setConnectionStatus('disconnected');
-      return;
-    }
+    const innerErrorsExist = err.innerErrors?.length > 0;
+    const innerErrorsContainAuthErrors = err.innerErrors?.some(
+      (innerError: { extensions?: { code: string } }) =>
+        innerError.extensions?.code === 'UNAUTHENTICATED'
+    );
+    const isAuthError = innerErrorsExist && innerErrorsContainAuthErrors;
 
-    if (
-      err.innerErrors?.length > 0 &&
-      err.innerErrors?.some(
-        (innerError: { extensions?: { code: string } }) =>
-          innerError.extensions?.code === 'UNAUTHENTICATED'
-      )
-    ) {
-      if (
-        !isAuthenticated &&
-        !isLoading &&
-        connectionStatus !== 'disconnected'
-      ) {
-        setConnectionStatus('unauthenticated');
-        return;
-      } else if (
-        err.innerErrors?.some(
-          (innerError: { message?: string }) =>
-            innerError.message === 'jwt malformed' ||
-            innerError.message === 'No auth token'
-        )
-      ) {
-        await restartReplication();
-        return;
-      }
+    if (isAuthError && isAuthenticated) {
+      restartReplication();
     }
 
     // Display unhandled errors
@@ -95,36 +62,28 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
       err.innerErrors.forEach((e: Error) => console.error(e));
   };
 
-  const handleReplicationResponse = () => {
-    setConnectionStatus('connected');
-  };
-
   useEffect(() => {
     if (patientsReplicationState) {
       patientsReplicationState.error$.subscribe(handleReplicationError);
-      patientsReplicationState.received$.subscribe(handleReplicationResponse);
-    } else if (isAuthenticated) {
-      restartReplication();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patientsReplicationState, isAuthenticated]);
+  }, [patientsReplicationState]);
+
+  useEffect(() => {
+    if (isAuthenticated && !patientsReplicationState) restartReplication();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, patientsReplicationState]);
 
   const newPatient = useCallback(() => {
     const newPatient = {
       id: uuid(),
     };
-    patientsDb?.['patients'].insert(newPatient);
+    superVisionDb?.['patients'].insert(newPatient);
     return newPatient.id;
-  }, [patientsDb]);
+  }, [superVisionDb]);
 
-  type CompletePatientType = PatientDocType & {
-    _attachments: unknown;
-    _deleted: unknown;
-    _meta: unknown;
-    _rev: unknown;
-  };
   const patientsAreEqual = useCallback(
-    (a: CompletePatientType, b: CompletePatientType) => {
+    (a: PatientDocument, b: PatientDocument) => {
       const { _attachments, _deleted, _meta, _rev, ...aWithoutMeta } = a;
       const {
         _attachments: bAttachments,
@@ -144,59 +103,45 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
       if (
         oldPatient &&
         patientsAreEqual(
-          oldPatient as CompletePatientType,
-          patient as CompletePatientType
+          oldPatient as PatientDocument,
+          patient as PatientDocument
         )
       ) {
         return;
       }
-      patientsDb?.['patients'].atomicUpsert(patient);
+      superVisionDb?.['patients'].atomicUpsert(patient);
     },
-    [patients, patientsAreEqual, patientsDb]
+    [patients, patientsAreEqual, superVisionDb]
   );
 
   useEffect(() => {
-    if (patientsDb) {
-      patientsDb['patients'].find().$.subscribe((value) => {
+    if (superVisionDb) {
+      superVisionDb['patients'].find().$.subscribe((value) => {
         const newPatients = JSON.parse(JSON.stringify(value));
         setPatients(newPatients);
       });
     }
-  }, [patientsDb]);
+  }, [superVisionDb]);
 
   useEffect(() => {
-    if (!patientsDb) {
-      patientDatabase
-        .get()
-        ?.then(
-          ({
-            db,
-            replicationState,
-          }: {
-            db: RxDatabase | null;
-            replicationState:
-              | RxGraphQLReplicationState<PatientDocType>
-              | null
-              | undefined;
-          }) => {
-            db && setPatientsDb(db);
-            replicationState && setPatientsReplicationState(replicationState);
-          }
-        )
+    if (!superVisionDb) {
+      getSuperVisionDatabase()
+        ?.then((db: RxDatabase | null) => {
+          db && setSuperVisionDb(db);
+        })
         .catch((error: Error) => {
           console.error(error);
         });
     }
-  }, [patientsDb]);
+  }, [superVisionDb]);
 
   const value = useMemo(
     () => ({
       patients,
       newPatient,
       updatePatient,
-      connectionStatus,
     }),
-    [patients, newPatient, updatePatient, connectionStatus]
+    [patients, newPatient, updatePatient]
   );
 
   return (

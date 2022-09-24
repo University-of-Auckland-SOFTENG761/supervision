@@ -1,43 +1,10 @@
 import environment from '@environment';
-import { addRxPlugin, createRxDatabase, RxDatabase, RxDocument } from 'rxdb';
-import { getRxStorageDexie } from 'rxdb/plugins/dexie';
-import patientSchema, { PatientDocType } from './patient-schema';
-import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
-import DatabaseConstructor from '../database-constructor';
-import { RxDBReplicationGraphQLPlugin } from 'rxdb/plugins/replication-graphql';
+import { RxDatabase } from 'rxdb';
 import { Ethnicities } from 'app/patients/ethnicity-select/ethnicity-select';
 import { Gender } from 'app/patients/gender-select/gender-select';
-import {
-  indexedDB as fakeIndexedDB,
-  IDBKeyRange as fakeIDBKeyRange,
-} from 'fake-indexeddb';
 import { v4 as uuidv4 } from 'uuid';
 import { getGraphQlHeaders } from 'database/authorisation';
-
-type ObjectWithRxdbMetaField = {
-  _meta?: {
-    [key: string]: unknown;
-  };
-};
-
-type PatientDocument = RxDocument<PatientDocType> & ObjectWithRxdbMetaField;
-
-const addPlugins = async () => {
-  addRxPlugin(RxDBReplicationGraphQLPlugin);
-  addRxPlugin(RxDBUpdatePlugin);
-
-  if (!environment.production) {
-    await import('rxdb/plugins/dev-mode').then((module) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      addRxPlugin((module as any).RxDBDevModePlugin);
-    });
-  }
-};
-
-const stripMetadata = (doc: PatientDocument) => {
-  const { _meta, ...rest } = doc;
-  return rest;
-};
+import { PatientDocument, stripMetadata } from 'database/rxdb-utils';
 
 const toEnumCase = (str: Ethnicities | Gender | string) =>
   str.toUpperCase().replaceAll(' ', '');
@@ -157,7 +124,7 @@ const deletionFilter = (doc: PatientDocument) => {
   return doc;
 };
 
-export const buildReplicationState = async (database: RxDatabase) => {
+export const buildPatientReplicationState = async (database: RxDatabase) => {
   const headers = await getGraphQlHeaders();
   return headers
     ? database.collections['patients'].syncGraphQL({
@@ -176,37 +143,18 @@ export const buildReplicationState = async (database: RxDatabase) => {
         live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
         headers,
       })
-    : undefined;
+    : null;
 };
 
-const initializePatientDatabase = async () => {
-  await addPlugins();
-
-  // Use fake indexedDB if in node environment
-  const storage =
-    (window.indexedDB && getRxStorageDexie()) ||
-    getRxStorageDexie({
-      indexedDB: fakeIndexedDB,
-      IDBKeyRange: fakeIDBKeyRange,
-    });
-
-  const db = await createRxDatabase({
-    name: 'patientdb',
-    storage,
-  });
-
-  await db.addCollections({
-    patients: {
-      schema: patientSchema,
-    },
-  });
-
-  const replicationState = await buildReplicationState(db);
+export const runPatientReplication = async (db: RxDatabase) => {
+  console.log('Running patient replication');
+  const replicationState = await buildPatientReplicationState(db);
+  console.log(
+    replicationState
+      ? 'Patient replication started'
+      : 'Patient replication not started'
+  );
   replicationState?.run();
 
-  return { db, replicationState };
+  return replicationState;
 };
-
-export const patientDatabase = new DatabaseConstructor(
-  initializePatientDatabase
-);

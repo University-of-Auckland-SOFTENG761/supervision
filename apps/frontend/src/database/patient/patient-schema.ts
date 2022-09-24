@@ -82,6 +82,4 @@ const patientSchemaTyped = toTypedRxJsonSchema(patientSchemaLiteral);
 export type PatientDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof patientSchemaTyped
 >;
-const patientSchema: RxJsonSchema<PatientDocType> = patientSchemaLiteral;
-
-export default patientSchema;
+export const patientSchema: RxJsonSchema<PatientDocType> = patientSchemaLiteral;

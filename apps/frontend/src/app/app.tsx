@@ -1,6 +1,6 @@
 import { Navbar, Stack } from '@mantine/core';
 import { IconEyeglass, IconSearch, IconEye, IconUser } from '@tabler/icons';
-import { AppShell, usePatients } from './shared';
+import { AppShell, useNetwork } from './shared';
 import { useEffect, useRef } from 'react';
 import {
   SearchModal,
@@ -13,26 +13,25 @@ import {
   ReconnectedLoginModalRef,
 } from './login/reconnected-login-modal';
 import { UserAvatar } from './shared/user-avatar';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const searchModal = useRef<SearchModalRef>(null);
   const reconnectedLoginModal = useRef<ReconnectedLoginModalRef>(null);
-  const { connectionStatus: patientsDbConnectionStatus } = usePatients();
+  const { online } = useNetwork();
+  const { isAuthenticated } = useAuth0();
 
   const openReconnectedLoginModal = () => reconnectedLoginModal.current?.show();
 
   const hideReconnectedLoginModal = () => reconnectedLoginModal.current?.hide();
 
   useEffect(() => {
-    if (
-      patientsDbConnectionStatus === 'unauthenticated' &&
-      location.pathname !== '/'
-    )
+    if (online && !isAuthenticated && location.pathname !== '/')
       openReconnectedLoginModal();
     else hideReconnectedLoginModal();
-  }, [patientsDbConnectionStatus, location.pathname]);
+  }, [online, location.pathname, isAuthenticated]);
 
   return (
     <AppShell

@@ -16,7 +16,7 @@ async function bootstrap() {
   const port = configService.get<number>('app.port');
 
   app.enableCors({
-    origin: 'https://uoa-supervision.org',
+    origin: process.env.FRONTEND_URL,
   });
 
   await app.listen(port);
