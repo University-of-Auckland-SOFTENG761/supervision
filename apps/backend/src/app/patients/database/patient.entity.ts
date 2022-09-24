@@ -1,5 +1,6 @@
 import { ConsultEntity } from '@supervision/consults/database/consult.entity';
 import { BaseEntity } from '@supervision/shared';
+import { SpectacleEntity } from '@supervision/spectacles/database';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 export enum Ethnicity {
@@ -61,6 +62,9 @@ export class PatientEntity extends BaseEntity {
 
   @OneToMany(() => ConsultEntity, (consult) => consult.patient)
   consults: ConsultEntity[];
+
+  @OneToMany(() => SpectacleEntity, (spectacle) => spectacle.patient)
+  spectacles: SpectacleEntity[];
 
   @Column('smallint', { nullable: true })
   yearLevel: number;

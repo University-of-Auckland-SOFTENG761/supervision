@@ -1,7 +1,8 @@
 import { BaseEntity } from '@supervision/shared';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { UserEntity } from '@supervision/users/database/user.entity';
 import { PatientEntity } from '@supervision/patients/database/patient.entity';
+import { SpectacleEntity } from '@supervision/spectacles/database/spectacle.entity';
 
 @Entity({ name: 'consult' })
 export class ConsultEntity extends BaseEntity {
@@ -16,6 +17,13 @@ export class ConsultEntity extends BaseEntity {
     eager: true,
   })
   patient: PatientEntity;
+
+  @JoinColumn()
+  @OneToOne(() => SpectacleEntity, (spectacle) => spectacle.consult, {
+    nullable: true,
+    eager: true,
+  })
+  spectacle: SpectacleEntity;
 
   @Column('date', { nullable: true })
   dateConsentGiven: Date;
