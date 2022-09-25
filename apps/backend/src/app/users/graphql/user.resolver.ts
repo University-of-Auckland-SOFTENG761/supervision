@@ -14,11 +14,15 @@ export class UserResolver {
   @Query(() => [UserModel], { name: 'userReplicationFeed' })
   @UseGuards(SupervisorGuard)
   async replicationFeed(@Args() args: ReplicationArgs): Promise<UserModel[]> {
-    return this.userService.getUpdatedUsers(
+    const users = await this.userService.getUpdatedUsers(
       args.minUpdatedAt,
       args.lastId,
       args.limit
     );
+    return users.map(({ consults, ...user }) => ({
+      consultIds: consults.map(({ id }) => id),
+      ...user,
+    }));
   }
 
   @Query(() => [UserModel])

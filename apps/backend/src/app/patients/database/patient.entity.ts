@@ -59,7 +59,9 @@ export class PatientEntity extends BaseEntity {
   })
   school: string;
 
-  @OneToMany(() => ConsultEntity, (consult) => consult.patient)
+  @OneToMany(() => ConsultEntity, (consult) => consult.patient, {
+    cascade: ['insert', 'update'],
+  })
   consults: ConsultEntity[];
 
   @Column('smallint', { nullable: true })

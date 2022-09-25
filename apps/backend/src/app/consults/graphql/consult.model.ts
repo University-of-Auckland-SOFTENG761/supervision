@@ -1,15 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { PatientModel } from '@supervision/patients/graphql/patient.model';
 import { BaseModel } from '@supervision/shared';
-import { UserModel } from '@supervision/users/graphql/user.model';
 
 @ObjectType({ description: 'consult' })
 export class ConsultModel extends BaseModel {
-  @Field(() => UserModel, { nullable: false })
-  user: UserModel;
+  @Field({ nullable: false })
+  userEmail: string;
 
-  @Field(() => PatientModel, { nullable: false })
-  patient: PatientModel;
+  @Field({ nullable: false })
+  patientId: string;
 
   @Field({ nullable: false })
   dateConsentGiven: Date;

@@ -46,11 +46,12 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
     err: RxReplicationError<PatientDocument>
   ) => {
     const innerErrorsExist = err.innerErrors?.length > 0;
-    const innerErrorsContainAuthErrors = err.innerErrors?.some(
-      (innerError: { extensions?: { code: string } }) =>
-        innerError.extensions?.code === 'UNAUTHENTICATED'
-    );
-    const isAuthError = innerErrorsExist && innerErrorsContainAuthErrors;
+    const isAuthError =
+      innerErrorsExist &&
+      err.innerErrors?.some(
+        (innerError: { extensions?: { code: string } }) =>
+          innerError.extensions?.code === 'UNAUTHENTICATED'
+      );
 
     if (isAuthError && isAuthenticated) {
       restartReplication();

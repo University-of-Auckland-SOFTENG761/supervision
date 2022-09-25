@@ -7,6 +7,7 @@ import { addRxPlugin, createRxDatabase, RxDatabase } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
 import { RxDBReplicationGraphQLPlugin } from 'rxdb/plugins/replication-graphql';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+import consultSchema from './consult/consult-schema';
 import { patientSchema, runPatientReplication } from './patient';
 
 let blocked = false;
@@ -43,6 +44,9 @@ const createSuperVisionDatabase = async () => {
   await db.addCollections({
     patients: {
       schema: patientSchema,
+    },
+    consults: {
+      schema: consultSchema,
     },
   });
 

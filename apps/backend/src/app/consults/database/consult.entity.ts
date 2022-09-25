@@ -8,12 +8,14 @@ export class ConsultEntity extends BaseEntity {
   @ManyToOne(() => UserEntity, (user) => user.consults, {
     nullable: false,
     eager: true,
+    cascade: ['insert', 'update'],
   })
   user: UserEntity;
 
   @ManyToOne(() => PatientEntity, (patient) => patient.consults, {
     nullable: false,
     eager: true,
+    cascade: ['insert', 'update'],
   })
   patient: PatientEntity;
 

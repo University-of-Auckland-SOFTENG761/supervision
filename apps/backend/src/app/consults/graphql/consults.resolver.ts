@@ -17,7 +17,10 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   async createConsult(
     @Args('createConsultInput') createConsultInput: CreateConsultInput
   ): Promise<ConsultModel> {
-    return await this.consultService.create(createConsultInput);
+    const { user, patient, ...consult } = await this.consultService.create(
+      createConsultInput
+    );
+    return { userEmail: user.email, patientId: patient.id, ...consult };
   }
 
   @Mutation(() => ConsultModel)
@@ -25,22 +28,31 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   async updateConsult(
     @Args('updateConsultInput') updateConsultInput: UpdateConsultInput
   ): Promise<ConsultModel> {
-    return await this.consultService.update(
+    const { user, patient, ...consult } = await this.consultService.update(
       updateConsultInput.id,
       updateConsultInput
     );
+    return { userEmail: user.email, patientId: patient.id, ...consult };
   }
 
   @Query(() => ConsultModel)
   @UseGuards(AuthGuard)
   async consult(@Args('id') id: string): Promise<ConsultModel> {
-    return await this.consultService.findOneByID(id);
+    const { user, patient, ...consult } = await this.consultService.findOneByID(
+      id
+    );
+    return { userEmail: user.email, patientId: patient.id, ...consult };
   }
 
   @Query(() => [ConsultModel])
   @UseGuards(AuthGuard)
   async consults(): Promise<ConsultModel[]> {
-    return await this.consultService.findAll();
+    const consults = await this.consultService.findAll();
+    return consults.map(({ user, patient, ...consult }) => ({
+      userEmail: user.email,
+      patientId: patient.id,
+      ...consult,
+    }));
   }
 
   @Query(() => [ConsultModel], { name: 'consultReplicationFeed' })
@@ -48,11 +60,16 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   async replicationFeed(
     @Args() args: ReplicationArgs
   ): Promise<ConsultModel[]> {
-    return this.consultService.getUpdatedConsults(
+    const consults = await this.consultService.getUpdatedConsults(
       args.minUpdatedAt,
       args.lastId,
       args.limit
     );
+    return consults.map(({ user, patient, ...consult }) => ({
+      userEmail: user.email,
+      patientId: patient.id,
+      ...consult,
+    }));
   }
 
   @Mutation(() => ConsultModel, { nullable: true })
@@ -65,6 +82,9 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
     })
     setConsultsInput: SetConsultInput[]
   ): Promise<ConsultModel | null> {
-    return await this.consultService.set(setConsultsInput);
+    const { user, patient, ...consult } = await this.consultService.set(
+      setConsultsInput
+    );
+    return { userEmail: user.email, patientId: patient.id, ...consult };
   }
 }

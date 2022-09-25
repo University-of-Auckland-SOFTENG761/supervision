@@ -110,6 +110,7 @@ export class PatientService {
       .addOrderBy('patient.id')
       .take(limit)
       .withDeleted()
+      .leftJoinAndSelect('patient.consults', 'consults')
       .getMany();
   }
 }

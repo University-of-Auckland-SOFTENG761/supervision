@@ -261,7 +261,7 @@ export const consultSchemaLiteral = {
       type: 'number',
     },
     wetRefractionGivenRightVA: {
-      type: 'numstringber',
+      type: 'string',
     },
     wetRefractionGivenRightAdd: {
       type: 'number',
