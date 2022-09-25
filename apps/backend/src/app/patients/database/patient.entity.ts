@@ -1,6 +1,6 @@
 import { ConsultEntity } from '@supervision/consults/database/consult.entity';
-import { BaseEntity } from '@supervision/shared';
-import { SpectaclesEntity } from '@supervision/spectacles/database';
+import { BaseEntity } from '@supervision/shared/database/base.entity';
+import { SpectaclesEntity } from '@supervision/spectacles/database/spectacles.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 export enum Ethnicity {
