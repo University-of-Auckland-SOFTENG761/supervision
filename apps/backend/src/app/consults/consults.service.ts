@@ -1,14 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ConsultEntity } from './database';
 import { CreateConsultInput, UpdateConsultInput, SetConsultInput } from './dto';
-
+import { SpectaclesEntity } from '@supervision/spectacles/database/spectacles.entity';
+import {
+  CreateSpectaclesInput,
+  UpdateSpectaclesInput,
+} from '@supervision/spectacles/dto';
+import { SpectaclesService } from '../spectacles/spectacles.service';
 @Injectable()
 export class ConsultsService {
   constructor(
     @InjectRepository(ConsultEntity)
-    private consultsRepository: Repository<ConsultEntity>
+    private consultsRepository: Repository<ConsultEntity>,
+
+    @Inject(forwardRef(() => SpectaclesService))
+    private spectaclesService: SpectaclesService
   ) {}
 
   async create(consult: CreateConsultInput): Promise<ConsultEntity> {
@@ -43,6 +51,33 @@ export class ConsultsService {
     return await this.consultsRepository.find();
   }
 
+  // Create a spectacle for an associated consult, patient and user
+  async createSpectacles(
+    spectacles: CreateSpectaclesInput
+  ): Promise<SpectaclesEntity> {
+    const newSpectacles = await this.spectaclesService.createSpectacles(
+      spectacles
+    );
+    return newSpectacles;
+  }
+
+  // Update spectacle for an associated consult, patient and user
+  async updateSpectacles(
+    updatedSpectacles: UpdateSpectaclesInput,
+    spectacleId: string
+  ): Promise<SpectaclesEntity> {
+    return await this.spectaclesService.updateSpectacles(
+      updatedSpectacles,
+      spectacleId
+    );
+  }
+
+  // Fetch spectacles for a consult
+  async findSpectaclesForConsult(consultId: string): Promise<SpectaclesEntity> {
+    return await this.spectaclesService.findSpectaclesForConsult(consultId);
+  }
+
+  // TODO move this to patients service
   async findConsultsForPatient(patientId: string): Promise<ConsultEntity[]> {
     return await this.consultsRepository.find({
       where: { patient: { id: patientId } },
@@ -65,7 +100,8 @@ export class ConsultsService {
         .createQueryBuilder('consult')
         // Load in the patient and user entities (SelectQueryBuilder does not do this by default)
         .leftJoinAndSelect('consult.patient', 'patient')
-        .leftJoinAndSelect('consult.user', 'user');
+        .leftJoinAndSelect('consult.user', 'user')
+        .leftJoinAndSelect('consult.spectacles', 'spectacles');
     } else {
       query = this.consultsRepository
         .createQueryBuilder('consult')

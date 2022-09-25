@@ -7,6 +7,11 @@ import { SetConsultInput } from '../dto/set-consult.input';
 import { ConsultModel } from './consult.model';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@supervision/auth/guards';
+import { SpectaclesModel } from '@supervision/spectacles/graphql';
+import {
+  CreateSpectaclesInput,
+  UpdateSpectaclesInput,
+} from '@supervision/spectacles/dto';
 
 @Resolver(() => ConsultModel)
 export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
@@ -31,6 +36,25 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
     );
   }
 
+  @Mutation(() => SpectaclesModel)
+  @UseGuards(AuthGuard)
+  async createSpectacles(
+    @Args('createSpectaclesInput') createSpectaclesInput: CreateSpectaclesInput
+  ): Promise<SpectaclesModel> {
+    return await this.consultService.createSpectacles(createSpectaclesInput);
+  }
+
+  @Mutation(() => SpectaclesModel)
+  @UseGuards(AuthGuard)
+  async updateSpectacles(
+    @Args('updateSpectaclesInput') updateSpectaclesInput: UpdateSpectaclesInput
+  ): Promise<SpectaclesModel> {
+    return await this.consultService.updateSpectacles(
+      updateSpectaclesInput,
+      updateSpectaclesInput.id
+    );
+  }
+
   @Query(() => ConsultModel)
   @UseGuards(AuthGuard)
   async consult(@Args('id') id: string): Promise<ConsultModel> {
@@ -41,6 +65,14 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   @UseGuards(AuthGuard)
   async consults(): Promise<ConsultModel[]> {
     return await this.consultService.findAll();
+  }
+
+  @Query(() => SpectaclesModel)
+  @UseGuards(AuthGuard)
+  async spectacles(
+    @Args('consultId') consultId: string
+  ): Promise<SpectaclesModel> {
+    return await this.consultService.findSpectaclesForConsult(consultId);
   }
 
   @Query(() => [ConsultModel], { name: 'consultReplicationFeed' })
