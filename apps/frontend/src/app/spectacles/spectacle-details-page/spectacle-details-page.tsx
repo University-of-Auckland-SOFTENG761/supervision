@@ -1,5 +1,12 @@
 import { useForm } from '@mantine/form';
-import { Checkbox, Group, ScrollArea, Stack, Title } from '@mantine/core';
+import {
+  Checkbox,
+  Divider,
+  Group,
+  ScrollArea,
+  Stack,
+  Title,
+} from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
 import React, { useCallback, useEffect } from 'react';
@@ -104,81 +111,93 @@ export const SpectacleDetailsPage = () => {
 
   return (
     <ScrollArea className="h-full p-8">
-      <Stack className={'w-2/5 mx-auto flex space-y-4'}>
+      <Stack className={'w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4'}>
         <Stack>
-          <Group>
-            <Title order={3} className={'-mb-3'}>
-              Spectacles Dispensing - Vision Bus
-            </Title>
-            <Text className="align-baseline">
-              {form.getInputProps('uid').value}
-            </Text>
-          </Group>
+          <Title order={3} className={'-mb-3'}>
+            Spectacles Dispensing - Vision Bus
+          </Title>
           {/*TODO: stringify date better*/}
           <Title order={3}>
-            {spectacles ? spectacles.date.toDateString() : undefined}
+            {spectacles
+              ? spectacles.date.toDateString().substring(4)
+              : undefined}
           </Title>
+          <Text className="align-baseline">
+            {form.getInputProps('uid').value}
+          </Text>
         </Stack>
 
         <Title order={3}>Optometrist Contact Details</Title>
-        <Group className="justify-between border-2 border-indigo-900">
-          <Text className="-mb-3">Email</Text>
-          <Text className="-mb-3">{optometristDetails.email}</Text>
-        </Group>
         <Group className="justify-between">
-          <Text className="-mb-3">Mobile</Text>
-          <Text className="-mb-3">{optometristDetails.mobile}</Text>
+          <Text className="-mb-8">Email</Text>
+          <Text className="-mb-8">{optometristDetails.email}</Text>
         </Group>
+        <Divider my="xs" />
+        <Group className="justify-between">
+          <Text className="-mb-8">Mobile</Text>
+          <Text className="-mb-8">{optometristDetails.mobile}</Text>
+        </Group>
+        <Divider my="xs" />
 
         <Title order={3}>Patient Details</Title>
         <Group className="justify-between">
-          <Text className="-mb-3">Patient ID</Text>
-          <Text className="-mb-3">placeholder</Text>
+          <Text className="-mb-8">Patient ID</Text>
+          <Text className="-mb-8">placeholder</Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">First name</Text>
-          <Text className="-mb-3">{form.getInputProps('firstName').value}</Text>
+          <Text className="-mb-8">First name</Text>
+          <Text className="-mb-8">{form.getInputProps('firstName').value}</Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">Last name</Text>
-          <Text className="-mb-3">{form.getInputProps('lastName').value}</Text>
+          <Text className="-mb-8">Last name</Text>
+          <Text className="-mb-8">{form.getInputProps('lastName').value}</Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">School</Text>
-          <Text className="-mb-3">{form.getInputProps('school').value}</Text>
+          <Text className="-mb-8">School</Text>
+          <Text className="-mb-8">{form.getInputProps('school').value}</Text>
         </Group>
+        <Divider my="xs" />
 
         <Title order={3}>Spectacles Details</Title>
         <Group className="justify-between">
-          <Text className="-mb-3">Spectacles code</Text>
-          <Text className="-mb-3">
+          <Text className="-mb-8">Spectacles code</Text>
+          <Text className="-mb-8">
             {form.getInputProps('spectaclesCode').value}
           </Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">Colour</Text>
-          <Text className="-mb-3">{form.getInputProps('colour').value}</Text>
+          <Text className="-mb-8">Colour</Text>
+          <Text className="-mb-8">{form.getInputProps('colour').value}</Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">Lens Type</Text>
-          <Text className="-mb-3">{form.getInputProps('lensType').value}</Text>
+          <Text className="-mb-8">Lens Type</Text>
+          <Text className="-mb-8">{form.getInputProps('lensType').value}</Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">PD</Text>
-          <Text className="-mb-3">
+          <Text className="-mb-8">PD</Text>
+          <Text className="-mb-8">
             {form.getInputProps('pupillaryDistance').value}
           </Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">Heights</Text>
-          <Text className="-mb-3">{form.getInputProps('school').heights}</Text>
+          <Text className="-mb-8">Heights</Text>
+          <Text className="-mb-8">{form.getInputProps('school').heights}</Text>
         </Group>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-3">Spectacles notes</Text>
-          <Text className="-mb-3">
+          <Text className="-mb-8">Spectacles notes</Text>
+          <Text className="-mb-8">
             {form.getInputProps('Spectacles Notes').value}
           </Text>
         </Group>
+        <Divider my="xs" />
         <Title order={3}>Dispensing Status</Title>
         <Checkbox.Group
           className="justify-items-stretch"

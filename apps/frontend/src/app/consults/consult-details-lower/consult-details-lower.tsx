@@ -3,6 +3,7 @@ import { Table, TableTheme, Button } from '@shared';
 import { TextInput, Grid, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
+import { useNavigate } from 'react-router-dom';
 
 type ConsultDetailsLowerProps = {
   consult: IConsult;
@@ -49,6 +50,8 @@ export const ConsultDetailsLower = ({
       code: 'givenRefraction',
     },
   ];
+
+  const navigate = useNavigate();
 
   return (
     <Grid columns={10} align="flex-end">
@@ -247,6 +250,15 @@ export const ConsultDetailsLower = ({
           <Button color="green">APPROVE</Button>
           <Button color="red">DELETE</Button>
           <Button>REFER</Button>
+          <Button
+            color="yellow"
+            onClick={() => {
+              const placeholder_id = 'fake_id_1234';
+              navigate(`/spectacle-details/${placeholder_id}`);
+            }}
+          >
+            SCRIPT
+          </Button>
         </Stack>
       </Grid.Col>
     </Grid>
