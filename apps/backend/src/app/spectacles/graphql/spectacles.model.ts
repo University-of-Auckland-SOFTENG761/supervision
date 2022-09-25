@@ -1,13 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { ConsultModel } from '@supervision/consults';
 import { PatientModel } from '@supervision/patients';
 import { BaseModel } from '@supervision/shared';
 import { UserModel } from '@supervision/users';
 import { OrderStatus } from '../database';
 
-@ObjectType({ description: 'spectacle' })
-export class SpectacleModel extends BaseModel {
-  @Field(() => SpectacleModel, { nullable: true })
-  spectacle: SpectacleModel;
+@ObjectType({ description: 'spectacles' })
+export class SpectaclesModel extends BaseModel {
+  @Field(() => ConsultModel, { nullable: false })
+  consult: ConsultModel;
 
   @Field(() => PatientModel, { nullable: false })
   patient: PatientModel;
@@ -40,7 +41,7 @@ export class SpectacleModel extends BaseModel {
   deliveredDate: Date;
 
   @Field(() => OrderStatus, { nullable: false })
-  deliveryStatus: OrderStatus;
+  orderStatus: OrderStatus;
 
   @Field({ nullable: true })
   deliverySchool: string;

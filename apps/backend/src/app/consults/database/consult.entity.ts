@@ -2,7 +2,7 @@ import { BaseEntity } from '@supervision/shared';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { UserEntity } from '@supervision/users/database/user.entity';
 import { PatientEntity } from '@supervision/patients/database/patient.entity';
-import { SpectacleEntity } from '@supervision/spectacles/database/spectacle.entity';
+import { SpectaclesEntity } from '@supervision/spectacles/database/spectacle.entity';
 
 @Entity({ name: 'consult' })
 export class ConsultEntity extends BaseEntity {
@@ -19,11 +19,11 @@ export class ConsultEntity extends BaseEntity {
   patient: PatientEntity;
 
   @JoinColumn()
-  @OneToOne(() => SpectacleEntity, (spectacle) => spectacle.consult, {
+  @OneToOne(() => SpectaclesEntity, (spectacles) => spectacles.consult, {
     nullable: true,
     eager: true,
   })
-  spectacle: SpectacleEntity;
+  spectacles: SpectaclesEntity;
 
   @Column('date', { nullable: true })
   dateConsentGiven: Date;

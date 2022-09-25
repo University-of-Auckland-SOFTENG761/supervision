@@ -1,1 +1,1 @@
-export * from './spectacle.model';
+export * from './spectacles.model';

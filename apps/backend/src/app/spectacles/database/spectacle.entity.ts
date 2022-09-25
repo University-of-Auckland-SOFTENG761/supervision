@@ -11,8 +11,8 @@ export enum OrderStatus {
 }
 
 @Entity({ name: 'spectacles' })
-export class SpectacleEntity extends BaseEntity {
-  @OneToOne(() => ConsultEntity, (consult) => consult.spectacle)
+export class SpectaclesEntity extends BaseEntity {
+  @OneToOne(() => ConsultEntity, (consult) => consult.spectacles)
   consult: ConsultEntity;
 
   // TODO: Do we want to associate a supervisor or student with a spectacle order?
@@ -54,7 +54,7 @@ export class SpectacleEntity extends BaseEntity {
     enum: OrderStatus,
     nullable: false,
   })
-  deliveryStatus: OrderStatus;
+  orderStatus: OrderStatus;
 
   @Column('varchar', { length: 45, nullable: true })
   deliverySchool: string;
