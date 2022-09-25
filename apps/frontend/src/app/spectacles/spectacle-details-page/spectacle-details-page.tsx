@@ -119,19 +119,15 @@ export const SpectacleDetailsPage = () => {
   return (
     <ScrollArea className="h-full p-8">
       <Stack className={'w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4'}>
-        <Stack>
-          <Title order={3} className={'-mb-3'}>
-            Spectacles Dispensing - Vision Bus
-          </Title>
-          <Title order={3}>
-            {spectacles
-              ? spectacles.date.toDateString().substring(4)
-              : undefined}
-          </Title>
-          <Text className="align-baseline">
-            {form.getInputProps('uid').value}
-          </Text>
-        </Stack>
+        <Title order={3} className={'-mb-3'}>
+          Spectacles Dispensing - Vision Bus
+        </Title>
+        <Title order={3}>
+          {spectacles ? spectacles.date.toDateString().substring(4) : undefined}
+        </Title>
+        <Text className="align-baseline">
+          {form.getInputProps('uid').value}
+        </Text>
 
         <Title order={3}>Optometrist Contact Details</Title>
         <Group className="justify-between">
