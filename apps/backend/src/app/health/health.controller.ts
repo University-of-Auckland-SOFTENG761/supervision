@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Header, Req } from '@nestjs/common';
+import { Request } from 'express';
 import {
   DiskHealthIndicator,
   HealthCheck,
@@ -7,7 +8,7 @@ import {
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 
-@Controller('health')
+@Controller()
 export class HealthController {
   constructor(
     private health: HealthCheckService,
@@ -16,7 +17,7 @@ export class HealthController {
     private readonly disk: DiskHealthIndicator
   ) {}
 
-  @Get()
+  @Get('/health')
   @HealthCheck()
   check() {
     return this.health.check([
@@ -25,5 +26,14 @@ export class HealthController {
       () =>
         this.disk.checkStorage('storage', { path: '/', thresholdPercent: 0.8 }),
     ]);
+  }
+
+  @Get('/ping')
+  @Header('Cache-Control', 'none')
+  ping(@Req() request: Request) {
+    return {
+      time: new Date().toISOString(),
+      challenge: request.query?.challenge ?? null,
+    };
   }
 }
