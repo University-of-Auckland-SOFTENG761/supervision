@@ -29,8 +29,8 @@ export type ISpectacles = {
   associatedPatientUid?: string;
 };
 
-export const SpectacleDetailsPage = () => {
-  // Fake data to match the records in spectacle-list-page
+export const SpectaclesDetailsPage = () => {
+  // Fake data to match the records in spectacles-list-page
   // TODO: replace with backend data
   const spectacleRecords: ISpectacles[] = [
     {

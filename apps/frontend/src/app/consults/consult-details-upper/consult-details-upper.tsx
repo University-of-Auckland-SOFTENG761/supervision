@@ -203,9 +203,9 @@ export const ConsultDetailsUpper = ({
           <Grid.Col span={1}>
             <Stack>
               <TextInput
-                label="Spectacle Code:"
+                label="Spectacles Code:"
                 classNames={{ label: 'whitespace-nowrap' }}
-                {...form.getInputProps('spectacleCode')}
+                {...form.getInputProps('spectaclesCode')}
               />
               <TextInput
                 label="Heights:"
@@ -224,8 +224,8 @@ export const ConsultDetailsUpper = ({
                 />
               </SimpleGrid>
               <TextInput
-                label="Spectacle Note:"
-                {...form.getInputProps('spectacleNote')}
+                label="Spectacles Note:"
+                {...form.getInputProps('spectaclesNote')}
               />
             </Stack>
           </Grid.Col>

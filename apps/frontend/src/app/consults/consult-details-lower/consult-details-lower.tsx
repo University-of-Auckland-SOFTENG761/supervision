@@ -22,7 +22,7 @@ export const ConsultDetailsLower = ({
 
   const consultRows = [
     {
-      name: 'Previous Spectacle Rx',
+      name: 'Previous Spectacles Rx',
       code: 'prevSpecRxGiven',
     },
     {
@@ -232,7 +232,7 @@ export const ConsultDetailsLower = ({
                     {...form.getInputProps(row.code + 'LeftAdd')}
                   />
                 </td>
-                {row.name === 'Previous Spectacle Rx' ||
+                {row.name === 'Previous Spectacles Rx' ||
                 row.name === 'Given refraction' ? (
                   <td>
                     <TextInput {...form.getInputProps(row.code + 'BVA')} />
@@ -254,7 +254,7 @@ export const ConsultDetailsLower = ({
             color="yellow"
             onClick={() => {
               const placeholder_id = 'fake_id_1234';
-              navigate(`/spectacle-details/${placeholder_id}`);
+              navigate(`/spectacles-details/${placeholder_id}`);
             }}
           >
             SCRIPT

@@ -5,8 +5,8 @@ import { PatientDetailsPage } from '@patients';
 import { ConsultDetailsPage } from '@consults';
 import { LoginPage } from '@login';
 import ProtectedRoute from './protected-route';
-import { SpectacleDetailsPage } from '../spectacles/spectacle-details-page';
-import { SpectacleListPage } from '../spectacles/spectacle-list-page';
+import { SpectaclesDetailsPage } from '../spectacles/spectacles-details-page';
+import { SpectaclesListPage } from '../spectacles/spectacles-list-page';
 
 const Routes = () => {
   return (
@@ -22,12 +22,12 @@ const Routes = () => {
           element={<ProtectedRoute component={<ConsultDetailsPage />} />}
         />
         <Route
-          path="/spectacle-details/:spectaclesUid"
-          element={<ProtectedRoute component={<SpectacleDetailsPage />} />}
+          path="/spectacles-details/:spectaclesUid"
+          element={<ProtectedRoute component={<SpectaclesDetailsPage />} />}
         />
         <Route
-          path="/spectacle-list"
-          element={<ProtectedRoute component={<SpectacleListPage />} />}
+          path="/spectacles-list"
+          element={<ProtectedRoute component={<SpectaclesListPage />} />}
         />
       </Route>
     </RRRoutes>

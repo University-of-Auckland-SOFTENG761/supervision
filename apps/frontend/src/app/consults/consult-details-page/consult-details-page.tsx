@@ -35,11 +35,11 @@ export type IConsult = {
   anteriorHealth?: string;
   management?: string;
   // Column 3/4
-  spectacleCode?: string;
+  spectaclesCode?: string;
   colour?: string;
   lensType?: string;
   heights?: string;
-  spectacleNote?: string;
+  spectaclesNote?: string;
   // Column 5
   posteriorHealth?: string;
   laypersonNotes?: string;

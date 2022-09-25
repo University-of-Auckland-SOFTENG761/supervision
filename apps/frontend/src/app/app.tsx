@@ -61,8 +61,8 @@ export function App() {
                 <NavbarLink
                   label="Dispensing"
                   icon={IconEyeglass}
-                  onClick={() => navigate('/spectacle-list')}
-                  active={location.pathname === '/spectacle-list'}
+                  onClick={() => navigate('/spectacles-list')}
+                  active={location.pathname === '/spectacles-list'}
                 ></NavbarLink>
               </Stack>
             </Navbar.Section>

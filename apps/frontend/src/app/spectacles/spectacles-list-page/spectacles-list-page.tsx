@@ -1,12 +1,12 @@
-import { ISpectacles } from '../spectacle-details-page';
+import { ISpectacles } from '../spectacles-details-page';
 import { Table, TableTheme } from '@shared';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea, Stack } from '@mantine/core';
 
-export const SpectacleListPage = () => {
+export const SpectaclesListPage = () => {
   //TODO: double-check with Veeran which columns he wants
-  const spectacleRecords: ISpectacles[] = [
+  const spectaclesRecords: ISpectacles[] = [
     {
       uid: 'fake_id_1234',
       firstName: 'Henry',
@@ -63,10 +63,10 @@ export const SpectacleListPage = () => {
             </tr>
           </thead>
           <tbody>
-            {spectacleRecords.map((record) => (
+            {spectaclesRecords.map((record) => (
               <tr
                 key={record.date.toString()}
-                onClick={() => navigate(`/spectacle-details/${record.uid}`)}
+                onClick={() => navigate(`/spectacles-details/${record.uid}`)}
               >
                 {/*TODO: improve date format*/}
                 <td>{record.date.toDateString()}</td>
