@@ -11,6 +11,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
 import { IPatient } from '../patient-details-page';
 import { usePatients } from '@shared';
+import { PatientDocument } from 'database/rxdb-utils';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
@@ -71,7 +72,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const buildPatient = () => {
+  const buildPatientDocument = () => {
     const newPatient = {
       ...form.values,
       id: patient?.id ?? '',
@@ -91,9 +92,9 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
     }
     debounceTimeout.current = setTimeout(() => {
       debounceTimeout.current = null;
-      const newPatient = buildPatient();
+      const newPatient = buildPatientDocument();
       if (newPatient && updatePatient) {
-        updatePatient(newPatient);
+        updatePatient(newPatient as PatientDocument);
       }
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps

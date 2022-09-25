@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import MantineTheme from './mantine.config';
 import Routes from 'app/routes';
 import { Auth0Provider } from '@login';
-import { PatientsProvider } from '@shared';
+import { ConsultsProvider, PatientsProvider } from '@shared';
 
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
@@ -28,7 +28,9 @@ root.render(
       <BrowserRouter>
         <Auth0Provider>
           <PatientsProvider>
-            <Routes />
+            <ConsultsProvider>
+              <Routes />
+            </ConsultsProvider>
           </PatientsProvider>
         </Auth0Provider>
       </BrowserRouter>

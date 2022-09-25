@@ -167,28 +167,28 @@ export const consultSchemaLiteral = {
     habitualRightCylinder: {
       type: 'number',
     },
-    habitualGivenRightAxis: {
+    habitualRightAxis: {
       type: 'number',
     },
-    habitualGivenRightVA: {
+    habitualRightVA: {
       type: 'string',
     },
-    habitualGivenRightAdd: {
+    habitualRightAdd: {
       type: 'number',
     },
-    habitualGivenLeftEyeSphere: {
+    habitualLeftEyeSphere: {
       type: 'number',
     },
-    habitualGivenLeftCylinder: {
+    habitualLeftCylinder: {
       type: 'number',
     },
-    habitualGivenLeftAxis: {
+    habitualLeftAxis: {
       type: 'number',
     },
-    habitualGivenLeftVA: {
+    habitualLeftVA: {
       type: 'string',
     },
-    habitualGivenLeftAdd: {
+    habitualLeftAdd: {
       type: 'number',
     },
     dryRetinoscopyRightEyeSphere: {
@@ -197,28 +197,28 @@ export const consultSchemaLiteral = {
     dryRetinoscopyRightCylinder: {
       type: 'number',
     },
-    dryRetinoscopyGivenRightAxis: {
+    dryRetinoscopyRightAxis: {
       type: 'number',
     },
-    dryRetinoscopyGivenRightVA: {
+    dryRetinoscopyRightVA: {
       type: 'string',
     },
-    dryRetinoscopyGivenRightAdd: {
+    dryRetinoscopyRightAdd: {
       type: 'number',
     },
-    dryRetinoscopyGivenLeftEyeSphere: {
+    dryRetinoscopyLeftEyeSphere: {
       type: 'number',
     },
-    dryRetinoscopyGivenLeftCylinder: {
+    dryRetinoscopyLeftCylinder: {
       type: 'number',
     },
-    dryRetinoscopyGivenLeftAxis: {
+    dryRetinoscopyLeftAxis: {
       type: 'number',
     },
-    dryRetinoscopyGivenLeftVA: {
+    dryRetinoscopyLeftVA: {
       type: 'string',
     },
-    dryRetinoscopyGivenLeftAdd: {
+    dryRetinoscopyLeftAdd: {
       type: 'number',
     },
     autoRefractionRightEyeSphere: {
@@ -227,28 +227,28 @@ export const consultSchemaLiteral = {
     autoRefractionRightCylinder: {
       type: 'number',
     },
-    autoRefractionGivenRightAxis: {
+    autoRefractionRightAxis: {
       type: 'number',
     },
-    autoRefractionGivenRightVA: {
+    autoRefractionRightVA: {
       type: 'string',
     },
-    autoRefractionGivenRightAdd: {
+    autoRefractionRightAdd: {
       type: 'number',
     },
-    autoRefractionGivenLeftEyeSphere: {
+    autoRefractionLeftEyeSphere: {
       type: 'number',
     },
-    autoRefractionGivenLeftCylinder: {
+    autoRefractionLeftCylinder: {
       type: 'number',
     },
-    autoRefractionGivenLeftAxis: {
+    autoRefractionLeftAxis: {
       type: 'number',
     },
-    autoRefractionGivenLeftVA: {
+    autoRefractionLeftVA: {
       type: 'string',
     },
-    autoRefractionGivenLeftAdd: {
+    autoRefractionLeftAdd: {
       type: 'number',
     },
     wetRefractionRightEyeSphere: {
@@ -257,28 +257,28 @@ export const consultSchemaLiteral = {
     wetRefractionRightCylinder: {
       type: 'number',
     },
-    wetRefractionGivenRightAxis: {
+    wetRefractionRightAxis: {
       type: 'number',
     },
-    wetRefractionGivenRightVA: {
+    wetRefractionRightVA: {
       type: 'string',
     },
-    wetRefractionGivenRightAdd: {
+    wetRefractionRightAdd: {
       type: 'number',
     },
-    wetRefractionGivenLeftEyeSphere: {
+    wetRefractionLeftEyeSphere: {
       type: 'number',
     },
-    wetRefractionGivenLeftCylinder: {
+    wetRefractionLeftCylinder: {
       type: 'number',
     },
-    wetRefractionGivenLeftAxis: {
+    wetRefractionLeftAxis: {
       type: 'number',
     },
-    wetRefractionGivenLeftVA: {
+    wetRefractionLeftVA: {
       type: 'string',
     },
-    wetRefractionGivenLeftAdd: {
+    wetRefractionLeftAdd: {
       type: 'number',
     },
     subjectiveRefractionRightEyeSphere: {
@@ -287,28 +287,28 @@ export const consultSchemaLiteral = {
     subjectiveRefractionRightCylinder: {
       type: 'number',
     },
-    subjectiveRefractionGivenRightAxis: {
+    subjectiveRefractionRightAxis: {
       type: 'number',
     },
-    subjectiveRefractionGivenRightVA: {
+    subjectiveRefractionRightVA: {
       type: 'string',
     },
-    subjectiveRefractionGivenRightAdd: {
+    subjectiveRefractionRightAdd: {
       type: 'number',
     },
-    subjectiveRefractionGivenLeftEyeSphere: {
+    subjectiveRefractionLeftEyeSphere: {
       type: 'number',
     },
-    subjectiveRefractionGivenLeftCylinder: {
+    subjectiveRefractionLeftCylinder: {
       type: 'number',
     },
-    subjectiveRefractionGivenLeftAxis: {
+    subjectiveRefractionLeftAxis: {
       type: 'number',
     },
-    subjectiveRefractionGivenLeftVA: {
+    subjectiveRefractionLeftVA: {
       type: 'string',
     },
-    subjectiveRefractionGivenLeftAdd: {
+    subjectiveRefractionLeftAdd: {
       type: 'number',
     },
     givenRefractionRightEyeSphere: {
@@ -317,31 +317,31 @@ export const consultSchemaLiteral = {
     givenRefractionRightCylinder: {
       type: 'number',
     },
-    givenRefractionGivenRightAxis: {
+    givenRefractionRightAxis: {
       type: 'number',
     },
-    givenRefractionGivenRightVA: {
+    givenRefractionRightVA: {
       type: 'string',
     },
-    givenRefractionGivenRightAdd: {
+    givenRefractionRightAdd: {
       type: 'number',
     },
-    givenRefractionGivenLeftEyeSphere: {
+    givenRefractionLeftEyeSphere: {
       type: 'number',
     },
-    givenRefractionGivenLeftCylinder: {
+    givenRefractionLeftCylinder: {
       type: 'number',
     },
-    givenRefractionGivenLeftAxis: {
+    givenRefractionLeftAxis: {
       type: 'number',
     },
-    givenRefractionGivenLeftVA: {
+    givenRefractionLeftVA: {
       type: 'string',
     },
-    givenRefractionGivenLeftAdd: {
+    givenRefractionLeftAdd: {
       type: 'number',
     },
-    givenRefractionGivenBVA: {
+    givenRefractionBVA: {
       type: 'string',
     },
     deletedAt: {
@@ -351,7 +351,7 @@ export const consultSchemaLiteral = {
       type: 'string',
     },
   },
-  required: ['id'],
+  required: ['id', 'patientId', 'userEmail', 'dateConsentGiven'],
 } as const;
 
 const consultSchemaTyped = toTypedRxJsonSchema(consultSchemaLiteral);

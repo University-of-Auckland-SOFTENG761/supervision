@@ -1,5 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { IPatient } from '@patients';
 import { runPatientReplication, getSuperVisionDatabase } from 'database';
 import { PatientDocument } from 'database/rxdb-utils';
 import {
@@ -16,9 +15,9 @@ import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-g
 import { uuid } from 'uuidv4';
 
 interface IPatientsContext {
-  patients: IPatient[];
+  patients: PatientDocument[];
   newPatient: () => string;
-  updatePatient: (patient: IPatient) => void;
+  updatePatient: (patient: PatientDocument) => void;
 }
 
 const PatientsContext = createContext<Partial<IPatientsContext>>({});
@@ -31,7 +30,7 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
   const [superVisionDb, setSuperVisionDb] = useState<RxDatabase | null>(null);
   const [patientsReplicationState, setPatientsReplicationState] =
     useState<RxGraphQLReplicationState<PatientDocument> | null>(null);
-  const [patients, setPatients] = useState<IPatient[]>([]);
+  const [patients, setPatients] = useState<PatientDocument[]>([]);
   const { isAuthenticated } = useAuth0();
 
   const restartReplication = async () => {
@@ -66,6 +65,9 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
   useEffect(() => {
     if (patientsReplicationState) {
       patientsReplicationState.error$.subscribe(handleReplicationError);
+      patientsReplicationState.received$.subscribe((docs) =>
+        console.log('received data from backend:', docs)
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientsReplicationState]);
@@ -99,7 +101,7 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
   );
 
   const updatePatient = useCallback(
-    (patient: IPatient) => {
+    (patient: PatientDocument) => {
       const oldPatient = patients.find((p) => p.id === patient.id);
       if (
         oldPatient &&
@@ -118,8 +120,7 @@ export const PatientsProvider = ({ children }: PatientsProviderProps) => {
   useEffect(() => {
     if (superVisionDb) {
       superVisionDb['patients'].find().$.subscribe((value) => {
-        const newPatients = JSON.parse(JSON.stringify(value));
-        setPatients(newPatients);
+        setPatients(value);
       });
     }
   }, [superVisionDb]);

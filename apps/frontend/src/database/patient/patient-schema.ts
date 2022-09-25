@@ -74,6 +74,13 @@ export const patientSchemaLiteral = {
     updatedAt: {
       type: 'string',
     },
+    consultIds: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+      },
+    },
   },
   required: ['id'],
 } as const;

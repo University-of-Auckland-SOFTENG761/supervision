@@ -7,6 +7,7 @@ import { addRxPlugin, createRxDatabase, RxDatabase } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
 import { RxDBReplicationGraphQLPlugin } from 'rxdb/plugins/replication-graphql';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+import { runConsultReplication } from './consult/consult-replication';
 import consultSchema from './consult/consult-schema';
 import { patientSchema, runPatientReplication } from './patient';
 
@@ -50,8 +51,12 @@ const createSuperVisionDatabase = async () => {
     },
   });
 
-  // TODO: Initialise replication for each collection via helper functions
+  db.collections['patients'].$.subscribe((event) => {
+    console.log('RXDB EVENT: ', event);
+  });
+
   await runPatientReplication(db);
+  // await runConsultReplication(db);
 };
 
 export const getSuperVisionDatabase = async () => {

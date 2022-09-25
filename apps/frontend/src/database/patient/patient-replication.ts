@@ -52,7 +52,6 @@ const pullQueryBuilder = (doc: PatientDocument) => {
 
   const lastId = doc?.id ? doc.id : uuidv4();
   const lastIdField = `lastId: "${lastId}", `;
-
   const query = `{
     patientReplicationFeed(${minUpdatedAtField}${lastIdField}limit: 5) {
       id,
@@ -79,9 +78,9 @@ const pullQueryBuilder = (doc: PatientDocument) => {
       postcode,
       adminNotes,
       screeningList,
+      consultIds,
     }
   }`;
-
   return {
     query,
     variables: {},
@@ -94,8 +93,7 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
     (doc) => doc.id && (doc.firstName || doc.lastName || doc.dateOfBirth)
   );
 
-  docs = docs.map((doc) => stripMetadata(serializeEnums(doc)));
-
+  const strippedDocs = docs.map((doc) => stripMetadata(serializeEnums(doc)));
   const query = `
           mutation SetPatient($patients: [SetPatientInput!]) {
             setPatients(setPatientsInput: $patients) {
@@ -104,7 +102,7 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
           }
   `;
   const variables = {
-    patients: docs,
+    patients: strippedDocs,
   };
 
   return {
