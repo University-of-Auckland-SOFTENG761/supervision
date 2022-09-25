@@ -4,6 +4,7 @@ import {
   Divider,
   Group,
   ScrollArea,
+  Select,
   Stack,
   Title,
 } from '@mantine/core';
@@ -24,6 +25,8 @@ export type ISpectacles = {
   pupillaryDistance?: number;
   heights?: string;
   spectaclesNotes?: string;
+  orderStatus?: string;
+  associatedPatientUid?: string;
 };
 
 export const SpectacleDetailsPage = () => {
@@ -35,13 +38,15 @@ export const SpectacleDetailsPage = () => {
       firstName: 'Henry',
       lastName: 'Mitchell-Hibbert',
       school: 'University of Auckland',
-      date: new Date(2022, 8, 25),
-      spectaclesCode: '',
+      date: new Date(2022, 8, 22),
+      spectaclesCode: 'some-spec-code',
       colour: 'Black',
-      lensType: '',
+      lensType: 'some-lens-type',
       pupillaryDistance: 120,
-      heights: '',
-      spectaclesNotes: '',
+      heights: '29',
+      spectaclesNotes: 'Sat on his last pair',
+      orderStatus: 'orderSent',
+      associatedPatientUid: 'some-patient-id-123456',
     },
     {
       uid: 'fake_id_1235',
@@ -90,6 +95,8 @@ export const SpectacleDetailsPage = () => {
       pupillaryDistance: spectacles?.pupillaryDistance,
       heights: spectacles?.heights,
       spectaclesNotes: spectacles?.spectaclesNotes,
+      orderStatus: spectacles?.orderStatus,
+      associatedPatientUid: spectacles?.associatedPatientUid,
     }),
     [spectacles]
   );
@@ -116,7 +123,6 @@ export const SpectacleDetailsPage = () => {
           <Title order={3} className={'-mb-3'}>
             Spectacles Dispensing - Vision Bus
           </Title>
-          {/*TODO: stringify date better*/}
           <Title order={3}>
             {spectacles
               ? spectacles.date.toDateString().substring(4)
@@ -142,7 +148,9 @@ export const SpectacleDetailsPage = () => {
         <Title order={3}>Patient Details</Title>
         <Group className="justify-between">
           <Text className="-mb-8">Patient ID</Text>
-          <Text className="-mb-8">placeholder</Text>
+          <Text className="-mb-8">
+            {form.getInputProps('associatedPatientUid').value}
+          </Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
@@ -182,32 +190,34 @@ export const SpectacleDetailsPage = () => {
         <Group className="justify-between">
           <Text className="-mb-8">PD</Text>
           <Text className="-mb-8">
-            {form.getInputProps('pupillaryDistance').value}
+            {form.getInputProps('pupillaryDistance').value + ' mm'}
           </Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-mb-8">Heights</Text>
-          <Text className="-mb-8">{form.getInputProps('school').heights}</Text>
+          <Text className="-mb-8">{form.getInputProps('heights').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-mb-8">Spectacles notes</Text>
           <Text className="-mb-8">
-            {form.getInputProps('Spectacles Notes').value}
+            {form.getInputProps('spectaclesNotes').value}
           </Text>
         </Group>
         <Divider my="xs" />
-        <Title order={3}>Dispensing Status</Title>
-        <Checkbox.Group
-          className="justify-items-stretch"
-          size="md"
-          spacing="xl"
-        >
-          <Checkbox value="ordered" label="Ordered" />
-          <Checkbox value="received" label="Received" />
-          <Checkbox value="dispensed" label="Dispensed" />
-        </Checkbox.Group>
+        {/*<Title order={3} className="-mb-8">Dispensing Status</Title>*/}
+        <Group className="justify-between">
+          <Text>Order status</Text>
+          <Select
+            data={[
+              { value: 'orderSent', label: 'Ordered' },
+              { value: 'readyForDelivery', label: 'Ready' },
+              { value: 'deliveredToPatient', label: 'Delivered' },
+            ]}
+            {...form.getInputProps('orderStatus')}
+          />
+        </Group>
       </Stack>
     </ScrollArea>
   );
