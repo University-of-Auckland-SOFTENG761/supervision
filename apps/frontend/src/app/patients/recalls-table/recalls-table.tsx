@@ -5,17 +5,17 @@ import dayjs from 'dayjs';
 import React from 'react';
 
 type RecallsTableProps = {
-  userConsults: ConsultDocument[];
+  patientConsults: ConsultDocument[];
 };
 
-export const RecallsTable = ({ userConsults }: RecallsTableProps) => {
+export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
   const applyDateFormat = (date?: Date) => dayjs(date).format('DD/MM/YYYY');
 
   return (
     <Stack>
       <Text className="-mb-3 text-sm">Recalls</Text>
-      {userConsults.every((consult) => consult.recallDate) ? (
-        <Table striped theme={TableTheme.Primary}>
+      {patientConsults.some((consult) => consult.recallDate) ? (
+        <Table theme={TableTheme.Primary}>
           <thead>
             <tr>
               <th>RECALL DATE</th>
@@ -23,7 +23,7 @@ export const RecallsTable = ({ userConsults }: RecallsTableProps) => {
             </tr>
           </thead>
           <tbody>
-            {userConsults?.map((record) => (
+            {patientConsults?.map((record) => (
               <tr key={record.id}>
                 <td>
                   {record.recallDate &&

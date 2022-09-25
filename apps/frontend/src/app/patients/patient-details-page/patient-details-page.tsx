@@ -11,11 +11,11 @@ export const PatientDetailsPage = () => {
   const { consults } = useDatabase();
   const [searchParams] = useSearchParams();
   const patientId = searchParams.get('patientId');
-  const [userConsults, setUserConsults] = useState<ConsultDocument[]>([]);
+  const [patientConsults, setPatientConsults] = useState<ConsultDocument[]>([]);
 
   useEffect(() => {
     if (!consults || !patientId) return;
-    setUserConsults(
+    setPatientConsults(
       consults.filter((consult) => consult.patientId === patientId) ?? []
     );
   }, [patientId, consults]);
@@ -33,12 +33,12 @@ export const PatientDetailsPage = () => {
               { maxWidth: 1280, cols: 3, spacing: 100 },
             ]}
           >
-            <PatientInputs userConsults={userConsults} />
+            <PatientInputs patientConsults={patientConsults} />
           </SimpleGrid>
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button className="ml-auto">CREATE NEW RECORD</Button>
           </div>
-          <PatientRecords className="pb-5" userConsults={userConsults} />
+          <PatientRecords className="pb-5" patientConsults={patientConsults} />
         </ScrollArea>
       ) : (
         <Center className="h-full">

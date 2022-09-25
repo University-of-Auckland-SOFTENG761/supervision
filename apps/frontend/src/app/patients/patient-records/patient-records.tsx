@@ -7,12 +7,12 @@ import { DispensingRecordsTable } from '../dispensing-records-table';
 
 type PatientRecordsProps = {
   className?: string;
-  userConsults: ConsultDocument[];
+  patientConsults: ConsultDocument[];
 };
 
 export const PatientRecords = ({
   className,
-  userConsults,
+  patientConsults,
 }: PatientRecordsProps) => {
   return (
     <Tabs variant="outline" defaultValue="consult" className={className}>
@@ -26,7 +26,7 @@ export const PatientRecords = ({
       </Tabs.List>
 
       <Tabs.Panel value="consult" className="p-3">
-        <ConsultRecordsTable userConsults={userConsults} />
+        <ConsultRecordsTable patientConsults={patientConsults} />
       </Tabs.Panel>
       <Tabs.Panel value="dispensing" className="p-3">
         <DispensingRecordsTable />

@@ -15,10 +15,10 @@ import { ConsultDocument, PatientDocument } from 'database/rxdb-utils';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
-  userConsults: ConsultDocument[];
+  patientConsults: ConsultDocument[];
 };
 
-export const PatientInputs = ({ userConsults }: PatientInputsProps) => {
+export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
   const { patients, updatePatient } = useDatabase();
 
   const [searchParams] = useSearchParams();
@@ -185,7 +185,7 @@ export const PatientInputs = ({ userConsults }: PatientInputsProps) => {
           minRows={3}
           {...form.getInputProps('adminNotes')}
         />
-        <RecallsTable userConsults={userConsults} />
+        <RecallsTable patientConsults={patientConsults} />
       </Stack>
     </>
   );
