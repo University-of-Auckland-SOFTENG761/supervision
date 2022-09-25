@@ -56,10 +56,10 @@ export const SpectaclesListPage = () => {
         <Table theme={TableTheme.Primary}>
           <thead>
             <tr>
+              <th>Date</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>School</th>
-              <th>Date</th>
             </tr>
           </thead>
           <tbody>
@@ -69,7 +69,7 @@ export const SpectaclesListPage = () => {
                 onClick={() => navigate(`/spectacles-details/${record.uid}`)}
               >
                 {/*TODO: improve date format*/}
-                <td>{record.date.toDateString()}</td>
+                <td>{record.date.toISOString().split('T')[0]}</td>
                 <td>{record.firstName}</td>
                 <td>{record.lastName}</td>
                 <td>{record.school}</td>
