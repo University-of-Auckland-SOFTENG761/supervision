@@ -12,7 +12,7 @@ import { ConsultsModule } from '@supervision/consults/consults.module';
 import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 import { PatientsModule } from '@supervision/patients';
-import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
+import { ErrorlessDateScalar } from './hacks/errorless-date.scalar';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,7 +26,7 @@ import { DateOfBirthScalar } from './patients/graphql/date-of-birth.scalar';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
-      resolvers: { DateOfBirth: DateOfBirthScalar },
+      resolvers: { ErrorlessDate: ErrorlessDateScalar },
       cache: 'bounded',
     }),
     HealthModule,

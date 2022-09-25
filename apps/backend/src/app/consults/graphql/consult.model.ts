@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { ErrorlessDateScalar } from '@supervision/hacks/errorless-date.scalar';
 import { BaseModel } from '@supervision/shared';
 
 @ObjectType({ description: 'consult' })
@@ -9,7 +10,7 @@ export class ConsultModel extends BaseModel {
   @Field({ nullable: false })
   patientId: string;
 
-  @Field({ nullable: false })
+  @Field(() => ErrorlessDateScalar, { nullable: false })
   dateConsentGiven: Date;
 
   @Field({ nullable: true })

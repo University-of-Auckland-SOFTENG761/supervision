@@ -49,7 +49,6 @@ const pullQueryBuilder = (doc: PatientDocument) => {
     ? new Date(doc.updatedAt).toISOString()
     : new Date(0).toISOString();
   const minUpdatedAtField = `minUpdatedAt: "${updatedAt}", `;
-
   const lastId = doc?.id ? doc.id : uuidv4();
   const lastIdField = `lastId: "${lastId}", `;
   const query = `{
@@ -92,7 +91,6 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   docs = docs.filter(
     (doc) => doc.id && (doc.firstName || doc.lastName || doc.dateOfBirth)
   );
-
   const strippedDocs = docs.map((doc) => stripMetadata(serializeEnums(doc)));
   const query = `
           mutation SetPatient($patients: [SetPatientInput!]) {

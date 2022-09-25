@@ -99,6 +99,8 @@ export class ConsultsService {
       .orderBy('consult.updatedAt', 'ASC')
       .addOrderBy('consult.id')
       .take(limit)
+      .leftJoinAndSelect('consult.user', 'user')
+      .leftJoinAndSelect('consult.patient', 'patient')
       .withDeleted()
       .getMany();
   }

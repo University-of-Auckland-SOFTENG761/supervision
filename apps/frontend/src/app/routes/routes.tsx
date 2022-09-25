@@ -15,9 +15,9 @@ const Routes = () => {
           path="/patient-details"
           element={<ProtectedRoute component={<PatientDetailsPage />} />}
         />
-        <Route 
-          path="/consult-details" 
-          element={<ProtectedRoute component={<ConsultDetailsPage />} />} 
+        <Route
+          path="/consult-details"
+          element={<ProtectedRoute component={<ConsultDetailsPage />} />}
         />
       </Route>
     </RRRoutes>

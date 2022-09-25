@@ -11,17 +11,17 @@ import {
 } from '@mantine/core';
 import React from 'react';
 import { useForm } from '@mantine/form';
-import { IConsult } from '../consult-details-page';
 import { VisualAcuityInputs } from './visual-acuity-inputs';
 import { TimeInput } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
 import { EyePressureInputs } from './eye-pressure-inputs';
+import { ConsultDocument } from 'database/rxdb-utils';
 
 type ConsultDetailsUpperProps = {
-  consult: IConsult;
-  onUpdateConsult: (updatedConsult: IConsult) => void;
+  consult: ConsultDocument;
+  onUpdateConsult: (updatedConsult: ConsultDocument) => void;
 };
 
 export const ConsultDetailsUpper = ({
@@ -120,7 +120,10 @@ export const ConsultDetailsUpper = ({
                     const checked: boolean = event.currentTarget.checked;
                     const timestamp = checked ? new Date() : undefined;
                     form.setFieldValue('isCyclopentolate', checked);
-                    form.setFieldValue('cyclopentolateTimestamp', timestamp);
+                    form.setFieldValue(
+                      'cyclopentolateTimestamp',
+                      timestamp?.toString()
+                    );
                   }}
                 />
                 <TimeInput
@@ -142,7 +145,10 @@ export const ConsultDetailsUpper = ({
                     const checked: boolean = event.currentTarget.checked;
                     const timestamp = checked ? new Date() : undefined;
                     form.setFieldValue('isTropicamide', checked);
-                    form.setFieldValue('tropicamideTimestamp', timestamp);
+                    form.setFieldValue(
+                      'tropicamideTimestamp',
+                      timestamp?.toString()
+                    );
                   }}
                 />
                 <TimeInput
@@ -269,7 +275,7 @@ export const ConsultDetailsUpper = ({
                 const nextDate = value
                   ? dayjs().add(parseInt(value), 'month')
                   : undefined;
-                form.setFieldValue('recallDate', nextDate?.toDate());
+                form.setFieldValue('recallDate', nextDate?.toDate().toString());
               }}
             />
             <TextInput

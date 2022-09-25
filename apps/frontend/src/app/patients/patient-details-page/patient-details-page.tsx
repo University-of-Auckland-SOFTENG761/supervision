@@ -4,44 +4,16 @@ import { Button } from '@shared';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
-
-export type IPatient = {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-  dateOfBirth?: string;
-  ethnicity?: string;
-  gender?: string;
-  school?: string;
-  yearLevel?: number;
-  room?: string;
-  streetAddress?: string;
-  suburb?: string;
-  city?: string;
-  postcode?: string;
-  caregiverFirstName?: string;
-  caregiverLastName?: string;
-  phoneNumber?: string;
-  email?: string;
-  adminNotes?: string;
-};
+import { useSearchParams } from 'react-router-dom';
 
 export const PatientDetailsPage = () => {
-  const [currentPatientUid, setCurrentPatientUid] = useState<
-    string | undefined
-  >();
-
-  const handlePatientChange = useCallback((uid: string) => {
-    setCurrentPatientUid(uid);
-  }, []);
+  const [searchParams] = useSearchParams();
+  const patientId = searchParams.get('patientId');
 
   return (
     <>
-      <PatientTabs
-        currentPatientUid={currentPatientUid}
-        onPatientChange={handlePatientChange}
-      />
-      {currentPatientUid ? (
+      <PatientTabs />
+      {patientId ? (
         <ScrollArea className="h-full p-8">
           <SimpleGrid
             cols={3}
@@ -51,7 +23,7 @@ export const PatientDetailsPage = () => {
               { maxWidth: 1280, cols: 3, spacing: 100 },
             ]}
           >
-            <PatientInputs patientUid={currentPatientUid} />
+            <PatientInputs />
           </SimpleGrid>
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button className="ml-auto">CREATE NEW RECORD</Button>

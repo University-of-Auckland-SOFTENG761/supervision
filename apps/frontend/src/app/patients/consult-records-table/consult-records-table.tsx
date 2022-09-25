@@ -1,38 +1,33 @@
-import { Table, TableTheme } from '@shared';
-import React from 'react';
+import { Table, TableTheme, useDatabase } from '@shared';
+import { ConsultDocument } from 'database/rxdb-utils';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 export const ConsultRecordsTable = () => {
-  // TODO: Replace with actual data
-  const consultRecords = [
-    {
-      date: '21/08/2022',
-      rxRight: '+4.00/-3.00x180',
-      rxRightEyeSphere: '+4.00',
-      rxRightCylinder: '-3.00',
-      rxRightAxis: '180',
-      rxLeft: '+4.00/-3.00x180',
-      rxLeftEyeSphere: '+4.00',
-      rxLeftCylinder: '-3.00',
-      rxLeftAxis: '180',
-      pd: '62',
-      diagnosis: 'Myopia',
-      management: 'Glasses',
-    },
-    {
-      date: '18/02/2019',
-      rxRight: '+4.00/-3.00x180',
-      rxRightEyeSphere: '+4.00',
-      rxRightCylinder: '-3.00',
-      rxRightAxis: '180',
-      rxLeft: '+4.00/-3.00x180',
-      rxLeftEyeSphere: '+4.00',
-      rxLeftCylinder: '-3.00',
-      rxLeftAxis: '180',
-      pd: '62',
-      diagnosis: 'Myopia',
-      management: 'Contact Lenses',
-    },
-  ];
+  const { consults } = useDatabase();
+  const [searchParams] = useSearchParams();
+  const patientId = searchParams.get('patientId');
+  const [userConsults, setUserConsults] = useState<ConsultDocument[]>([]);
+  console.log('user consults: ', userConsults);
+
+  useEffect(() => {
+    if (!consults || !patientId) return;
+    setUserConsults(
+      consults.filter((consult) => consult.patientId === patientId) ?? []
+    );
+  }, [patientId, consults]);
+
+  const applyRefractionFormat = (
+    eyeSphere?: number,
+    eyeCylinder?: number,
+    axis?: number
+  ) =>
+    `${eyeSphere?.toFixed(2) ?? '-.--'} / ${
+      eyeCylinder?.toFixed(2) ?? '-.--'
+    } x ${axis ?? '--'}`;
+
+  const applyDateFormat = (date?: Date) => dayjs(date).format('DD/MM/YYYY');
 
   return (
     <Table theme={TableTheme.Primary}>
@@ -46,22 +41,22 @@ export const ConsultRecordsTable = () => {
         </tr>
       </thead>
       <tbody>
-        {consultRecords.map((record) => (
-          <tr key={record.date}>
-            <td>{record.date}</td>
+        {userConsults?.map((record) => (
+          <tr key={record.id}>
+            <td>{applyDateFormat(new Date(record.dateConsentGiven))}</td>
             <td>
-              {record.rxRightEyeSphere +
-                '/' +
-                record.rxRightCylinder +
-                'x' +
-                record.rxRightAxis}
+              {applyRefractionFormat(
+                record.givenRefractionRightEyeSphere,
+                record.givenRefractionRightCylinder,
+                record.givenRefractionRightAxis
+              )}
             </td>
             <td>
-              {record.rxLeftEyeSphere +
-                '/' +
-                record.rxLeftCylinder +
-                'x' +
-                record.rxLeftAxis}
+              {applyRefractionFormat(
+                record.givenRefractionLeftEyeSphere,
+                record.givenRefractionLeftCylinder,
+                record.givenRefractionLeftAxis
+              )}
             </td>
             <td>{record.diagnosis}</td>
             <td>{record.management}</td>

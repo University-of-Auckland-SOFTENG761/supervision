@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
@@ -9,20 +9,21 @@ import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
-import { IPatient } from '../patient-details-page';
-import { usePatients } from '@shared';
+import { useDatabase } from '@shared';
+import { useSearchParams } from 'react-router-dom';
 import { PatientDocument } from 'database/rxdb-utils';
 dayjs.extend(customParseFormat);
 
-type PatientInputsProps = {
-  patientUid?: string;
-};
+export const PatientInputs = () => {
+  const { patients, updatePatient } = useDatabase();
 
-export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
-  const { patients, updatePatient } = usePatients();
-  const patient = patientUid
-    ? patients?.find((p: IPatient) => p.id === patientUid)
+  const [searchParams] = useSearchParams();
+  const patientId = searchParams.get('patientId');
+
+  const patient = patientId
+    ? patients?.find((p) => p.id === patientId)
     : undefined;
+
   const [patientAge, setPatientAge] = useState(
     patient?.dateOfBirth
       ? calculateAge(new Date(patient?.dateOfBirth))
@@ -31,7 +32,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
 
   const buildFormValues = useCallback(
     () => ({
-      id: patient?.id,
+      id: patient?.id ?? '',
       firstName: patient?.firstName ?? '',
       lastName: patient?.lastName ?? '',
       dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
@@ -133,11 +134,7 @@ export const PatientInputs = ({ patientUid }: PatientInputsProps) => {
             disabled
           />
         </Group>
-        <TextInput
-          label="Patient ID:"
-          {...form.getInputProps('patientId')}
-          disabled
-        />
+        <TextInput label="Patient ID:" {...form.getInputProps('id')} disabled />
         <EthnicitySelect {...form.getInputProps('ethnicity')} />
         <GenderSelect {...form.getInputProps('gender')} />
         <SchoolAutocomplete label="School" {...form.getInputProps('school')} />

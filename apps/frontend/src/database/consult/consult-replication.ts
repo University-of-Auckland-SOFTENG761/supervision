@@ -60,17 +60,17 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
       spectacleNotes,
       recallDate,
       recallDescription,
-      prevSpecRxRightEyeSphere,
-      prevSpecRxRightCylinder,
-      prevSpecRxRightAxis,
-      prevSpecRxRightVA,
-      prevSpecRxRightAdd,
-      prevSpecRxLeftEyeSphere,
-      prevSpecRxLeftCylinder,
-      prevSpecRxLeftAxis,
-      prevSpecRxLeftVA,
-      prevSpecRxLeftAdd,
-      prevSpecRxBVA,
+      prevSpecRxGivenRightEyeSphere,
+      prevSpecRxGivenRightCylinder,
+      prevSpecRxGivenRightAxis,
+      prevSpecRxGivenRightVA,
+      prevSpecRxGivenRightAdd,
+      prevSpecRxGivenLeftEyeSphere,
+      prevSpecRxGivenLeftCylinder,
+      prevSpecRxGivenLeftAxis,
+      prevSpecRxGivenLeftVA,
+      prevSpecRxGivenLeftAdd,
+      prevSpecRxGivenBVA,
       habitualRightEyeSphere,
       habitualRightCylinder,
       habitualRightAxis,
@@ -134,11 +134,11 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
       givenRefractionBVA,
     }
   }`;
-
-  return {
+  const result = {
     query,
     variables: {},
   };
+  return result;
 };
 
 const pushQueryBuilder = (docs: ConsultDocument[]) => {
@@ -205,7 +205,11 @@ export const runConsultReplication = async (db: RxDatabase) => {
       ? 'Consult replication started'
       : 'Consult replication not started'
   );
-  replicationState?.run();
+  try {
+    replicationState?.run();
+  } catch (e) {
+    console.log('Consult replication failed', e);
+  }
 
   return replicationState;
 };

@@ -1,7 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
 import { Ethnicity, Gender } from '@supervision/patients';
-import { DateOfBirthScalar } from './date-of-birth.scalar';
+import { ErrorlessDateScalar } from '@supervision/hacks/errorless-date.scalar';
 
 registerEnumType(Ethnicity, {
   name: 'Ethnicity',
@@ -19,7 +19,7 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: true })
   lastName: string;
 
-  @Field(() => DateOfBirthScalar, { nullable: true })
+  @Field(() => ErrorlessDateScalar, { nullable: true })
   dateOfBirth: Date;
 
   @Field(() => Gender, { nullable: true })

@@ -1,20 +1,20 @@
-import { IConsult } from '../consult-details-page';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
+import { ConsultDocument } from 'database/rxdb-utils';
 
 type ConsultDetailsProps = {
-  consult: IConsult;
-  onUpdateConsult: (updatedConsult: IConsult) => void;
+  consult: ConsultDocument;
+  onUpdateConsult: (updatedConsult: ConsultDocument) => void;
 };
 
 export const ConsultInputs = ({
   consult,
   onUpdateConsult,
 }: ConsultDetailsProps) => {
-  const [consultUid, setConsultUid] = useState(consult.uid);
+  const [consultId, setConsultId] = useState(consult.id);
 
   const form = useForm({
     initialValues: {
@@ -23,13 +23,11 @@ export const ConsultInputs = ({
   });
 
   useEffect(() => {
-    if (consult.uid !== consultUid) {
-      setConsultUid(consult.uid);
-      form.setValues({
-        uid: consult.uid,
-      });
+    if (consult.id !== consultId) {
+      setConsultId(consult.id);
+      form.setValues(consult);
     }
-  }, [form, consultUid, consult]);
+  }, [form, consultId, consult]);
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 

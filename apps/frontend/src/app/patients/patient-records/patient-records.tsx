@@ -7,9 +7,10 @@ import { DispensingRecordsTable } from '../dispensing-records-table';
 type PatientRecordsProps = {
   className?: string;
 };
-export const PatientRecords = (props: PatientRecordsProps) => {
+
+export const PatientRecords = ({ className }: PatientRecordsProps) => {
   return (
-    <Tabs variant="outline" defaultValue="consult" className={props.className}>
+    <Tabs variant="outline" defaultValue="consult" className={className}>
       <Tabs.List>
         <Tabs.Tab value="consult" icon={<IconEye size={20} />}>
           Consult Records

@@ -1,12 +1,12 @@
-import { IConsult } from '../consult-details-page';
 import { Table, TableTheme, Button } from '@shared';
 import { TextInput, Grid, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
+import { ConsultDocument } from 'database/rxdb-utils';
 
 type ConsultDetailsLowerProps = {
-  consult: IConsult;
-  onUpdateConsult: (updatedConsult: IConsult) => void;
+  consult: ConsultDocument;
+  onUpdateConsult: (updatedConsult: ConsultDocument) => void;
 };
 
 export const ConsultDetailsLower = ({

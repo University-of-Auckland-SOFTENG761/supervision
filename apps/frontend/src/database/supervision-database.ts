@@ -56,7 +56,7 @@ const createSuperVisionDatabase = async () => {
   });
 
   await runPatientReplication(db);
-  // await runConsultReplication(db);
+  await runConsultReplication(db);
 };
 
 export const getSuperVisionDatabase = async () => {
