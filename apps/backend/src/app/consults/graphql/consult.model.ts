@@ -112,7 +112,7 @@ export class ConsultModel extends BaseModel {
   @Field({ nullable: true })
   spectacleNotes: string;
 
-  @Field({ nullable: true })
+  @Field(() => ErrorlessDateScalar, { nullable: true })
   recallDate: Date;
 
   @Field({ nullable: true })

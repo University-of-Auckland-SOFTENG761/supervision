@@ -1,23 +1,15 @@
-import { Table, TableTheme, useDatabase } from '@shared';
+import { Table, TableTheme } from '@shared';
 import { ConsultDocument } from 'database/rxdb-utils';
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React from 'react';
 import dayjs from 'dayjs';
 
-export const ConsultRecordsTable = () => {
-  const { consults } = useDatabase();
-  const [searchParams] = useSearchParams();
-  const patientId = searchParams.get('patientId');
-  const [userConsults, setUserConsults] = useState<ConsultDocument[]>([]);
-  console.log('user consults: ', userConsults);
+type ConsultRecordsTableProps = {
+  userConsults: ConsultDocument[];
+};
 
-  useEffect(() => {
-    if (!consults || !patientId) return;
-    setUserConsults(
-      consults.filter((consult) => consult.patientId === patientId) ?? []
-    );
-  }, [patientId, consults]);
-
+export const ConsultRecordsTable = ({
+  userConsults,
+}: ConsultRecordsTableProps) => {
   const applyRefractionFormat = (
     eyeSphere?: number,
     eyeCylinder?: number,

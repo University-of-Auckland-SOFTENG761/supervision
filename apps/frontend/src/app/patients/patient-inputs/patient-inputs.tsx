@@ -11,10 +11,14 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
 import { useDatabase } from '@shared';
 import { useSearchParams } from 'react-router-dom';
-import { PatientDocument } from 'database/rxdb-utils';
+import { ConsultDocument, PatientDocument } from 'database/rxdb-utils';
 dayjs.extend(customParseFormat);
 
-export const PatientInputs = () => {
+type PatientInputsProps = {
+  userConsults: ConsultDocument[];
+};
+
+export const PatientInputs = ({ userConsults }: PatientInputsProps) => {
   const { patients, updatePatient } = useDatabase();
 
   const [searchParams] = useSearchParams();
@@ -181,7 +185,7 @@ export const PatientInputs = () => {
           minRows={3}
           {...form.getInputProps('adminNotes')}
         />
-        <RecallsTable />
+        <RecallsTable userConsults={userConsults} />
       </Stack>
     </>
   );
