@@ -8,7 +8,10 @@ const ping = async () => {
   if (!navigator.onLine) return false;
 
   try {
-    const url = new URL('health', environment.api_url);
+    const url = new URL(
+      !environment.production ? 'graphql' : 'health',
+      environment.api_url
+    );
     await fetch(url);
     return true;
   } catch (error) {
