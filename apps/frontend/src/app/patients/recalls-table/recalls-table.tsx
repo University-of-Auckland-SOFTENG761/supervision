@@ -1,23 +1,43 @@
+import { Stack, Text } from '@mantine/core';
 import { Table, TableTheme } from '@shared';
+import { ConsultDocument } from 'database/rxdb-utils';
+import dayjs from 'dayjs';
 import React from 'react';
 
-export const RecallsTable = () => {
+type RecallsTableProps = {
+  patientConsults: ConsultDocument[];
+};
+
+export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
+  const applyDateFormat = (date?: Date) => dayjs(date).format('DD/MM/YYYY');
+
   return (
-    <Table striped theme={TableTheme.Primary}>
-      <thead>
-        <tr>
-          <th>RECALLS</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>16/02/2021</td>
-        </tr>
-        <tr>
-          <td>18/08/2019</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Stack>
+      <Text className="-mb-3 text-sm">Recalls</Text>
+      {patientConsults.some((consult) => consult.recallDate) ? (
+        <Table theme={TableTheme.Primary}>
+          <thead>
+            <tr>
+              <th>RECALL DATE</th>
+              <th>DESCRIPTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            {patientConsults?.map((record) => (
+              <tr key={record.id}>
+                <td>
+                  {record.recallDate &&
+                    applyDateFormat(new Date(record.recallDate))}
+                </td>
+                <td>{record.recallDescription}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <Text className="text-sm">No recalls yet!</Text>
+      )}
+    </Stack>
   );
 };
 
