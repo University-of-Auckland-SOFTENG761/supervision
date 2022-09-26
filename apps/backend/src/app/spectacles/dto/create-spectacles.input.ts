@@ -15,13 +15,7 @@ export class CreateSpectaclesInput {
   consultId: string;
 
   @Field({
-    description: 'ID of associated patient',
-    nullable: false,
-  })
-  userId: string;
-
-  @Field({
-    description: 'ID of user who should deliver the spectacle', // * See spectacle.entity.ts
+    description: 'ID of user who should deliver the spectacle',
     nullable: false,
   })
   patientId: string;

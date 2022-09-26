@@ -2,7 +2,6 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { ConsultModel } from '@supervision/consults';
 import { PatientModel } from '@supervision/patients';
 import { BaseModel } from '@supervision/shared';
-import { UserModel } from '@supervision/users';
 import { OrderStatus } from '../database';
 
 @ObjectType({ description: 'spectacles' })
@@ -12,9 +11,6 @@ export class SpectaclesModel extends BaseModel {
 
   @Field(() => PatientModel, { nullable: false })
   patient: PatientModel;
-
-  @Field(() => UserModel, { nullable: false })
-  user: UserModel;
 
   @Field({ nullable: false })
   code: string;

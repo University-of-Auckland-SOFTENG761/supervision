@@ -18,7 +18,6 @@ export class SpectaclesService {
     const newSpectacles = await this.spectaclesRepository.create({
       consult: { id: spectacles.consultId },
       patient: { id: spectacles.patientId },
-      user: { id: spectacles.userId },
       ...spectacles,
     });
     return await this.spectaclesRepository.save(newSpectacles);
