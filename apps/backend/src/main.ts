@@ -15,9 +15,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('app.port');
 
-  app.enableCors({
-    origin: 'https://uoa-supervision.org',
-  });
+  if (configService.get('app.isProduction')) {
+    app.enableCors({
+      origin: 'https://uoa-supervision.org',
+    });
+  }
 
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/graphql`);
