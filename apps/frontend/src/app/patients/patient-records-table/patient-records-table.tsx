@@ -6,7 +6,6 @@ export const PatientRecordsTable = ({
 }: {
   patientRecords: IPatient[];
 }) => {
-
   return (
     <Table theme={TableTheme.Primary}>
       <thead>
