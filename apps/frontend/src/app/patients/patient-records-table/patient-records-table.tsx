@@ -21,9 +21,11 @@ export const PatientRecordsTable = ({
             <td>
               {record.firstName} {record.lastName}
             </td>
-            <td>{record.dateOfBirth
+            <td>
+              {record.dateOfBirth
                 ? new Date(record.dateOfBirth).toLocaleDateString()
-                : undefined}</td>
+                : undefined}
+            </td>
             <td>{record.school}</td>
           </tr>
         ))}
