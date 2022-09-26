@@ -12,7 +12,6 @@ import { ConsultsModule } from '@supervision/consults/consults.module';
 import { HealthModule } from '@supervision/health';
 import { UsersModule } from '@supervision/users';
 import { PatientsModule } from '@supervision/patients';
-import { ErrorlessDateScalar } from './hacks/errorless-date.scalar';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,7 +25,6 @@ import { ErrorlessDateScalar } from './hacks/errorless-date.scalar';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
-      resolvers: { ErrorlessDate: ErrorlessDateScalar },
       cache: 'bounded',
     }),
     HealthModule,
