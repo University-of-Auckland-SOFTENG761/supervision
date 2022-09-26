@@ -112,22 +112,6 @@ export class ConsultEntity extends BaseEntity {
   @Column('varchar', { nullable: true })
   layPersonNotes: string;
 
-  @Column('varchar', { length: 20, nullable: true })
-  spectacleCode: string;
-
-  @Column('varchar', { length: 20, nullable: true })
-  spectacleColour: string;
-
-  @Column('varchar', { length: 20, nullable: true })
-  spectacleLensType: string;
-
-  @Column('varchar', { length: 20, nullable: true, default: 'Datum' })
-  spectacleHeights: string;
-
-  @Column('varchar', { nullable: true })
-  spectacleNotes: string;
-
-  // RECALL COULD BE SUBJECT TO CHANGE
   @Column('date', { nullable: true })
   recallDate: Date;
 

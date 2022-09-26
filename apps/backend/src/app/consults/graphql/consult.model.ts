@@ -103,21 +103,6 @@ export class ConsultModel extends BaseModel {
   layPersonNotes: string;
 
   @Field({ nullable: true })
-  spectacleCode: string;
-
-  @Field({ nullable: true })
-  spectacleColour: string;
-
-  @Field({ nullable: true })
-  spectacleLensType: string;
-
-  @Field({ nullable: true })
-  spectacleHeights: string;
-
-  @Field({ nullable: true })
-  spectacleNotes: string;
-
-  @Field({ nullable: true })
   recallDate: Date;
 
   @Field({ nullable: true })
