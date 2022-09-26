@@ -85,7 +85,7 @@ export const patientSchemaLiteral = {
   required: ['id'],
 } as const;
 
-const patientSchemaTyped = toTypedRxJsonSchema(patientSchemaLiteral);
+export const patientSchemaTyped = toTypedRxJsonSchema(patientSchemaLiteral);
 export type PatientDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof patientSchemaTyped
 >;

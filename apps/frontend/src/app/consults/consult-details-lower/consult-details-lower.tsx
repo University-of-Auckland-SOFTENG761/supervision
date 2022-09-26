@@ -1,24 +1,14 @@
 import { Table, TableTheme, Button } from '@shared';
 import { TextInput, Grid, Stack } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { UseFormReturnType } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
-import { ConsultDocument } from 'database/rxdb-utils';
+import { FormInputType } from '../consult-inputs';
 
 type ConsultDetailsLowerProps = {
-  consult: ConsultDocument;
-  onUpdateConsult: (updatedConsult: ConsultDocument) => void;
+  form: UseFormReturnType<FormInputType>;
 };
 
-export const ConsultDetailsLower = ({
-  consult,
-  onUpdateConsult,
-}: ConsultDetailsLowerProps) => {
-  const form = useForm({
-    initialValues: {
-      ...consult,
-    },
-  });
-
+export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
   const consultRows = [
     {
       name: 'Previous Spectacle Rx',

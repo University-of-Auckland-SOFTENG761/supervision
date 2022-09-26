@@ -135,12 +135,6 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
     [online, superVisionDb, user, userEmail]
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const stripRevision = (doc: any) => {
-    const { revision, ...strippedDoc } = doc;
-    return strippedDoc;
-  };
-
   const documentsAreEqual = useCallback(
     (
       a: PatientDocument | ConsultDocument,
@@ -148,12 +142,15 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
     ) => {
       const aJSON =
         a.toJSON !== undefined
-          ? JSON.stringify(stripRevision(a.toJSON()))
+          ? JSON.stringify(
+              stripMetadata(a.toJSON() as ConsultDocument | PatientDocument)
+            )
           : JSON.stringify(stripMetadata(a));
-      console.log('A', aJSON);
       const bJSON =
         b.toJSON !== undefined
-          ? JSON.stringify(stripRevision(b.toJSON()))
+          ? JSON.stringify(
+              stripMetadata(b.toJSON() as ConsultDocument | PatientDocument)
+            )
           : JSON.stringify(stripMetadata(b));
       return aJSON === bJSON;
     },

@@ -1,35 +1,114 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from '@mantine/form';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
-import { ConsultDocument } from 'database/rxdb-utils';
+import {
+  buildFormValues,
+  ConsultDocument,
+  stripUnusedFields,
+} from 'database/rxdb-utils';
+import { useDatabase } from '@shared';
+import { useSearchParams } from 'react-router-dom';
+import { ConsultDocType, consultSchemaTyped } from 'database';
 
-type ConsultDetailsProps = {
-  consult: ConsultDocument;
-  onUpdateConsult: (updatedConsult: ConsultDocument) => void;
+type TimestampFilter =
+  | 'eyePressureTimestamp'
+  | 'cyclopentolateTimestamp'
+  | 'tropicamideTimestamp';
+
+type FormTimestamps = {
+  [key in TimestampFilter]: Date | null;
 };
 
-export const ConsultInputs = ({
-  consult,
-  onUpdateConsult,
-}: ConsultDetailsProps) => {
-  const [consultId, setConsultId] = useState(consult.id);
+// const unionOfNumberKeys = Object.entries(consultSchemaTyped.properties).reduce(
+//   (keys: (keyof ConsultDocType)[], [key, value]) => {
+//     if (value.type === 'number') {
+//       return keys.concat([key as keyof ConsultDocType]);
+//     }
+//     return keys;
+//   },
+//   []
+// );
+
+// type NumberKeysFilter = typeof unionOfNumberKeys[number];
+
+// console.log(unionOfNumberKeys);
+
+// type FormNumbers = {
+//   [key in NumberKeysFilter]: number | null;
+// };
+
+export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
+  FormTimestamps;
+
+export const ConsultInputs = () => {
+  const { consults, updateConsult } = useDatabase();
+
+  const [searchParams] = useSearchParams();
+  const consultId = searchParams.get('consultId');
+
+  const consult = consultId
+    ? consults?.find((p) => p.id === consultId)
+    : undefined;
 
   const form = useForm({
     initialValues: {
-      ...consult,
-    },
+      ...buildFormValues(
+        consultSchemaTyped,
+        consult?.toJSON !== undefined ? consult.toJSON() : consult
+      ),
+      eyePressureTimestamp: consult?.eyePressureTimestamp
+        ? new Date(consult?.eyePressureTimestamp)
+        : null,
+      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
+        ? new Date(consult?.cyclopentolateTimestamp)
+        : null,
+      tropicamideTimestamp: consult?.tropicamideTimestamp
+        ? new Date(consult?.tropicamideTimestamp)
+        : null,
+    } as FormInputType,
   });
 
   useEffect(() => {
-    if (consult.id !== consultId) {
-      setConsultId(consult.id);
-      form.setValues(consult);
-    }
-  }, [form, consultId, consult]);
+    form.setValues({
+      ...buildFormValues(
+        consultSchemaTyped,
+        consult?.toJSON !== undefined ? consult.toJSON() : consult
+      ),
+      eyePressureTimestamp: consult?.eyePressureTimestamp
+        ? new Date(consult?.eyePressureTimestamp)
+        : null,
+      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
+        ? new Date(consult?.cyclopentolateTimestamp)
+        : null,
+      tropicamideTimestamp: consult?.tropicamideTimestamp
+        ? new Date(consult?.tropicamideTimestamp)
+        : null,
+    } as FormInputType);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [consults]);
 
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const buildConsultDocument = () => {
+    const strippedFormInputs = stripUnusedFields(form.values) as FormInputType;
+    const newConsult = {
+      ...strippedFormInputs,
+      eyePressureTimestamp: strippedFormInputs.eyePressureTimestamp
+        ? new Date(strippedFormInputs.eyePressureTimestamp).toISOString()
+        : undefined,
+      cyclopentolateTimestamp: strippedFormInputs.cyclopentolateTimestamp
+        ? new Date(strippedFormInputs.cyclopentolateTimestamp).toISOString()
+        : undefined,
+      tropicamideTimestamp: strippedFormInputs.tropicamideTimestamp
+        ? new Date(strippedFormInputs.tropicamideTimestamp).toISOString()
+        : undefined,
+    } as ConsultDocType;
+    console.log(newConsult);
+    if (newConsult.id === undefined) return undefined;
+    return newConsult;
+  };
 
   useEffect(() => {
     if (debounceTimeout.current != null) {
@@ -37,23 +116,18 @@ export const ConsultInputs = ({
     }
     debounceTimeout.current = setTimeout(() => {
       debounceTimeout.current = null;
-      onUpdateConsult({
-        ...form.values,
-      });
+      const newConsult = buildConsultDocument();
+      if (newConsult && updateConsult) {
+        updateConsult(newConsult as ConsultDocument);
+      }
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values]);
 
   return (
     <Stack>
-      <ConsultDetailsUpper
-        onUpdateConsult={onUpdateConsult}
-        consult={consult}
-      />
-      <ConsultDetailsLower
-        onUpdateConsult={onUpdateConsult}
-        consult={consult}
-      />
+      <ConsultDetailsUpper form={form} />
+      <ConsultDetailsLower form={form} />
     </Stack>
   );
 };

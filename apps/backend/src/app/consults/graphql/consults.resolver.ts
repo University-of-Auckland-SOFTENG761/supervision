@@ -82,9 +82,11 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
     })
     setConsultsInput: SetConsultInput[]
   ): Promise<ConsultModel | null> {
-    const { user, patient, ...consult } = await this.consultService.set(
-      setConsultsInput
-    );
-    return { userEmail: user.email, patientId: patient.id, ...consult };
+    const lastSetConsult = await this.consultService.set(setConsultsInput);
+    if (lastSetConsult) {
+      const { user, patient, ...consult } = lastSetConsult;
+      return { userEmail: user.email, patientId: patient.id, ...consult };
+    }
+    return null;
   }
 }

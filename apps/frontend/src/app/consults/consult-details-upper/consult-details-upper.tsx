@@ -10,30 +10,20 @@ import {
   Select,
 } from '@mantine/core';
 import React from 'react';
-import { useForm } from '@mantine/form';
+import { UseFormReturnType } from '@mantine/form';
 import { VisualAcuityInputs } from './visual-acuity-inputs';
 import { TimeInput } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
 import { EyePressureInputs } from './eye-pressure-inputs';
-import { ConsultDocument } from 'database/rxdb-utils';
+import { FormInputType } from '../consult-inputs';
 
 type ConsultDetailsUpperProps = {
-  consult: ConsultDocument;
-  onUpdateConsult: (updatedConsult: ConsultDocument) => void;
+  form: UseFormReturnType<FormInputType>;
 };
 
-export const ConsultDetailsUpper = ({
-  consult,
-  onUpdateConsult,
-}: ConsultDetailsUpperProps) => {
-  const form = useForm({
-    initialValues: {
-      ...consult,
-    },
-  });
-
+export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
   return (
     <Grid columns={5} justify="flex-end">
       {/*Column 1*/}
@@ -101,7 +91,7 @@ export const ConsultDetailsUpper = ({
             eyePressureTimestampProps={{
               ...form.getInputProps('eyePressureTimeStamp'),
             }}
-            setEyePressureTimestamp={(timestamp: Date) => {
+            setEyePressureTimestamp={(timestamp: Date | null) => {
               form.setFieldValue('eyePressureTimeStamp', timestamp);
             }}
           />
@@ -118,12 +108,9 @@ export const ConsultDetailsUpper = ({
                   })}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
-                    const timestamp = checked ? new Date() : undefined;
+                    const timestamp = checked ? new Date() : null;
                     form.setFieldValue('isCyclopentolate', checked);
-                    form.setFieldValue(
-                      'cyclopentolateTimestamp',
-                      timestamp?.toString()
-                    );
+                    form.setFieldValue('cyclopentolateTimestamp', timestamp);
                   }}
                 />
                 <TimeInput
@@ -143,12 +130,9 @@ export const ConsultDetailsUpper = ({
                   {...form.getInputProps('isTropicamide', { type: 'checkbox' })}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
-                    const timestamp = checked ? new Date() : undefined;
+                    const timestamp = checked ? new Date() : null;
                     form.setFieldValue('isTropicamide', checked);
-                    form.setFieldValue(
-                      'tropicamideTimestamp',
-                      timestamp?.toString()
-                    );
+                    form.setFieldValue('tropicamideTimestamp', timestamp);
                   }}
                 />
                 <TimeInput
@@ -275,7 +259,7 @@ export const ConsultDetailsUpper = ({
                 const nextDate = value
                   ? dayjs().add(parseInt(value), 'month')
                   : undefined;
-                form.setFieldValue('recallDate', nextDate?.toDate().toString());
+                form.setFieldValue('recallDate', nextDate?.toISOString() ?? '');
               }}
             />
             <TextInput

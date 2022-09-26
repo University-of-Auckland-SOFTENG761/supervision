@@ -1,8 +1,8 @@
 import { Table, TableTheme } from '@shared';
 import { ConsultDocument } from 'database/rxdb-utils';
-import React from 'react';
 import { Text } from '@mantine/core';
 import { applyDateFormat } from 'utils/date.utils';
+import { useNavigate } from 'react-router-dom';
 
 type ConsultRecordsTableProps = {
   patientConsults: ConsultDocument[];
@@ -11,6 +11,8 @@ type ConsultRecordsTableProps = {
 export const ConsultRecordsTable = ({
   patientConsults,
 }: ConsultRecordsTableProps) => {
+  const navigate = useNavigate();
+
   const applyRefractionFormat = (
     eyeSphere?: number,
     eyeCylinder?: number,
@@ -19,6 +21,10 @@ export const ConsultRecordsTable = ({
     `${eyeSphere?.toFixed(2) ?? '-.--'} / ${
       eyeCylinder?.toFixed(2) ?? '-.--'
     } x ${axis ?? '--'}`;
+
+  const handleConsultClick = (consultId: string) => {
+    navigate(`/consult-details?consultId=${consultId}`);
+  };
 
   if (patientConsults.length === 0) {
     return <Text className="text-sm">No consult records yet!</Text>;
@@ -36,7 +42,11 @@ export const ConsultRecordsTable = ({
         </thead>
         <tbody>
           {patientConsults?.map((record) => (
-            <tr key={record.id}>
+            <tr
+              key={record.id}
+              className="cursor-pointer"
+              onClick={() => handleConsultClick(record.id)}
+            >
               <td>{applyDateFormat(new Date(record.dateConsentGiven))}</td>
               <td>
                 {applyRefractionFormat(

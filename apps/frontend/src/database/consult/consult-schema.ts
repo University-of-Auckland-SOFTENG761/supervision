@@ -354,7 +354,7 @@ export const consultSchemaLiteral = {
   required: ['id', 'patientId', 'userEmail', 'dateConsentGiven'],
 } as const;
 
-const consultSchemaTyped = toTypedRxJsonSchema(consultSchemaLiteral);
+export const consultSchemaTyped = toTypedRxJsonSchema(consultSchemaLiteral);
 export type ConsultDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof consultSchemaTyped
 >;

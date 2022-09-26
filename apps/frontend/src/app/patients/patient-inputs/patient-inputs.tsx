@@ -17,11 +17,15 @@ import {
   buildFormValues,
   stripUnusedFields,
 } from 'database/rxdb-utils';
-import { PatientDocType } from 'database';
+import { PatientDocType, patientSchemaTyped } from 'database';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
   patientConsults: ConsultDocument[];
+};
+
+export type FormInputType = Omit<PatientDocType, 'dateOfBirth'> & {
+  dateOfBirth: Date | null;
 };
 
 export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
@@ -41,23 +45,25 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
   );
 
   const form = useForm({
-    initialValues: buildFormValues(
-      patient?.toJSON !== undefined ? patient.toJSON() : patient,
-      ['dateOfBirth'],
-      ['ethnicity', 'gender']
-    ) as PatientDocType & { dateOfBirth: Date | null },
+    initialValues: {
+      ...buildFormValues(
+        patientSchemaTyped,
+        patient?.toJSON !== undefined ? patient.toJSON() : patient
+      ),
+      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
+    } as FormInputType,
   });
 
   useEffect(() => {
-    form.setValues(
-      buildFormValues(
-        patient?.toJSON !== undefined ? patient.toJSON() : patient,
-        ['dateOfBirth'],
-        ['ethnicity', 'gender']
-      ) as PatientDocType & { dateOfBirth: Date | null }
-    );
+    form.setValues({
+      ...buildFormValues(
+        patientSchemaTyped,
+        patient?.toJSON !== undefined ? patient.toJSON() : patient
+      ),
+      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
+    } as FormInputType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buildFormValues, patients]);
+  }, [patients]);
 
   useEffect(() => {
     setPatientAge(
@@ -71,14 +77,13 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
 
   const buildPatientDocument = () => {
     const newPatient = {
-      ...(stripUnusedFields({
-        ...form.values,
-        dateOfBirth: form.values.dateOfBirth
-          ? form.values.dateOfBirth.toISOString()
-          : '',
-      }) as PatientDocType),
-    };
+      ...stripUnusedFields(form.values),
+      dateOfBirth: form.values.dateOfBirth?.toISOString
+        ? new Date(form.values.dateOfBirth).toISOString()
+        : undefined,
+    } as PatientDocType;
     if (newPatient.id === undefined) return undefined;
+    console.log(newPatient);
     return newPatient;
   };
 

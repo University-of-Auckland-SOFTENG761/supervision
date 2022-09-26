@@ -101,11 +101,12 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   const variables = {
     patients: strippedDocs,
   };
-
-  return {
+  const result = {
     query,
     variables,
   };
+  // console.log('pushQueryBuilder', result);
+  return result;
 };
 
 const deletionFilter = (doc: PatientDocument) => {

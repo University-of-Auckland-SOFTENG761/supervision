@@ -1,5 +1,5 @@
 import { SimpleGrid, TextInput, Title } from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
+import { TimeInput, TimeInputProps } from '@mantine/dates';
 import React from 'react';
 
 type EyePressureInputsProps = {
@@ -11,8 +11,8 @@ type EyePressureInputsProps = {
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement> | null) => void;
   };
-  eyePressureTimestampProps: any;
-  setEyePressureTimestamp: (timestamp: Date | undefined) => void;
+  eyePressureTimestampProps: TimeInputProps;
+  setEyePressureTimestamp: (timestamp: Date | null) => void;
 };
 
 export const EyePressureInputs = ({
@@ -35,7 +35,7 @@ export const EyePressureInputs = ({
               !eyePressureTimestampProps.value &&
                 setEyePressureTimestamp(new Date());
             } else {
-              setEyePressureTimestamp(undefined);
+              setEyePressureTimestamp(null);
             }
           }}
         />
@@ -47,7 +47,7 @@ export const EyePressureInputs = ({
               !eyePressureTimestampProps.value &&
                 setEyePressureTimestamp(new Date());
             } else {
-              setEyePressureTimestamp(undefined);
+              setEyePressureTimestamp(null);
             }
           }}
         />

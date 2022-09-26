@@ -27,25 +27,33 @@ export const stripMetadata = (doc: PatientDocument | ConsultDocument) => {
     collection,
     _meta,
     revision,
+    _deleted,
+    _attachments,
+    _rev,
     ...rest
   } = doc;
   return rest;
 };
 
 export const buildFormValues = (
-  docJSON?: { [key: string]: unknown },
-  dateKeys?: string[],
-  enumKeys?: string[]
+  schema: { properties: { [key: string]: { type: string } } },
+  docJSON?: { [key: string]: unknown }
 ) =>
   Object.fromEntries(
-    Object.entries(docJSON ?? {}).map(([key, value]) => {
-      if (dateKeys?.includes(key)) {
-        return [key, value ? new Date(value as string) : null];
+    Object.entries(schema.properties).map(([key, { type }]) => {
+      const value = docJSON?.[key];
+      if (type === 'number') {
+        // console.log(
+        //   'key',
+        //   key,
+        //   'value',
+        //   value,
+        //   'resolved',
+        //   value ? Number(value) : null
+        // );
+        return [key, value ? Number(value) : null];
       }
-      if (enumKeys?.includes(key)) {
-        return [key, value ?? null];
-      }
-      return [key, value ?? ''];
+      return [key, value === null || value === undefined ? '' : value];
     })
   );
 

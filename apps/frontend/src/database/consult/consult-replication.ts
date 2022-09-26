@@ -137,6 +137,7 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
     query,
     variables: {},
   };
+
   return result;
 };
 
@@ -156,11 +157,12 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
   const variables = {
     consults: strippedDocs,
   };
-
-  return {
+  const result = {
     query,
     variables,
   };
+  // console.log('pushQueryBuilder', result);
+  return result;
 };
 
 const deletionFilter = (doc: ConsultDocument) => {
