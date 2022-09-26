@@ -55,7 +55,7 @@ export class ConsultsService {
 
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
     const bundledConsults = await Promise.all(
-      consults.map(async ({ userEmail, patientId, ...consult }) => ({
+      consults?.map(async ({ userEmail, patientId, ...consult }) => ({
         user: await this.userService.findOneByEmail(userEmail),
         patient: { id: patientId },
         ...consult,

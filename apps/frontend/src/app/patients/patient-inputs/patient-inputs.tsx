@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
@@ -73,33 +74,14 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
     );
   }, [form.values.dateOfBirth]);
 
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const buildPatientDocument = () => {
-    const newPatient = {
-      ...stripUnusedFields(form.values),
-      dateOfBirth: form.values.dateOfBirth?.toISOString
-        ? new Date(form.values.dateOfBirth).toISOString()
-        : undefined,
-    } as PatientDocType;
-    if (newPatient.id === undefined) return undefined;
-    console.log(newPatient);
-    return newPatient;
-  };
+  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
 
   useEffect(() => {
-    if (debounceTimeout.current != null) {
-      clearTimeout(debounceTimeout.current);
+    if (debouncedFormValues && updatePatient) {
+      updatePatient(stripUnusedFields(debouncedFormValues));
     }
-    debounceTimeout.current = setTimeout(() => {
-      debounceTimeout.current = null;
-      const newPatient = buildPatientDocument();
-      if (newPatient && updatePatient) {
-        updatePatient(newPatient as PatientDocument);
-      }
-    }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.values]);
+  }, [debouncedFormValues]);
 
   return (
     <>

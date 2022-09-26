@@ -8,6 +8,7 @@ import {
   Title,
   Group,
   Select,
+  Text,
 } from '@mantine/core';
 import React from 'react';
 import { UseFormReturnType } from '@mantine/form';
@@ -18,6 +19,7 @@ import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
 import { EyePressureInputs } from './eye-pressure-inputs';
 import { FormInputType } from '../consult-inputs';
+import { applyDateFormat } from 'utils/date.utils';
 
 type ConsultDetailsUpperProps = {
   form: UseFormReturnType<FormInputType>;
@@ -44,22 +46,22 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
           />
           <VisualAcuityInputs
             {...{
-              ...form.getInputProps('rightVisualAcuity'),
-              ...form.getInputProps('leftVisualAcuity'),
-              ...form.getInputProps('bothVisualAcuity'),
+              ...form.getInputProps('visualAcuityRight'),
+              ...form.getInputProps('visualAcuityLeft'),
+              ...form.getInputProps('visualAcuityBoth'),
             }}
           />
           <NearAcuityInputs
             {...{
-              ...form.getInputProps('rightNearAcuity'),
-              ...form.getInputProps('leftNearAcuity'),
-              ...form.getInputProps('bothNearAcuity'),
+              ...form.getInputProps('nearAcuityRight'),
+              ...form.getInputProps('nearAcuityLeft'),
+              ...form.getInputProps('nearAcuityBoth'),
             }}
           />
           <CoverTestInputs
             {...{
-              ...form.getInputProps('distanceCoverTest'),
-              ...form.getInputProps('nearCoverTest'),
+              ...form.getInputProps('coverTestDistance'),
+              ...form.getInputProps('coverTestNear'),
             }}
           />
         </Stack>
@@ -67,16 +69,19 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
       {/*Column 2*/}
       <Grid.Col lg={1} md={2}>
         <Stack>
-          <TextInput label="NPC:" {...form.getInputProps('npc')} />
+          <TextInput
+            label="NPC:"
+            {...form.getInputProps('nearPointOfConvergence')}
+          />
           <TextInput label="Motility:" {...form.getInputProps('motility')} />
           <TextInput label="Pupils:" {...form.getInputProps('pupils')} />
           <TextInput
-            label="Pupil Distance:"
-            {...form.getInputProps('pupilDistance')}
+            label="Pupillary Distance:"
+            {...form.getInputProps('pupillaryDistance')}
           />
           <TextInput
             label="Fields/Colour Vision/Other:"
-            {...form.getInputProps('fieldsColourVisionOther')}
+            {...form.getInputProps('otherField')}
           />
           {/*TODO: add timestamp for eye pressure*/}
           <EyePressureInputs
@@ -199,7 +204,7 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               />
               <TextInput
                 label="Heights:"
-                {...form.getInputProps('heights')}
+                {...form.getInputProps('spectacleHeights')}
                 placeholder="Datum"
               />
             </Stack>
@@ -207,15 +212,18 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
           <Grid.Col span={2}>
             <Stack>
               <SimpleGrid cols={2}>
-                <TextInput label="Colour:" {...form.getInputProps('colour')} />
+                <TextInput
+                  label="Colour:"
+                  {...form.getInputProps('spectacleColour')}
+                />
                 <TextInput
                   label="Lens Type:"
-                  {...form.getInputProps('lensType')}
+                  {...form.getInputProps('spectacleLensType')}
                 />
               </SimpleGrid>
               <TextInput
                 label="Spectacle Note:"
-                {...form.getInputProps('spectacleNote')}
+                {...form.getInputProps('spectacleNotes')}
               />
             </Stack>
           </Grid.Col>
@@ -256,12 +264,21 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               ]}
               placeholder="Select one"
               onChange={(value) => {
+                if (!value) {
+                  form.setFieldValue('recallDate', undefined);
+                  return;
+                }
                 const nextDate = value
                   ? dayjs().add(parseInt(value), 'month')
                   : undefined;
                 form.setFieldValue('recallDate', nextDate?.toISOString() ?? '');
               }}
             />
+            <Text>
+              {form.values.recallDate
+                ? applyDateFormat(new Date(form.values.recallDate))
+                : ''}
+            </Text>
             <TextInput
               label="Reason:"
               {...form.getInputProps('recallDescription')}

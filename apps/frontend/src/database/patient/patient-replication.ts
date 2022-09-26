@@ -105,7 +105,6 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
     query,
     variables,
   };
-  // console.log('pushQueryBuilder', result);
   return result;
 };
 

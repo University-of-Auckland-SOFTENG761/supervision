@@ -3,11 +3,15 @@ import {
   runPatientReplication,
   getSuperVisionDatabase,
   runConsultReplication,
+  patientSchemaTyped,
+  PatientDocType,
+  consultSchemaTyped,
+  ConsultDocType,
 } from 'database';
 import {
+  buildFormValues,
   ConsultDocument,
   PatientDocument,
-  stripMetadata,
 } from 'database/rxdb-utils';
 import {
   createContext,
@@ -26,10 +30,10 @@ import { useNetwork } from '../hooks';
 interface IDataBaseContext {
   patients: PatientDocument[];
   newPatient: () => string;
-  updatePatient: (patient: PatientDocument) => void;
+  updatePatient: (patient: PatientDocument | PatientDocType) => void;
   consults: ConsultDocument[];
   newConsult: (patientId: string) => string | undefined;
-  updateConsult: (consult: ConsultDocument) => void;
+  updateConsult: (consult: ConsultDocument | ConsultDocType) => void;
 }
 
 const DatabaseContext = createContext<Partial<IDataBaseContext>>({});
@@ -135,60 +139,58 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
     [online, superVisionDb, user, userEmail]
   );
 
-  const documentsAreEqual = useCallback(
-    (
-      a: PatientDocument | ConsultDocument,
-      b: PatientDocument | ConsultDocument
-    ) => {
-      const aJSON =
-        a.toJSON !== undefined
-          ? JSON.stringify(
-              stripMetadata(a.toJSON() as ConsultDocument | PatientDocument)
-            )
-          : JSON.stringify(stripMetadata(a));
-      const bJSON =
-        b.toJSON !== undefined
-          ? JSON.stringify(
-              stripMetadata(b.toJSON() as ConsultDocument | PatientDocument)
-            )
-          : JSON.stringify(stripMetadata(b));
+  const patientDocumentsAreEqual = useCallback(
+    (a: PatientDocument, b: PatientDocument) => {
+      const aJSON = JSON.stringify(
+        buildFormValues(patientSchemaTyped, a as PatientDocType)
+      );
+      const bJSON = JSON.stringify(
+        buildFormValues(patientSchemaTyped, b as PatientDocType)
+      );
+      return aJSON === bJSON;
+    },
+    []
+  );
+
+  const consultDocumentsAreEqual = useCallback(
+    (a: ConsultDocument, b: ConsultDocument) => {
+      const aJSON = JSON.stringify(
+        buildFormValues(consultSchemaTyped, a as ConsultDocType)
+      );
+      const bJSON = JSON.stringify(
+        buildFormValues(consultSchemaTyped, b as ConsultDocType)
+      );
       return aJSON === bJSON;
     },
     []
   );
 
   const updatePatient = useCallback(
-    (patient: PatientDocument) => {
+    (patient: PatientDocument | PatientDocType) => {
       const oldPatient = patients.find((p) => p.id === patient.id);
       if (
         oldPatient &&
-        documentsAreEqual(
-          oldPatient as PatientDocument,
-          patient as PatientDocument
-        )
+        patientDocumentsAreEqual(oldPatient, patient as PatientDocument)
       ) {
         return;
       }
-      superVisionDb?.['patients'].atomicUpsert(patient);
+      superVisionDb?.['patients'].upsert(patient);
     },
-    [patients, documentsAreEqual, superVisionDb]
+    [patientDocumentsAreEqual, patients, superVisionDb]
   );
 
   const updateConsult = useCallback(
-    (consult: ConsultDocument) => {
-      const oldConsult = consults.find((p) => p.id === consult.id);
+    (consult: ConsultDocument | ConsultDocType) => {
+      const oldConsult = consults.find((c) => c.id === consult.id);
       if (
         oldConsult &&
-        documentsAreEqual(
-          oldConsult as ConsultDocument,
-          consult as ConsultDocument
-        )
+        consultDocumentsAreEqual(oldConsult, consult as ConsultDocument)
       ) {
         return;
       }
       superVisionDb?.['consults'].atomicUpsert(consult);
     },
-    [consults, documentsAreEqual, superVisionDb]
+    [consults, consultDocumentsAreEqual, superVisionDb]
   );
 
   useEffect(() => {

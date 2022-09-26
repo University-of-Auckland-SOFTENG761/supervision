@@ -1,16 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useForm } from '@mantine/form';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
-import {
-  buildFormValues,
-  ConsultDocument,
-  stripUnusedFields,
-} from 'database/rxdb-utils';
+import { buildFormValues, stripUnusedFields } from 'database/rxdb-utils';
 import { useDatabase } from '@shared';
 import { useSearchParams } from 'react-router-dom';
 import { ConsultDocType, consultSchemaTyped } from 'database';
+import { useDebouncedValue } from '@mantine/hooks';
 
 type TimestampFilter =
   | 'eyePressureTimestamp'
@@ -71,31 +68,16 @@ export const ConsultInputs = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consults]);
 
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const buildConsultDocument = () => {
-    const strippedFormInputs = stripUnusedFields(form.values);
-    const newConsult = {
-      ...strippedFormInputs,
-    } as ConsultDocType;
-    console.log(newConsult);
-    if (newConsult.id === undefined) return undefined;
-    return newConsult;
-  };
+  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
 
   useEffect(() => {
-    if (debounceTimeout.current != null) {
-      clearTimeout(debounceTimeout.current);
+    if (debouncedFormValues && updateConsult) {
+      updateConsult(stripUnusedFields(debouncedFormValues));
     }
-    debounceTimeout.current = setTimeout(() => {
-      debounceTimeout.current = null;
-      const newConsult = buildConsultDocument();
-      if (newConsult && updateConsult) {
-        updateConsult(newConsult as ConsultDocument);
-      }
-    }, 500);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.values]);
+    return () => {
+      if (updateConsult) updateConsult(stripUnusedFields(form.values));
+    };
+  }, [debouncedFormValues, form.values, updateConsult]);
 
   return (
     <Stack>
