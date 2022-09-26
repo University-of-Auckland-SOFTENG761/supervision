@@ -51,10 +51,6 @@ const createSuperVisionDatabase = async () => {
     },
   });
 
-  db.collections['patients'].$.subscribe((event) => {
-    console.log('RXDB EVENT: ', event);
-  });
-
   await runPatientReplication(db);
   await runConsultReplication(db);
 };

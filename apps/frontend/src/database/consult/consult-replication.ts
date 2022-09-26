@@ -19,7 +19,6 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
       userEmail,
       patientId,
       revision,
-      createdAt,
       deletedAt,
       updatedAt,
       userEmail,

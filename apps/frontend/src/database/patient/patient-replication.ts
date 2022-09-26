@@ -55,7 +55,6 @@ const pullQueryBuilder = (doc: PatientDocument) => {
     patientReplicationFeed(${minUpdatedAtField}${lastIdField}limit: 5) {
       id,
       revision,
-      createdAt,
       deletedAt,
       updatedAt,
       firstName,

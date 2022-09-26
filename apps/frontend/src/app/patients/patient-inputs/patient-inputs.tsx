@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
@@ -11,7 +11,13 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
 import { useDatabase } from '@shared';
 import { useSearchParams } from 'react-router-dom';
-import { ConsultDocument, PatientDocument } from 'database/rxdb-utils';
+import {
+  ConsultDocument,
+  PatientDocument,
+  buildFormValues,
+  stripUnusedFields,
+} from 'database/rxdb-utils';
+import { PatientDocType } from 'database';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
@@ -34,36 +40,22 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
       : undefined
   );
 
-  const buildFormValues = useCallback(
-    () => ({
-      id: patient?.id ?? '',
-      firstName: patient?.firstName ?? '',
-      lastName: patient?.lastName ?? '',
-      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
-      ethnicity: patient?.ethnicity ?? null,
-      gender: patient?.gender ?? null,
-      school: patient?.school ?? '',
-      yearLevel: patient?.yearLevel,
-      room: patient?.room ?? '',
-      streetAddress: patient?.streetAddress ?? '',
-      suburb: patient?.suburb ?? '',
-      city: patient?.city ?? '',
-      postcode: patient?.postcode ?? '',
-      caregiverFirstName: patient?.caregiverFirstName ?? '',
-      caregiverLastName: patient?.caregiverLastName ?? '',
-      phoneNumber: patient?.phoneNumber ?? '',
-      email: patient?.email ?? '',
-      adminNotes: patient?.adminNotes ?? '',
-    }),
-    [patient]
-  );
-
   const form = useForm({
-    initialValues: buildFormValues(),
+    initialValues: buildFormValues(
+      patient?.toJSON !== undefined ? patient.toJSON() : patient,
+      ['dateOfBirth'],
+      ['ethnicity', 'gender']
+    ) as PatientDocType & { dateOfBirth: Date | null },
   });
 
   useEffect(() => {
-    form.setValues(buildFormValues());
+    form.setValues(
+      buildFormValues(
+        patient?.toJSON !== undefined ? patient.toJSON() : patient,
+        ['dateOfBirth'],
+        ['ethnicity', 'gender']
+      ) as PatientDocType & { dateOfBirth: Date | null }
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buildFormValues, patients]);
 
@@ -79,13 +71,12 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
 
   const buildPatientDocument = () => {
     const newPatient = {
-      ...form.values,
-      id: patient?.id ?? '',
-      gender: form.values.gender ?? undefined,
-      ethnicity: form.values.ethnicity ?? undefined,
-      dateOfBirth: form.values.dateOfBirth
-        ? form.values.dateOfBirth.toISOString()
-        : undefined,
+      ...(stripUnusedFields({
+        ...form.values,
+        dateOfBirth: form.values.dateOfBirth
+          ? form.values.dateOfBirth.toISOString()
+          : '',
+      }) as PatientDocType),
     };
     if (newPatient.id === undefined) return undefined;
     return newPatient;
