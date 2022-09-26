@@ -55,22 +55,21 @@ describe('patient resolver', () => {
       return [{ ...fakePatient, id: Date() }];
     }),
 
-    getUpdatedPatients: jest
-      .fn()
-      .mockImplementation(
-        async (
-          minUpdatedAt: Date | null,
-          lastId: string | null,
-          limit: number
-        ) => {
-          return [
-            {
-              ...fakePatient,
-              id: lastId ? lastId : Date(), // Currently not working - returns empty array
-            },
-          ];
-        }
-      ),
+    getUpdatedPatients: jest.fn().mockImplementation(
+      async (
+        minUpdatedAt: Date | null,
+        lastId: string | null,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        limit: number
+      ) => {
+        return [
+          {
+            ...fakePatient,
+            id: lastId ? lastId : Date(), // Currently not working - returns empty array
+          },
+        ];
+      }
+    ),
 
     patients: jest.fn().mockImplementation(async () => {
       return [{ ...fakePatient, id: Date() }];
