@@ -1,22 +1,13 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ConsultEntity } from './database';
 import { CreateConsultInput, UpdateConsultInput, SetConsultInput } from './dto';
-import { SpectaclesEntity } from '@supervision/spectacles/database/spectacles.entity';
-import {
-  CreateSpectaclesInput,
-  UpdateSpectaclesInput,
-} from '@supervision/spectacles/dto';
-import { SpectaclesService } from '../spectacles/spectacles.service';
 @Injectable()
 export class ConsultsService {
   constructor(
     @InjectRepository(ConsultEntity)
-    private consultsRepository: Repository<ConsultEntity>,
-
-    @Inject(forwardRef(() => SpectaclesService))
-    private spectaclesService: SpectaclesService
+    private consultsRepository: Repository<ConsultEntity>
   ) {}
 
   async create(consult: CreateConsultInput): Promise<ConsultEntity> {
@@ -49,32 +40,6 @@ export class ConsultsService {
 
   async findAll(): Promise<ConsultEntity[]> {
     return await this.consultsRepository.find();
-  }
-
-  // Create a spectacle for an associated consult, patient and user
-  async createSpectacles(
-    spectacles: CreateSpectaclesInput
-  ): Promise<SpectaclesEntity> {
-    const newSpectacles = await this.spectaclesService.createSpectacles(
-      spectacles
-    );
-    return newSpectacles;
-  }
-
-  // Update spectacle for an associated consult, patient and user
-  async updateSpectacles(
-    updatedSpectacles: UpdateSpectaclesInput,
-    spectacleId: string
-  ): Promise<SpectaclesEntity> {
-    return await this.spectaclesService.updateSpectacles(
-      updatedSpectacles,
-      spectacleId
-    );
-  }
-
-  // Fetch spectacles for a consult
-  async findSpectaclesForConsult(consultId: string): Promise<SpectaclesEntity> {
-    return await this.spectaclesService.findSpectaclesForConsult(consultId);
   }
 
   // TODO move this to patients service

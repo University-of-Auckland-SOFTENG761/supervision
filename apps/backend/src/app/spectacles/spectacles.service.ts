@@ -1,6 +1,5 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConsultsService } from '@supervision/consults/consults.service';
 import { Repository } from 'typeorm';
 import { SpectaclesEntity } from './database';
 import { CreateSpectaclesInput, UpdateSpectaclesInput } from './dto';
@@ -9,10 +8,7 @@ import { CreateSpectaclesInput, UpdateSpectaclesInput } from './dto';
 export class SpectaclesService {
   constructor(
     @InjectRepository(SpectaclesEntity)
-    private spectaclesRepository: Repository<SpectaclesEntity>,
-
-    @Inject(forwardRef(() => ConsultsService))
-    private consultsService: ConsultsService
+    private spectaclesRepository: Repository<SpectaclesEntity>
   ) {}
 
   // Create a spectacle for an associated consult, patient and user

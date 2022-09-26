@@ -12,10 +12,14 @@ import {
   CreateSpectaclesInput,
   UpdateSpectaclesInput,
 } from '@supervision/spectacles/dto';
+import { SpectaclesService } from '@supervision/spectacles/spectacles.service';
 
 @Resolver(() => ConsultModel)
 export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
-  constructor(private consultService: ConsultsService) {}
+  constructor(
+    private consultService: ConsultsService,
+    private spectaclesService: SpectaclesService
+  ) {}
 
   @Mutation(() => ConsultModel)
   @UseGuards(AuthGuard)
@@ -41,7 +45,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   async createSpectacles(
     @Args('createSpectaclesInput') createSpectaclesInput: CreateSpectaclesInput
   ): Promise<SpectaclesModel> {
-    return await this.consultService.createSpectacles(createSpectaclesInput);
+    return await this.spectaclesService.createSpectacles(createSpectaclesInput);
   }
 
   @Mutation(() => SpectaclesModel)
@@ -49,7 +53,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   async updateSpectacles(
     @Args('updateSpectaclesInput') updateSpectaclesInput: UpdateSpectaclesInput
   ): Promise<SpectaclesModel> {
-    return await this.consultService.updateSpectacles(
+    return await this.spectaclesService.updateSpectacles(
       updateSpectaclesInput,
       updateSpectaclesInput.id
     );
@@ -72,7 +76,7 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   async spectacles(
     @Args('consultId') consultId: string
   ): Promise<SpectaclesModel> {
-    return await this.consultService.findSpectaclesForConsult(consultId);
+    return await this.spectaclesService.findSpectaclesForConsult(consultId);
   }
 
   @Query(() => [ConsultModel], { name: 'consultReplicationFeed' })
