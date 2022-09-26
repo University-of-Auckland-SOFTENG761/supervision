@@ -23,7 +23,7 @@ export const PatientRecordsTable = ({
             <td>
               {record.firstName} {record.lastName}
             </td>
-            <td>{record.dateOfBirth?.toLocaleString()}</td>
+            <td>{record.dateOfBirth?.substring(0, 10)}</td>
             <td>{record.school}</td>
           </tr>
         ))}
