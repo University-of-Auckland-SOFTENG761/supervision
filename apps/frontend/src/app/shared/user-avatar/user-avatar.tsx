@@ -1,7 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import environment from '@environment';
 import { Avatar, Center, Popover, Text } from '@mantine/core';
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getIdToken } from '../../../database/authorisation';
 import { Button } from '../button';
 import { useNetwork } from '../hooks';
 
@@ -19,6 +21,15 @@ export const UserAvatar = () => {
       logout({ returnTo: window.location.origin });
     }
   };
+
+  async function handleCopyAuthToken() {
+    const token = await getIdToken();
+    navigator.clipboard.writeText(
+      JSON.stringify({
+        Authorization: `Bearer ${token}`,
+      })
+    );
+  }
 
   const userInitials = useMemo(() => {
     if (user && (user.given_name || user.family_name)) {
@@ -84,6 +95,16 @@ export const UserAvatar = () => {
             >
               Log out
             </Button>
+            {!environment.production && (
+              <Button
+                size="sm"
+                color="yellow"
+                uppercase
+                onClick={handleCopyAuthToken}
+              >
+                Copy Token
+              </Button>
+            )}
           </Center>
         </Popover.Dropdown>
       </Popover>
