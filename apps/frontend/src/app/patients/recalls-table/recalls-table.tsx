@@ -1,16 +1,14 @@
 import { Stack, Text } from '@mantine/core';
 import { Table, TableTheme } from '@shared';
 import { ConsultDocument } from 'database/rxdb-utils';
-import dayjs from 'dayjs';
 import React from 'react';
+import { applyDateFormat } from 'utils/date.utils';
 
 type RecallsTableProps = {
   patientConsults: ConsultDocument[];
 };
 
 export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
-  const applyDateFormat = (date?: Date) => dayjs(date).format('DD/MM/YYYY');
-
   return (
     <Stack>
       <Text className="-mb-3 text-sm">Recalls</Text>
