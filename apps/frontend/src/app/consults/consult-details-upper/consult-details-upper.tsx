@@ -89,10 +89,10 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
             }}
             eyePressureLeftProps={{ ...form.getInputProps('eyePressureLeft') }}
             eyePressureTimestampProps={{
-              ...form.getInputProps('eyePressureTimeStamp'),
+              ...form.getInputProps('eyePressureTimestamp'),
             }}
             setEyePressureTimestamp={(timestamp: Date | null) => {
-              form.setFieldValue('eyePressureTimeStamp', timestamp);
+              form.setFieldValue('eyePressureTimestamp', timestamp);
             }}
           />
           {/*TODO: Refactor cyclopentolate/tropicamide into a separate file*/}

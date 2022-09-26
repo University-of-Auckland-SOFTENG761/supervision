@@ -21,24 +21,6 @@ type FormTimestamps = {
   [key in TimestampFilter]: Date | null;
 };
 
-// const unionOfNumberKeys = Object.entries(consultSchemaTyped.properties).reduce(
-//   (keys: (keyof ConsultDocType)[], [key, value]) => {
-//     if (value.type === 'number') {
-//       return keys.concat([key as keyof ConsultDocType]);
-//     }
-//     return keys;
-//   },
-//   []
-// );
-
-// type NumberKeysFilter = typeof unionOfNumberKeys[number];
-
-// console.log(unionOfNumberKeys);
-
-// type FormNumbers = {
-//   [key in NumberKeysFilter]: number | null;
-// };
-
 export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
   FormTimestamps;
 
@@ -92,18 +74,9 @@ export const ConsultInputs = () => {
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const buildConsultDocument = () => {
-    const strippedFormInputs = stripUnusedFields(form.values) as FormInputType;
+    const strippedFormInputs = stripUnusedFields(form.values);
     const newConsult = {
       ...strippedFormInputs,
-      eyePressureTimestamp: strippedFormInputs.eyePressureTimestamp
-        ? new Date(strippedFormInputs.eyePressureTimestamp).toISOString()
-        : undefined,
-      cyclopentolateTimestamp: strippedFormInputs.cyclopentolateTimestamp
-        ? new Date(strippedFormInputs.cyclopentolateTimestamp).toISOString()
-        : undefined,
-      tropicamideTimestamp: strippedFormInputs.tropicamideTimestamp
-        ? new Date(strippedFormInputs.tropicamideTimestamp).toISOString()
-        : undefined,
     } as ConsultDocType;
     console.log(newConsult);
     if (newConsult.id === undefined) return undefined;
