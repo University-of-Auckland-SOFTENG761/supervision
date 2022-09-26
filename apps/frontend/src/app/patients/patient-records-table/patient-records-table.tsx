@@ -1,17 +1,11 @@
 import { Table, TableTheme } from '@shared';
-import React from 'react';
+import { IPatient } from '../patient-details-page';
 
-export const PatientRecordsTable = () => {
-  // TODO: Replace with actual data
-  const patientRecords = [
-    {
-      name: 'Jackson Chadfield',
-      dateOfBirth: new Date(2000, 11, 17),
-      school: 'University of Auckland',
-      lastSeenBy: 'Veeran',
-    },
-  ];
-
+export const PatientRecordsTable = ({
+  patientRecords,
+}: {
+  patientRecords: IPatient[];
+}) => {
   return (
     <Table theme={TableTheme.Primary}>
       <thead>
@@ -19,16 +13,20 @@ export const PatientRecordsTable = () => {
           <th>NAME</th>
           <th>DATE OF BIRTH</th>
           <th>SCHOOL</th>
-          <th>LAST SEEN BY</th>
         </tr>
       </thead>
       <tbody>
         {patientRecords.map((record) => (
-          <tr key={record.name}>
-            <td>{record.name}</td>
-            <td>{record.dateOfBirth.toLocaleString()}</td>
+          <tr key={record.id}>
+            <td>
+              {record.firstName} {record.lastName}
+            </td>
+            <td>
+              {record.dateOfBirth
+                ? new Date(record.dateOfBirth).toLocaleDateString()
+                : undefined}
+            </td>
             <td>{record.school}</td>
-            <td>{record.lastSeenBy}</td>
           </tr>
         ))}
       </tbody>
