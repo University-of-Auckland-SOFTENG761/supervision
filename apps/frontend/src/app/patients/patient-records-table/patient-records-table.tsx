@@ -1,5 +1,4 @@
 import { Table, TableTheme } from '@shared';
-import React from 'react';
 
 export const PatientRecordsTable = ({
   patientRecords,

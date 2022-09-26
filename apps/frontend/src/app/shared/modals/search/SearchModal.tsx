@@ -47,8 +47,6 @@ export interface SearchModalProps {
 export const SearchModal = forwardRef(
   (props: SearchModalProps, ref: ForwardedRef<SearchModalRef>) => {
     const [opened, setOpened] = useState(false);
-    // const [value, setValue] = useState('');
-    // const textRef = useRef<HTMLInputElement>(null);
     const [patientRecordsUpdated, setPatientRecordsUpdated] =
       useState(patientRecords);
 
@@ -84,7 +82,6 @@ export const SearchModal = forwardRef(
           <TextInput
             placeholder="Search Patients"
             icon={<IconSearch size={14} />}
-            // onChange={onSearchChanged}
             onChange={(event) => onSearchChanged(event.currentTarget.value)}
           />
         }
