@@ -74,10 +74,8 @@ export const ConsultInputs = () => {
     if (debouncedFormValues && updateConsult) {
       updateConsult(stripUnusedFields(debouncedFormValues));
     }
-    return () => {
-      if (updateConsult) updateConsult(stripUnusedFields(form.values));
-    };
-  }, [debouncedFormValues, form.values, updateConsult]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedFormValues]);
 
   return (
     <Stack>
