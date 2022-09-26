@@ -1,8 +1,8 @@
 import { Table, TableTheme } from '@shared';
 import { ConsultDocument } from 'database/rxdb-utils';
 import React from 'react';
-import dayjs from 'dayjs';
 import { Text } from '@mantine/core';
+import { applyDateFormat } from 'utils/date.utils';
 
 type ConsultRecordsTableProps = {
   patientConsults: ConsultDocument[];
@@ -19,8 +19,6 @@ export const ConsultRecordsTable = ({
     `${eyeSphere?.toFixed(2) ?? '-.--'} / ${
       eyeCylinder?.toFixed(2) ?? '-.--'
     } x ${axis ?? '--'}`;
-
-  const applyDateFormat = (date?: Date) => dayjs(date).format('DD/MM/YYYY');
 
   if (patientConsults.length === 0) {
     return <Text className="text-sm">No consult records yet!</Text>;
