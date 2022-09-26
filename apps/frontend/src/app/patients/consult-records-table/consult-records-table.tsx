@@ -1,8 +1,9 @@
 import { Table, TableTheme } from '@shared';
 import { ConsultDocument } from 'database/rxdb-utils';
-import { Text } from '@mantine/core';
+import { Stack, Text, ThemeIcon } from '@mantine/core';
 import { applyDateFormat } from 'utils/date.utils';
 import { useNavigate } from 'react-router-dom';
+import { IconDatabaseOff } from '@tabler/icons';
 
 type ConsultRecordsTableProps = {
   patientConsults: ConsultDocument[];
@@ -26,22 +27,37 @@ export const ConsultRecordsTable = ({
     navigate(`/consult-details?consultId=${consultId}`);
   };
 
-  if (patientConsults.length === 0) {
-    return <Text className="text-sm">No consult records yet!</Text>;
-  } else {
-    return (
-      <Table theme={TableTheme.Primary}>
-        <thead>
+  return (
+    <Table theme={TableTheme.Primary}>
+      <thead>
+        <tr>
+          <th>DATE SEEN</th>
+          <th>RX RIGHT</th>
+          <th>RX LEFT</th>
+          <th>DIAGNOSIS</th>
+          <th>MANAGEMENT</th>
+        </tr>
+      </thead>
+      <tbody>
+        {patientConsults.length === 0 ? (
           <tr>
-            <th>DATE SEEN</th>
-            <th>RX RIGHT</th>
-            <th>RX LEFT</th>
-            <th>DIAGNOSIS</th>
-            <th>MANAGEMENT</th>
+            <td colSpan={5} className="hover:bg-white">
+              <Stack className="justify-center w-full p-2">
+                <ThemeIcon
+                  color="gray.6"
+                  variant="light"
+                  size="xl"
+                  radius="xl"
+                  className="m-auto"
+                >
+                  <IconDatabaseOff />
+                </ThemeIcon>
+                <Text className="m-auto font-medium">No consult records</Text>
+              </Stack>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {patientConsults?.map((record) => (
+        ) : (
+          patientConsults?.map((record) => (
             <tr
               key={record.id}
               className="cursor-pointer"
@@ -65,11 +81,11 @@ export const ConsultRecordsTable = ({
               <td>{record.diagnosis}</td>
               <td>{record.management}</td>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    );
-  }
+          ))
+        )}
+      </tbody>
+    </Table>
+  );
 };
 
 export default ConsultRecordsTable;

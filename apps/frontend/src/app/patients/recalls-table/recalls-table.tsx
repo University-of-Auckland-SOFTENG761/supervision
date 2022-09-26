@@ -1,5 +1,6 @@
-import { Stack, Text } from '@mantine/core';
+import { Stack, Text, ThemeIcon } from '@mantine/core';
 import { Table, TableTheme } from '@shared';
+import { IconDatabaseOff } from '@tabler/icons';
 import { ConsultDocument } from 'database/rxdb-utils';
 import React from 'react';
 import { applyDateFormat } from 'utils/date.utils';
@@ -12,16 +13,16 @@ export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
   return (
     <Stack>
       <Text className="-mb-3 text-sm">Recalls</Text>
-      {patientConsults.some((consult) => consult.recallDate) ? (
-        <Table theme={TableTheme.Primary}>
-          <thead>
-            <tr>
-              <th>RECALL DATE</th>
-              <th>DESCRIPTION</th>
-            </tr>
-          </thead>
-          <tbody>
-            {patientConsults?.map((record) => (
+      <Table theme={TableTheme.Primary}>
+        <thead>
+          <tr>
+            <th>RECALL DATE</th>
+            <th>DESCRIPTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          {patientConsults.some((consult) => consult.recallDate) ? (
+            patientConsults?.map((record) => (
               <tr key={record.id}>
                 <td>
                   {record.recallDate &&
@@ -29,12 +30,27 @@ export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
                 </td>
                 <td>{record.recallDescription}</td>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      ) : (
-        <Text className="text-sm">No recalls yet!</Text>
-      )}
+            ))
+          ) : (
+            <tr>
+              <td colSpan={5} className="hover:bg-white">
+                <Stack className="justify-center w-full p-2">
+                  <ThemeIcon
+                    color="gray.6"
+                    variant="light"
+                    size="xl"
+                    radius="xl"
+                    className="m-auto"
+                  >
+                    <IconDatabaseOff />
+                  </ThemeIcon>
+                  <Text className="m-auto font-medium">No recalls</Text>
+                </Stack>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </Stack>
   );
 };
