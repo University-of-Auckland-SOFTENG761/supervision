@@ -6,7 +6,6 @@ export const PatientRecordsTable = ({
 }: {
   patientRecords: IPatient[];
 }) => {
-  // TODO: Replace with actual data
 
   return (
     <Table theme={TableTheme.Primary}>
