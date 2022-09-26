@@ -1,14 +1,10 @@
 import { Table, TableTheme } from '@shared';
+import { IPatient } from '../patient-details-page';
 
 export const PatientRecordsTable = ({
   patientRecords,
 }: {
-  patientRecords: {
-    name: string;
-    dateOfBirth: Date;
-    school: string;
-    lastSeenBy: string;
-  }[];
+  patientRecords: IPatient[];
 }) => {
   // TODO: Replace with actual data
 
@@ -19,16 +15,16 @@ export const PatientRecordsTable = ({
           <th>NAME</th>
           <th>DATE OF BIRTH</th>
           <th>SCHOOL</th>
-          <th>LAST SEEN BY</th>
         </tr>
       </thead>
       <tbody>
         {patientRecords.map((record) => (
-          <tr key={record.name}>
-            <td>{record.name}</td>
-            <td>{record.dateOfBirth.toLocaleString()}</td>
+          <tr key={record.id}>
+            <td>
+              {record.firstName} {record.lastName}
+            </td>
+            <td>{record.dateOfBirth?.toLocaleString()}</td>
             <td>{record.school}</td>
-            <td>{record.lastSeenBy}</td>
           </tr>
         ))}
       </tbody>
