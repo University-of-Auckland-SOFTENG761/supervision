@@ -5,7 +5,6 @@ import { getGraphQlHeaders } from 'database/authorisation';
 import { ConsultDocument, stripMetadata } from 'database/rxdb-utils';
 
 const pullQueryBuilder = (doc: ConsultDocument) => {
-  console.log('CONSULT PULLING');
   const updatedAt = doc?.updatedAt
     ? new Date(doc.updatedAt).toISOString()
     : new Date(0).toISOString();
@@ -134,16 +133,14 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
       givenRefractionBVA,
     }
   }`;
-  const result = {
+
+  return {
     query,
     variables: {},
   };
-
-  return result;
 };
 
 const pushQueryBuilder = (docs: ConsultDocument[]) => {
-  console.log('CONSULT PUSHING');
   // Ensure that the doc has at least an id field and date consent given
   docs = docs.filter((doc) => doc.id && doc.dateConsentGiven);
 
@@ -156,14 +153,15 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
       }
     }
   `;
+
   const variables = {
     consults: strippedDocs,
   };
-  const result = {
+
+  return {
     query,
     variables,
   };
-  return result;
 };
 
 const deletionFilter = (doc: ConsultDocument) => {
