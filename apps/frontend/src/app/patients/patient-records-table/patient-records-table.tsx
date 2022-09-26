@@ -1,9 +1,17 @@
 import { Table, TableTheme } from '@shared';
 import React from 'react';
 
-export const PatientRecordsTable = ({patientRecords}: {patientRecords: {name: string, dateOfBirth: Date, school: string, lastSeenBy: string}[]} ) => {
+export const PatientRecordsTable = ({
+  patientRecords,
+}: {
+  patientRecords: {
+    name: string;
+    dateOfBirth: Date;
+    school: string;
+    lastSeenBy: string;
+  }[];
+}) => {
   // TODO: Replace with actual data
-
 
   return (
     <Table theme={TableTheme.Primary}>
