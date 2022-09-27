@@ -4,7 +4,7 @@ import { CreateSpectaclesInput } from './create-spectacles.input';
 @InputType()
 export class UpdateSpectaclesInput extends PartialType(CreateSpectaclesInput) {
   @Field({
-    description: 'ID of spectacle to update',
+    description: 'ID of spectacles to update',
     nullable: false,
   })
   id: string;
