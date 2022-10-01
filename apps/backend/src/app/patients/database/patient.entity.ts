@@ -63,7 +63,9 @@ export class PatientEntity extends BaseEntity {
   @OneToMany(() => ConsultEntity, (consult) => consult.patient)
   consults: ConsultEntity[];
 
-  @OneToMany(() => SpectaclesEntity, (spectacles) => spectacles.patient)
+  @OneToMany(() => SpectaclesEntity, (spectacles) => spectacles.patient, {
+    cascade: ['insert', 'update'],
+  })
   spectacles: SpectaclesEntity[];
 
   @Column('smallint', { nullable: true })
