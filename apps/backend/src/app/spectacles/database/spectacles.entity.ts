@@ -18,7 +18,7 @@ export class SpectaclesEntity extends BaseEntity {
   patient: PatientEntity;
 
   @Column('varchar', { nullable: true })
-  code: string; // Might need to change to accomodate for drop down list functionality PO wants
+  code: string;
 
   @Column('varchar', { length: 22, nullable: true })
   colour: string;
@@ -27,10 +27,10 @@ export class SpectaclesEntity extends BaseEntity {
   lensType: string;
 
   // PD: Pupil distance
-  @Column('smallint', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
   PD: number;
 
-  @Column('varchar', { nullable: true })
+  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
   heights: string;
 
   @Column('varchar', { nullable: true })
@@ -45,6 +45,7 @@ export class SpectaclesEntity extends BaseEntity {
   @Column('enum', {
     enum: OrderStatus,
     nullable: true,
+    default: OrderStatus.SENT,
   })
   orderStatus: OrderStatus;
 
