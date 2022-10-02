@@ -15,12 +15,6 @@ export class CreateSpectaclesInput {
   consultId: string;
 
   @Field({
-    description: 'ID of user who should deliver the spectacle',
-    nullable: false,
-  })
-  patientId: string;
-
-  @Field({
     description: 'spectacle code',
     nullable: false,
   })

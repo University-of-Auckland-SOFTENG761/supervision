@@ -17,7 +17,6 @@ export class SpectaclesService {
   ): Promise<SpectaclesEntity> {
     const newSpectacles = await this.spectaclesRepository.create({
       consult: { id: spectacles.consultId },
-      patient: { id: spectacles.patientId },
       ...spectacles,
     });
     return await this.spectaclesRepository.save(newSpectacles);
