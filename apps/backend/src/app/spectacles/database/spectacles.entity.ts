@@ -4,10 +4,10 @@ import { PatientEntity } from '@supervision/patients/database/patient.entity';
 import { ConsultEntity } from '@supervision/consults/database/consult.entity';
 
 export enum OrderStatus {
-  CREATED = 'spectacle order created',
+  CREATED = 'created',
   ORDERSENT = 'orderSent',
   READYFORDELIVERY = 'readyForDelivery',
-  DELIVERED = 'deliveredToPatient',
+  DELIVERED = 'delivered',
 }
 
 @Entity({ name: 'spectacles' })
