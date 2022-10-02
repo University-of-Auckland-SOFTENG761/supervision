@@ -6,6 +6,6 @@ export class UpdatePatientInput extends PartialType(CreatePatientInput) {
   @Field(() => String, { nullable: false })
   id: string;
 
-  @Field(() => [String])
-  consultIds: string[];
+  @Field(() => [String], { nullable: true })
+  consultIds?: string[];
 }
