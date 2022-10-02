@@ -1,6 +1,5 @@
 import { useForm } from '@mantine/form';
 import {
-  Checkbox,
   Divider,
   Group,
   ScrollArea,
@@ -11,6 +10,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
 import React, { useCallback, useEffect } from 'react';
+import dayjs from 'dayjs';
 
 // TODO: check with in-progress schema
 export type ISpectacles = {
@@ -119,92 +119,94 @@ export const SpectaclesDetailsPage = () => {
   return (
     <ScrollArea className="h-full p-8">
       <Stack className={'w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4'}>
-        <Title order={3} className={'-mb-3'}>
+        <Title order={3} className={'-mb-8'}>
           Spectacles Dispensing - Vision Bus
         </Title>
-        <Title order={3}>
-          {spectacles ? spectacles.date.toDateString().substring(4) : undefined}
+        <Title order={3} className={'-mb-8'}>
+          {spectacles
+            ? dayjs(spectacles.date).format('D MMMM YYYY')
+            : undefined}
         </Title>
-        <Text className="align-baseline">
-          {form.getInputProps('uid').value}
-        </Text>
+        <Text className={'-mt-8'}>{form.getInputProps('uid').value}</Text>
 
         <Title order={3}>Optometrist Contact Details</Title>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Email</Text>
-          <Text className="-mb-8">{optometristDetails.email}</Text>
+          <Text className="-my-8">Email</Text>
+          <Text className="-my-8">{optometristDetails.email}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Mobile</Text>
-          <Text className="-mb-8">{optometristDetails.mobile}</Text>
+          <Text className="-my-8">Mobile</Text>
+          <Text className="-my-8">{optometristDetails.mobile}</Text>
         </Group>
         <Divider my="xs" />
 
         <Title order={3}>Patient Details</Title>
-        <Group className="justify-between">
-          <Text className="-mb-8">Patient ID</Text>
-          <Text className="-mb-8">
+        <Divider my="xs" />
+        <Group className="justify-between -mb-12">
+          <Text className="-my-8">Patient ID</Text>
+          <Text className="-my-8">
             {form.getInputProps('associatedPatientUid').value}
           </Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">First name</Text>
-          <Text className="-mb-8">{form.getInputProps('firstName').value}</Text>
+          <Text className="-my-8">First name</Text>
+          <Text className="-my-8">{form.getInputProps('firstName').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Last name</Text>
-          <Text className="-mb-8">{form.getInputProps('lastName').value}</Text>
+          <Text className="-my-8">Last name</Text>
+          <Text className="-my-8">{form.getInputProps('lastName').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">School</Text>
-          <Text className="-mb-8">{form.getInputProps('school').value}</Text>
+          <Text className="-my-8">School</Text>
+          <Text className="-my-8">{form.getInputProps('school').value}</Text>
         </Group>
         <Divider my="xs" />
 
         <Title order={3}>Spectacles Details</Title>
+        <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Spectacles code</Text>
-          <Text className="-mb-8">
+          <Text className="-my-8">Spectacles code</Text>
+          <Text className="-my-8">
             {form.getInputProps('spectaclesCode').value}
           </Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Colour</Text>
-          <Text className="-mb-8">{form.getInputProps('colour').value}</Text>
+          <Text className="-my-8">Colour</Text>
+          <Text className="-my-8">{form.getInputProps('colour').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Lens Type</Text>
-          <Text className="-mb-8">{form.getInputProps('lensType').value}</Text>
+          <Text className="-my-8">Lens Type</Text>
+          <Text className="-my-8">{form.getInputProps('lensType').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">PD</Text>
-          <Text className="-mb-8">
+          <Text className="-my-8">PD</Text>
+          <Text className="-my-8">
             {form.getInputProps('pupillaryDistance').value + ' mm'}
           </Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Heights</Text>
-          <Text className="-mb-8">{form.getInputProps('heights').value}</Text>
+          <Text className="-my-8">Heights</Text>
+          <Text className="-my-8">{form.getInputProps('heights').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-mb-8">Spectacles notes</Text>
-          <Text className="-mb-8">
+          <Text className="-my-8">Spectacles notes</Text>
+          <Text className="-my-8">
             {form.getInputProps('spectaclesNotes').value}
           </Text>
         </Group>
         <Divider my="xs" />
-        {/*<Title order={3} className="-mb-8">Dispensing Status</Title>*/}
         <Group className="justify-between">
-          <Text>Order status</Text>
+          <Text className="-my-8">Order status</Text>
           <Select
             data={[
               { value: 'orderSent', label: 'Ordered' },
