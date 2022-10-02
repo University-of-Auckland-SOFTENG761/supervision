@@ -68,17 +68,20 @@ export const ConsultInputs = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consults]);
 
+  const sendUpdate = () => {
+    if (updateConsult && form.values)
+      updateConsult(stripUnusedFields(form.values));
+  };
+
   const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
 
   useEffect(() => {
-    if (debouncedFormValues && updateConsult) {
-      updateConsult(stripUnusedFields(debouncedFormValues));
-    }
+    sendUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedFormValues]);
 
   return (
-    <Stack>
+    <Stack onBlur={sendUpdate}>
       <ConsultDetailsUpper form={form} />
       <ConsultDetailsLower form={form} />
     </Stack>

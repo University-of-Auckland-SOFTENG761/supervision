@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
@@ -14,7 +14,6 @@ import { useDatabase } from '@shared';
 import { useSearchParams } from 'react-router-dom';
 import {
   ConsultDocument,
-  PatientDocument,
   buildFormValues,
   stripUnusedFields,
 } from 'database/rxdb-utils';
@@ -64,7 +63,7 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
       dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
     } as FormInputType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patients]);
+  }, [patient]);
 
   useEffect(() => {
     setPatientAge(
@@ -74,32 +73,38 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
     );
   }, [form.values.dateOfBirth]);
 
+  const sendUpdate = () => {
+    if (updatePatient && form.values)
+      updatePatient(stripUnusedFields(form.values));
+  };
+
   const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
 
   useEffect(() => {
-    if (debouncedFormValues && updatePatient) {
-      updatePatient(stripUnusedFields(debouncedFormValues));
-    }
+    sendUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedFormValues]);
 
   return (
     <>
-      <Stack>
+      <Stack onBlur={sendUpdate}>
         <TextInput
           required
           label="First name:"
+          onBlur={sendUpdate}
           {...form.getInputProps('firstName')}
         />
         <TextInput
           required
           label="Last name:"
+          onBlur={sendUpdate}
           {...form.getInputProps('lastName')}
         />
         <Group className="justify-between">
           <DatePicker
             required
             label="Date of birth:"
+            onBlur={sendUpdate}
             {...form.getInputProps('dateOfBirth')}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
@@ -116,19 +121,33 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
             disabled
           />
         </Group>
-        <TextInput label="Patient ID:" {...form.getInputProps('id')} disabled />
-        <EthnicitySelect {...form.getInputProps('ethnicity')} />
-        <GenderSelect {...form.getInputProps('gender')} />
-        <SchoolAutocomplete label="School" {...form.getInputProps('school')} />
+        <TextInput
+          label="Patient ID:"
+          onBlur={sendUpdate}
+          {...form.getInputProps('id')}
+          disabled
+        />
+        <EthnicitySelect
+          onBlur={sendUpdate}
+          {...form.getInputProps('ethnicity')}
+        />
+        <GenderSelect onBlur={sendUpdate} {...form.getInputProps('gender')} />
+        <SchoolAutocomplete
+          label="School"
+          onBlur={sendUpdate}
+          {...form.getInputProps('school')}
+        />
         <Group className="w-full">
           <NumberInput
             label="Year:"
             className="w-20"
+            onBlur={sendUpdate}
             {...form.getInputProps('yearLevel')}
           />
           <TextInput
             label="Room:"
             className="grow"
+            onBlur={sendUpdate}
             {...form.getInputProps('room')}
           />
         </Group>
@@ -137,23 +156,46 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
         <TextInput
           label="Address:"
           placeholder="Street Address"
+          onBlur={sendUpdate}
           {...form.getInputProps('streetAddress')}
         />
         <Group className="w-full" grow>
-          <TextInput placeholder="Suburb" {...form.getInputProps('suburb')} />
-          <TextInput placeholder="City" {...form.getInputProps('city')} />
+          <TextInput
+            placeholder="Suburb"
+            onBlur={sendUpdate}
+            {...form.getInputProps('suburb')}
+          />
+          <TextInput
+            placeholder="City"
+            onBlur={sendUpdate}
+            {...form.getInputProps('city')}
+          />
         </Group>
-        <TextInput placeholder="Postcode" {...form.getInputProps('postcode')} />
+        <TextInput
+          placeholder="Postcode"
+          onBlur={sendUpdate}
+          {...form.getInputProps('postcode')}
+        />
         <TextInput
           label="Caregiver First Name:"
+          onBlur={sendUpdate}
           {...form.getInputProps('caregiverFirstName')}
         />
         <TextInput
           label="Caregiver Last Name:"
+          onBlur={sendUpdate}
           {...form.getInputProps('caregiverLastName')}
         />
-        <TextInput label="Phone:" {...form.getInputProps('phoneNumber')} />
-        <TextInput label="Email:" {...form.getInputProps('email')} />
+        <TextInput
+          label="Phone:"
+          onBlur={sendUpdate}
+          {...form.getInputProps('phoneNumber')}
+        />
+        <TextInput
+          label="Email:"
+          onBlur={sendUpdate}
+          {...form.getInputProps('email')}
+        />
       </Stack>
       <Stack>
         <Textarea
@@ -161,6 +203,7 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
           placeholder="Type here..."
           autosize
           minRows={3}
+          onBlur={sendUpdate}
           {...form.getInputProps('adminNotes')}
         />
         <RecallsTable patientConsults={patientConsults} />

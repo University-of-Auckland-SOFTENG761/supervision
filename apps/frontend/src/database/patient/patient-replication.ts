@@ -76,7 +76,9 @@ const pullQueryBuilder = (doc: PatientDocument) => {
       postcode,
       adminNotes,
       screeningList,
-      consultIds,
+      consults {
+        id
+      },
     }
   }`;
   return {
@@ -98,14 +100,15 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
             }
           }
   `;
+
   const variables = {
     patients: strippedDocs,
   };
-  const result = {
+
+  return {
     query,
     variables,
   };
-  return result;
 };
 
 const deletionFilter = (doc: PatientDocument) => {
@@ -127,7 +130,12 @@ export const buildPatientReplicationState = async (database: RxDatabase) => {
         pull: {
           queryBuilder: pullQueryBuilder, // the queryBuilder from above
           batchSize: 5,
-          modifier: (doc) => deserializeEnums(deletionFilter(doc)),
+          modifier: (doc) => ({
+            ...deserializeEnums(deletionFilter(doc)),
+            consultIds: doc.consults.map(
+              (consult: { id: string }) => consult.id
+            ),
+          }),
         },
         push: {
           queryBuilder: pushQueryBuilder,

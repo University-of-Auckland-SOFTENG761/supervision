@@ -16,13 +16,15 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
   const query = `{
     consultReplicationFeed(${minUpdatedAtField}${lastIdField}limit: 5) {
       id,
-      userEmail,
-      patientId,
       revision,
       deletedAt,
       updatedAt,
-      userEmail,
-      patientId,
+      user {
+        email
+      },
+      patient {
+        id
+      },
       dateConsentGiven,
       history,
       medication,
@@ -183,7 +185,11 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
         pull: {
           queryBuilder: pullQueryBuilder, // the queryBuilder from above
           batchSize: 5,
-          modifier: (doc) => deletionFilter(doc),
+          modifier: (doc) => ({
+            ...deletionFilter(doc),
+            userEmail: doc.user.email,
+            patientId: doc.patient.id,
+          }),
         },
         push: {
           queryBuilder: pushQueryBuilder,

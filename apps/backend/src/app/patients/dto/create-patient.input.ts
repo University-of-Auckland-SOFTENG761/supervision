@@ -65,7 +65,4 @@ export class CreatePatientInput {
 
   @Field(() => String, { nullable: true })
   screeningList: string;
-
-  @Field(() => [String], { nullable: true })
-  consultIds: string[];
 }
