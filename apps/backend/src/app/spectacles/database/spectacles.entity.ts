@@ -4,8 +4,9 @@ import { PatientEntity } from '@supervision/patients/database/patient.entity';
 import { ConsultEntity } from '@supervision/consults/database/consult.entity';
 
 export enum OrderStatus {
-  SENT = 'orderSent',
-  READY = 'readyForDelivery',
+  CREATED = 'spectacle order created',
+  ORDERSENT = 'orderSent',
+  READYFORDELIVERY = 'readyForDelivery',
   DELIVERED = 'deliveredToPatient',
 }
 
@@ -45,7 +46,7 @@ export class SpectaclesEntity extends BaseEntity {
   @Column('enum', {
     enum: OrderStatus,
     nullable: true,
-    default: OrderStatus.SENT,
+    default: OrderStatus.CREATED,
   })
   orderStatus: OrderStatus;
 
