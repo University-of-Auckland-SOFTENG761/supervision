@@ -43,11 +43,6 @@ export class ConsultsService {
   }
 
   // TODO move this to patients service
-  async findConsultsForPatient(patientId: string): Promise<ConsultEntity[]> {
-    return await this.consultsRepository.find({
-      where: { patient: { id: patientId } },
-    });
-  }
 
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
     const newConsults = await this.consultsRepository.save(consults);

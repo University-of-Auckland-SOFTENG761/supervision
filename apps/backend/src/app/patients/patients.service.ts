@@ -38,7 +38,10 @@ export class PatientService {
   }
 
   async findOne(id: string): Promise<PatientEntity> {
-    return await this.patientsRepository.findOneBy({ id: id });
+    return await this.patientsRepository.findOne({
+      where: { id: id },
+      relations: ['consults', 'spectacles'],
+    });
   }
 
   // Find patient by first or last name
@@ -60,6 +63,8 @@ export class PatientService {
     const lastNameTextPattern = `%${lastName}%`;
     query = this.patientsRepository
       .createQueryBuilder('patient')
+      .leftJoinAndSelect('patient.consults', 'consult')
+      .leftJoinAndSelect('patient.spectacles', 'spectacles')
       .where('upper(patient.firstName) LIKE :firstNameTextPattern', {
         firstNameTextPattern,
       });
