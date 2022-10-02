@@ -1,6 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from '@supervision/users';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ConsultEntity } from './database';
 import { CreateConsultInput, UpdateConsultInput, SetConsultInput } from './dto';
@@ -9,16 +8,13 @@ import { CreateConsultInput, UpdateConsultInput, SetConsultInput } from './dto';
 export class ConsultsService {
   constructor(
     @InjectRepository(ConsultEntity)
-    private consultsRepository: Repository<ConsultEntity>,
-    @Inject(UserService)
-    private userService: UserService
+    private consultsRepository: Repository<ConsultEntity>
   ) {}
 
   async create(consult: CreateConsultInput): Promise<ConsultEntity> {
-    const user = await this.userService.findOneByEmail(consult.userEmail);
-    const newConsult = await this.consultsRepository.create({
+    const newConsult = this.consultsRepository.create({
       patient: { id: consult.patientId },
-      user: { id: user.id },
+      user: { email: consult.userEmail },
       ...consult,
     });
     return await this.consultsRepository.save(newConsult);
@@ -54,14 +50,7 @@ export class ConsultsService {
   }
 
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
-    const bundledConsults = await Promise.all(
-      consults?.map(async ({ userEmail, patientId, ...consult }) => ({
-        user: await this.userService.findOneByEmail(userEmail),
-        patient: { id: patientId },
-        ...consult,
-      }))
-    );
-    const newConsults = await this.consultsRepository.save(bundledConsults);
+    const newConsults = await this.consultsRepository.save(consults);
     return newConsults[newConsults.length - 1];
   }
 

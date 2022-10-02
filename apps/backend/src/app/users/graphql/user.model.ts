@@ -1,4 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { ConsultModel } from '@supervision/consults';
 import { BaseModel } from '@supervision/shared';
 import { UserRole } from '@supervision/users';
 
@@ -23,6 +24,6 @@ export class UserModel extends BaseModel {
   @Field()
   isActive: boolean;
 
-  @Field(() => [String])
-  consultIds: string[];
+  @Field(() => [ConsultModel])
+  consults: ConsultModel[];
 }

@@ -1,6 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
 import { Ethnicity, Gender } from '@supervision/patients';
+import { ConsultModel } from '@supervision/consults';
 
 registerEnumType(Ethnicity, {
   name: 'Ethnicity',
@@ -69,6 +70,6 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: true })
   screeningList: string;
 
-  @Field(() => [String], { nullable: true })
-  consultIds: string[];
+  @Field(() => [ConsultModel], { nullable: true })
+  consults: ConsultModel[];
 }

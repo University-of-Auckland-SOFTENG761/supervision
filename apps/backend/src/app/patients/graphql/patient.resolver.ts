@@ -17,15 +17,11 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   async replicationFeed(
     @Args() args: ReplicationArgs
   ): Promise<PatientModel[]> {
-    const patients = await this.patientService.getUpdatedPatients(
+    return await this.patientService.getUpdatedPatients(
       args.minUpdatedAt,
       args.lastId,
       args.limit
     );
-    return patients.map(({ consults = [], ...patient }) => ({
-      consultIds: consults.map(({ id }) => id),
-      ...patient,
-    }));
   }
 
   @Mutation(() => PatientModel)
@@ -33,10 +29,7 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   async createPatient(
     @Args('createPatientInput') createPatientInput: CreatePatientInput
   ): Promise<PatientModel> {
-    const { consults = [], ...patient } = await this.patientService.create(
-      createPatientInput
-    );
-    return { consultIds: consults.map(({ id }) => id), ...patient };
+    return await this.patientService.create(createPatientInput);
   }
 
   @Mutation(() => PatientModel)
@@ -44,11 +37,10 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   async updatePatient(
     @Args('updatePatientInput') updatePatientInput: UpdatePatientInput
   ): Promise<PatientModel> {
-    const { consults = [], ...patient } = await this.patientService.update(
+    return await this.patientService.update(
       updatePatientInput.id,
       updatePatientInput
     );
-    return { consultIds: consults.map(({ id }) => id), ...patient };
   }
 
   @Mutation(() => PatientModel, { nullable: true })
@@ -61,19 +53,13 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
     })
     setPatientsInput: SetPatientInput[]
   ): Promise<PatientModel | null> {
-    if (!setPatientsInput?.length) {
-      return null;
-    }
-    const temp = await this.patientService.set(setPatientsInput);
-    const { consults = [], ...patient } = temp;
-    return { consultIds: consults.map(({ id }) => id), ...patient };
+    return await this.patientService.set(setPatientsInput);
   }
 
   @Query(() => PatientModel)
   @UseGuards(AuthGuard)
   async patient(@Args('id') id: string): Promise<PatientModel> {
-    const { consults = [], ...patient } = await this.patientService.findOne(id);
-    return { consultIds: consults?.map(({ id }) => id), ...patient };
+    return await this.patientService.findOne(id);
   }
 
   @Query(() => [PatientModel])
@@ -82,23 +68,12 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
     @Args('firstName') firstName: string,
     @Args('lastName') lastName: string | null = null
   ): Promise<PatientModel[]> {
-    const patients = await this.patientService.findOneByName(
-      firstName,
-      lastName
-    );
-    return patients.map(({ consults = [], ...patient }) => ({
-      consultIds: consults.map(({ id }) => id),
-      ...patient,
-    }));
+    return await this.patientService.findOneByName(firstName, lastName);
   }
 
   @Query(() => [PatientModel])
   @UseGuards(AuthGuard)
   async patients(): Promise<PatientModel[]> {
-    const patients = await this.patientService.findAll();
-    return patients.map(({ consults = [], ...patient }) => ({
-      consultIds: consults.map(({ id }) => id),
-      ...patient,
-    }));
+    return this.patientService.findAll();
   }
 }
