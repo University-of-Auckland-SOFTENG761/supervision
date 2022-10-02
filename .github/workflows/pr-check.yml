@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.15.0
-      - uses: nrwl/nx-set-shas@v2
+      - uses: nrwl/nx-set-shas@v3
       - run: npm ci
       - run: npx nx workspace-lint
       - run: npx nx affected --target=lint --parallel=3
