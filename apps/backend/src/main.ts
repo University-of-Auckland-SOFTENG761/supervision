@@ -18,7 +18,7 @@ async function bootstrap() {
   app.enableCors({
     origin: configService.get('app.isProduction')
       ? 'https://uoa-supervision.org'
-      : process.env.FRONTEND_URL, // BREAKING CHANGE: ADD THIS TO YOUR ENV FILE!!!
+      : '*',
   });
 
   await app.listen(port);
