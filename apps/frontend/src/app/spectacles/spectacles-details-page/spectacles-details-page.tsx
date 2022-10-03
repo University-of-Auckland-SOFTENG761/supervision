@@ -15,7 +15,6 @@ import React, { useCallback, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
 
-// TODO: check with in-progress schema
 export type ISpectacles = {
   uid: string;
   firstName?: string;
