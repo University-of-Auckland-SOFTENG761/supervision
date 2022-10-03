@@ -21,7 +21,6 @@ export type ISpectacles = {
   firstName?: string;
   lastName: string;
   school: string;
-  date: Date;
   spectaclesCode?: string;
   colour?: string;
   lensType?: string;
@@ -30,6 +29,7 @@ export type ISpectacles = {
   spectaclesNotes?: string;
   orderStatus?: string;
   orderDate?: Date;
+  deliveryDate?: Date;
   associatedPatientUid?: string;
 };
 
@@ -42,7 +42,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: 'Henry',
       lastName: 'Mitchell-Hibbert',
       school: 'University of Auckland',
-      date: new Date(2022, 8, 22),
       spectaclesCode: 'some-spec-code',
       colour: 'Black',
       lensType: 'some-lens-type',
@@ -57,7 +56,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: 'Joan',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2021, 3, 5),
       spectaclesCode: '',
       colour: 'Blue',
       lensType: '',
@@ -70,7 +68,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: 'Jezza',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2022, 3, 20),
       spectaclesCode: '',
       colour: 'Green',
       lensType: '',
@@ -92,7 +89,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: spectacles?.firstName,
       lastName: spectacles?.lastName,
       school: spectacles?.school,
-      date: spectacles?.date,
       spectaclesCode: spectacles?.spectaclesCode,
       colour: spectacles?.colour,
       lensType: spectacles?.lensType,
@@ -114,7 +110,6 @@ export const SpectaclesDetailsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // TODO: ask Veeran if this should be fixed
   const optometristDetails = {
     email: 'mobile-optometry@auckland.ac.nz',
     mobile: '027 272 3319',
@@ -123,13 +118,11 @@ export const SpectaclesDetailsPage = () => {
   return (
     <ScrollArea className="h-full p-8">
       <Stack className="w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4">
-        <Title order={3} className="-mb-8">
-          Spectacles Dispensing - Vision Bus
+        <Title order={2} className="-mb-8">
+          Vision Bus Aotearoa
         </Title>
-        <Title order={3} className="-mb-8">
-          {spectacles
-            ? dayjs(spectacles.date).format('D MMMM YYYY')
-            : undefined}
+        <Title order={2} className="-mb-8">
+          Spectacles Order Form
         </Title>
 
         <Title order={3}>Optometrist Contact Details</Title>

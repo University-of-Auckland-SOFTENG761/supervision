@@ -12,7 +12,7 @@ export const SpectaclesListPage = () => {
       firstName: 'Henry',
       lastName: 'Mitchell-Hibbert',
       school: 'University of Auckland',
-      date: new Date(2022, 8, 25),
+      orderDate: new Date(2022, 8, 25),
       spectaclesCode: '',
       colour: 'Black',
       lensType: '',
@@ -25,7 +25,7 @@ export const SpectaclesListPage = () => {
       firstName: 'Joan',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2021, 3, 5),
+      orderDate: new Date(2021, 3, 5),
       spectaclesCode: '',
       colour: 'Blue',
       lensType: '',
@@ -38,7 +38,7 @@ export const SpectaclesListPage = () => {
       firstName: 'Jezza',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2022, 3, 20),
+      orderDate: new Date(2022, 3, 20),
       spectaclesCode: '',
       colour: 'Green',
       lensType: '',
@@ -65,11 +65,15 @@ export const SpectaclesListPage = () => {
           <tbody>
             {spectaclesRecords.map((record) => (
               <tr
-                key={record.date.toString()}
+                key={record.orderDate ? record.orderDate.toString() : undefined}
                 onClick={() => navigate(`/spectacles-details/${record.uid}`)}
               >
                 {/*TODO: improve date format*/}
-                <td>{record.date.toISOString().split('T')[0]}</td>
+                <td>
+                  {record.orderDate
+                    ? record.orderDate.toISOString().split('T')[0]
+                    : undefined}
+                </td>
                 <td>{record.firstName}</td>
                 <td>{record.lastName}</td>
                 <td>{record.school}</td>
