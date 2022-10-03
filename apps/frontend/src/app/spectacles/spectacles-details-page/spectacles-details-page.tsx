@@ -5,6 +5,7 @@ import {
   ScrollArea,
   Select,
   Stack,
+  TextInput,
   Title,
 } from '@mantine/core';
 import { useParams } from 'react-router-dom';
@@ -23,7 +24,7 @@ export type ISpectacles = {
   colour?: string;
   lensType?: string;
   pupillaryDistance?: number;
-  heights?: string;
+  heights?: number;
   spectaclesNotes?: string;
   orderStatus?: string;
   associatedPatientUid?: string;
@@ -42,8 +43,8 @@ export const SpectaclesDetailsPage = () => {
       spectaclesCode: 'some-spec-code',
       colour: 'Black',
       lensType: 'some-lens-type',
-      pupillaryDistance: 120,
-      heights: '29',
+      pupillaryDistance: 120.5,
+      heights: 29.5,
       spectaclesNotes: 'Sat on his last pair',
       orderStatus: 'orderSent',
       associatedPatientUid: 'some-patient-id-123456',
@@ -58,7 +59,7 @@ export const SpectaclesDetailsPage = () => {
       colour: 'Blue',
       lensType: '',
       pupillaryDistance: 120,
-      heights: '',
+      heights: 20.5,
       spectaclesNotes: '',
     },
     {
@@ -71,7 +72,7 @@ export const SpectaclesDetailsPage = () => {
       colour: 'Green',
       lensType: '',
       pupillaryDistance: 120,
-      heights: '',
+      heights: 42.0,
       spectaclesNotes: '',
     },
   ];
@@ -175,43 +176,50 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Spectacles code</Text>
-          <Text className="-my-8">
-            {form.getInputProps('spectaclesCode').value}
-          </Text>
+          <TextInput
+            className="-my-8"
+            {...form.getInputProps('spectaclesCode')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Colour</Text>
-          <Text className="-my-8">{form.getInputProps('colour').value}</Text>
+          <TextInput className="-my-8" {...form.getInputProps('colour')} />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Lens Type</Text>
-          <Text className="-my-8">{form.getInputProps('lensType').value}</Text>
+          <TextInput className="-my-8" {...form.getInputProps('lensType')} />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">PD</Text>
-          <Text className="-my-8">
-            {form.getInputProps('pupillaryDistance').value + ' mm'}
-          </Text>
+          <Text className="-my-8">PD (mm)</Text>
+          <TextInput
+            className="-my-8 w-16"
+            {...form.getInputProps('pupillaryDistance')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">Heights</Text>
-          <Text className="-my-8">{form.getInputProps('heights').value}</Text>
+          <Text className="-my-8">Heights (mm)</Text>
+          <TextInput
+            className="-my-8 w-16"
+            {...form.getInputProps('heights')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Spectacles notes</Text>
-          <Text className="-my-8">
-            {form.getInputProps('spectaclesNotes').value}
-          </Text>
+          <TextInput
+            className="-my-8"
+            {...form.getInputProps('spectaclesNotes')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Order status</Text>
           <Select
+            className="w-48"
             data={[
               { value: 'orderSent', label: 'Ordered' },
               { value: 'readyForDelivery', label: 'Ready' },

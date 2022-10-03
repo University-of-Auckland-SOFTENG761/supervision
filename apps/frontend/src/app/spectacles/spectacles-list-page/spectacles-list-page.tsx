@@ -17,7 +17,7 @@ export const SpectaclesListPage = () => {
       colour: 'Black',
       lensType: '',
       pupillaryDistance: 120,
-      heights: '',
+      heights: undefined,
       spectaclesNotes: '',
     },
     {
@@ -30,7 +30,7 @@ export const SpectaclesListPage = () => {
       colour: 'Blue',
       lensType: '',
       pupillaryDistance: 120,
-      heights: '',
+      heights: undefined,
       spectaclesNotes: '',
     },
     {
@@ -43,7 +43,7 @@ export const SpectaclesListPage = () => {
       colour: 'Green',
       lensType: '',
       pupillaryDistance: 120,
-      heights: '',
+      heights: undefined,
       spectaclesNotes: '',
     },
   ];
