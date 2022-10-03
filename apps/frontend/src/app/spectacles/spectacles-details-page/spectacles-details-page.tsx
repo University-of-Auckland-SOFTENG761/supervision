@@ -155,12 +155,12 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">First name</Text>
+          <Text className="-my-8">First Name</Text>
           <Text className="-my-8">{form.getInputProps('firstName').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">Last name</Text>
+          <Text className="-my-8">Last Name</Text>
           <Text className="-my-8">{form.getInputProps('lastName').value}</Text>
         </Group>
         <Divider my="xs" />
@@ -178,7 +178,7 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">Spectacles code</Text>
+          <Text className="-my-8">Code</Text>
           <TextInput
             classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('spectaclesCode')}
@@ -218,7 +218,7 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">Spectacles notes</Text>
+          <Text className="-my-8">Notes</Text>
           <Textarea
             autosize
             minRows="1"
@@ -228,7 +228,7 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between -my-8">
-          <Text className="-my-8">Order status</Text>
+          <Text className="-my-8">Order Status</Text>
           <Select
             className="w-40"
             classNames={{ root: 'w-48 -my-8', input: 'text-right' }}
