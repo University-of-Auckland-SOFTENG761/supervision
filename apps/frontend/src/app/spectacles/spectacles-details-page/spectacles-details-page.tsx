@@ -118,16 +118,15 @@ export const SpectaclesDetailsPage = () => {
 
   return (
     <ScrollArea className="h-full p-8">
-      <Stack className={'w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4'}>
-        <Title order={3} className={'-mb-8'}>
+      <Stack className="w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4">
+        <Title order={3} className="-mb-8">
           Spectacles Dispensing - Vision Bus
         </Title>
-        <Title order={3} className={'-mb-8'}>
+        <Title order={3} className="-mb-8">
           {spectacles
             ? dayjs(spectacles.date).format('D MMMM YYYY')
             : undefined}
         </Title>
-        <Text className={'-mt-8'}>{form.getInputProps('uid').value}</Text>
 
         <Title order={3}>Optometrist Contact Details</Title>
         <Divider my="xs" />
@@ -168,6 +167,11 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
 
         <Title order={3}>Spectacles Details</Title>
+        <Divider my="xs" />
+        <Group className="justify-between">
+          <Text className="-my-8">Spectacles ID</Text>
+          <Text className="-my-8">{form.getInputProps('uid').value}</Text>
+        </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Spectacles code</Text>
