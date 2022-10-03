@@ -5,6 +5,7 @@ import {
   ScrollArea,
   Select,
   Stack,
+  Textarea,
   TextInput,
   Title,
 } from '@mantine/core';
@@ -12,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
 import React, { useCallback, useEffect } from 'react';
 import dayjs from 'dayjs';
+import { DatePicker } from '@mantine/dates';
 
 // TODO: check with in-progress schema
 export type ISpectacles = {
@@ -27,6 +29,7 @@ export type ISpectacles = {
   heights?: number;
   spectaclesNotes?: string;
   orderStatus?: string;
+  orderDate?: Date;
   associatedPatientUid?: string;
 };
 
@@ -216,16 +219,16 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Spectacles notes</Text>
-          <TextInput
-            classNames={{ root: '-my-8', input: 'text-right' }}
+          <Textarea
+            autosize
+            minRows="1"
+            classNames={{ root: '-my-3', input: 'text-left py-1' }}
             {...form.getInputProps('spectaclesNotes')}
           />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between -my-8">
-          <Text classNames={{ root: '-my-8', input: 'text-right' }}>
-            Order status
-          </Text>
+          <Text className="-my-8">Order status</Text>
           <Select
             className="w-40"
             classNames={{ root: 'w-48 -my-8', input: 'text-right' }}
@@ -235,6 +238,36 @@ export const SpectaclesDetailsPage = () => {
               { value: 'deliveredToPatient', label: 'Delivered' },
             ]}
             {...form.getInputProps('orderStatus')}
+          />
+        </Group>
+        <Divider my="xs" />
+        <Group className="justify-between">
+          <Text className="-my-8">Order Date</Text>
+          <DatePicker
+            classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
+            {...form.getInputProps('orderDate')}
+            allowFreeInput
+            inputFormat="DD/MM/YYYY"
+            dateParser={(date: string) =>
+              dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
+            }
+            placeholder="DD/MM/YYYY"
+            initialMonth={new Date()}
+          />
+        </Group>
+        <Divider my="xs" />
+        <Group className="justify-between">
+          <Text className="-my-8">Delivery Date</Text>
+          <DatePicker
+            classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
+            {...form.getInputProps('deliveredDate')}
+            allowFreeInput
+            inputFormat="DD/MM/YYYY"
+            dateParser={(date: string) =>
+              dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
+            }
+            placeholder="DD/MM/YYYY"
+            initialMonth={new Date()}
           />
         </Group>
       </Stack>
