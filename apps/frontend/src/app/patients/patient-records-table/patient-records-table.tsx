@@ -1,10 +1,10 @@
 import { Table, TableTheme } from '@shared';
-import { IPatient } from '../patient-details-page';
+import { PatientDocument } from 'database/rxdb-utils';
 
 export const PatientRecordsTable = ({
   patientRecords,
 }: {
-  patientRecords: IPatient[];
+  patientRecords: PatientDocument[];
 }) => {
   return (
     <Table theme={TableTheme.Primary}>

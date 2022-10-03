@@ -1,8 +1,9 @@
-import { IPatient, PatientRecordsTable } from '@patients';
+import { PatientRecordsTable } from '@patients';
 import { ActionIcon, Modal, TextInput } from '@mantine/core';
-import { usePatients } from '@shared';
+import { useDatabase } from '@shared';
 import { IconSearch, IconUserPlus } from '@tabler/icons';
 import { ForwardedRef, forwardRef, useImperativeHandle, useState } from 'react';
+import { PatientDocument } from 'database/rxdb-utils';
 
 export interface SearchModalRef {
   show(): void;
@@ -17,13 +18,15 @@ export const SearchModal = forwardRef(
     const [opened, setOpened] = useState(false);
     const [searchString, setSearchString] = useState('');
 
-    const { patients } = usePatients();
+    const { patients } = useDatabase();
 
-    const filteredRecords: (_: string) => IPatient[] = (nameString: string) => {
+    const filteredRecords: (_: string) => PatientDocument[] = (
+      nameString: string
+    ) => {
       return patients?.filter((record) => {
         const name = `${record.firstName} ${record.lastName}`;
         return name.toLowerCase().includes(nameString.toLowerCase());
-      }) as IPatient[];
+      }) as PatientDocument[];
     };
 
     useImperativeHandle(ref, () => ({
