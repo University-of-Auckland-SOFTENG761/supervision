@@ -2,7 +2,7 @@ import { ISpectacles } from '../spectacles-details-page';
 import { Table, TableTheme } from '@shared';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ScrollArea, Stack } from '@mantine/core';
+import { ScrollArea, Stack, Title } from '@mantine/core';
 
 export const SpectaclesListPage = () => {
   //TODO: double-check with Veeran which columns he wants
@@ -53,6 +53,7 @@ export const SpectaclesListPage = () => {
   return (
     <ScrollArea className="h-full p-8">
       <Stack className={'w-4/5 mx-auto'}>
+        <Title order={2}>Spectacles List</Title>
         <Table theme={TableTheme.Primary}>
           <thead>
             <tr>
