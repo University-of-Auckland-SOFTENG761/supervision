@@ -12,11 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16.15.0
       - run: npm ci
       - run: npx nx workspace-lint
-      - run: npx nx run-many --all --target=lint --parallel=3
-      - run: npx nx run-many --all --target=test --parallel=3 --ci --code-coverage
-      - run: npx nx run-many --all --target=build --parallel=3
+      - run: npx nx affected --target=lint --parallel=3
+      - run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+      - run: npx nx affected --target=build --parallel=3
