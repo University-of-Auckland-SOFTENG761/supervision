@@ -4,8 +4,6 @@ import { OrderStatus } from '../database';
 registerEnumType(OrderStatus, {
   name: 'OrderStatus',
 });
-
-// ? for reviewers: Do I need to change all these fields to be nullable like we did for consults
 @InputType()
 export class CreateSpectaclesInput {
   @Field({
