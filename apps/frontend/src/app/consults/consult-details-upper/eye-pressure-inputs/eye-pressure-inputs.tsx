@@ -1,6 +1,5 @@
 import { NumberInput, SimpleGrid, Title } from '@mantine/core';
 import { TimeInput, TimeInputProps } from '@mantine/dates';
-import React from 'react';
 
 type EyePressureInputsProps = {
   eyePressureRightProps: {
@@ -41,6 +40,7 @@ export const EyePressureInputs = ({
               setEyePressureTimestamp(null);
             }
           }}
+          value={Number(eyePressureRightProps.value)}
         />
         <NumberInput
           label="Left:"
@@ -56,6 +56,7 @@ export const EyePressureInputs = ({
               setEyePressureTimestamp(null);
             }
           }}
+          value={Number(eyePressureLeftProps.value)}
         />
       </SimpleGrid>
       <TimeInput

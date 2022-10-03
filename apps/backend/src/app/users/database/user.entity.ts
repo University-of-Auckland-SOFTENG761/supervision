@@ -12,7 +12,7 @@ export class UserEntity extends BaseEntity {
   @Column('text', { nullable: false, unique: true })
   auth0Id: string;
 
-  @Column('text')
+  @Column('varchar', { nullable: true })
   email: string;
 
   @Column('varchar', { length: 30 })

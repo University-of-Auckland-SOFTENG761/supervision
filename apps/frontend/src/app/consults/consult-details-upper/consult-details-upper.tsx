@@ -10,7 +10,6 @@ import {
   Select,
   Text,
 } from '@mantine/core';
-import React from 'react';
 import { UseFormReturnType } from '@mantine/form';
 import { VisualAcuityInputs } from './visual-acuity-inputs';
 import { TimeInput } from '@mantine/dates';
@@ -45,24 +44,18 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
             required
           />
           <VisualAcuityInputs
-            {...{
-              ...form.getInputProps('visualAcuityRight'),
-              ...form.getInputProps('visualAcuityLeft'),
-              ...form.getInputProps('visualAcuityBoth'),
-            }}
+            visualAcuityRightProps={form.getInputProps('visualAcuityRight')}
+            visualAcuityLeftProps={form.getInputProps('visualAcuityLeft')}
+            visualAcuityBothProps={form.getInputProps('visualAcuityBoth')}
           />
           <NearAcuityInputs
-            {...{
-              ...form.getInputProps('nearAcuityRight'),
-              ...form.getInputProps('nearAcuityLeft'),
-              ...form.getInputProps('nearAcuityBoth'),
-            }}
+            nearAcuityRightProps={form.getInputProps('nearAcuityRight')}
+            nearAcuityLeftProps={form.getInputProps('nearAcuityLeft')}
+            nearAcuityBothProps={form.getInputProps('nearAcuityBoth')}
           />
           <CoverTestInputs
-            {...{
-              ...form.getInputProps('coverTestDistance'),
-              ...form.getInputProps('coverTestNear'),
-            }}
+            coverTestDistanceProps={form.getInputProps('coverTestDistance')}
+            coverTestNearProps={form.getInputProps('coverTestNear')}
           />
         </Stack>
       </Grid.Col>
