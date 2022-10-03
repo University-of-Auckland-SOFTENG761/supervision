@@ -40,6 +40,11 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
     },
   ];
 
+  const preciseInputProps = {
+    precision: 2,
+    step: 0.01,
+  };
+
   return (
     <Grid columns={10} align="flex-end">
       <Grid.Col lg={9} md={10}>
@@ -74,18 +79,21 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
                 <td>{row.name}</td>
                 <td>
                   <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'RightEyeSphere')}
                   />
                 </td>
                 <td>/</td>
                 <td>
                   <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'RightCylinder')}
                   />
                 </td>
                 <td>x</td>
                 <td>
                   <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'RightAxis')}
                   />
                 </td>
@@ -186,12 +194,14 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
                 </td>
                 <td>
                   <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'LeftEyeSphere')}
                   />
                 </td>
                 <td>/</td>
                 <td>
                   <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'LeftCylinder')}
                   />
                 </td>

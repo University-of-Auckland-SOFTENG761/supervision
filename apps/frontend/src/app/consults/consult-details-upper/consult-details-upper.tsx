@@ -9,6 +9,7 @@ import {
   Group,
   Select,
   Text,
+  NumberInput,
 } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { VisualAcuityInputs } from './visual-acuity-inputs';
@@ -68,7 +69,7 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
           />
           <TextInput label="Motility:" {...form.getInputProps('motility')} />
           <TextInput label="Pupils:" {...form.getInputProps('pupils')} />
-          <TextInput
+          <NumberInput
             label="Pupillary Distance:"
             {...form.getInputProps('pupillaryDistance')}
           />
@@ -238,7 +239,7 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
             placeholder="Include the diagnosis, management plan and prognosis/recall in lay terms"
             autosize
             minRows={11}
-            {...form.getInputProps('laypersonNotes')}
+            {...form.getInputProps('layPersonNotes')}
           />
           <Title order={6} className="-mb-3">
             Recall

@@ -63,7 +63,7 @@ export const consultSchemaLiteral = {
       type: 'string',
     },
     pupillaryDistance: {
-      type: 'string',
+      type: 'number',
     },
     otherField: {
       type: 'string',
