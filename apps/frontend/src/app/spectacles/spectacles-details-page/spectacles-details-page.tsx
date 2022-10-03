@@ -177,25 +177,31 @@ export const SpectaclesDetailsPage = () => {
         <Group className="justify-between">
           <Text className="-my-8">Spectacles code</Text>
           <TextInput
-            className="-my-8"
+            classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('spectaclesCode')}
           />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Colour</Text>
-          <TextInput className="-my-8" {...form.getInputProps('colour')} />
+          <TextInput
+            classNames={{ root: '-my-8', input: 'text-right' }}
+            {...form.getInputProps('colour')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Lens Type</Text>
-          <TextInput className="-my-8" {...form.getInputProps('lensType')} />
+          <TextInput
+            classNames={{ root: '-my-8', input: 'text-right' }}
+            {...form.getInputProps('lensType')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">PD (mm)</Text>
           <TextInput
-            className="-my-8 w-16"
+            classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('pupillaryDistance')}
           />
         </Group>
@@ -203,7 +209,7 @@ export const SpectaclesDetailsPage = () => {
         <Group className="justify-between">
           <Text className="-my-8">Heights (mm)</Text>
           <TextInput
-            className="-my-8 w-16"
+            classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('heights')}
           />
         </Group>
@@ -211,15 +217,18 @@ export const SpectaclesDetailsPage = () => {
         <Group className="justify-between">
           <Text className="-my-8">Spectacles notes</Text>
           <TextInput
-            className="-my-8"
+            classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('spectaclesNotes')}
           />
         </Group>
         <Divider my="xs" />
-        <Group className="justify-between">
-          <Text className="-my-8">Order status</Text>
+        <Group className="justify-between -my-8">
+          <Text classNames={{ root: '-my-8', input: 'text-right' }}>
+            Order status
+          </Text>
           <Select
-            className="w-48"
+            className="w-40"
+            classNames={{ root: 'w-48 -my-8', input: 'text-right' }}
             data={[
               { value: 'orderSent', label: 'Ordered' },
               { value: 'readyForDelivery', label: 'Ready' },
