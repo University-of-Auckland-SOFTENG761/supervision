@@ -5,6 +5,7 @@ import {
   ScrollArea,
   Select,
   Stack,
+  Textarea,
   TextInput,
   Title,
 } from '@mantine/core';
@@ -12,14 +13,13 @@ import { useParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
 import React, { useCallback, useEffect } from 'react';
 import dayjs from 'dayjs';
+import { DatePicker } from '@mantine/dates';
 
-// TODO: check with in-progress schema
 export type ISpectacles = {
   uid: string;
   firstName?: string;
   lastName: string;
   school: string;
-  date: Date;
   spectaclesCode?: string;
   colour?: string;
   lensType?: string;
@@ -27,6 +27,8 @@ export type ISpectacles = {
   heights?: number;
   spectaclesNotes?: string;
   orderStatus?: string;
+  orderDate?: Date;
+  deliveryDate?: Date;
   associatedPatientUid?: string;
 };
 
@@ -39,7 +41,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: 'Henry',
       lastName: 'Mitchell-Hibbert',
       school: 'University of Auckland',
-      date: new Date(2022, 8, 22),
       spectaclesCode: 'some-spec-code',
       colour: 'Black',
       lensType: 'some-lens-type',
@@ -54,7 +55,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: 'Joan',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2021, 3, 5),
       spectaclesCode: '',
       colour: 'Blue',
       lensType: '',
@@ -67,7 +67,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: 'Jezza',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2022, 3, 20),
       spectaclesCode: '',
       colour: 'Green',
       lensType: '',
@@ -89,7 +88,6 @@ export const SpectaclesDetailsPage = () => {
       firstName: spectacles?.firstName,
       lastName: spectacles?.lastName,
       school: spectacles?.school,
-      date: spectacles?.date,
       spectaclesCode: spectacles?.spectaclesCode,
       colour: spectacles?.colour,
       lensType: spectacles?.lensType,
@@ -111,7 +109,6 @@ export const SpectaclesDetailsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // TODO: ask Veeran if this should be fixed
   const optometristDetails = {
     email: 'mobile-optometry@auckland.ac.nz',
     mobile: '027 272 3319',
@@ -120,13 +117,11 @@ export const SpectaclesDetailsPage = () => {
   return (
     <ScrollArea className="h-full p-8">
       <Stack className="w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4">
-        <Title order={3} className="-mb-8">
-          Spectacles Dispensing - Vision Bus
+        <Title order={2} className="-mb-8">
+          Vision Bus Aotearoa
         </Title>
-        <Title order={3} className="-mb-8">
-          {spectacles
-            ? dayjs(spectacles.date).format('D MMMM YYYY')
-            : undefined}
+        <Title order={2} className="-mb-8">
+          Spectacles Order Form
         </Title>
 
         <Title order={3}>Optometrist Contact Details</Title>
@@ -152,12 +147,12 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">First name</Text>
+          <Text className="-my-8">First Name</Text>
           <Text className="-my-8">{form.getInputProps('firstName').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">Last name</Text>
+          <Text className="-my-8">Last Name</Text>
           <Text className="-my-8">{form.getInputProps('lastName').value}</Text>
         </Group>
         <Divider my="xs" />
@@ -175,27 +170,33 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">Spectacles code</Text>
+          <Text className="-my-8">Code</Text>
           <TextInput
-            className="-my-8"
+            classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('spectaclesCode')}
           />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Colour</Text>
-          <TextInput className="-my-8" {...form.getInputProps('colour')} />
+          <TextInput
+            classNames={{ root: '-my-8', input: 'text-right' }}
+            {...form.getInputProps('colour')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Lens Type</Text>
-          <TextInput className="-my-8" {...form.getInputProps('lensType')} />
+          <TextInput
+            classNames={{ root: '-my-8', input: 'text-right' }}
+            {...form.getInputProps('lensType')}
+          />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">PD (mm)</Text>
           <TextInput
-            className="-my-8 w-16"
+            classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('pupillaryDistance')}
           />
         </Group>
@@ -203,29 +204,62 @@ export const SpectaclesDetailsPage = () => {
         <Group className="justify-between">
           <Text className="-my-8">Heights (mm)</Text>
           <TextInput
-            className="-my-8 w-16"
+            classNames={{ root: '-my-8', input: 'text-right' }}
             {...form.getInputProps('heights')}
           />
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
-          <Text className="-my-8">Spectacles notes</Text>
-          <TextInput
-            className="-my-8"
+          <Text className="-my-8">Notes</Text>
+          <Textarea
+            autosize
+            minRows="1"
+            classNames={{ root: '-my-3', input: 'text-left py-1' }}
             {...form.getInputProps('spectaclesNotes')}
           />
         </Group>
         <Divider my="xs" />
-        <Group className="justify-between">
-          <Text className="-my-8">Order status</Text>
+        <Group className="justify-between -my-8">
+          <Text className="-my-8">Order Status</Text>
           <Select
-            className="w-48"
+            className="w-40"
+            classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
             data={[
               { value: 'orderSent', label: 'Ordered' },
               { value: 'readyForDelivery', label: 'Ready' },
               { value: 'deliveredToPatient', label: 'Delivered' },
             ]}
             {...form.getInputProps('orderStatus')}
+          />
+        </Group>
+        <Divider my="xs" />
+        <Group className="justify-between">
+          <Text className="-my-8">Order Date</Text>
+          <DatePicker
+            classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
+            {...form.getInputProps('orderDate')}
+            allowFreeInput
+            inputFormat="DD/MM/YYYY"
+            dateParser={(date: string) =>
+              dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
+            }
+            placeholder="DD/MM/YYYY"
+            initialMonth={new Date()}
+          />
+        </Group>
+        <Divider my="xs" />
+        <Group className="justify-between">
+          <Text className="-my-8">Delivery Date</Text>
+          <DatePicker
+            classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
+            {...form.getInputProps('deliveredDate')}
+            allowFreeInput
+            inputFormat="DD/MM/YYYY"
+            dateParser={(date: string) =>
+              dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
+            }
+            placeholder="DD/MM/YYYY"
+            initialMonth={new Date()}
           />
         </Group>
       </Stack>

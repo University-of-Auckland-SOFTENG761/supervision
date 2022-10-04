@@ -1,2 +1,3 @@
 export * from './patient';
-export * from './database-constructor';
+export * from './supervision-database';
+export * from './consult';

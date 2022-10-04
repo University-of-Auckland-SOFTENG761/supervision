@@ -38,7 +38,7 @@ export class PatientEntity extends BaseEntity {
   @Column('varchar', { length: 40, nullable: true })
   lastName: string;
 
-  @Column('date', { nullable: true })
+  @Column('timestamp', { nullable: true })
   dateOfBirth: Date;
 
   @Column('enum', {
@@ -59,13 +59,15 @@ export class PatientEntity extends BaseEntity {
   })
   school: string;
 
-  @OneToMany(() => ConsultEntity, (consult) => consult.patient)
+  @OneToMany(() => ConsultEntity, (consult) => consult.patient, {
+    cascade: ['insert', 'update'],
+  })
   consults: ConsultEntity[];
 
   @Column('smallint', { nullable: true })
   yearLevel: number;
 
-  @Column('date', { nullable: true })
+  @Column('timestamp', { nullable: true })
   yearLevelLastUpdated: Date;
 
   @Column('varchar', { length: 20, nullable: true })

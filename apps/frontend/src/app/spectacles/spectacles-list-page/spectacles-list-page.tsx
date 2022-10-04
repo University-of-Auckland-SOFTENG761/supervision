@@ -16,7 +16,7 @@ export const SpectaclesListPage = () => {
       firstName: 'Henry',
       lastName: 'Mitchell-Hibbert',
       school: 'University of Auckland',
-      date: new Date(2022, 8, 25),
+      orderDate: new Date(2022, 8, 25),
       spectaclesCode: '',
       colour: 'Black',
       lensType: '',
@@ -30,7 +30,7 @@ export const SpectaclesListPage = () => {
       firstName: 'Joan',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2021, 3, 5),
+      orderDate: new Date(2021, 3, 5),
       spectaclesCode: '',
       colour: 'Blue',
       lensType: '',
@@ -44,7 +44,7 @@ export const SpectaclesListPage = () => {
       firstName: 'Jezza',
       lastName: 'Doe',
       school: 'Massey High School',
-      date: new Date(2022, 3, 20),
+      orderDate: new Date(2022, 3, 20),
       spectaclesCode: '',
       colour: 'Green',
       lensType: '',
@@ -81,7 +81,7 @@ export const SpectaclesListPage = () => {
     console.log(debouncedStatusQuery);
     setTableRecords(
       spectaclesRecords.filter(
-        ({ firstName, lastName, date, school, uid, orderStatus }) => {
+        ({ firstName, lastName, orderDate, school, uid, orderStatus }) => {
           if (
             debouncedStatusQuery !== '' &&
             debouncedStatusQuery !== null &&
@@ -91,7 +91,7 @@ export const SpectaclesListPage = () => {
           }
           if (
             debouncedQuery !== '' &&
-            !`${firstName} ${lastName} ${date.toLocaleDateString()} ${school} ${uid}`
+            !`${firstName} ${lastName} ${orderDate?.toLocaleDateString()} ${school} ${uid}`
               .toLowerCase()
               .includes(debouncedQuery.trim().toLowerCase())
           ) {
@@ -143,9 +143,9 @@ export const SpectaclesListPage = () => {
           idAccessor="uid"
           columns={[
             {
-              accessor: 'date',
+              accessor: 'orderDate',
               title: 'DATE',
-              render: ({ date }) => dayjs(date).format('DD/MM/YYYY'),
+              render: ({ orderDate }) => dayjs(orderDate).format('DD/MM/YYYY'),
               sortable: true,
             },
             { accessor: 'uid', title: 'ID#', sortable: true },

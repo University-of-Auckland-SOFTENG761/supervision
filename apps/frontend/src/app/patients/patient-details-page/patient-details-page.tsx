@@ -1,47 +1,39 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Center, ScrollArea, SimpleGrid, Text } from '@mantine/core';
-import { Button } from '@shared';
+import { Button, useDatabase } from '@shared';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
-
-export type IPatient = {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-  dateOfBirth?: string;
-  ethnicity?: string;
-  gender?: string;
-  school?: string;
-  yearLevel?: number;
-  room?: string;
-  streetAddress?: string;
-  suburb?: string;
-  city?: string;
-  postcode?: string;
-  caregiverFirstName?: string;
-  caregiverLastName?: string;
-  phoneNumber?: string;
-  email?: string;
-  adminNotes?: string;
-};
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ConsultDocument } from 'database/rxdb-utils';
 
 export const PatientDetailsPage = () => {
-  const [currentPatientUid, setCurrentPatientUid] = useState<
-    string | undefined
-  >();
+  const { consults, newConsult } = useDatabase();
+  const [searchParams] = useSearchParams();
+  const patientId = searchParams.get('patientId');
+  const [patientConsults, setPatientConsults] = useState<ConsultDocument[]>([]);
+  const navigate = useNavigate();
 
-  const handlePatientChange = useCallback((uid: string) => {
-    setCurrentPatientUid(uid);
-  }, []);
+  useEffect(() => {
+    if (!consults || !patientId) return;
+    setPatientConsults(
+      consults.filter((consult) => consult.patientId === patientId) ?? []
+    );
+  }, [patientId, consults]);
+
+  const handleCreateNewRecord = () => {
+    const patientRecordsTab =
+      searchParams.get('patientRecordsTab') ?? 'consult';
+    if (newConsult && patientId && patientRecordsTab === 'consult') {
+      const newConsultId = newConsult(patientId);
+      navigate(`/consult-details?consultId=${newConsultId}`);
+    }
+  };
 
   return (
     <>
-      <PatientTabs
-        currentPatientUid={currentPatientUid}
-        onPatientChange={handlePatientChange}
-      />
-      {currentPatientUid ? (
+      <PatientTabs />
+      {patientId ? (
         <ScrollArea className="h-full p-8">
           <SimpleGrid
             cols={3}
@@ -51,12 +43,14 @@ export const PatientDetailsPage = () => {
               { maxWidth: 1280, cols: 3, spacing: 100 },
             ]}
           >
-            <PatientInputs patientUid={currentPatientUid} />
+            <PatientInputs patientConsults={patientConsults} />
           </SimpleGrid>
           <div className="flex mt-5 -mb-5 justify-end w-full">
-            <Button className="ml-auto">CREATE NEW RECORD</Button>
+            <Button onClick={handleCreateNewRecord} className="ml-auto">
+              CREATE NEW RECORD
+            </Button>
           </div>
-          <PatientRecords className="pb-5" />
+          <PatientRecords className="pb-5" patientConsults={patientConsults} />
         </ScrollArea>
       ) : (
         <Center className="h-full">

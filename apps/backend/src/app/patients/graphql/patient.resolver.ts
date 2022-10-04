@@ -5,7 +5,6 @@ import { IReplicationResolver, ReplicationArgs } from '@supervision/shared';
 import { PatientModel } from './patient.model';
 import { PatientService } from '@supervision/patients/patients.service';
 import { CreatePatientInput } from '../dto/create-patient.input';
-import { PatientEntity } from '../database';
 import { UpdatePatientInput } from '../dto/update-patient.input';
 import { SetPatientInput } from '../dto/set-patient-input';
 
@@ -18,7 +17,7 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   async replicationFeed(
     @Args() args: ReplicationArgs
   ): Promise<PatientModel[]> {
-    return this.patientService.getUpdatedPatients(
+    return await this.patientService.getUpdatedPatients(
       args.minUpdatedAt,
       args.lastId,
       args.limit
@@ -68,13 +67,13 @@ export class PatientResolver implements IReplicationResolver<PatientModel> {
   async findPatientByName(
     @Args('firstName') firstName: string,
     @Args('lastName') lastName: string | null = null
-  ): Promise<PatientEntity[]> {
+  ): Promise<PatientModel[]> {
     return await this.patientService.findOneByName(firstName, lastName);
   }
 
   @Query(() => [PatientModel])
   @UseGuards(AuthGuard)
   async patients(): Promise<PatientModel[]> {
-    return await this.patientService.findAll();
+    return this.patientService.findAll();
   }
 }

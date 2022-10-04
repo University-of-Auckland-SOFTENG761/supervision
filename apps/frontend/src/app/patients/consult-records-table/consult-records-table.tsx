@@ -1,38 +1,31 @@
 import { Table, TableTheme } from '@shared';
-import React from 'react';
+import { ConsultDocument } from 'database/rxdb-utils';
+import { Stack, Text, ThemeIcon } from '@mantine/core';
+import { applyDateFormat } from 'utils/date.utils';
+import { useNavigate } from 'react-router-dom';
+import { IconDatabaseOff } from '@tabler/icons';
 
-export const ConsultRecordsTable = () => {
-  // TODO: Replace with actual data
-  const consultRecords = [
-    {
-      date: '21/08/2022',
-      rxRight: '+4.00/-3.00x180',
-      rxRightEyeSphere: '+4.00',
-      rxRightCylinder: '-3.00',
-      rxRightAxis: '180',
-      rxLeft: '+4.00/-3.00x180',
-      rxLeftEyeSphere: '+4.00',
-      rxLeftCylinder: '-3.00',
-      rxLeftAxis: '180',
-      pd: '62',
-      diagnosis: 'Myopia',
-      management: 'Glasses',
-    },
-    {
-      date: '18/02/2019',
-      rxRight: '+4.00/-3.00x180',
-      rxRightEyeSphere: '+4.00',
-      rxRightCylinder: '-3.00',
-      rxRightAxis: '180',
-      rxLeft: '+4.00/-3.00x180',
-      rxLeftEyeSphere: '+4.00',
-      rxLeftCylinder: '-3.00',
-      rxLeftAxis: '180',
-      pd: '62',
-      diagnosis: 'Myopia',
-      management: 'Contact Lenses',
-    },
-  ];
+type ConsultRecordsTableProps = {
+  patientConsults: ConsultDocument[];
+};
+
+export const ConsultRecordsTable = ({
+  patientConsults,
+}: ConsultRecordsTableProps) => {
+  const navigate = useNavigate();
+
+  const applyRefractionFormat = (
+    eyeSphere?: number,
+    eyeCylinder?: number,
+    axis?: number
+  ) =>
+    `${eyeSphere?.toFixed(2) ?? '-.--'} / ${
+      eyeCylinder?.toFixed(2) ?? '-.--'
+    } x ${axis ?? '--'}`;
+
+  const handleConsultClick = (consultId: string) => {
+    navigate(`/consult-details?consultId=${consultId}`);
+  };
 
   return (
     <Table theme={TableTheme.Primary}>
@@ -46,27 +39,50 @@ export const ConsultRecordsTable = () => {
         </tr>
       </thead>
       <tbody>
-        {consultRecords.map((record) => (
-          <tr key={record.date}>
-            <td>{record.date}</td>
-            <td>
-              {record.rxRightEyeSphere +
-                '/' +
-                record.rxRightCylinder +
-                'x' +
-                record.rxRightAxis}
+        {patientConsults.length === 0 ? (
+          <tr>
+            <td colSpan={5} className="hover:bg-white">
+              <Stack className="justify-center w-full p-2">
+                <ThemeIcon
+                  color="gray.6"
+                  variant="light"
+                  size="xl"
+                  radius="xl"
+                  className="m-auto"
+                >
+                  <IconDatabaseOff />
+                </ThemeIcon>
+                <Text className="m-auto font-medium">No consult records</Text>
+              </Stack>
             </td>
-            <td>
-              {record.rxLeftEyeSphere +
-                '/' +
-                record.rxLeftCylinder +
-                'x' +
-                record.rxLeftAxis}
-            </td>
-            <td>{record.diagnosis}</td>
-            <td>{record.management}</td>
           </tr>
-        ))}
+        ) : (
+          patientConsults?.map((record) => (
+            <tr
+              key={record.id}
+              className="cursor-pointer"
+              onClick={() => handleConsultClick(record.id)}
+            >
+              <td>{applyDateFormat(new Date(record.dateConsentGiven))}</td>
+              <td>
+                {applyRefractionFormat(
+                  record.givenRefractionRightEyeSphere,
+                  record.givenRefractionRightCylinder,
+                  record.givenRefractionRightAxis
+                )}
+              </td>
+              <td>
+                {applyRefractionFormat(
+                  record.givenRefractionLeftEyeSphere,
+                  record.givenRefractionLeftCylinder,
+                  record.givenRefractionLeftAxis
+                )}
+              </td>
+              <td>{record.diagnosis}</td>
+              <td>{record.management}</td>
+            </tr>
+          ))
+        )}
       </tbody>
     </Table>
   );

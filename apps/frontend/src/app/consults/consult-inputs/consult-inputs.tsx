@@ -1,61 +1,89 @@
-import { IConsult } from '../consult-details-page';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from '@mantine/form';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
+import { buildFormValues, stripUnusedFields } from 'database/rxdb-utils';
+import { useDatabase } from '@shared';
+import { useSearchParams } from 'react-router-dom';
+import { ConsultDocType, consultSchemaTyped } from 'database';
+import { useDebouncedValue } from '@mantine/hooks';
 
-type ConsultDetailsProps = {
-  consult: IConsult;
-  onUpdateConsult: (updatedConsult: IConsult) => void;
+type TimestampFilter =
+  | 'eyePressureTimestamp'
+  | 'cyclopentolateTimestamp'
+  | 'tropicamideTimestamp';
+
+type FormTimestamps = {
+  [key in TimestampFilter]: Date | null;
 };
 
-export const ConsultInputs = ({
-  consult,
-  onUpdateConsult,
-}: ConsultDetailsProps) => {
-  const [consultUid, setConsultUid] = useState(consult.uid);
+export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
+  FormTimestamps;
+
+export const ConsultInputs = () => {
+  const { consults, updateConsult } = useDatabase();
+
+  const [searchParams] = useSearchParams();
+  const consultId = searchParams.get('consultId');
+
+  const consult = consultId
+    ? consults?.find((p) => p.id === consultId)
+    : undefined;
 
   const form = useForm({
     initialValues: {
-      ...consult,
-    },
+      ...buildFormValues(
+        consultSchemaTyped,
+        consult?.toJSON !== undefined ? consult.toJSON() : consult
+      ),
+      eyePressureTimestamp: consult?.eyePressureTimestamp
+        ? new Date(consult?.eyePressureTimestamp)
+        : null,
+      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
+        ? new Date(consult?.cyclopentolateTimestamp)
+        : null,
+      tropicamideTimestamp: consult?.tropicamideTimestamp
+        ? new Date(consult?.tropicamideTimestamp)
+        : null,
+    } as FormInputType,
   });
 
   useEffect(() => {
-    if (consult.uid !== consultUid) {
-      setConsultUid(consult.uid);
-      form.setValues({
-        uid: consult.uid,
-      });
-    }
-  }, [form, consultUid, consult]);
+    form.setValues({
+      ...buildFormValues(
+        consultSchemaTyped,
+        consult?.toJSON !== undefined ? consult.toJSON() : consult
+      ),
+      eyePressureTimestamp: consult?.eyePressureTimestamp
+        ? new Date(consult?.eyePressureTimestamp)
+        : null,
+      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
+        ? new Date(consult?.cyclopentolateTimestamp)
+        : null,
+      tropicamideTimestamp: consult?.tropicamideTimestamp
+        ? new Date(consult?.tropicamideTimestamp)
+        : null,
+    } as FormInputType);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [consults]);
 
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sendUpdate = () => {
+    if (updateConsult && form.values)
+      updateConsult(stripUnusedFields(form.values));
+  };
+
+  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
 
   useEffect(() => {
-    if (debounceTimeout.current != null) {
-      clearTimeout(debounceTimeout.current);
-    }
-    debounceTimeout.current = setTimeout(() => {
-      debounceTimeout.current = null;
-      onUpdateConsult({
-        ...form.values,
-      });
-    }, 500);
+    sendUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.values]);
+  }, [debouncedFormValues]);
 
   return (
-    <Stack>
-      <ConsultDetailsUpper
-        onUpdateConsult={onUpdateConsult}
-        consult={consult}
-      />
-      <ConsultDetailsLower
-        onUpdateConsult={onUpdateConsult}
-        consult={consult}
-      />
+    <Stack onBlur={sendUpdate}>
+      <ConsultDetailsUpper form={form} />
+      <ConsultDetailsLower form={form} />
     </Stack>
   );
 };
