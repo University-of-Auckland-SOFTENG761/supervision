@@ -1,4 +1,5 @@
 import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -25,13 +26,15 @@ root.render(
       withNormalizeCSS
       theme={MantineTheme}
     >
-      <BrowserRouter>
-        <Auth0Provider>
-          <DatabaseProvider>
-            <Routes />
-          </DatabaseProvider>
-        </Auth0Provider>
-      </BrowserRouter>
+      <NotificationsProvider position="top-center">
+        <BrowserRouter>
+          <Auth0Provider>
+            <DatabaseProvider>
+              <Routes />
+            </DatabaseProvider>
+          </Auth0Provider>
+        </BrowserRouter>
+      </NotificationsProvider>
     </MantineProvider>
   </StrictMode>
 );
