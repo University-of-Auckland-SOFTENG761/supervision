@@ -3,6 +3,7 @@ import { Table, TableTheme, Button } from '@shared';
 import { TextInput, Grid, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
+import { useNavigate } from 'react-router-dom';
 
 type ConsultDetailsLowerProps = {
   consult: IConsult;
@@ -21,7 +22,7 @@ export const ConsultDetailsLower = ({
 
   const consultRows = [
     {
-      name: 'Previous Spectacle Rx',
+      name: 'Previous Spectacles Rx',
       code: 'prevSpecRxGiven',
     },
     {
@@ -49,6 +50,8 @@ export const ConsultDetailsLower = ({
       code: 'givenRefraction',
     },
   ];
+
+  const navigate = useNavigate();
 
   return (
     <Grid columns={10} align="flex-end">
@@ -229,7 +232,7 @@ export const ConsultDetailsLower = ({
                     {...form.getInputProps(row.code + 'LeftAdd')}
                   />
                 </td>
-                {row.name === 'Previous Spectacle Rx' ||
+                {row.name === 'Previous Spectacles Rx' ||
                 row.name === 'Given refraction' ? (
                   <td>
                     <TextInput {...form.getInputProps(row.code + 'BVA')} />
@@ -247,6 +250,15 @@ export const ConsultDetailsLower = ({
           <Button color="green">APPROVE</Button>
           <Button color="red">DELETE</Button>
           <Button>REFER</Button>
+          <Button
+            color="yellow"
+            onClick={() => {
+              const placeholder_id = 'fake_id_1234';
+              navigate(`/spectacles-details/${placeholder_id}`);
+            }}
+          >
+            SCRIPT
+          </Button>
         </Stack>
       </Grid.Col>
     </Grid>
