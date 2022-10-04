@@ -104,11 +104,16 @@ export class UserService {
     databaseUser.auth0Id = auth0UserId;
     databaseUser.firstName = data.firstName;
     databaseUser.lastName = data.lastName;
+    databaseUser.email = data.email;
     return this.usersRepository.save(databaseUser);
   }
 
   async findOneById(id: string): Promise<UserEntity | null> {
     return this.usersRepository.findOneBy({ id });
+  }
+
+  async findOneByEmail(email: string): Promise<UserEntity | null> {
+    return this.usersRepository.findOneBy({ email });
   }
 
   async findUserFromAuth0(auth0Id: string): Promise<UserEntity | null> {

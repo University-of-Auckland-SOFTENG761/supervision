@@ -1,18 +1,13 @@
-import { SimpleGrid, TextInput, Title } from '@mantine/core';
-import React from 'react';
+import { SimpleGrid, TextInput, TextInputProps, Title } from '@mantine/core';
 
 type CoverTestInputsProps = {
-  distanceCoverTest: string;
-  onUpdateDistanceCoverTest: (value: string | null) => void;
-  nearCoverTest: string;
-  onUpdateNearCoverTest: (value: string | null) => void;
+  coverTestDistanceProps: TextInputProps;
+  coverTestNearProps: TextInputProps;
 };
 
 export const CoverTestInputs = ({
-  distanceCoverTest,
-  onUpdateDistanceCoverTest,
-  nearCoverTest,
-  onUpdateNearCoverTest,
+  coverTestDistanceProps,
+  coverTestNearProps,
 }: CoverTestInputsProps) => {
   return (
     <>
@@ -23,12 +18,9 @@ export const CoverTestInputs = ({
         <TextInput
           label="Distance:"
           classNames={{ label: 'whitespace-nowrap' }}
-          {...{ distanceCoverTest, onUpdateDistanceCoverTest }}
+          {...coverTestDistanceProps}
         />
-        <TextInput
-          label="Near:"
-          {...{ nearCoverTest, onUpdateNearCoverTest }}
-        />
+        <TextInput label="Near:" {...coverTestNearProps} />
       </SimpleGrid>
     </>
   );

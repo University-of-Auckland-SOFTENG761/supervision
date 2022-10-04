@@ -1,18 +1,17 @@
-import { SimpleGrid, TextInput, Title } from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
-import React from 'react';
+import { NumberInput, SimpleGrid, Title } from '@mantine/core';
+import { TimeInput, TimeInputProps } from '@mantine/dates';
 
 type EyePressureInputsProps = {
   eyePressureRightProps: {
     value: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement> | null) => void;
+    onChange: (value?: number) => void;
   };
   eyePressureLeftProps: {
     value: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement> | null) => void;
+    onChange: (value?: number) => void;
   };
-  eyePressureTimestampProps: any;
-  setEyePressureTimestamp: (timestamp: Date | undefined) => void;
+  eyePressureTimestampProps: TimeInputProps;
+  setEyePressureTimestamp: (timestamp: Date | null) => void;
 };
 
 export const EyePressureInputs = ({
@@ -27,29 +26,37 @@ export const EyePressureInputs = ({
         Eye Pressures (mmHg)
       </Title>
       <SimpleGrid cols={3}>
-        <TextInput
+        <NumberInput
           label="Right:"
-          onChange={(event) => {
-            eyePressureRightProps.onChange(event);
-            if (event.target.value || eyePressureLeftProps.value) {
+          onChange={(value) => {
+            eyePressureRightProps.onChange(value);
+            if (
+              value !== undefined ||
+              eyePressureLeftProps.value !== undefined
+            ) {
               !eyePressureTimestampProps.value &&
                 setEyePressureTimestamp(new Date());
             } else {
-              setEyePressureTimestamp(undefined);
+              setEyePressureTimestamp(null);
             }
           }}
+          value={Number(eyePressureRightProps.value)}
         />
-        <TextInput
+        <NumberInput
           label="Left:"
-          onChange={(event) => {
-            eyePressureLeftProps.onChange(event);
-            if (event.target.value || eyePressureRightProps.value) {
+          onChange={(value) => {
+            eyePressureLeftProps.onChange(value);
+            if (
+              value !== undefined ||
+              eyePressureRightProps.value !== undefined
+            ) {
               !eyePressureTimestampProps.value &&
                 setEyePressureTimestamp(new Date());
             } else {
-              setEyePressureTimestamp(undefined);
+              setEyePressureTimestamp(null);
             }
           }}
+          value={Number(eyePressureLeftProps.value)}
         />
       </SimpleGrid>
       <TimeInput

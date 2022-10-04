@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { PatientModel } from '@supervision/patients/graphql/patient.model';
+import { PatientModel } from '@supervision/patients';
 import { BaseModel } from '@supervision/shared';
-import { UserModel } from '@supervision/users/graphql/user.model';
+import { UserModel } from '@supervision/users';
 
 @ObjectType({ description: 'consult' })
 export class ConsultModel extends BaseModel {
