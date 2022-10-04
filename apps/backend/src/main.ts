@@ -16,7 +16,9 @@ async function bootstrap() {
   const port = configService.get<number>('app.port');
 
   app.enableCors({
-    origin: 'https://uoa-supervision.org',
+    origin: configService.get('app.isProduction')
+      ? 'https://uoa-supervision.org'
+      : '*',
   });
 
   await app.listen(port);
