@@ -4,8 +4,8 @@ import { PatientModel } from '@supervision/patients';
 import { BaseModel } from '@supervision/shared';
 import { OrderStatus } from '../database';
 
-@ObjectType({ description: 'spectacles' })
-export class SpectaclesModel extends BaseModel {
+@ObjectType({ description: 'spectacle' })
+export class SpectacleModel extends BaseModel {
   @Field(() => ConsultModel, { nullable: false })
   consult: ConsultModel;
 
@@ -34,7 +34,7 @@ export class SpectaclesModel extends BaseModel {
   orderDate: Date;
 
   @Field({ nullable: true })
-  createdDate;
+  createdDate: Date;
 
   @Field({ nullable: true })
   deliveredDate: Date;

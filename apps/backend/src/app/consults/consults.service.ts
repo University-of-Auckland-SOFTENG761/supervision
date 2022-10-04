@@ -71,7 +71,7 @@ export class ConsultsService {
         // Load in the patient and user entities (SelectQueryBuilder does not do this by default)
         .leftJoinAndSelect('consult.patient', 'patient')
         .leftJoinAndSelect('consult.user', 'user')
-        .leftJoinAndSelect('consult.spectacles', 'spectacles');
+        .leftJoinAndSelect('consult.spectacle', 'spectacle');
     } else {
       query = this.consultsRepository
         .createQueryBuilder('consult')

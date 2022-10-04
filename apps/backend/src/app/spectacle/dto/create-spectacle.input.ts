@@ -5,7 +5,7 @@ registerEnumType(OrderStatus, {
   name: 'OrderStatus',
 });
 @InputType()
-export class CreateSpectaclesInput {
+export class CreateSpectacleInput {
   @Field({
     description: 'ID of associated consult',
     nullable: false,

@@ -7,18 +7,18 @@ import { SetConsultInput } from '../dto/set-consult.input';
 import { ConsultModel } from './consult.model';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@supervision/auth/guards';
-import { SpectaclesModel } from '@supervision/spectacles/graphql';
+import { SpectacleModel } from '@supervision/spectacle/graphql';
 import {
-  CreateSpectaclesInput,
-  UpdateSpectaclesInput,
-} from '@supervision/spectacles/dto';
-import { SpectaclesService } from '@supervision/spectacles/spectacles.service';
+  CreateSpectacleInput,
+  UpdateSpectacleInput,
+} from '@supervision/spectacle/dto';
+import { SpectacleService } from '@supervision/spectacle/spectacle.service';
 
 @Resolver(() => ConsultModel)
 export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   constructor(
     private consultService: ConsultsService,
-    private spectaclesService: SpectaclesService
+    private spectacleService: SpectacleService
   ) {}
 
   @Mutation(() => ConsultModel)
@@ -40,22 +40,22 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
     );
   }
 
-  @Mutation(() => SpectaclesModel)
+  @Mutation(() => SpectacleModel)
   @UseGuards(AuthGuard)
-  async createSpectacles(
-    @Args('createSpectaclesInput') createSpectaclesInput: CreateSpectaclesInput
-  ): Promise<SpectaclesModel> {
-    return await this.spectaclesService.createSpectacles(createSpectaclesInput);
+  async createSpectacle(
+    @Args('createSpectacleInput') createSpectacleInput: CreateSpectacleInput
+  ): Promise<SpectacleModel> {
+    return await this.spectacleService.createSpectacle(createSpectacleInput);
   }
 
-  @Mutation(() => SpectaclesModel)
+  @Mutation(() => SpectacleModel)
   @UseGuards(AuthGuard)
-  async updateSpectacles(
-    @Args('updateSpectaclesInput') updateSpectaclesInput: UpdateSpectaclesInput
-  ): Promise<SpectaclesModel> {
-    return await this.spectaclesService.updateSpectacles(
-      updateSpectaclesInput,
-      updateSpectaclesInput.id
+  async updateSpectacle(
+    @Args('updateSpectacleInput') updateSpectacleInput: UpdateSpectacleInput
+  ): Promise<SpectacleModel> {
+    return await this.spectacleService.updateSpectacle(
+      updateSpectacleInput,
+      updateSpectacleInput.id
     );
   }
 
@@ -71,12 +71,12 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
     return await this.consultService.findAll();
   }
 
-  @Query(() => SpectaclesModel)
+  @Query(() => SpectacleModel)
   @UseGuards(AuthGuard)
-  async spectacles(
+  async spectacle(
     @Args('consultId') consultId: string
-  ): Promise<SpectaclesModel> {
-    return await this.spectaclesService.findSpectaclesForConsult(consultId);
+  ): Promise<SpectacleModel> {
+    return await this.spectacleService.findSpectacleForConsult(consultId);
   }
 
   @Query(() => [ConsultModel], { name: 'consultReplicationFeed' })

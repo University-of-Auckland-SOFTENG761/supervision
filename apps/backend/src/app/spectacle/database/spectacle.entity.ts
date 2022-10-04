@@ -10,12 +10,12 @@ export enum OrderStatus {
   DELIVERED = 'delivered',
 }
 
-@Entity({ name: 'spectacles' })
-export class SpectaclesEntity extends BaseEntity {
-  @OneToOne(() => ConsultEntity, (consult) => consult.spectacles)
+@Entity({ name: 'spectacle' })
+export class SpectacleEntity extends BaseEntity {
+  @OneToOne(() => ConsultEntity, (consult) => consult.spectacle)
   consult: ConsultEntity;
 
-  @ManyToOne(() => PatientEntity, (patient) => patient.spectacles)
+  @ManyToOne(() => PatientEntity, (patient) => patient.spectacle)
   patient: PatientEntity;
 
   @Column('varchar', { nullable: true })

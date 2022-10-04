@@ -40,7 +40,7 @@ export class PatientService {
   async findOne(id: string): Promise<PatientEntity> {
     return await this.patientsRepository.findOne({
       where: { id: id },
-      relations: ['consults', 'spectacles'],
+      relations: ['consults', 'spectacle'],
     });
   }
 
@@ -64,7 +64,7 @@ export class PatientService {
     query = this.patientsRepository
       .createQueryBuilder('patient')
       .leftJoinAndSelect('patient.consults', 'consult')
-      .leftJoinAndSelect('patient.spectacles', 'spectacles')
+      .leftJoinAndSelect('patient.spectacle', 'spectacle')
       .where('upper(patient.firstName) LIKE :firstNameTextPattern', {
         firstNameTextPattern,
       });
