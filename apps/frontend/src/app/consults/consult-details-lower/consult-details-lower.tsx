@@ -1,31 +1,22 @@
-import { IConsult } from '../consult-details-page';
 import { Table, TableTheme, Button } from '@shared';
-import { TextInput, Grid, Stack } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { TextInput, Grid, Stack, NumberInput } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
+import { FormInputType } from '../consult-inputs';
+import { useNavigate } from 'react-router-dom';
 
 type ConsultDetailsLowerProps = {
-  consult: IConsult;
-  onUpdateConsult: (updatedConsult: IConsult) => void;
+  form: UseFormReturnType<FormInputType>;
 };
 
-export const ConsultDetailsLower = ({
-  consult,
-  onUpdateConsult,
-}: ConsultDetailsLowerProps) => {
-  const form = useForm({
-    initialValues: {
-      ...consult,
-    },
-  });
-
+export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
   const consultRows = [
     {
-      name: 'Previous Spectacle Rx',
+      name: 'Previous Spectacles Rx',
       code: 'prevSpecRxGiven',
     },
     {
-      name: 'Habitual (if different from above',
+      name: 'Habitual (if different from above)',
       code: 'habitual',
     },
     {
@@ -49,6 +40,13 @@ export const ConsultDetailsLower = ({
       code: 'givenRefraction',
     },
   ];
+
+  const preciseInputProps = {
+    precision: 2,
+    step: 0.01,
+  };
+  
+  const navigate = useNavigate();
 
   return (
     <Grid columns={10} align="flex-end">
@@ -83,22 +81,22 @@ export const ConsultDetailsLower = ({
               <tr key={row.name}>
                 <td>{row.name}</td>
                 <td>
-                  <TextInput
-                    type="number"
+                  <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'RightEyeSphere')}
                   />
                 </td>
                 <td>/</td>
                 <td>
-                  <TextInput
-                    type="number"
+                  <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'RightCylinder')}
                   />
                 </td>
                 <td>x</td>
                 <td>
-                  <TextInput
-                    type="number"
+                  <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'RightAxis')}
                   />
                 </td>
@@ -106,10 +104,7 @@ export const ConsultDetailsLower = ({
                   <TextInput {...form.getInputProps(row.code + 'RightVA')} />
                 </td>
                 <td>
-                  <TextInput
-                    type="number"
-                    {...form.getInputProps(row.code + 'RightAdd')}
-                  />
+                  <NumberInput {...form.getInputProps(row.code + 'RightAdd')} />
                 </td>
                 <td>
                   {index !== consultRows.length - 1 && (
@@ -201,35 +196,29 @@ export const ConsultDetailsLower = ({
                   )}
                 </td>
                 <td>
-                  <TextInput
-                    type="number"
+                  <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'LeftEyeSphere')}
                   />
                 </td>
                 <td>/</td>
                 <td>
-                  <TextInput
-                    type="number"
+                  <NumberInput
+                    {...preciseInputProps}
                     {...form.getInputProps(row.code + 'LeftCylinder')}
                   />
                 </td>
                 <td>x</td>
                 <td>
-                  <TextInput
-                    type="number"
-                    {...form.getInputProps(row.code + 'LeftAxis')}
-                  />
+                  <NumberInput {...form.getInputProps(row.code + 'LeftAxis')} />
                 </td>
                 <td>
                   <TextInput {...form.getInputProps(row.code + 'LeftVA')} />
                 </td>
                 <td>
-                  <TextInput
-                    type="number"
-                    {...form.getInputProps(row.code + 'LeftAdd')}
-                  />
+                  <NumberInput {...form.getInputProps(row.code + 'LeftAdd')} />
                 </td>
-                {row.name === 'Previous Spectacle Rx' ||
+                {row.name === 'Previous Spectacles Rx' ||
                 row.name === 'Given refraction' ? (
                   <td>
                     <TextInput {...form.getInputProps(row.code + 'BVA')} />
@@ -247,6 +236,15 @@ export const ConsultDetailsLower = ({
           <Button color="green">APPROVE</Button>
           <Button color="red">DELETE</Button>
           <Button>REFER</Button>
+          <Button
+            color="yellow"
+            onClick={() => {
+              const placeholder_id = 'fake_id_1234';
+              navigate(`/spectacles-details/${placeholder_id}`);
+            }}
+          >
+            SCRIPT
+          </Button>
         </Stack>
       </Grid.Col>
     </Grid>

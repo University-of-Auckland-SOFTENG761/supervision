@@ -1,22 +1,15 @@
-import { SimpleGrid, TextInput, Title } from '@mantine/core';
-import React from 'react';
+import { SimpleGrid, TextInput, TextInputProps, Title } from '@mantine/core';
 
 type NearAcuityInputsProps = {
-  rightNearAcuity: string;
-  onUpdateRightNearAcuity: (value: string | null) => void;
-  leftNearAcuity: string;
-  onUpdateLeftNearAcuity: (value: string | null) => void;
-  bothNearAcuity: string;
-  onUpdateBothNearAcuity: (value: string | null) => void;
+  nearAcuityRightProps: TextInputProps;
+  nearAcuityLeftProps: TextInputProps;
+  nearAcuityBothProps: TextInputProps;
 };
 
 export const NearAcuityInputs = ({
-  rightNearAcuity,
-  onUpdateRightNearAcuity,
-  leftNearAcuity,
-  onUpdateLeftNearAcuity,
-  bothNearAcuity,
-  onUpdateBothNearAcuity,
+  nearAcuityRightProps,
+  nearAcuityLeftProps,
+  nearAcuityBothProps,
 }: NearAcuityInputsProps) => {
   return (
     <>
@@ -24,29 +17,9 @@ export const NearAcuityInputs = ({
         Near Acuity
       </Title>
       <SimpleGrid cols={3}>
-        <TextInput
-          label="Right:"
-          {...{
-            rightNearAcuity: rightNearAcuity,
-            onUpdateRightNearAcuity: onUpdateRightNearAcuity,
-          }}
-          required
-        />
-        <TextInput
-          label="Left:"
-          {...{
-            leftNearAcuity: leftNearAcuity,
-            onUpdateLeftNearAcuity: onUpdateLeftNearAcuity,
-          }}
-          required
-        />
-        <TextInput
-          label="Both:"
-          {...{
-            bothNearAcuity: bothNearAcuity,
-            onUpdateBothNearAcuity: onUpdateBothNearAcuity,
-          }}
-        />
+        <TextInput label="Right:" required {...nearAcuityRightProps} />
+        <TextInput label="Left:" required {...nearAcuityLeftProps} />
+        <TextInput label="Both:" {...nearAcuityBothProps} />
       </SimpleGrid>
     </>
   );

@@ -74,14 +74,19 @@ export const patientSchemaLiteral = {
     updatedAt: {
       type: 'string',
     },
+    consultIds: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+      },
+    },
   },
   required: ['id'],
 } as const;
 
-const patientSchemaTyped = toTypedRxJsonSchema(patientSchemaLiteral);
+export const patientSchemaTyped = toTypedRxJsonSchema(patientSchemaLiteral);
 export type PatientDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof patientSchemaTyped
 >;
-const patientSchema: RxJsonSchema<PatientDocType> = patientSchemaLiteral;
-
-export default patientSchema;
+export const patientSchema: RxJsonSchema<PatientDocType> = patientSchemaLiteral;

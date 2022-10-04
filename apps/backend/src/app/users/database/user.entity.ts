@@ -13,6 +13,9 @@ export class UserEntity extends BaseEntity {
   @Column('text', { nullable: false, unique: true })
   auth0Id: string;
 
+  @Column('varchar', { nullable: true })
+  email: string;
+
   @Column('varchar', { length: 30 })
   firstName: string;
 
@@ -27,7 +30,9 @@ export class UserEntity extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => ConsultEntity, (consult) => consult.user)
+  @OneToMany(() => ConsultEntity, (consult) => consult.user, {
+    cascade: ['insert', 'update'],
+  })
   consults: ConsultEntity[];
 
   @OneToMany(() => SpectaclesEntity, (spectacles) => spectacles.patient)

@@ -1,8 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { BaseModel } from '@supervision/shared';
-import { ConsultModel } from '@supervision/consults/graphql/consult.model';
 import { Ethnicity, Gender } from '@supervision/patients';
-import { DateOfBirthScalar } from './date-of-birth.scalar';
+import { ConsultModel } from '@supervision/consults';
 
 registerEnumType(Ethnicity, {
   name: 'Ethnicity',
@@ -20,7 +19,7 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: true })
   lastName: string;
 
-  @Field(() => DateOfBirthScalar, { nullable: true })
+  @Field({ nullable: true })
   dateOfBirth: Date;
 
   @Field(() => Gender, { nullable: true })
@@ -71,6 +70,6 @@ export class PatientModel extends BaseModel {
   @Field({ nullable: true })
   screeningList: string;
 
-  @Field(() => [ConsultModel])
+  @Field(() => [ConsultModel], { nullable: true })
   consults: ConsultModel[];
 }

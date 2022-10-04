@@ -1,23 +1,57 @@
+import { Stack, Text, ThemeIcon } from '@mantine/core';
 import { Table, TableTheme } from '@shared';
+import { IconDatabaseOff } from '@tabler/icons';
+import { ConsultDocument } from 'database/rxdb-utils';
 import React from 'react';
+import { applyDateFormat } from 'utils/date.utils';
 
-export const RecallsTable = () => {
+type RecallsTableProps = {
+  patientConsults: ConsultDocument[];
+};
+
+export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
   return (
-    <Table striped theme={TableTheme.Primary}>
-      <thead>
-        <tr>
-          <th>RECALLS</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>16/02/2021</td>
-        </tr>
-        <tr>
-          <td>18/08/2019</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Stack>
+      <Text className="-mb-3 text-sm">Recalls</Text>
+      <Table theme={TableTheme.Primary}>
+        <thead>
+          <tr>
+            <th>RECALL DATE</th>
+            <th>DESCRIPTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          {patientConsults.some((consult) => consult.recallDate) ? (
+            patientConsults?.map((record) => (
+              <tr key={record.id}>
+                <td>
+                  {record.recallDate &&
+                    applyDateFormat(new Date(record.recallDate))}
+                </td>
+                <td>{record.recallDescription}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={5} className="hover:bg-white">
+                <Stack className="justify-center w-full p-2">
+                  <ThemeIcon
+                    color="gray.6"
+                    variant="light"
+                    size="xl"
+                    radius="xl"
+                    className="m-auto"
+                  >
+                    <IconDatabaseOff />
+                  </ThemeIcon>
+                  <Text className="m-auto font-medium">No recalls</Text>
+                </Stack>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+    </Stack>
   );
 };
 

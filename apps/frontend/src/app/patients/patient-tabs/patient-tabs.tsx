@@ -1,36 +1,31 @@
 import { ActionIcon, Group, Tabs } from '@mantine/core';
 import { IconMenu2, IconPlus } from '@tabler/icons';
-import { usePatients } from '@shared';
+import { useDatabase } from '@shared';
 import { useCallback, useEffect, useMemo } from 'react';
-import { IPatient } from '../patient-details-page';
+import { useSearchParams } from 'react-router-dom';
+import { PatientDocument } from 'database/rxdb-utils';
 
-type PatientTabsProps = {
-  currentPatientUid?: string;
-  onPatientChange: (patientUID: string) => void;
-};
-
-export const PatientTabs = ({
-  currentPatientUid,
-  onPatientChange,
-}: PatientTabsProps) => {
-  const { patients, newPatient } = usePatients();
+export const PatientTabs = () => {
+  const { patients, newPatient } = useDatabase();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const patientId = searchParams.get('patientId');
 
   const handleTabChange = useCallback(
-    (patientUID: string) => onPatientChange(patientUID),
-    [onPatientChange]
+    (newPatientId: string) => setSearchParams({ patientId: newPatientId }),
+    [setSearchParams]
   );
 
   const handleNewPatient = () => newPatient && handleTabChange(newPatient());
 
   useEffect(() => {
-    if (patients && patients.length > 0 && !currentPatientUid) {
+    if (patients && patients.length > 0 && !patientId) {
       handleTabChange(patients[0].id);
     }
-  }, [patients, currentPatientUid, handleTabChange]);
+  }, [patients, patientId, handleTabChange]);
 
   const patientTabs = useMemo(
     () =>
-      patients?.map((patient: IPatient) => (
+      patients?.map((patient: PatientDocument) => (
         <Tabs.Tab key={'patient-' + patient.id} value={patient.id}>
           {!patient.firstName && !patient.lastName
             ? 'New Patient'
@@ -56,7 +51,7 @@ export const PatientTabs = ({
       <Tabs
         variant="pills"
         color="blue"
-        value={currentPatientUid}
+        value={patientId}
         onTabChange={handleTabChange}
         classNames={{
           root: 'grow',

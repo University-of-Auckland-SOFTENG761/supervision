@@ -3,7 +3,7 @@ import { InputType, Field } from '@nestjs/graphql';
 @InputType('ConsultInput')
 export class CreateConsultInput {
   @Field({ nullable: false })
-  userId!: string;
+  userEmail!: string;
 
   @Field({ nullable: false })
   patientId!: string;
