@@ -34,6 +34,9 @@ export class SpectaclesModel extends BaseModel {
   orderDate: Date;
 
   @Field({ nullable: true })
+  createdDate;
+
+  @Field({ nullable: true })
   deliveredDate: Date;
 
   @Field(() => OrderStatus, { nullable: false })

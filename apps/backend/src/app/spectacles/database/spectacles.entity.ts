@@ -38,6 +38,9 @@ export class SpectaclesEntity extends BaseEntity {
   notes: string;
 
   @Column('date', { nullable: true })
+  createdDate: Date;
+
+  @Column('date', { nullable: true })
   orderDate: Date;
 
   @Column('date', { nullable: true })

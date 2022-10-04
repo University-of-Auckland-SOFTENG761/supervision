@@ -55,6 +55,12 @@ export class CreateSpectaclesInput {
   orderDate: Date;
 
   @Field({
+    description: 'spectacle created date',
+    nullable: true,
+  })
+  createdDate: Date;
+
+  @Field({
     description: 'spectacle delivered date',
     nullable: true,
   })
