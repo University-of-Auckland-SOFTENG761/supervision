@@ -205,7 +205,7 @@ export const ConsultDetailsUpper = ({
               <TextInput
                 label="Spectacles Code:"
                 classNames={{ label: 'whitespace-nowrap' }}
-                {...form.getInputProps('spectaclesCode')}
+                {...form.getInputProps('spectacleCode')}
               />
               <TextInput
                 label="Heights:"
@@ -225,7 +225,7 @@ export const ConsultDetailsUpper = ({
               </SimpleGrid>
               <TextInput
                 label="Spectacles Note:"
-                {...form.getInputProps('spectaclesNote')}
+                {...form.getInputProps('spectacleNote')}
               />
             </Stack>
           </Grid.Col>
