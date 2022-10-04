@@ -223,7 +223,7 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Order Status</Text>
           <Select
             className="w-40"
-            classNames={{ root: 'w-48 -my-8', input: 'text-right' }}
+            classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
             data={[
               { value: 'orderSent', label: 'Ordered' },
               { value: 'readyForDelivery', label: 'Ready' },
