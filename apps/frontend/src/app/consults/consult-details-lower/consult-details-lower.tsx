@@ -3,6 +3,7 @@ import { TextInput, Grid, Stack, NumberInput } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
 import { FormInputType } from '../consult-inputs';
+import { useNavigate } from 'react-router-dom';
 
 type ConsultDetailsLowerProps = {
   form: UseFormReturnType<FormInputType>;
@@ -11,7 +12,7 @@ type ConsultDetailsLowerProps = {
 export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
   const consultRows = [
     {
-      name: 'Previous Spectacle Rx',
+      name: 'Previous Spectacles Rx',
       code: 'prevSpecRxGiven',
     },
     {
@@ -44,6 +45,8 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
     precision: 2,
     step: 0.01,
   };
+  
+  const navigate = useNavigate();
 
   return (
     <Grid columns={10} align="flex-end">
@@ -215,7 +218,7 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
                 <td>
                   <NumberInput {...form.getInputProps(row.code + 'LeftAdd')} />
                 </td>
-                {row.name === 'Previous Spectacle Rx' ||
+                {row.name === 'Previous Spectacles Rx' ||
                 row.name === 'Given refraction' ? (
                   <td>
                     <TextInput {...form.getInputProps(row.code + 'BVA')} />
@@ -233,6 +236,15 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
           <Button color="green">APPROVE</Button>
           <Button color="red">DELETE</Button>
           <Button>REFER</Button>
+          <Button
+            color="yellow"
+            onClick={() => {
+              const placeholder_id = 'fake_id_1234';
+              navigate(`/spectacles-details/${placeholder_id}`);
+            }}
+          >
+            SCRIPT
+          </Button>
         </Stack>
       </Grid.Col>
     </Grid>
