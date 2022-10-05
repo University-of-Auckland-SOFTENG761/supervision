@@ -41,7 +41,9 @@ export const PatientInputs = ({
 }: PatientInputsProps) => {
   const { patientsCollection } = useDatabase();
 
-  const patientRef = useRef<PatientDocType | null>(null);
+  const [patient, setPatient] = useState<PatientDocType | null>(null);
+  const [revision, setRevision] = useState<number | string>(0);
+  const patientRef = useRef<PatientDocType | null>(patient);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -50,25 +52,31 @@ export const PatientInputs = ({
       setIsLoading(true);
       patientsCollection
         .findOne({ selector: { id: patientId } })
-        .exec()
-        .then((p) => {
+        .$.subscribe((p) => {
           if (p) {
-            patientRef.current = buildFormValues(
-              patientSchemaTyped,
-              p as PatientDocType
-            ) as PatientDocType;
+            console.log('subscription ping');
+            setPatient(
+              buildFormValues(
+                patientSchemaTyped,
+                p as PatientDocType
+              ) as PatientDocType
+            );
+            setRevision(p.revision);
             setIsLoading(false);
           }
         });
     }
   }, [patientsCollection, patientId]);
 
+  useEffect(() => {
+    patientRef.current = patient;
+  }, [patient]);
+
   const patientAge =
-    patientRef.current?.dateOfBirth &&
-    calculateAge(new Date(patientRef.current?.dateOfBirth));
+    patient?.dateOfBirth && calculateAge(new Date(patient.dateOfBirth));
 
   const sendUpdate = () => {
-    if (patientRef?.current) {
+    if (patientRef.current) {
       console.log(patientRef.current);
       patientsCollection?.upsert(stripUnusedFields(patientRef.current));
     }
@@ -91,12 +99,13 @@ export const PatientInputs = ({
         { maxWidth: 1024, cols: 2, spacing: 100 },
         { maxWidth: 1280, cols: 3, spacing: 100 },
       ]}
+      key={revision}
     >
       <Stack>
         <TextInput
           required
           label="First name:"
-          defaultValue={patientRef.current?.firstName}
+          defaultValue={patient?.firstName}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.firstName = e.currentTarget.value)
@@ -105,7 +114,7 @@ export const PatientInputs = ({
         <TextInput
           required
           label="Last name:"
-          defaultValue={patientRef.current?.lastName}
+          defaultValue={patient?.lastName}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.lastName = e.currentTarget.value)
@@ -115,7 +124,7 @@ export const PatientInputs = ({
           <DatePicker
             required
             label="Date of birth:"
-            defaultValue={new Date(patientRef.current?.dateOfBirth ?? '')}
+            defaultValue={new Date(patient?.dateOfBirth ?? '')}
             onChange={(d) => {
               patientRef.current &&
                 (patientRef.current.dateOfBirth = d?.toISOString());
@@ -135,26 +144,22 @@ export const PatientInputs = ({
             disabled
           />
         </Group>
-        <TextInput
-          label="Patient ID:"
-          value={patientRef.current?.id}
-          disabled
-        />
+        <TextInput label="Patient ID:" value={patient?.id} disabled />
         <EthnicitySelect
-          defaultValue={patientRef.current?.ethnicity ?? null}
+          defaultValue={patient?.ethnicity ?? null}
           onChange={(s) =>
             patientRef.current &&
             (patientRef.current.ethnicity = s ?? undefined)
           }
         />
         <GenderSelect
-          defaultValue={patientRef.current?.gender ?? null}
+          defaultValue={patient?.gender ?? null}
           onChange={(s) =>
             patientRef.current && (patientRef.current.gender = s ?? undefined)
           }
         />
         <SchoolAutocomplete
-          defaultValue={patientRef.current?.school}
+          defaultValue={patient?.school}
           onChange={(s) =>
             patientRef.current && (patientRef.current.school = s ?? undefined)
           }
@@ -163,7 +168,7 @@ export const PatientInputs = ({
           <NumberInput
             label="Year:"
             className="w-20"
-            defaultValue={Number(patientRef.current?.yearLevel)}
+            defaultValue={Number(patient?.yearLevel)}
             onChange={(n) =>
               patientRef.current &&
               (patientRef.current.yearLevel = n ?? undefined)
@@ -172,7 +177,7 @@ export const PatientInputs = ({
           <TextInput
             label="Room:"
             className="grow"
-            defaultValue={patientRef.current?.room}
+            defaultValue={patient?.room}
             onChange={(e) =>
               patientRef.current &&
               (patientRef.current.room = e.currentTarget.value)
@@ -184,7 +189,7 @@ export const PatientInputs = ({
         <TextInput
           label="Address:"
           placeholder="Street Address"
-          defaultValue={patientRef.current?.streetAddress}
+          defaultValue={patient?.streetAddress}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.streetAddress = e.currentTarget.value)
@@ -193,7 +198,7 @@ export const PatientInputs = ({
         <Group className="w-full" grow>
           <TextInput
             placeholder="Suburb"
-            defaultValue={patientRef.current?.suburb}
+            defaultValue={patient?.suburb}
             onChange={(e) =>
               patientRef.current &&
               (patientRef.current.suburb = e.currentTarget.value)
@@ -201,7 +206,7 @@ export const PatientInputs = ({
           />
           <TextInput
             placeholder="City"
-            defaultValue={patientRef.current?.city}
+            defaultValue={patient?.city}
             onChange={(e) =>
               patientRef.current &&
               (patientRef.current.city = e.currentTarget.value)
@@ -210,7 +215,7 @@ export const PatientInputs = ({
         </Group>
         <TextInput
           placeholder="Postcode"
-          defaultValue={patientRef.current?.postcode}
+          defaultValue={patient?.postcode}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.postcode = e.currentTarget.value)
@@ -218,7 +223,7 @@ export const PatientInputs = ({
         />
         <TextInput
           label="Caregiver First Name:"
-          defaultValue={patientRef.current?.caregiverFirstName}
+          defaultValue={patient?.caregiverFirstName}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.caregiverFirstName = e.currentTarget.value)
@@ -226,7 +231,7 @@ export const PatientInputs = ({
         />
         <TextInput
           label="Caregiver Last Name:"
-          defaultValue={patientRef.current?.caregiverLastName}
+          defaultValue={patient?.caregiverLastName}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.caregiverLastName = e.currentTarget.value)
@@ -234,7 +239,7 @@ export const PatientInputs = ({
         />
         <TextInput
           label="Phone:"
-          defaultValue={patientRef.current?.phoneNumber}
+          defaultValue={patient?.phoneNumber}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.phoneNumber = e.currentTarget.value)
@@ -242,7 +247,7 @@ export const PatientInputs = ({
         />
         <TextInput
           label="Email:"
-          defaultValue={patientRef.current?.email}
+          defaultValue={patient?.email}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.email = e.currentTarget.value)
@@ -255,7 +260,7 @@ export const PatientInputs = ({
           placeholder="Type here..."
           autosize
           minRows={3}
-          defaultValue={patientRef.current?.adminNotes}
+          defaultValue={patient?.adminNotes}
           onChange={(e) =>
             patientRef.current &&
             (patientRef.current.adminNotes = e.currentTarget.value)

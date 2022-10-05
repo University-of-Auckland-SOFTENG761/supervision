@@ -145,6 +145,7 @@ export const buildPatientReplicationState = async (database: RxDatabase) => {
         deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
         live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
         headers,
+        waitForLeadership: true,
       })
     : null;
 };
