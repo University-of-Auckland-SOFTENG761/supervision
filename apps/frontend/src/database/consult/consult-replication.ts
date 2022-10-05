@@ -59,6 +59,7 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
         code,
         colour,
         lensType,
+        pupillaryDistance,
         heights,
         notes
       }
@@ -195,6 +196,7 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
             spectacleCode: doc.spectacle?.code,
             spectacleColour: doc.spectacle?.colour,
             spectacleLensType: doc.spectacle?.lensType,
+            spectaclePupillaryDistance: doc.spectacle?.pupillaryDistance,
             spectacleHeights: doc.spectacle?.heights,
             spectacleNotes: doc.spectacle?.notes,
           }),

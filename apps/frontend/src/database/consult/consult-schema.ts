@@ -119,6 +119,9 @@ export const consultSchemaLiteral = {
     spectacleLensType: {
       type: 'string',
     },
+    spectaclePupillaryDistance: {
+      type: 'number',
+    },
     spectacleHeights: {
       type: 'string',
     },
