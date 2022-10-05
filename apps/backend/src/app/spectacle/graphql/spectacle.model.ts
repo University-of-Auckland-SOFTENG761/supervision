@@ -22,7 +22,7 @@ export class SpectacleModel extends BaseModel {
   lensType: string;
 
   @Field({ nullable: true })
-  PD: number;
+  pupillaryDistance: number;
 
   @Field({ nullable: true })
   heights: string;

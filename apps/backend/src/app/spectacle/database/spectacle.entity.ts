@@ -27,9 +27,8 @@ export class SpectacleEntity extends BaseEntity {
   @Column('varchar', { length: 20, nullable: true })
   lensType: string;
 
-  // PD: Pupil distance
   @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
-  PD: number;
+  pupillaryDistance: number;
 
   @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
   heights: string;

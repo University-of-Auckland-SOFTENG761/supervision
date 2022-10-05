@@ -37,10 +37,10 @@ export class CreateSpectacleInput {
   lensType: string;
 
   @Field({
-    description: 'spectacle PD',
+    description: 'spectacle pupillaryDistance',
     nullable: false,
   })
-  PD: number;
+  pupillaryDistance: number;
 
   @Field({
     description: 'spectacle heights',
