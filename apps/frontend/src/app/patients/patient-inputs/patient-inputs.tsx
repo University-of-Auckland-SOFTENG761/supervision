@@ -18,7 +18,11 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
 import { useDatabase } from '@shared';
-import { ConsultDocument, buildFormValues } from 'database/rxdb-utils';
+import {
+  ConsultDocument,
+  buildFormValues,
+  stripUnusedFields,
+} from 'database/rxdb-utils';
 import { PatientDocType, patientSchemaTyped } from 'database';
 dayjs.extend(customParseFormat);
 
@@ -66,7 +70,7 @@ export const PatientInputs = ({
   const sendUpdate = () => {
     if (patientRef?.current) {
       console.log(patientRef.current);
-      patientsCollection?.upsert(patientRef.current);
+      patientsCollection?.upsert(stripUnusedFields(patientRef.current));
     }
   };
 
