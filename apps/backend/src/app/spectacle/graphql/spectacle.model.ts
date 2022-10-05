@@ -12,19 +12,19 @@ export class SpectacleModel extends BaseModel {
   @Field(() => PatientModel, { nullable: false })
   patient: PatientModel;
 
-  @Field({ nullable: false })
+  @Field({ nullable: true })
   code: string;
 
-  @Field({ nullable: false })
+  @Field({ nullable: true })
   colour: string;
 
-  @Field({ nullable: false })
+  @Field({ nullable: true })
   lensType: string;
 
-  @Field({ nullable: false })
+  @Field({ nullable: true })
   PD: number;
 
-  @Field({ nullable: false })
+  @Field({ nullable: true })
   heights: string;
 
   @Field({ nullable: true })
@@ -39,7 +39,7 @@ export class SpectacleModel extends BaseModel {
   @Field({ nullable: true })
   deliveredDate: Date;
 
-  @Field(() => OrderStatus, { nullable: false })
+  @Field(() => OrderStatus, { nullable: true })
   orderStatus: OrderStatus;
 
   @Field({ nullable: true })

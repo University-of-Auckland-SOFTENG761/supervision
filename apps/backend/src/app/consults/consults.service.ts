@@ -126,6 +126,7 @@ export class ConsultsService {
       .take(limit)
       .leftJoinAndSelect('consult.user', 'user')
       .leftJoinAndSelect('consult.patient', 'patient')
+      .leftJoinAndSelect('consult.spectacle', 'spectacle')
       .withDeleted()
       .getMany();
   }
