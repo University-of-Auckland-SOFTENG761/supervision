@@ -1,19 +1,19 @@
 import { Tabs } from '@mantine/core';
 import { IconEye, IconEyeglass } from '@tabler/icons';
-import { ConsultDocument } from 'database/rxdb-utils';
-import React from 'react';
+import { ConsultDocType } from 'database';
 import { useSearchParams } from 'react-router-dom';
+import { RxDocument } from 'rxdb';
 import { ConsultRecordsTable } from '../consult-records-table';
 import { DispensingRecordsTable } from '../dispensing-records-table';
 
 type PatientRecordsProps = {
   className?: string;
-  patientConsults: ConsultDocument[];
+  consults: Map<string, RxDocument<ConsultDocType>> | null;
 };
 
 export const PatientRecords = ({
   className,
-  patientConsults,
+  consults,
 }: PatientRecordsProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const patientRecordsTab = searchParams.get('patientRecordsTab') ?? 'consult';
@@ -40,7 +40,7 @@ export const PatientRecords = ({
       </Tabs.List>
 
       <Tabs.Panel value="consult" className="p-3">
-        <ConsultRecordsTable patientConsults={patientConsults} />
+        <ConsultRecordsTable consults={consults} />
       </Tabs.Panel>
       <Tabs.Panel value="dispensing" className="p-3">
         <DispensingRecordsTable />

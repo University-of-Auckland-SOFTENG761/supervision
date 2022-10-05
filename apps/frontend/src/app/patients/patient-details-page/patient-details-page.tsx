@@ -1,25 +1,62 @@
-import { useEffect, useState } from 'react';
-import { Center, ScrollArea, Text } from '@mantine/core';
+import { useEffect, useMemo, useState } from 'react';
+import { Center, ScrollArea, Text, Loader } from '@mantine/core';
 import { Button, useDatabase } from '@shared';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
 import { PatientRecords } from '../patient-records';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ConsultDocument } from 'database/rxdb-utils';
+import { RxDocument } from 'rxdb';
+import { ConsultDocType, PatientDocType } from 'database';
 
 export const PatientDetailsPage = () => {
-  const { consults, newConsult } = useDatabase();
+  const { patientsCollection, consultsCollection, newConsult } = useDatabase();
   const [searchParams] = useSearchParams();
-  const patientId = searchParams.get('patientId');
-  const [patientConsults, setPatientConsults] = useState<ConsultDocument[]>([]);
+  const patientId = useMemo(
+    () => searchParams.get('patientId'),
+    [searchParams]
+  );
   const navigate = useNavigate();
 
+  const [patient, setPatient] = useState<RxDocument<PatientDocType> | null>(
+    null
+  );
+  const [consults, setConsults] = useState<Map<
+    string,
+    RxDocument<ConsultDocType>
+  > | null>(null);
+  const [isLoading, setIsLoading] = useState(0);
+
+  const handleUpdatePatient = async (patient: PatientDocType) => {
+    await patientsCollection?.atomicUpsert(patient);
+  };
+
   useEffect(() => {
-    if (!consults || !patientId) return;
-    setPatientConsults(
-      consults.filter((consult) => consult.patientId === patientId) ?? []
-    );
-  }, [patientId, consults]);
+    if (patientsCollection && patientId) {
+      setIsLoading((l) => l + 1);
+      patientsCollection
+        .findOne({ selector: { id: patientId } })
+        .$.subscribe((p) => {
+          if (p) {
+            setPatient(p);
+          }
+          setIsLoading((l) => l - 1);
+        });
+    }
+  }, [patientsCollection, patientId]);
+
+  useEffect(() => {
+    if (patient && (patient.consultIds?.length ?? []) > 0) {
+      setIsLoading((l) => l + 1);
+      consultsCollection
+        ?.findByIds$(patient.consultIds ?? [])
+        .subscribe((c) => {
+          if (c) {
+            setConsults(c);
+          }
+          setIsLoading((l) => l - 1);
+        });
+    }
+  }, [consultsCollection, patient]);
 
   const handleCreateNewRecord = () => {
     const patientRecordsTab =
@@ -30,22 +67,31 @@ export const PatientDetailsPage = () => {
     }
   };
 
+  if (isLoading > 0 || (patientId && !patient)) {
+    // This is currently ugly but it prevents inputs from being loaded with incorrect defaultValues
+    return (
+      <Center className="w-full h-full">
+        <Loader />
+      </Center>
+    );
+  }
+
   return (
     <>
       <PatientTabs />
-      {patientId ? (
+      {patientId && patient ? (
         <ScrollArea className="h-full p-8">
           <PatientInputs
-            patientConsults={patientConsults}
-            patientId={patientId}
-            key={patientId}
+            patient={patient}
+            consults={consults}
+            updatePatient={handleUpdatePatient}
           />
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button onClick={handleCreateNewRecord} className="ml-auto">
               CREATE NEW RECORD
             </Button>
           </div>
-          <PatientRecords className="pb-5" patientConsults={patientConsults} />
+          <PatientRecords className="pb-5" consults={consults} />
         </ScrollArea>
       ) : (
         <Center className="h-full">

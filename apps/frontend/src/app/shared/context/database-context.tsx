@@ -32,6 +32,7 @@ interface IDataBaseContext {
   patients: PatientDocument[];
   newPatient: () => string;
   updatePatient: (patient: PatientDocument | PatientDocType) => void;
+  consultsCollection: RxCollection<ConsultDocType>;
   consults: ConsultDocument[];
   newConsult: (patientId: string) => string | undefined;
   updateConsult: (consult: ConsultDocument | ConsultDocType) => void;
@@ -46,6 +47,7 @@ type DatabaseProviderProps = {
 export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
   const [superVisionDb, setSuperVisionDb] = useState<RxDatabase | null>(null);
   const patientsCollection = superVisionDb?.collections['patients'];
+  const consultsCollection = superVisionDb?.collections['consults'];
   const [patientsReplicationState, setPatientsReplicationState] =
     useState<RxGraphQLReplicationState<PatientDocument> | null>(null);
   const [patients, setPatients] = useState<PatientDocument[]>([]);
@@ -226,6 +228,7 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
       patients,
       newPatient,
       updatePatient,
+      consultsCollection,
       consults,
       newConsult,
       updateConsult,
@@ -235,6 +238,7 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
       patients,
       newPatient,
       updatePatient,
+      consultsCollection,
       consults,
       newConsult,
       updateConsult,
