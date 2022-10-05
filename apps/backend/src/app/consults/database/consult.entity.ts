@@ -24,10 +24,11 @@ export class ConsultEntity extends BaseEntity {
   @OneToOne(() => SpectacleEntity, (spectacle) => spectacle.consult, {
     nullable: true,
     eager: true,
+    cascade: ['insert', 'update'],
   })
   spectacle: SpectacleEntity;
 
-  @Column('date', { nullable: true })
+  @Column('timestamp', { nullable: true })
   dateConsentGiven: Date;
 
   @Column('varchar', { nullable: true })
@@ -114,7 +115,7 @@ export class ConsultEntity extends BaseEntity {
   @Column('varchar', { nullable: true })
   layPersonNotes: string;
 
-  @Column('date', { nullable: true })
+  @Column('timestamp', { nullable: true })
   recallDate: Date;
 
   @Column('varchar', { nullable: true })

@@ -22,6 +22,19 @@ export class SpectacleService {
     return await this.spectacleRepository.save(newSpectacle);
   }
 
+  async saveSpectacle(
+    spectacle: UpdateSpectacleInput
+  ): Promise<SpectacleEntity> {
+    const { id, consultId, patientId, ...spectacleData } = spectacle;
+
+    return await this.spectacleRepository.save({
+      id: id,
+      consult: { id: consultId },
+      patient: { id: patientId },
+      ...spectacleData,
+    });
+  }
+
   // Update spectacle for an associated consult, patient and user
   async updateSpectacle(
     updatedSpectacle: UpdateSpectacleInput,

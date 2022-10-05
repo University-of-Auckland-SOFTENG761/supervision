@@ -1,5 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SpectacleService } from '@supervision/spectacle/spectacle.service';
 import { UserService } from '@supervision/users';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ConsultEntity } from './database';
@@ -10,7 +11,9 @@ export class ConsultsService {
     @InjectRepository(ConsultEntity)
     private consultsRepository: Repository<ConsultEntity>,
     @Inject(forwardRef(() => UserService))
-    private userService: UserService
+    private userService: UserService,
+    @Inject(SpectacleService)
+    private spectacleService: SpectacleService
   ) {}
 
   async create(consult: CreateConsultInput): Promise<ConsultEntity> {
@@ -49,11 +52,38 @@ export class ConsultsService {
 
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
     const bundledConsults = await Promise.all(
-      consults?.map(async ({ userEmail, patientId, ...consult }) => ({
-        user: await this.userService.findOneByEmail(userEmail),
-        patient: { id: patientId },
-        ...consult,
-      }))
+      consults?.map(
+        async ({
+          userEmail,
+          patientId,
+          spectacleId,
+          spectacleCode,
+          spectacleColour,
+          spectacleLensType,
+          spectacleHeights,
+          spectacleNotes,
+          ...consult
+        }) => {
+          const spectacle = spectacleId
+            ? await this.spectacleService.saveSpectacle({
+                id: spectacleId,
+                patientId: patientId,
+                consultId: consult.id,
+                code: spectacleCode,
+                colour: spectacleColour,
+                lensType: spectacleLensType,
+                heights: spectacleHeights,
+                notes: spectacleNotes,
+              })
+            : null;
+          return {
+            user: await this.userService.findOneByEmail(userEmail),
+            patient: { id: patientId },
+            ...consult,
+            spectacle,
+          };
+        }
+      )
     );
     const newConsults = await this.consultsRepository.save(bundledConsults);
     return newConsults[newConsults.length - 1];

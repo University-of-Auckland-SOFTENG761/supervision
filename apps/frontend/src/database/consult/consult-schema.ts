@@ -107,6 +107,9 @@ export const consultSchemaLiteral = {
     layPersonNotes: {
       type: 'string',
     },
+    spectacleId: {
+      type: 'string',
+    },
     spectacleCode: {
       type: 'string',
     },

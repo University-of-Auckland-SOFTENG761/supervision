@@ -13,6 +13,12 @@ export class CreateSpectacleInput {
   consultId: string;
 
   @Field({
+    description: 'ID of associated patient',
+    nullable: false,
+  })
+  patientId: string;
+
+  @Field({
     description: 'spectacle code',
     nullable: false,
   })
