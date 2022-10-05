@@ -1,17 +1,19 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SpectacleService } from '@supervision/spectacle/spectacle.service';
 import { UserService } from '@supervision/users';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ConsultEntity } from './database';
 import { CreateConsultInput, UpdateConsultInput, SetConsultInput } from './dto';
-
 @Injectable()
 export class ConsultsService {
   constructor(
     @InjectRepository(ConsultEntity)
     private consultsRepository: Repository<ConsultEntity>,
     @Inject(forwardRef(() => UserService))
-    private userService: UserService
+    private userService: UserService,
+    @Inject(SpectacleService)
+    private spectacleService: SpectacleService
   ) {}
 
   async create(consult: CreateConsultInput): Promise<ConsultEntity> {
@@ -48,19 +50,40 @@ export class ConsultsService {
     return await this.consultsRepository.find();
   }
 
-  async findConsultsForPatient(patientId: string): Promise<ConsultEntity[]> {
-    return await this.consultsRepository.find({
-      where: { patient: { id: patientId } },
-    });
-  }
-
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
     const bundledConsults = await Promise.all(
-      consults?.map(async ({ userEmail, patientId, ...consult }) => ({
-        user: await this.userService.findOneByEmail(userEmail),
-        patient: { id: patientId },
-        ...consult,
-      }))
+      consults?.map(
+        async ({
+          userEmail,
+          patientId,
+          spectacleId,
+          spectacleCode,
+          spectacleColour,
+          spectacleLensType,
+          spectacleHeights,
+          spectacleNotes,
+          ...consult
+        }) => {
+          const spectacle = spectacleId
+            ? await this.spectacleService.saveSpectacle({
+                id: spectacleId,
+                patientId: patientId,
+                consultId: consult.id,
+                code: spectacleCode,
+                colour: spectacleColour,
+                lensType: spectacleLensType,
+                heights: spectacleHeights,
+                notes: spectacleNotes,
+              })
+            : null;
+          return {
+            user: await this.userService.findOneByEmail(userEmail),
+            patient: { id: patientId },
+            ...consult,
+            spectacle,
+          };
+        }
+      )
     );
     const newConsults = await this.consultsRepository.save(bundledConsults);
     return newConsults[newConsults.length - 1];
@@ -77,7 +100,8 @@ export class ConsultsService {
         .createQueryBuilder('consult')
         // Load in the patient and user entities (SelectQueryBuilder does not do this by default)
         .leftJoinAndSelect('consult.patient', 'patient')
-        .leftJoinAndSelect('consult.user', 'user');
+        .leftJoinAndSelect('consult.user', 'user')
+        .leftJoinAndSelect('consult.spectacle', 'spectacle');
     } else {
       query = this.consultsRepository
         .createQueryBuilder('consult')
@@ -102,6 +126,7 @@ export class ConsultsService {
       .take(limit)
       .leftJoinAndSelect('consult.user', 'user')
       .leftJoinAndSelect('consult.patient', 'patient')
+      .leftJoinAndSelect('consult.spectacle', 'spectacle')
       .withDeleted()
       .getMany();
   }

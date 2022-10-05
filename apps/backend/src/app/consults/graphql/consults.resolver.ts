@@ -7,10 +7,19 @@ import { SetConsultInput } from '../dto/set-consult.input';
 import { ConsultModel } from './consult.model';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@supervision/auth/guards';
+import { SpectacleModel } from '@supervision/spectacle/graphql';
+import {
+  CreateSpectacleInput,
+  UpdateSpectacleInput,
+} from '@supervision/spectacle/dto';
+import { SpectacleService } from '@supervision/spectacle/spectacle.service';
 
 @Resolver(() => ConsultModel)
 export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
-  constructor(private consultService: ConsultsService) {}
+  constructor(
+    private consultService: ConsultsService,
+    private spectacleService: SpectacleService
+  ) {}
 
   @Mutation(() => ConsultModel)
   @UseGuards(AuthGuard)
@@ -31,6 +40,25 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
     );
   }
 
+  @Mutation(() => SpectacleModel)
+  @UseGuards(AuthGuard)
+  async createSpectacle(
+    @Args('createSpectacleInput') createSpectacleInput: CreateSpectacleInput
+  ): Promise<SpectacleModel> {
+    return await this.spectacleService.createSpectacle(createSpectacleInput);
+  }
+
+  @Mutation(() => SpectacleModel)
+  @UseGuards(AuthGuard)
+  async updateSpectacle(
+    @Args('updateSpectacleInput') updateSpectacleInput: UpdateSpectacleInput
+  ): Promise<SpectacleModel> {
+    return await this.spectacleService.updateSpectacle(
+      updateSpectacleInput,
+      updateSpectacleInput.id
+    );
+  }
+
   @Query(() => ConsultModel)
   @UseGuards(AuthGuard)
   async consult(@Args('id') id: string): Promise<ConsultModel> {
@@ -41,6 +69,14 @@ export class ConsultsResolver implements IReplicationResolver<ConsultModel> {
   @UseGuards(AuthGuard)
   async consults(): Promise<ConsultModel[]> {
     return await this.consultService.findAll();
+  }
+
+  @Query(() => SpectacleModel)
+  @UseGuards(AuthGuard)
+  async spectacle(
+    @Args('consultId') consultId: string
+  ): Promise<SpectacleModel> {
+    return await this.spectacleService.findSpectacleForConsult(consultId);
   }
 
   @Query(() => [ConsultModel], { name: 'consultReplicationFeed' })

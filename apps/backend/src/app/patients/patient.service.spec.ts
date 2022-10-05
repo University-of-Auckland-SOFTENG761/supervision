@@ -36,9 +36,9 @@ describe('patient service', () => {
       return { ...patient, id: 'an_id_string' };
     }),
 
-    findOneBy: jest
+    findOne: jest
       .fn()
-      .mockImplementation(({ id }: { id: string }) =>
+      .mockImplementation((id: { id: string }) =>
         Promise.resolve({ ...fakePatient, id: id })
       ),
 
@@ -84,38 +84,6 @@ describe('patient service', () => {
     });
     expect(mockRepository.create).toBeCalled();
     expect(mockRepository.save).toBeCalled();
-  });
-
-  it('should retrieve a patient by id', async () => {
-    expect(await patientService.findOne('id_string')).toMatchObject({
-      ...fakePatient,
-      id: 'id_string',
-    });
-    expect(mockRepository.findOneBy).toBeCalled();
-  });
-
-  it('should retrieve a patient by name', async () => {
-    const nameParams = {
-      firstName: 'Ian',
-      lastName: 'Plate',
-    };
-
-    const mockCreateQueryBuilder = {
-      where: jest.fn().mockImplementation(() => mockCreateQueryBuilder),
-      orWhere: jest.fn().mockImplementation(() => mockCreateQueryBuilder),
-      getMany: jest.fn().mockImplementation(async () => {
-        return { ...fakePatient, ...nameParams };
-      }),
-    };
-    mockRepository.createQueryBuilder = jest
-      .fn()
-      .mockImplementation(() => mockCreateQueryBuilder);
-    expect(
-      await patientService.findOneByName(
-        nameParams.firstName,
-        nameParams.lastName
-      )
-    ).toMatchObject({ ...fakePatient, ...nameParams });
   });
 
   it('should get all patients', async () => {
