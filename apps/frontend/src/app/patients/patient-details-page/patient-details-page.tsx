@@ -46,6 +46,7 @@ export const PatientDetailsPage = () => {
             <PatientInputs
               patientConsults={patientConsults}
               patientId={patientId}
+              key={patientId}
             />
           </SimpleGrid>
           <div className="flex mt-5 -mb-5 justify-end w-full">

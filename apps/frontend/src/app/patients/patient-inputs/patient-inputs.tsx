@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   Center,
   Group,
@@ -8,7 +8,6 @@ import {
   Textarea,
   TextInput,
 } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
@@ -18,9 +17,8 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
 import { useDatabase } from '@shared';
-import { ConsultDocument } from 'database/rxdb-utils';
-import { PatientDocType } from 'database';
-import { RxDocument } from 'rxdb';
+import { ConsultDocument, buildFormValues } from 'database/rxdb-utils';
+import { PatientDocType, patientSchemaTyped } from 'database';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
@@ -38,8 +36,6 @@ export const PatientInputs = ({
 }: PatientInputsProps) => {
   const { patientsCollection } = useDatabase();
 
-  const [key, setKey] = useState(Date.now());
-  const [patient, setPatient] = useState<PatientDocType | null>(null);
   const patientRef = useRef<PatientDocType | null>(null);
 
   useEffect(() => {
@@ -48,28 +44,28 @@ export const PatientInputs = ({
       patientsCollection
         .findOne({ selector: { id: patientId } })
         .exec()
-        .then((p: RxDocument<PatientDocType> | null) => setPatient(p));
+        .then((p) => {
+          p &&
+            (patientRef.current = buildFormValues(
+              patientSchemaTyped,
+              p as PatientDocType
+            ) as PatientDocType);
+        });
     }
   }, [patientsCollection, patientId]);
-
-  useEffect(() => {
-    patientRef.current = patient;
-    setKey(Date.now());
-  }, [patient]);
 
   const patientAge =
     patientRef.current?.dateOfBirth &&
     calculateAge(new Date(patientRef.current?.dateOfBirth));
 
   const sendUpdate = () => {
-    if (patientRef.current) {
+    if (patientRef?.current) {
       console.log(patientRef.current);
-      setPatient(patientRef.current);
-      // patientsCollection?.upsert(patient.current);
+      patientsCollection?.upsert(patientRef.current);
     }
   };
 
-  if (!patientRef.current || !patient)
+  if (!patientRef.current)
     // This is currently ugly but it prevents inputs from being loaded with incorrect defaultValues
     return (
       <Center className="w-full h-full">
@@ -79,14 +75,17 @@ export const PatientInputs = ({
 
   return (
     <>
-      <Stack onBlur={sendUpdate} key={key}>
+      <Stack onBlur={sendUpdate}>
         <TextInput
           required
           label="First name:"
           defaultValue={patientRef.current?.firstName}
           onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.firstName = e.currentTarget.value)
+            patientRef?.current &&
+            (patientRef.current = {
+              ...patientRef.current,
+              firstName: e.currentTarget.value,
+            })
           }
         />
         <TextInput
@@ -102,15 +101,13 @@ export const PatientInputs = ({
           <DatePicker
             required
             label="Date of birth:"
-            value={new Date(patient?.dateOfBirth ?? '')}
+            defaultValue={new Date(patientRef.current?.dateOfBirth ?? '')}
             onChange={(d) => {
-              console.log('DARTE CHAGE', d?.toISOString());
               patientRef?.current &&
-                setPatient({
+                (patientRef.current = {
                   ...patientRef.current,
-                  dateOfBirth: d?.toISOString() ?? undefined,
+                  dateOfBirth: d?.toISOString(),
                 });
-              console.log(patientRef.current?.dateOfBirth);
             }}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
