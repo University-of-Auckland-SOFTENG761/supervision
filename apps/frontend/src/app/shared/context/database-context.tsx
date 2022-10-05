@@ -21,13 +21,14 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { RxDatabase } from 'rxdb';
+import { RxCollection, RxDatabase } from 'rxdb';
 import { RxReplicationError } from 'rxdb/dist/types/plugins/replication';
 import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-graphql';
 import { uuid } from 'uuidv4';
 import { useNetwork } from '../hooks';
 
 interface IDataBaseContext {
+  patientsCollection: RxCollection<PatientDocType>;
   patients: PatientDocument[];
   newPatient: () => string;
   updatePatient: (patient: PatientDocument | PatientDocType) => void;
@@ -44,7 +45,7 @@ type DatabaseProviderProps = {
 
 export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
   const [superVisionDb, setSuperVisionDb] = useState<RxDatabase | null>(null);
-
+  const patientsCollection = superVisionDb?.collections['patients'];
   const [patientsReplicationState, setPatientsReplicationState] =
     useState<RxGraphQLReplicationState<PatientDocument> | null>(null);
   const [patients, setPatients] = useState<PatientDocument[]>([]);
@@ -220,6 +221,7 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
 
   const value = useMemo(
     () => ({
+      patientsCollection,
       patients,
       newPatient,
       updatePatient,
@@ -227,7 +229,15 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
       newConsult,
       updateConsult,
     }),
-    [patients, newPatient, updatePatient, consults, newConsult, updateConsult]
+    [
+      patientsCollection,
+      patients,
+      newPatient,
+      updatePatient,
+      consults,
+      newConsult,
+      updateConsult,
+    ]
   );
 
   return (

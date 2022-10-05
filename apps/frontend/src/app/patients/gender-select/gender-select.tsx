@@ -1,9 +1,9 @@
-import React from 'react';
 import { Select } from '@mantine/core';
 
 type GenderSelectProps = {
-  value: string | null;
-  onChange: (value: string | null) => void;
+  value?: string | null;
+  defaultValue?: string | null;
+  onChange?: (value: string | null) => void;
 };
 
 export enum Gender {
@@ -13,7 +13,7 @@ export enum Gender {
   'Prefer not to say' = 'prefer not to say',
 }
 
-const GenderSelect = ({ value, onChange }: GenderSelectProps) => {
+const GenderSelect = ({ value, defaultValue, onChange }: GenderSelectProps) => {
   return (
     <Select
       label="Gender:"
@@ -24,6 +24,7 @@ const GenderSelect = ({ value, onChange }: GenderSelectProps) => {
         })
       )}
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
     />
   );

@@ -2,8 +2,9 @@ import React from 'react';
 import { Select } from '@mantine/core';
 
 type EthnicitySelectProps = {
-  value: string | null;
-  onChange: (value: string | null) => void;
+  value?: string | null;
+  defaultValue?: string | null;
+  onChange?: (value: string | null) => void;
 };
 
 export enum Ethnicities {
@@ -27,7 +28,11 @@ export enum Ethnicities {
   'Other Ethnicity' = 'other ethnicity',
 }
 
-const EthnicitySelect = ({ value, onChange }: EthnicitySelectProps) => {
+const EthnicitySelect = ({
+  value,
+  defaultValue,
+  onChange,
+}: EthnicitySelectProps) => {
   return (
     <Select
       label="Ethnicity:"
@@ -41,6 +46,7 @@ const EthnicitySelect = ({ value, onChange }: EthnicitySelectProps) => {
       )}
       searchable
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
     />
   );

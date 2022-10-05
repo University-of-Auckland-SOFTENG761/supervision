@@ -1,7 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Center,
+  Group,
+  Loader,
+  NumberInput,
+  Stack,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
-import { useForm } from '@mantine/form';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
@@ -11,101 +18,100 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
 import { useDatabase } from '@shared';
-import { useSearchParams } from 'react-router-dom';
-import {
-  ConsultDocument,
-  buildFormValues,
-  stripUnusedFields,
-} from 'database/rxdb-utils';
-import { PatientDocType, patientSchemaTyped } from 'database';
+import { ConsultDocument } from 'database/rxdb-utils';
+import { PatientDocType } from 'database';
+import { RxDocument } from 'rxdb';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
   patientConsults: ConsultDocument[];
+  patientId: string;
 };
 
 export type FormInputType = Omit<PatientDocType, 'dateOfBirth'> & {
   dateOfBirth: Date | null;
 };
 
-export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
-  const { patients, updatePatient } = useDatabase();
+export const PatientInputs = ({
+  patientConsults,
+  patientId,
+}: PatientInputsProps) => {
+  const { patientsCollection } = useDatabase();
 
-  const [searchParams] = useSearchParams();
-  const patientId = searchParams.get('patientId');
-
-  const patient = patientId
-    ? patients?.find((p) => p.id === patientId)
-    : undefined;
-
-  const [patientAge, setPatientAge] = useState(
-    patient?.dateOfBirth
-      ? calculateAge(new Date(patient?.dateOfBirth))
-      : undefined
-  );
-
-  const form = useForm({
-    initialValues: {
-      ...buildFormValues(
-        patientSchemaTyped,
-        patient?.toJSON !== undefined ? patient.toJSON() : patient
-      ),
-      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
-    } as FormInputType,
-  });
+  const [key, setKey] = useState(Date.now());
+  const [patient, setPatient] = useState<PatientDocType | null>(null);
+  const patientRef = useRef<PatientDocType | null>(null);
 
   useEffect(() => {
-    form.setValues({
-      ...buildFormValues(
-        patientSchemaTyped,
-        patient?.toJSON !== undefined ? patient.toJSON() : patient
-      ),
-      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
-    } as FormInputType);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log('patients collection or id changed');
+    if (patientsCollection && patientId) {
+      patientsCollection
+        .findOne({ selector: { id: patientId } })
+        .exec()
+        .then((p: RxDocument<PatientDocType> | null) => setPatient(p));
+    }
+  }, [patientsCollection, patientId]);
+
+  useEffect(() => {
+    patientRef.current = patient;
+    setKey(Date.now());
   }, [patient]);
 
-  useEffect(() => {
-    setPatientAge(
-      form.values.dateOfBirth
-        ? calculateAge(new Date(form.values.dateOfBirth))
-        : undefined
-    );
-  }, [form.values.dateOfBirth]);
+  const patientAge =
+    patientRef.current?.dateOfBirth &&
+    calculateAge(new Date(patientRef.current?.dateOfBirth));
 
   const sendUpdate = () => {
-    if (updatePatient && form.values)
-      updatePatient(stripUnusedFields(form.values));
+    if (patientRef.current) {
+      console.log(patientRef.current);
+      setPatient(patientRef.current);
+      // patientsCollection?.upsert(patient.current);
+    }
   };
 
-  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
-
-  useEffect(() => {
-    sendUpdate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFormValues]);
+  if (!patientRef.current || !patient)
+    // This is currently ugly but it prevents inputs from being loaded with incorrect defaultValues
+    return (
+      <Center className="w-full h-full">
+        <Loader />
+      </Center>
+    );
 
   return (
     <>
-      <Stack onBlur={sendUpdate}>
+      <Stack onBlur={sendUpdate} key={key}>
         <TextInput
           required
           label="First name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('firstName')}
+          defaultValue={patientRef.current?.firstName}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.firstName = e.currentTarget.value)
+          }
         />
         <TextInput
           required
           label="Last name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('lastName')}
+          defaultValue={patientRef.current?.lastName}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.lastName = e.currentTarget.value)
+          }
         />
         <Group className="justify-between">
           <DatePicker
             required
             label="Date of birth:"
-            onBlur={sendUpdate}
-            {...form.getInputProps('dateOfBirth')}
+            value={new Date(patient?.dateOfBirth ?? '')}
+            onChange={(d) => {
+              console.log('DARTE CHAGE', d?.toISOString());
+              patientRef?.current &&
+                setPatient({
+                  ...patientRef.current,
+                  dateOfBirth: d?.toISOString() ?? undefined,
+                });
+              console.log(patientRef.current?.dateOfBirth);
+            }}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
             dateParser={(date: string) =>
@@ -117,38 +123,52 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
           <NumberInput
             label="Age:"
             className="w-20"
-            value={patientAge}
+            defaultValue={Number(patientAge)}
             disabled
           />
         </Group>
         <TextInput
           label="Patient ID:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('id')}
+          value={patientRef.current?.id}
           disabled
         />
         <EthnicitySelect
-          onBlur={sendUpdate}
-          {...form.getInputProps('ethnicity')}
+          defaultValue={patientRef.current?.ethnicity ?? null}
+          onChange={(s) =>
+            patientRef.current &&
+            (patientRef.current.ethnicity = s ?? undefined)
+          }
         />
-        <GenderSelect onBlur={sendUpdate} {...form.getInputProps('gender')} />
+        <GenderSelect
+          defaultValue={patientRef.current?.gender ?? null}
+          onChange={(s) =>
+            patientRef.current && (patientRef.current.gender = s ?? undefined)
+          }
+        />
         <SchoolAutocomplete
-          label="School"
-          onBlur={sendUpdate}
-          {...form.getInputProps('school')}
+          defaultValue={patientRef.current?.school}
+          onChange={(s) =>
+            patientRef.current && (patientRef.current.school = s ?? undefined)
+          }
         />
         <Group className="w-full">
           <NumberInput
             label="Year:"
             className="w-20"
-            onBlur={sendUpdate}
-            {...form.getInputProps('yearLevel')}
+            defaultValue={Number(patientRef.current?.yearLevel)}
+            onChange={(n) =>
+              patientRef.current &&
+              (patientRef.current.yearLevel = n ?? undefined)
+            }
           />
           <TextInput
             label="Room:"
             className="grow"
-            onBlur={sendUpdate}
-            {...form.getInputProps('room')}
+            defaultValue={patientRef.current?.room}
+            onChange={(e) =>
+              patientRef.current &&
+              (patientRef.current.room = e.currentTarget.value)
+            }
           />
         </Group>
       </Stack>
@@ -156,45 +176,69 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
         <TextInput
           label="Address:"
           placeholder="Street Address"
-          onBlur={sendUpdate}
-          {...form.getInputProps('streetAddress')}
+          defaultValue={patientRef.current?.streetAddress}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.streetAddress = e.currentTarget.value)
+          }
         />
         <Group className="w-full" grow>
           <TextInput
             placeholder="Suburb"
-            onBlur={sendUpdate}
-            {...form.getInputProps('suburb')}
+            defaultValue={patientRef.current?.suburb}
+            onChange={(e) =>
+              patientRef.current &&
+              (patientRef.current.suburb = e.currentTarget.value)
+            }
           />
           <TextInput
             placeholder="City"
-            onBlur={sendUpdate}
-            {...form.getInputProps('city')}
+            defaultValue={patientRef.current?.city}
+            onChange={(e) =>
+              patientRef.current &&
+              (patientRef.current.city = e.currentTarget.value)
+            }
           />
         </Group>
         <TextInput
           placeholder="Postcode"
-          onBlur={sendUpdate}
-          {...form.getInputProps('postcode')}
+          defaultValue={patientRef.current?.postcode}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.postcode = e.currentTarget.value)
+          }
         />
         <TextInput
           label="Caregiver First Name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('caregiverFirstName')}
+          defaultValue={patientRef.current?.caregiverFirstName}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.caregiverFirstName = e.currentTarget.value)
+          }
         />
         <TextInput
           label="Caregiver Last Name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('caregiverLastName')}
+          defaultValue={patientRef.current?.caregiverLastName}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.caregiverLastName = e.currentTarget.value)
+          }
         />
         <TextInput
           label="Phone:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('phoneNumber')}
+          defaultValue={patientRef.current?.phoneNumber}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.phoneNumber = e.currentTarget.value)
+          }
         />
         <TextInput
           label="Email:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('email')}
+          defaultValue={patientRef.current?.email}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.email = e.currentTarget.value)
+          }
         />
       </Stack>
       <Stack>
@@ -203,8 +247,11 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
           placeholder="Type here..."
           autosize
           minRows={3}
-          onBlur={sendUpdate}
-          {...form.getInputProps('adminNotes')}
+          defaultValue={patientRef.current?.adminNotes}
+          onChange={(e) =>
+            patientRef.current &&
+            (patientRef.current.adminNotes = e.currentTarget.value)
+          }
         />
         <RecallsTable patientConsults={patientConsults} />
       </Stack>

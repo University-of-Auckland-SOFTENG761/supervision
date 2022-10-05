@@ -43,7 +43,10 @@ export const PatientDetailsPage = () => {
               { maxWidth: 1280, cols: 3, spacing: 100 },
             ]}
           >
-            <PatientInputs patientConsults={patientConsults} />
+            <PatientInputs
+              patientConsults={patientConsults}
+              patientId={patientId}
+            />
           </SimpleGrid>
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button onClick={handleCreateNewRecord} className="ml-auto">

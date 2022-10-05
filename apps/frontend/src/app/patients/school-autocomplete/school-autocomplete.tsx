@@ -1,12 +1,16 @@
-import React from 'react';
 import { Autocomplete } from '@mantine/core';
 
 type SchoolAutocompleteProps = {
-  value: string | undefined;
-  onChange: (value: string | null) => void;
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string | null) => void;
 };
 
-const SchoolAutocomplete = ({ value, onChange }: SchoolAutocompleteProps) => {
+const SchoolAutocomplete = ({
+  value,
+  defaultValue,
+  onChange,
+}: SchoolAutocompleteProps) => {
   // TODO: Replace with real data
   const schoolData = ['The University of Auckland', 'Fake University'];
 
@@ -15,6 +19,7 @@ const SchoolAutocomplete = ({ value, onChange }: SchoolAutocompleteProps) => {
       label="School:"
       data={schoolData}
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
     />
   );
