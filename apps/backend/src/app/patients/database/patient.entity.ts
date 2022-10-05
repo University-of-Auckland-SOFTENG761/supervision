@@ -1,5 +1,6 @@
 import { ConsultEntity } from '@supervision/consults/database/consult.entity';
-import { BaseEntity } from '@supervision/shared';
+import { BaseEntity } from '@supervision/shared/database/base.entity';
+import { SpectacleEntity } from '@supervision/spectacle/database/spectacle.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 export enum Ethnicity {
@@ -63,6 +64,11 @@ export class PatientEntity extends BaseEntity {
     cascade: ['insert', 'update'],
   })
   consults: ConsultEntity[];
+
+  @OneToMany(() => SpectacleEntity, (spectacle) => spectacle.patient, {
+    cascade: ['insert', 'update'],
+  })
+  spectacle: SpectacleEntity[];
 
   @Column('smallint', { nullable: true })
   yearLevel: number;

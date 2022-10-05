@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '@supervision/shared';
 import { ConsultEntity } from '@supervision/consults/database/consult.entity';
+import { SpectacleEntity } from '@supervision/spectacle/database/spectacle.entity';
 
 export enum UserRole {
   SUPERVISOR = 'supervisor',
@@ -33,4 +34,7 @@ export class UserEntity extends BaseEntity {
     cascade: ['insert', 'update'],
   })
   consults: ConsultEntity[];
+
+  @OneToMany(() => SpectacleEntity, (spectacle) => spectacle.patient)
+  spectacle: SpectacleEntity[];
 }

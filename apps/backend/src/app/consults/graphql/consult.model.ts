@@ -1,7 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { PatientModel } from '@supervision/patients';
+import { PatientModel } from '@supervision/patients/graphql/patient.model';
+import { SpectacleModel } from '@supervision/spectacle/graphql/spectacle.model';
 import { BaseModel } from '@supervision/shared';
-import { UserModel } from '@supervision/users';
+import { UserModel } from '@supervision/users/graphql/user.model';
 
 @ObjectType({ description: 'consult' })
 export class ConsultModel extends BaseModel {
@@ -10,6 +11,9 @@ export class ConsultModel extends BaseModel {
 
   @Field(() => PatientModel, { nullable: false })
   patient: PatientModel;
+
+  @Field(() => SpectacleModel, { nullable: true })
+  spectacle: SpectacleModel;
 
   @Field({ nullable: false })
   dateConsentGiven: Date;
@@ -97,21 +101,6 @@ export class ConsultModel extends BaseModel {
 
   @Field({ nullable: true })
   layPersonNotes: string;
-
-  @Field({ nullable: true })
-  spectacleCode: string;
-
-  @Field({ nullable: true })
-  spectacleColour: string;
-
-  @Field({ nullable: true })
-  spectacleLensType: string;
-
-  @Field({ nullable: true })
-  spectacleHeights: string;
-
-  @Field({ nullable: true })
-  spectacleNotes: string;
 
   @Field({ nullable: true })
   recallDate: Date;

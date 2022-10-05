@@ -42,9 +42,6 @@ export const buildFormValues = (
   Object.fromEntries(
     Object.entries(schema.properties).map(([key, { type }]) => {
       const value = docJSON?.[key];
-      if (type === 'number') {
-        return [key, value ? Number(value) || '' : null];
-      }
       return [key, value === null || value === undefined ? '' : value];
     })
   );

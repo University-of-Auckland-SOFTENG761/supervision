@@ -2,7 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@supervision/auth';
 import { UserEntity } from '@supervision/users/database';
-import { UserResolver } from '@supervision/users/graphql';
+import { UserResolver } from '@supervision/users/graphql/user.resolver';
 import { UserService } from '@supervision/users/users.service';
 
 @Module({
