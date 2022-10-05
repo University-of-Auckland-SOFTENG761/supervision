@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Center,
   Group,
   Loader,
   NumberInput,
+  SimpleGrid,
   Stack,
   Textarea,
   TextInput,
@@ -37,19 +38,23 @@ export const PatientInputs = ({
   const { patientsCollection } = useDatabase();
 
   const patientRef = useRef<PatientDocType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log('patients collection or id changed');
     if (patientsCollection && patientId) {
+      setIsLoading(true);
       patientsCollection
         .findOne({ selector: { id: patientId } })
         .exec()
         .then((p) => {
-          p &&
-            (patientRef.current = buildFormValues(
+          if (p) {
+            patientRef.current = buildFormValues(
               patientSchemaTyped,
               p as PatientDocType
-            ) as PatientDocType);
+            ) as PatientDocType;
+            setIsLoading(false);
+          }
         });
     }
   }, [patientsCollection, patientId]);
@@ -65,7 +70,7 @@ export const PatientInputs = ({
     }
   };
 
-  if (!patientRef.current)
+  if (isLoading)
     // This is currently ugly but it prevents inputs from being loaded with incorrect defaultValues
     return (
       <Center className="w-full h-full">
@@ -74,18 +79,23 @@ export const PatientInputs = ({
     );
 
   return (
-    <>
-      <Stack onBlur={sendUpdate}>
+    <SimpleGrid
+      onBlur={sendUpdate}
+      cols={3}
+      spacing={180}
+      breakpoints={[
+        { maxWidth: 1024, cols: 2, spacing: 100 },
+        { maxWidth: 1280, cols: 3, spacing: 100 },
+      ]}
+    >
+      <Stack>
         <TextInput
           required
           label="First name:"
           defaultValue={patientRef.current?.firstName}
           onChange={(e) =>
-            patientRef?.current &&
-            (patientRef.current = {
-              ...patientRef.current,
-              firstName: e.currentTarget.value,
-            })
+            patientRef.current &&
+            (patientRef.current.firstName = e.currentTarget.value)
           }
         />
         <TextInput
@@ -103,11 +113,8 @@ export const PatientInputs = ({
             label="Date of birth:"
             defaultValue={new Date(patientRef.current?.dateOfBirth ?? '')}
             onChange={(d) => {
-              patientRef?.current &&
-                (patientRef.current = {
-                  ...patientRef.current,
-                  dateOfBirth: d?.toISOString(),
-                });
+              patientRef.current &&
+                (patientRef.current.dateOfBirth = d?.toISOString());
             }}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
@@ -252,7 +259,7 @@ export const PatientInputs = ({
         />
         <RecallsTable patientConsults={patientConsults} />
       </Stack>
-    </>
+    </SimpleGrid>
   );
 };
 

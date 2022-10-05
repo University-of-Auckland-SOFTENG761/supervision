@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Center, ScrollArea, SimpleGrid, Text } from '@mantine/core';
+import { Center, ScrollArea, Text } from '@mantine/core';
 import { Button, useDatabase } from '@shared';
 import { PatientTabs } from '../patient-tabs';
 import { PatientInputs } from '../patient-inputs';
@@ -35,20 +35,11 @@ export const PatientDetailsPage = () => {
       <PatientTabs />
       {patientId ? (
         <ScrollArea className="h-full p-8">
-          <SimpleGrid
-            cols={3}
-            spacing={180}
-            breakpoints={[
-              { maxWidth: 1024, cols: 2, spacing: 100 },
-              { maxWidth: 1280, cols: 3, spacing: 100 },
-            ]}
-          >
-            <PatientInputs
-              patientConsults={patientConsults}
-              patientId={patientId}
-              key={patientId}
-            />
-          </SimpleGrid>
+          <PatientInputs
+            patientConsults={patientConsults}
+            patientId={patientId}
+            key={patientId}
+          />
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button onClick={handleCreateNewRecord} className="ml-auto">
               CREATE NEW RECORD
