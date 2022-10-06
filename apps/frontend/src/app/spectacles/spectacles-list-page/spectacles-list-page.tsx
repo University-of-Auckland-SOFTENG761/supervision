@@ -78,7 +78,6 @@ export const SpectaclesListPage = () => {
   const [debouncedStatusQuery] = useDebouncedValue(statusQuery, 200);
 
   useEffect(() => {
-    console.log(debouncedStatusQuery);
     setTableRecords(
       spectaclesRecords.filter(
         ({ firstName, lastName, orderDate, school, uid, orderStatus }) => {
