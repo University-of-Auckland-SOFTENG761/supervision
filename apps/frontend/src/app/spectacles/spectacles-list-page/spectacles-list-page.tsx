@@ -9,7 +9,6 @@ import sortBy from 'lodash/sortBy';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 
 export const SpectaclesListPage = () => {
-  //TODO: double-check with Veeran which columns he wants
   const spectaclesRecords: ISpectacles[] = [
     {
       uid: 'fake_id_1234',
