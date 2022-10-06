@@ -194,11 +194,11 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               <TextInput
                 label="Spectacles Code:"
                 classNames={{ label: 'whitespace-nowrap' }}
-                {...form.getInputProps('spectacleCode')}
+                {...form.getInputProps('spectacle.code')}
               />
               <TextInput
                 label="Heights:"
-                {...form.getInputProps('spectacleHeights')}
+                {...form.getInputProps('spectacle.heights')}
                 placeholder="Datum"
               />
             </Stack>
@@ -208,16 +208,16 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               <SimpleGrid cols={2}>
                 <TextInput
                   label="Colour:"
-                  {...form.getInputProps('spectacleColour')}
+                  {...form.getInputProps('spectacle.colour')}
                 />
                 <TextInput
                   label="Lens Type:"
-                  {...form.getInputProps('spectacleLensType')}
+                  {...form.getInputProps('spectacle.lensType')}
                 />
               </SimpleGrid>
               <TextInput
                 label="Spectacles Note:"
-                {...form.getInputProps('spectacleNotes')}
+                {...form.getInputProps('spectacle.notes')}
               />
             </Stack>
           </Grid.Col>
