@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
@@ -17,8 +17,10 @@ export const ConsultInputs = ({
   updateConsult,
 }: ConsultInputsProps) => {
   const consultRef = useRef<ConsultDocType | null>(consult);
-  const [debouncedRevision] = useDebouncedValue(consult?.revision, 5000);
-
+  const [debouncedRevision, cancelDebounce] = useDebouncedValue(
+    consult?.revision,
+    5000
+  );
   consultRef.current = consult.toMutableJSON();
 
   const sendUpdate = () => {
@@ -27,6 +29,25 @@ export const ConsultInputs = ({
       updateConsult(stripUnusedFields(consultRef.current));
     }
   };
+
+  const timeoutRef = useRef<NodeJS.Timer | null>(null);
+
+  const cancelRender = () => {
+    cancelDebounce();
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(sendUpdate, 5000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      sendUpdate();
+    };
+  }, []);
 
   const setFieldByKey = (key: string, value: string | number | undefined) => {
     if (consultRef.current) {
@@ -39,7 +60,7 @@ export const ConsultInputs = ({
   };
 
   return (
-    <Stack onBlur={sendUpdate} key={debouncedRevision}>
+    <Stack onChange={cancelRender} key={debouncedRevision}>
       <div>
         <ConsultDetailsUpper consultRef={consultRef} />
       </div>

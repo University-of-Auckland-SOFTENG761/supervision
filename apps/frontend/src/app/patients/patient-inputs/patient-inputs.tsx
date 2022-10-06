@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   Group,
   NumberInput,
@@ -37,7 +37,10 @@ export const PatientInputs = ({
   consults,
 }: PatientInputsProps) => {
   const patientRef = useRef<PatientDocType | null>(patient);
-  const [debouncedRevision] = useDebouncedValue(patient?.revision, 5000);
+  const [debouncedRevision, cancelDebounce] = useDebouncedValue(
+    patient?.revision,
+    5000
+  );
 
   patientRef.current = patient.toMutableJSON();
 
@@ -51,9 +54,28 @@ export const PatientInputs = ({
     }
   };
 
+  const timeoutRef = useRef<NodeJS.Timer | null>(null);
+
+  const cancelRender = () => {
+    cancelDebounce();
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(sendUpdate, 5000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      sendUpdate();
+    };
+  }, []);
+
   return (
     <SimpleGrid
-      onBlur={sendUpdate}
+      onChange={cancelRender}
       cols={3}
       spacing={180}
       breakpoints={[

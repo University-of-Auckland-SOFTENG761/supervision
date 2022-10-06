@@ -60,9 +60,7 @@ export const stripUnusedFields = (docJSON?: { [key: string]: unknown }) =>
       })
       .filter(([key, value]) => {
         return !(
-          value === '' ||
-          value == null ||
-          (value as Array<unknown>).length === 0
+          value === null
         );
       })
   );
