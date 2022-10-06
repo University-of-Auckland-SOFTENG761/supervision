@@ -61,7 +61,12 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
         lensType,
         pupillaryDistance,
         heights,
-        notes
+        notes,
+        orderStatus,
+        orderDate,
+        deliveredDate,
+        createdDate,
+        deliverySchool,
       }
       recallDate,
       recallDescription,

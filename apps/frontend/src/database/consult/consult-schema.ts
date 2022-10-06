@@ -131,6 +131,21 @@ export const consultSchemaLiteral = {
         notes: {
           type: 'string',
         },
+        orderStatus: {
+          type: 'string',
+        },
+        createdDate: {
+          type: 'string',
+        },
+        orderDate: {
+          type: 'string',
+        },
+        deliveredDate: {
+          type: 'string',
+        },
+        deliverySchool: {
+          type: 'string',
+        },
       },
     },
     recallDate: {

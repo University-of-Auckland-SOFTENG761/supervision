@@ -63,6 +63,11 @@ export class ConsultsService {
               lensType: spectacle.lensType,
               heights: spectacle.heights,
               notes: spectacle.notes,
+              orderStatus: spectacle.orderStatus,
+              createdDate: spectacle.createdDate,
+              orderDate: spectacle.orderDate,
+              deliveredDate: spectacle.deliveredDate,
+              deliverySchool: spectacle.deliverySchool,
             })
           : null;
         return {

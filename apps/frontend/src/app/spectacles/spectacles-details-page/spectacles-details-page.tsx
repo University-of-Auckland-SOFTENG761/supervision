@@ -9,11 +9,12 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
 import React, { useCallback, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
+import { useDatabase } from '@shared';
 
 export type ISpectacles = {
   uid: string;
@@ -33,71 +34,38 @@ export type ISpectacles = {
 };
 
 export const SpectaclesDetailsPage = () => {
-  // Fake data to match the records in spectacles-list-page
-  // TODO: replace with backend data
-  const spectacleRecords: ISpectacles[] = [
-    {
-      uid: 'fake_id_1234',
-      firstName: 'Henry',
-      lastName: 'Mitchell-Hibbert',
-      school: 'University of Auckland',
-      spectaclesCode: 'some-spec-code',
-      colour: 'Black',
-      lensType: 'some-lens-type',
-      pupillaryDistance: 120.5,
-      heights: 29.5,
-      spectaclesNotes: 'Sat on his last pair',
-      orderStatus: 'orderSent',
-      associatedPatientUid: 'some-patient-id-123456',
-    },
-    {
-      uid: 'fake_id_1235',
-      firstName: 'Joan',
-      lastName: 'Doe',
-      school: 'Massey High School',
-      spectaclesCode: '',
-      colour: 'Blue',
-      lensType: '',
-      pupillaryDistance: 120,
-      heights: 20.5,
-      spectaclesNotes: '',
-    },
-    {
-      uid: 'fake_id_1236',
-      firstName: 'Jezza',
-      lastName: 'Doe',
-      school: 'Massey High School',
-      spectaclesCode: '',
-      colour: 'Green',
-      lensType: '',
-      pupillaryDistance: 120,
-      heights: 42.0,
-      spectaclesNotes: '',
-    },
-  ];
-
-  const { spectaclesUid } = useParams();
-
-  const spectacles = spectaclesUid
-    ? spectacleRecords?.find((s: ISpectacles) => s.uid === spectaclesUid)
+  const { consults, patients } = useDatabase();
+  const [searchParams] = useSearchParams();
+  const spectaclesId = searchParams.get('spectaclesId');
+  const consult = spectaclesId
+    ? consults?.find((c) => c.spectacle?.id === spectaclesId)
+    : undefined;
+  const patient = consult?.patientId
+    ? patients?.find((p) => p.id === consult?.patientId)
     : undefined;
 
   const buildFormValues = useCallback(
     () => ({
-      uid: spectacles?.uid,
-      firstName: spectacles?.firstName,
-      lastName: spectacles?.lastName,
-      school: spectacles?.school,
-      spectaclesCode: spectacles?.spectaclesCode,
-      colour: spectacles?.colour,
-      lensType: spectacles?.lensType,
-      pupillaryDistance: spectacles?.pupillaryDistance,
-      heights: spectacles?.heights,
-      spectaclesNotes: spectacles?.spectaclesNotes,
-      orderStatus: spectacles?.orderStatus,
-      associatedPatientUid: spectacles?.associatedPatientUid,
+      id: consult?.spectacle?.id,
+      firstName: patient?.firstName,
+      lastName: patient?.lastName,
+      school: patient?.school,
+      spectaclesCode: consult?.spectacle?.code,
+      colour: consult?.spectacle?.colour,
+      lensType: consult?.spectacle?.lensType,
+      pupillaryDistance: consult?.spectacle?.pupillaryDistance,
+      heights: consult?.spectacle?.heights,
+      spectaclesNotes: consult?.spectacle?.notes,
+      orderStatus: consult?.spectacle?.orderStatus,
+      associatedPatientUid: consult?.patientId,
+      orderDate: consult?.spectacle?.orderDate
+        ? new Date(consult?.spectacle?.orderDate)
+        : null,
+      deliveredDate: consult?.spectacle?.deliveredDate
+        ? new Date(consult?.spectacle?.deliveredDate)
+        : null,
     }),
-    [spectacles]
+    [consult, patient]
   );
 
   const form = useForm({
@@ -166,7 +134,7 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Spectacles ID</Text>
-          <Text className="-my-8">{form.getInputProps('uid').value}</Text>
+          <Text className="-my-8">{form.getInputProps('id').value}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
@@ -225,9 +193,10 @@ export const SpectaclesDetailsPage = () => {
             className="w-40"
             classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
             data={[
-              { value: 'orderSent', label: 'Ordered' },
-              { value: 'readyForDelivery', label: 'Ready' },
-              { value: 'deliveredToPatient', label: 'Delivered' },
+              { value: 'CREATED', label: 'Created' },
+              { value: 'ORDERSENT', label: 'Order sent' },
+              { value: 'READYFORDELIVERY', label: 'Ready for delivery' },
+              { value: 'DELIVERED', label: 'Delivered' },
             ]}
             {...form.getInputProps('orderStatus')}
           />

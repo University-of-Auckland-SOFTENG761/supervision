@@ -36,13 +36,13 @@ export class SpectacleEntity extends BaseEntity {
   @Column('varchar', { nullable: true })
   notes: string;
 
-  @Column('date', { nullable: true })
+  @Column('timestamp', { nullable: true })
   createdDate: Date;
 
-  @Column('date', { nullable: true })
+  @Column('timestamp', { nullable: true })
   orderDate: Date;
 
-  @Column('date', { nullable: true })
+  @Column('timestamp', { nullable: true })
   deliveredDate: Date;
 
   @Column('enum', {

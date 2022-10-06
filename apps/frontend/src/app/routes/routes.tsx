@@ -22,7 +22,7 @@ const Routes = () => {
           element={<ProtectedRoute component={<ConsultDetailsPage />} />}
         />
         <Route
-          path="/spectacles-details/:spectaclesUid"
+          path="/spectacles-details"
           element={<ProtectedRoute component={<SpectaclesDetailsPage />} />}
         />
         <Route
