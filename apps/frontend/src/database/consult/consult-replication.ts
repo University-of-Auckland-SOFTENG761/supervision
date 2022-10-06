@@ -197,6 +197,13 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
             ...deletionFilter(doc),
             userEmail: doc.user.email,
             patientId: doc.patient.id,
+            spectacle: {
+              ...doc.spectacle,
+              patientId: doc.patient.id,
+              consultId: doc.id,
+            },
+            user: undefined,
+            patient: undefined,
           }),
         },
         push: {

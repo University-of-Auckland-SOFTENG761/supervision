@@ -62,6 +62,7 @@ export class ConsultsService {
               colour: spectacle.colour,
               lensType: spectacle.lensType,
               heights: spectacle.heights,
+              pupillaryDistance: spectacle.pupillaryDistance,
               notes: spectacle.notes,
               orderStatus: spectacle.orderStatus,
               createdDate: spectacle.createdDate,

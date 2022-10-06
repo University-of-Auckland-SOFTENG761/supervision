@@ -113,6 +113,12 @@ export const consultSchemaLiteral = {
         id: {
           type: 'string',
         },
+        patientId: {
+          type: 'string',
+        },
+        consultId: {
+          type: 'string',
+        },
         code: {
           type: 'string',
         },

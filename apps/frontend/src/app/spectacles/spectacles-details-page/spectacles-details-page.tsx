@@ -1,7 +1,10 @@
 import { useForm } from '@mantine/form';
 import {
+  Center,
   Divider,
   Group,
+  Loader,
+  NumberInput,
   ScrollArea,
   Select,
   Stack,
@@ -11,15 +14,29 @@ import {
 } from '@mantine/core';
 import { useSearchParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
 import { useDatabase } from '@shared';
+import { useDebouncedValue } from '@mantine/hooks';
+import { ConsultDocType } from 'database';
+import { stripUnusedFields } from 'database/rxdb-utils';
+
+type TimestampFilter = 'spectacle.orderDate' | 'spectacle.deliveredDate';
+
+type FormTimestamps = {
+  [key in TimestampFilter]: Date | null;
+};
+
+export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
+  FormTimestamps;
 
 export const SpectaclesDetailsPage = () => {
-  const { consults, patients } = useDatabase();
+  const { consults, patients, updateConsult } = useDatabase();
+
   const [searchParams] = useSearchParams();
   const spectaclesId = searchParams.get('spectaclesId');
+
   const consult = spectaclesId
     ? consults?.find((c) => c.spectacle?.id === spectaclesId)
     : undefined;
@@ -27,29 +44,23 @@ export const SpectaclesDetailsPage = () => {
     ? patients?.find((p) => p.id === consult?.patientId)
     : undefined;
 
-  const buildFormValues = useCallback(
-    () => ({
-      id: consult?.spectacle?.id,
-      firstName: patient?.firstName,
-      lastName: patient?.lastName,
-      school: patient?.school,
-      spectaclesCode: consult?.spectacle?.code,
-      colour: consult?.spectacle?.colour,
-      lensType: consult?.spectacle?.lensType,
-      pupillaryDistance: consult?.spectacle?.pupillaryDistance,
-      heights: consult?.spectacle?.heights,
-      spectaclesNotes: consult?.spectacle?.notes,
-      orderStatus: consult?.spectacle?.orderStatus,
-      associatedPatientUid: consult?.patientId,
+  const buildFormValues = () => {
+    return {
+      code: consult?.spectacle?.code ?? '',
+      colour: consult?.spectacle?.colour ?? '',
+      lensType: consult?.spectacle?.lensType ?? '',
+      pupillaryDistance: consult?.spectacle?.pupillaryDistance ?? undefined,
+      heights: consult?.spectacle?.heights ?? '',
+      notes: consult?.spectacle?.notes ?? '',
+      orderStatus: consult?.spectacle?.orderStatus ?? '',
       orderDate: consult?.spectacle?.orderDate
         ? new Date(consult?.spectacle?.orderDate)
         : null,
       deliveredDate: consult?.spectacle?.deliveredDate
         ? new Date(consult?.spectacle?.deliveredDate)
         : null,
-    }),
-    [consult, patient]
-  );
+    };
+  };
 
   const form = useForm({
     initialValues: buildFormValues(),
@@ -58,12 +69,37 @@ export const SpectaclesDetailsPage = () => {
   useEffect(() => {
     form.setValues(buildFormValues());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [consult]);
+
+  const sendUpdate = () => {
+    if (updateConsult && form.values && consult)
+      updateConsult({
+        ...consult,
+        spectacle: {
+          id: spectaclesId,
+          ...stripUnusedFields(form.values),
+        },
+      });
+  };
+
+  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
+
+  useEffect(() => {
+    sendUpdate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedFormValues]);
 
   const optometristDetails = {
     email: 'mobile-optometry@auckland.ac.nz',
     mobile: '027 272 3319',
   };
+
+  if (!form.values || !consult)
+    return (
+      <Center className="h-full w-full">
+        <Loader />
+      </Center>
+    );
 
   return (
     <ScrollArea className="h-full p-8">
@@ -92,24 +128,22 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between -mb-12">
           <Text className="-my-8">Patient ID</Text>
-          <Text className="-my-8">
-            {form.getInputProps('associatedPatientUid').value}
-          </Text>
+          <Text className="-my-8">{patient?.id}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">First Name</Text>
-          <Text className="-my-8">{form.getInputProps('firstName').value}</Text>
+          <Text className="-my-8">{patient?.firstName}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Last Name</Text>
-          <Text className="-my-8">{form.getInputProps('lastName').value}</Text>
+          <Text className="-my-8">{patient?.lastName}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">School</Text>
-          <Text className="-my-8">{form.getInputProps('school').value}</Text>
+          <Text className="-my-8">{patient?.school}</Text>
         </Group>
         <Divider my="xs" />
 
@@ -117,14 +151,14 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Spectacles ID</Text>
-          <Text className="-my-8">{form.getInputProps('id').value}</Text>
+          <Text className="-my-8">{spectaclesId}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Code</Text>
           <TextInput
             classNames={{ root: '-my-8', input: 'text-right' }}
-            {...form.getInputProps('spectaclesCode')}
+            {...form.getInputProps('code')}
           />
         </Group>
         <Divider my="xs" />
@@ -146,8 +180,8 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">PD (mm)</Text>
-          <TextInput
-            classNames={{ root: '-my-8', input: 'text-right' }}
+          <NumberInput
+            classNames={{ root: '-my-8', input: 'text-right pr-8' }}
             {...form.getInputProps('pupillaryDistance')}
           />
         </Group>
@@ -166,7 +200,7 @@ export const SpectaclesDetailsPage = () => {
             autosize
             minRows="1"
             classNames={{ root: '-my-3', input: 'text-left py-1' }}
-            {...form.getInputProps('spectaclesNotes')}
+            {...form.getInputProps('notes')}
           />
         </Group>
         <Divider my="xs" />
