@@ -44,7 +44,6 @@ setInterval(setNotification, 6 * 1000);
 
 export const useNetwork = () => {
   const [online, setOnline] = useState(navigator.onLine);
-  const [lastPing, setLastPing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const checkOnline = async () => {
