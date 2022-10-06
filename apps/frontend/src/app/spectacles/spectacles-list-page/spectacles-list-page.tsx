@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ISpectacles } from '../spectacles-details-page';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
