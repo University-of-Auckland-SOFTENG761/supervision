@@ -16,23 +16,6 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
 import { useDatabase } from '@shared';
 
-export type ISpectacles = {
-  uid: string;
-  firstName?: string;
-  lastName: string;
-  school: string;
-  spectaclesCode?: string;
-  colour?: string;
-  lensType?: string;
-  pupillaryDistance?: number;
-  heights?: number;
-  spectaclesNotes?: string;
-  orderStatus?: string;
-  orderDate?: Date;
-  deliveryDate?: Date;
-  associatedPatientUid?: string;
-};
-
 export const SpectaclesDetailsPage = () => {
   const { consults, patients } = useDatabase();
   const [searchParams] = useSearchParams();

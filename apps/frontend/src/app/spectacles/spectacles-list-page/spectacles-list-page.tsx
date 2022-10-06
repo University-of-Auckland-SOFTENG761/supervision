@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ISpectacles } from '../spectacles-details-page';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea, Stack, Title, TextInput, Select } from '@mantine/core';
@@ -8,52 +7,28 @@ import { IconSearch } from '@tabler/icons';
 import { useDebouncedValue } from '@mantine/hooks';
 import sortBy from 'lodash/sortBy';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
+import { useDatabase } from '@shared';
 
 export const SpectaclesListPage = () => {
-  const spectaclesRecords: ISpectacles[] = [
-    {
-      uid: 'fake_id_1234',
-      firstName: 'Henry',
-      lastName: 'Mitchell-Hibbert',
-      school: 'University of Auckland',
-      orderDate: new Date(2022, 8, 25),
-      spectaclesCode: '',
-      colour: 'Black',
-      lensType: '',
-      pupillaryDistance: 120,
-      heights: undefined,
-      spectaclesNotes: '',
-      orderStatus: 'created',
-    },
-    {
-      uid: 'fake_id_1235',
-      firstName: 'Joan',
-      lastName: 'Doe',
-      school: 'Massey High School',
-      orderDate: new Date(2021, 3, 5),
-      spectaclesCode: '',
-      colour: 'Blue',
-      lensType: '',
-      pupillaryDistance: 120,
-      heights: undefined,
-      spectaclesNotes: '',
-      orderStatus: 'created',
-    },
-    {
-      uid: 'fake_id_1236',
-      firstName: 'Jezza',
-      lastName: 'Doe',
-      school: 'Massey High School',
-      orderDate: new Date(2022, 3, 20),
-      spectaclesCode: '',
-      colour: 'Green',
-      lensType: '',
-      pupillaryDistance: 120,
-      heights: undefined,
-      spectaclesNotes: '',
-      orderStatus: 'delivered',
-    },
-  ];
+  const { consults, patients } = useDatabase();
+  const spectaclesRecords = consults?.map((c) => {
+    const patient = patients?.find((p) => p.id === c.patientId);
+    return {
+      id: c.spectacle?.id,
+      firstName: patient?.firstName,
+      lastName: patient?.lastName,
+      school: patient?.school,
+      spectaclesCode: c.spectacle?.code,
+      colour: c.spectacle?.colour,
+      lensType: c.spectacle?.lensType,
+      pupillaryDistance: c.spectacle?.pupillaryDistance,
+      heights: c.spectacle?.heights,
+      spectaclesNotes: c.spectacle?.notes,
+      orderStatus: c.spectacle?.orderStatus,
+      associatedPatientUid: c.patientId,
+      orderDate: c.spectacle?.orderDate,
+    };
+  });
 
   const navigate = useNavigate();
 
@@ -77,28 +52,31 @@ export const SpectaclesListPage = () => {
   const [debouncedStatusQuery] = useDebouncedValue(statusQuery, 200);
 
   useEffect(() => {
-    setTableRecords(
-      spectaclesRecords.filter(
-        ({ firstName, lastName, orderDate, school, uid, orderStatus }) => {
-          if (
-            debouncedStatusQuery !== '' &&
-            debouncedStatusQuery !== null &&
-            debouncedStatusQuery !== orderStatus
-          ) {
-            return false;
+    spectaclesRecords &&
+      setTableRecords(
+        spectaclesRecords.filter(
+          ({ firstName, lastName, orderDate, school, id, orderStatus }) => {
+            if (
+              debouncedStatusQuery !== '' &&
+              debouncedStatusQuery !== null &&
+              debouncedStatusQuery !== orderStatus
+            ) {
+              return false;
+            }
+            if (
+              debouncedQuery !== '' &&
+              !`${firstName} ${lastName} ${
+                orderDate ? new Date(orderDate)?.toLocaleDateString() : null
+              } ${school} ${id}`
+                .toLowerCase()
+                .includes(debouncedQuery.trim().toLowerCase())
+            ) {
+              return false;
+            }
+            return true;
           }
-          if (
-            debouncedQuery !== '' &&
-            !`${firstName} ${lastName} ${orderDate?.toLocaleDateString()} ${school} ${uid}`
-              .toLowerCase()
-              .includes(debouncedQuery.trim().toLowerCase())
-          ) {
-            return false;
-          }
-          return true;
-        }
-      )
-    );
+        )
+      );
   }, [debouncedQuery, debouncedStatusQuery]);
 
   return (
@@ -119,10 +97,10 @@ export const SpectaclesListPage = () => {
           placeholder="Order Status"
           clearable
           data={[
-            { value: 'created', label: 'Created' },
-            { value: 'orderSent', label: 'Ordered' },
-            { value: 'readyForDelivery', label: 'Ready' },
-            { value: 'delivered', label: 'Delivered' },
+            { value: 'CREATED', label: 'Created' },
+            { value: 'ORDERSENT', label: 'Order sent' },
+            { value: 'READYFORDELIVERY', label: 'Ready for delivery' },
+            { value: 'DELIVERED', label: 'Delivered' },
           ]}
         />
         <DataTable
@@ -146,7 +124,7 @@ export const SpectaclesListPage = () => {
               render: ({ orderDate }) => dayjs(orderDate).format('DD/MM/YYYY'),
               sortable: true,
             },
-            { accessor: 'uid', title: 'ID#', sortable: true },
+            { accessor: 'id', title: 'ID#', sortable: true },
             { accessor: 'firstName', title: 'FIRST NAME', sortable: true },
             { accessor: 'lastName', title: 'LAST NAME', sortable: true },
             { accessor: 'school', title: 'SCHOOL', sortable: true },
@@ -163,7 +141,9 @@ export const SpectaclesListPage = () => {
           onSortStatusChange={setSortStatus}
           noRecordsText="No records to show"
           fetching={isFetching}
-          onRowClick={(record) => navigate(`/spectacles-details/${record.uid}`)}
+          onRowClick={(record) =>
+            navigate(`/spectacles-details?spectaclesId=${record.id}`)
+          }
         />
       </Stack>
     </ScrollArea>
