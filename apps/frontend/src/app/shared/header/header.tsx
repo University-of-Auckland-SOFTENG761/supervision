@@ -11,7 +11,7 @@ export interface HeaderProps {}
 
 export function Header(props: HeaderProps) {
   const location = useLocation();
-  const online = useNetwork();
+  const { online } = useNetwork();
 
   console.log(online + 'help me i hate this');
 
