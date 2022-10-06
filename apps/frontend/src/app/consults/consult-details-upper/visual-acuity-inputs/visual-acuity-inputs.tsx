@@ -17,9 +17,19 @@ export const VisualAcuityInputs = ({
         Visual Acuity
       </Title>
       <SimpleGrid cols={3}>
-        <TextInput label="Right:" required {...visualAcuityRightProps} />
-        <TextInput label="Left:" required {...visualAcuityLeftProps} />
-        <TextInput label="Both:" {...visualAcuityBothProps} />
+        <TextInput
+          maxLength={10}
+          label="Right:"
+          required
+          {...visualAcuityRightProps}
+        />
+        <TextInput
+          maxLength={10}
+          label="Left:"
+          required
+          {...visualAcuityLeftProps}
+        />
+        <TextInput maxLength={10} label="Both:" {...visualAcuityBothProps} />
       </SimpleGrid>
     </>
   );

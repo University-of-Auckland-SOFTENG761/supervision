@@ -124,6 +124,7 @@ export const ConsultDetailsUpper = ({
         <Stack>
           <TextInput
             label="NPC:"
+            maxLength={8}
             defaultValue={consultRef?.current?.nearPointOfConvergence}
             onChange={(e) =>
               consultRef?.current &&
@@ -133,6 +134,7 @@ export const ConsultDetailsUpper = ({
           />
           <TextInput
             label="Motility:"
+            maxLength={8}
             defaultValue={consultRef?.current?.motility}
             onChange={(e) => {
               consultRef?.current &&
@@ -141,6 +143,7 @@ export const ConsultDetailsUpper = ({
           />
           <TextInput
             label="Pupils:"
+            maxLength={8}
             defaultValue={consultRef?.current?.pupils}
             onChange={(e) => {
               consultRef?.current &&
@@ -156,6 +159,7 @@ export const ConsultDetailsUpper = ({
           />
           <TextInput
             label="Fields/Colour Vision/Other:"
+            maxLength={20}
             defaultValue={consultRef?.current?.otherField}
             onChange={(e) => {
               consultRef?.current &&

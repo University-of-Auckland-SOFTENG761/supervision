@@ -16,6 +16,7 @@ const SchoolAutocomplete = ({
 
   return (
     <Autocomplete
+      maxLength={45}
       label="School:"
       data={schoolData}
       value={value}

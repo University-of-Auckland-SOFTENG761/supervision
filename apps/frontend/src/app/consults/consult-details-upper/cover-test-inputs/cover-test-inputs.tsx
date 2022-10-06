@@ -16,11 +16,12 @@ export const CoverTestInputs = ({
       </Title>
       <SimpleGrid cols={3}>
         <TextInput
+          maxLength={40}
           label="Distance:"
           classNames={{ label: 'whitespace-nowrap' }}
           {...coverTestDistanceProps}
         />
-        <TextInput label="Near:" {...coverTestNearProps} />
+        <TextInput maxLength={40} label="Near:" {...coverTestNearProps} />
       </SimpleGrid>
     </>
   );

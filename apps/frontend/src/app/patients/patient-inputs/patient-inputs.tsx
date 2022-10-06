@@ -66,6 +66,7 @@ export const PatientInputs = ({
       <Stack>
         <TextInput
           required
+          maxLength={40}
           label="First name:"
           defaultValue={patientRef.current?.firstName}
           onChange={(e) =>
@@ -75,6 +76,7 @@ export const PatientInputs = ({
         />
         <TextInput
           required
+          maxLength={40}
           label="Last name:"
           defaultValue={patientRef.current?.lastName}
           onChange={(e) =>
@@ -149,6 +151,7 @@ export const PatientInputs = ({
             }
           />
           <TextInput
+            maxLength={20}
             label="Room:"
             className="grow"
             defaultValue={patientRef.current?.room}
@@ -188,6 +191,7 @@ export const PatientInputs = ({
           />
         </Group>
         <TextInput
+          maxLength={5}
           placeholder="Postcode"
           defaultValue={patientRef.current?.postcode}
           onChange={(e) =>
@@ -196,6 +200,7 @@ export const PatientInputs = ({
           }
         />
         <TextInput
+          maxLength={40}
           label="Caregiver First Name:"
           defaultValue={patientRef.current?.caregiverFirstName}
           onChange={(e) =>
@@ -204,6 +209,7 @@ export const PatientInputs = ({
           }
         />
         <TextInput
+          maxLength={40}
           label="Caregiver Last Name:"
           defaultValue={patientRef.current?.caregiverLastName}
           onChange={(e) =>
@@ -212,6 +218,7 @@ export const PatientInputs = ({
           }
         />
         <TextInput
+          maxLength={15}
           label="Phone:"
           defaultValue={patientRef.current?.phoneNumber}
           onChange={(e) =>

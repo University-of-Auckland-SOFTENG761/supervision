@@ -122,6 +122,7 @@ export const ConsultDetailsLower = ({
                 </td>
                 <td>
                   <TextInput
+                    maxLength={10}
                     defaultValue={consult.get(row.code + 'RightVA')}
                     onChange={(event) => {
                       setFieldByKey(
@@ -248,6 +249,7 @@ export const ConsultDetailsLower = ({
                 row.name === 'Given refraction' ? (
                   <td>
                     <TextInput
+                      maxLength={10}
                       defaultValue={consult.get(row.code + 'BVA')}
                       onChange={(event) => {
                         setFieldByKey(
