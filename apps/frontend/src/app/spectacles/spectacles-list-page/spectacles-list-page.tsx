@@ -56,7 +56,6 @@ export const SpectaclesListPage = () => {
 
   const navigate = useNavigate();
 
-  //TODO: Link isFetching to backend query status
   const [isFetching, setIsFetching] = useState(false);
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'date',
