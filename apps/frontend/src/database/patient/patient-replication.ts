@@ -135,6 +135,7 @@ export const buildPatientReplicationState = async (database: RxDatabase) => {
             consultIds: doc.consults.map(
               (consult: { id: string }) => consult.id
             ),
+            consults: undefined,
           }),
         },
         push: {

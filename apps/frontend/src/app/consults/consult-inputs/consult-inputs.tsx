@@ -1,89 +1,52 @@
-import { useEffect } from 'react';
-import { useForm } from '@mantine/form';
+import { useRef } from 'react';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
-import { buildFormValues, stripUnusedFields } from 'database/rxdb-utils';
-import { useDatabase } from '@shared';
-import { useSearchParams } from 'react-router-dom';
-import { ConsultDocType, consultSchemaTyped } from 'database';
+import { stripUnusedFields } from 'database/rxdb-utils';
+import { ConsultDocType } from 'database';
 import { useDebouncedValue } from '@mantine/hooks';
+import { RxDocument } from 'rxdb';
 
-type TimestampFilter =
-  | 'eyePressureTimestamp'
-  | 'cyclopentolateTimestamp'
-  | 'tropicamideTimestamp';
-
-type FormTimestamps = {
-  [key in TimestampFilter]: Date | null;
+type ConsultInputsProps = {
+  consult: RxDocument<ConsultDocType>;
+  updateConsult: (consultJSON: ConsultDocType) => void;
 };
 
-export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
-  FormTimestamps;
+export const ConsultInputs = ({
+  consult,
+  updateConsult,
+}: ConsultInputsProps) => {
+  const consultRef = useRef<ConsultDocType | null>(consult);
+  const [debouncedRevision] = useDebouncedValue(consult?.revision, 5000);
 
-export const ConsultInputs = () => {
-  const { consults, updateConsult } = useDatabase();
-
-  const [searchParams] = useSearchParams();
-  const consultId = searchParams.get('consultId');
-
-  const consult = consultId
-    ? consults?.find((p) => p.id === consultId)
-    : undefined;
-
-  const form = useForm({
-    initialValues: {
-      ...buildFormValues(
-        consultSchemaTyped,
-        consult?.toJSON !== undefined ? consult.toJSON() : consult
-      ),
-      eyePressureTimestamp: consult?.eyePressureTimestamp
-        ? new Date(consult?.eyePressureTimestamp)
-        : null,
-      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
-        ? new Date(consult?.cyclopentolateTimestamp)
-        : null,
-      tropicamideTimestamp: consult?.tropicamideTimestamp
-        ? new Date(consult?.tropicamideTimestamp)
-        : null,
-    } as FormInputType,
-  });
-
-  useEffect(() => {
-    form.setValues({
-      ...buildFormValues(
-        consultSchemaTyped,
-        consult?.toJSON !== undefined ? consult.toJSON() : consult
-      ),
-      eyePressureTimestamp: consult?.eyePressureTimestamp
-        ? new Date(consult?.eyePressureTimestamp)
-        : null,
-      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
-        ? new Date(consult?.cyclopentolateTimestamp)
-        : null,
-      tropicamideTimestamp: consult?.tropicamideTimestamp
-        ? new Date(consult?.tropicamideTimestamp)
-        : null,
-    } as FormInputType);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consults]);
+  consultRef.current = consult.toMutableJSON();
+  console.log(debouncedRevision);
 
   const sendUpdate = () => {
-    if (updateConsult && form.values)
-      updateConsult(stripUnusedFields(form.values));
+    if (consultRef.current) {
+      console.log(consultRef.current);
+      updateConsult(stripUnusedFields(consultRef.current));
+    }
   };
 
-  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
-
-  useEffect(() => {
-    sendUpdate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFormValues]);
+  const setFieldByKey = (key: string, value: string | number | undefined) => {
+    if (consultRef.current) {
+      const newConsult = Object.fromEntries([
+        ...Object.entries(consultRef.current),
+        [key, value],
+      ]) as ConsultDocType;
+      updateConsult(newConsult);
+    }
+  };
 
   return (
-    <Stack onBlur={sendUpdate}>
-      <ConsultDetailsUpper form={form} />
-      <ConsultDetailsLower form={form} />
+    <Stack onBlur={sendUpdate} key={debouncedRevision}>
+      <div>
+        <ConsultDetailsUpper consultRef={consultRef} />
+      </div>
+      <div>
+        <ConsultDetailsLower consult={consult} setFieldByKey={setFieldByKey} />
+      </div>
     </Stack>
   );
 };

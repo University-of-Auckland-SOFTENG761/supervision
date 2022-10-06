@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import {
   Group,
   NumberInput,
@@ -55,7 +55,7 @@ export const PatientInputs = ({
 
   return (
     <SimpleGrid
-      onBlur={sendUpdate}
+      onChange={sendUpdate}
       cols={3}
       spacing={180}
       breakpoints={[

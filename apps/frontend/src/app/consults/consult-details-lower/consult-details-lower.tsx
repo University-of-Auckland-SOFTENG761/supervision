@@ -1,16 +1,28 @@
 import { Table, TableTheme, Button } from '@shared';
 import { TextInput, Grid, Stack, NumberInput } from '@mantine/core';
-import { UseFormReturnType } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
-import { FormInputType } from '../consult-inputs';
 import { useNavigate } from 'react-router-dom';
+import { RxDocument } from 'rxdb';
+import { ConsultDocType } from 'database';
 
 type ConsultDetailsLowerProps = {
-  form: UseFormReturnType<FormInputType>;
+  consult: RxDocument<ConsultDocType>;
+  setFieldByKey: (key: string, value: string | number | undefined) => void;
 };
 
-export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
-  const consultRows = [
+export const ConsultDetailsLower = ({
+  consult,
+  setFieldByKey,
+}: ConsultDetailsLowerProps) => {
+  type RowCode =
+    | 'prevSpecRxGiven'
+    | 'habitual'
+    | 'dryRetinoscopy'
+    | 'autoRefraction'
+    | 'wetRefraction'
+    | 'subjectiveRefraction'
+    | 'givenRefraction';
+  const consultRows: { name: string; code: RowCode }[] = [
     {
       name: 'Previous Spectacles Rx',
       code: 'prevSpecRxGiven',
@@ -45,7 +57,7 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
     precision: 2,
     step: 0.01,
   };
-  
+
   const navigate = useNavigate();
 
   return (
@@ -83,112 +95,101 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'RightEyeSphere')}
+                    defaultValue={consult.get(row.code + 'RightEyeSphere')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'RightEyeSphere', value);
+                    }}
                   />
                 </td>
                 <td>/</td>
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'RightCylinder')}
+                    defaultValue={consult.get(row.code + 'RightCylinder')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'RightCylinder', value);
+                    }}
                   />
                 </td>
                 <td>x</td>
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'RightAxis')}
+                    defaultValue={consult.get(row.code + 'RightAxis')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'RightAxis', value);
+                    }}
                   />
                 </td>
                 <td>
-                  <TextInput {...form.getInputProps(row.code + 'RightVA')} />
+                  <TextInput
+                    defaultValue={consult.get(row.code + 'RightVA')}
+                    onChange={(event) => {
+                      setFieldByKey(
+                        row.code + 'RightVA',
+                        event.currentTarget.value
+                      );
+                    }}
+                  />
                 </td>
                 <td>
-                  <NumberInput {...form.getInputProps(row.code + 'RightAdd')} />
+                  <NumberInput
+                    defaultValue={consult.get(row.code + 'RightAdd')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'RightAdd', value);
+                    }}
+                  />
                 </td>
                 <td>
                   {index !== consultRows.length - 1 && (
                     <Button compact variant="subtle">
                       <IconArrowAutofitDown
                         onClick={() => {
-                          const valRightEyeSphere = {
-                            ...form.getInputProps(row.code + 'RightEyeSphere'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightEyeSphere',
-                            valRightEyeSphere
-                          );
+                          const nextRow = consultRows[index + 1];
 
-                          const valRightCylinder = {
-                            ...form.getInputProps(row.code + 'RightCylinder'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightCylinder',
-                            valRightCylinder
+                          setFieldByKey(
+                            nextRow.code + 'RightEyeSphere',
+                            consult.get(row.code + 'RightEyeSphere')
                           );
-
-                          const valRightAxis = {
-                            ...form.getInputProps(row.code + 'RightAxis'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightAxis',
-                            valRightAxis
+                          setFieldByKey(
+                            nextRow.code + 'RightCylinder',
+                            consult.get(row.code + 'RightCylinder')
                           );
-
-                          const valRightVA = {
-                            ...form.getInputProps(row.code + 'RightVA'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightVA',
-                            valRightVA
+                          setFieldByKey(
+                            nextRow.code + 'RightAxis',
+                            consult.get(row.code + 'RightAxis')
                           );
-
-                          const valRightAdd = {
-                            ...form.getInputProps(row.code + 'RightAdd'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightAdd',
-                            valRightAdd
+                          setFieldByKey(
+                            nextRow.code + 'RightVA',
+                            consult.get(row.code + 'RightVA')
                           );
-
-                          const valLeftEyeSphere = {
-                            ...form.getInputProps(row.code + 'LeftEyeSphere'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftEyeSphere',
-                            valLeftEyeSphere
+                          setFieldByKey(
+                            nextRow.code + 'RightAdd',
+                            consult.get(row.code + 'RightAdd')
                           );
-
-                          const valLeftCylinder = {
-                            ...form.getInputProps(row.code + 'LeftCylinder'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftCylinder',
-                            valLeftCylinder
+                          setFieldByKey(
+                            nextRow.code + 'LeftEyeSphere',
+                            consult.get(row.code + 'LeftEyeSphere')
                           );
-
-                          const valLeftAxis = {
-                            ...form.getInputProps(row.code + 'LeftAxis'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftAxis',
-                            valLeftAxis
+                          setFieldByKey(
+                            nextRow.code + 'LeftCylinder',
+                            consult.get(row.code + 'LeftCylinder')
                           );
-
-                          const valLeftVA = {
-                            ...form.getInputProps(row.code + 'LeftVA'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftVA',
-                            valLeftVA
+                          setFieldByKey(
+                            nextRow.code + 'LeftAxis',
+                            consult.get(row.code + 'LeftAxis')
                           );
-
-                          const valLeftAdd = {
-                            ...form.getInputProps(row.code + 'LeftAdd'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftAdd',
-                            valLeftAdd
+                          setFieldByKey(
+                            nextRow.code + 'LeftVA',
+                            consult.get(row.code + 'LeftVA')
+                          );
+                          setFieldByKey(
+                            nextRow.code + 'LeftAdd',
+                            consult.get(row.code + 'LeftAdd')
+                          );
+                          setFieldByKey(
+                            nextRow.code + 'BVA',
+                            consult.get(row.code + 'BVA')
                           );
                         }}
                       />
@@ -198,30 +199,62 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'LeftEyeSphere')}
+                    defaultValue={consult.get(row.code + 'LeftEyeSphere')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'LeftEyeSphere', value);
+                    }}
                   />
                 </td>
                 <td>/</td>
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'LeftCylinder')}
+                    defaultValue={consult.get(row.code + 'LeftCylinder')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'LeftCylinder', value);
+                    }}
                   />
                 </td>
                 <td>x</td>
                 <td>
-                  <NumberInput {...form.getInputProps(row.code + 'LeftAxis')} />
+                  <NumberInput
+                    defaultValue={consult.get(row.code + 'LeftAxis')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'LeftAxis', value);
+                    }}
+                  />
                 </td>
                 <td>
-                  <TextInput {...form.getInputProps(row.code + 'LeftVA')} />
+                  <TextInput
+                    defaultValue={consult.get(row.code + 'LeftVA')}
+                    onChange={(event) => {
+                      setFieldByKey(
+                        row.code + 'LeftVA',
+                        event.currentTarget.value
+                      );
+                    }}
+                  />
                 </td>
                 <td>
-                  <NumberInput {...form.getInputProps(row.code + 'LeftAdd')} />
+                  <NumberInput
+                    defaultValue={consult.get(row.code + 'LeftAdd')}
+                    onChange={(value) => {
+                      setFieldByKey(row.code + 'LeftAdd', value);
+                    }}
+                  />
                 </td>
                 {row.name === 'Previous Spectacles Rx' ||
                 row.name === 'Given refraction' ? (
                   <td>
-                    <TextInput {...form.getInputProps(row.code + 'BVA')} />
+                    <TextInput
+                      defaultValue={consult.get(row.code + 'BVA')}
+                      onChange={(event) => {
+                        setFieldByKey(
+                          row.code + 'BVA',
+                          event.currentTarget.value
+                        );
+                      }}
+                    />
                   </td>
                 ) : (
                   <td></td>

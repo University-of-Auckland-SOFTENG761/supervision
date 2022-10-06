@@ -163,6 +163,7 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
   const variables = {
     consults: strippedDocs,
   };
+  console.log("PUSHING CONSULTS", query, variables);
   return {
     query,
     variables,
@@ -199,6 +200,9 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
             spectaclePupillaryDistance: doc.spectacle?.pupillaryDistance,
             spectacleHeights: doc.spectacle?.heights,
             spectacleNotes: doc.spectacle?.notes,
+            user: undefined,
+            patient: undefined,
+            spectacle: undefined,
           }),
         },
         push: {

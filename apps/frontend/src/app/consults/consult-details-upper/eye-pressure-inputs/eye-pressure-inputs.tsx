@@ -1,15 +1,14 @@
-import { NumberInput, SimpleGrid, Title } from '@mantine/core';
+import {
+  NumberInput,
+  NumberInputProps,
+  SimpleGrid,
+  Title,
+} from '@mantine/core';
 import { TimeInput, TimeInputProps } from '@mantine/dates';
 
 type EyePressureInputsProps = {
-  eyePressureRightProps: {
-    value: string;
-    onChange: (value?: number) => void;
-  };
-  eyePressureLeftProps: {
-    value: string;
-    onChange: (value?: number) => void;
-  };
+  eyePressureRightProps: NumberInputProps;
+  eyePressureLeftProps: NumberInputProps;
   eyePressureTimestampProps: TimeInputProps;
   setEyePressureTimestamp: (timestamp: Date | null) => void;
 };
@@ -29,7 +28,9 @@ export const EyePressureInputs = ({
         <NumberInput
           label="Right:"
           onChange={(value) => {
-            eyePressureRightProps.onChange(value);
+            if (eyePressureRightProps.onChange) {
+              eyePressureRightProps.onChange(value);
+            }
             if (
               value !== undefined ||
               eyePressureLeftProps.value !== undefined
@@ -45,7 +46,9 @@ export const EyePressureInputs = ({
         <NumberInput
           label="Left:"
           onChange={(value) => {
-            eyePressureLeftProps.onChange(value);
+            if (eyePressureLeftProps.onChange) {
+              eyePressureLeftProps.onChange(value);
+            }
             if (
               value !== undefined ||
               eyePressureRightProps.value !== undefined
