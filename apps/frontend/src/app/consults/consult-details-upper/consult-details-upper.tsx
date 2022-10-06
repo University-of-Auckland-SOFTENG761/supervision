@@ -194,7 +194,7 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               <TextInput
                 label="Spectacles Code:"
                 classNames={{ label: 'whitespace-nowrap' }}
-                {...form.getInputProps('spectaclesCode')}
+                {...form.getInputProps('spectacleCode')}
               />
               <TextInput
                 label="Heights:"
