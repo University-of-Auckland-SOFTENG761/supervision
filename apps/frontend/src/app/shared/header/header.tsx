@@ -1,5 +1,4 @@
 import { Container, Group } from '@mantine/core';
-import React from 'react';
 import Logo from '../logo/logo';
 import { Header as MantineHeader } from '@mantine/core';
 import { useLocation } from 'react-router-dom';
