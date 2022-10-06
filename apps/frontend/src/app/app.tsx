@@ -14,6 +14,7 @@ import {
 } from './login/reconnected-login-modal';
 import { UserAvatar } from './shared/user-avatar';
 import { useAuth0 } from '@auth0/auth0-react';
+import { IconWifiOff, IconWifi } from '@tabler/icons';
 
 export function App() {
   const navigate = useNavigate();
@@ -78,7 +79,10 @@ export function App() {
               </Stack>
             </Navbar.Section>
             <Navbar.Section className="w-full justify-center">
+            <Stack justify="center" align="center">
+                {online ? <IconWifi /> : <IconWifiOff />}
               <UserAvatar />
+              </Stack>
             </Navbar.Section>
           </Navbar>
         )
