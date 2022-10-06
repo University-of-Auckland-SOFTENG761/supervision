@@ -85,6 +85,7 @@ export const PatientDetailsPage = () => {
             patient={patient}
             consults={consults}
             updatePatient={handleUpdatePatient}
+            key={patient.revision}
           />
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button onClick={handleCreateNewRecord} className="ml-auto">
