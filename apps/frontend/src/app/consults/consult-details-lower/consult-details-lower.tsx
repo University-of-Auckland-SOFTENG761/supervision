@@ -55,7 +55,7 @@ export const ConsultDetailsLower = ({
 
   const preciseInputProps = {
     precision: 2,
-    step: 0.01,
+    step: 0.25,
   };
 
   const navigate = useNavigate();
@@ -114,7 +114,6 @@ export const ConsultDetailsLower = ({
                 <td>x</td>
                 <td>
                   <NumberInput
-                    {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightAxis')}
                     onChange={(value) => {
                       setFieldByKey(row.code + 'RightAxis', value);
@@ -134,6 +133,7 @@ export const ConsultDetailsLower = ({
                 </td>
                 <td>
                   <NumberInput
+                    {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightAdd')}
                     onChange={(value) => {
                       setFieldByKey(row.code + 'RightAdd', value);
@@ -237,6 +237,7 @@ export const ConsultDetailsLower = ({
                 </td>
                 <td>
                   <NumberInput
+                    {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'LeftAdd')}
                     onChange={(value) => {
                       setFieldByKey(row.code + 'LeftAdd', value);

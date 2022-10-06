@@ -41,7 +41,6 @@ export const PatientInputs = ({
   const [debouncedRevision] = useDebouncedValue(patient?.revision, 5000);
 
   patientRef.current = patient.toMutableJSON();
-  console.log(debouncedRevision);
 
   const patientAge =
     patientRef.current?.dateOfBirth &&

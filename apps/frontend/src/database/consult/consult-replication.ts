@@ -163,7 +163,7 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
   const variables = {
     consults: strippedDocs,
   };
-  console.log("PUSHING CONSULTS", query, variables);
+  console.log('PUSHING CONSULTS', query, variables);
   return {
     query,
     variables,

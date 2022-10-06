@@ -20,7 +20,6 @@ export const ConsultInputs = ({
   const [debouncedRevision] = useDebouncedValue(consult?.revision, 5000);
 
   consultRef.current = consult.toMutableJSON();
-  console.log(debouncedRevision);
 
   const sendUpdate = () => {
     if (consultRef.current) {
