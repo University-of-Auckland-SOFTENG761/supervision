@@ -20,18 +20,30 @@ export function App() {
   const location = useLocation();
   const searchModal = useRef<SearchModalRef>(null);
   const reconnectedLoginModal = useRef<ReconnectedLoginModalRef>(null);
-  const { online } = useNetwork();
-  const { isAuthenticated } = useAuth0();
+  const { online, isLoading: networkStatusIsLoading } = useNetwork();
+  const { isAuthenticated, isLoading: authIsLoading } = useAuth0();
 
   const openReconnectedLoginModal = () => reconnectedLoginModal.current?.show();
 
   const hideReconnectedLoginModal = () => reconnectedLoginModal.current?.hide();
 
   useEffect(() => {
-    if (online && !isAuthenticated && location.pathname !== '/')
+    if (
+      !networkStatusIsLoading &&
+      !authIsLoading &&
+      online &&
+      !isAuthenticated &&
+      location.pathname !== '/'
+    )
       openReconnectedLoginModal();
     else hideReconnectedLoginModal();
-  }, [online, location.pathname, isAuthenticated]);
+  }, [
+    online,
+    location.pathname,
+    isAuthenticated,
+    networkStatusIsLoading,
+    authIsLoading,
+  ]);
 
   return (
     <AppShell
