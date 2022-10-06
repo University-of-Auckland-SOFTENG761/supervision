@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import MantineTheme from './mantine.config';
 import Routes from 'app/routes';
 import { Auth0Provider } from '@login';
-import { DatabaseProvider } from '@shared';
+import { DatabaseProvider, NetworkProvider } from '@shared';
 
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
@@ -27,13 +27,15 @@ root.render(
       theme={MantineTheme}
     >
       <NotificationsProvider position="top-center">
-        <BrowserRouter>
-          <Auth0Provider>
-            <DatabaseProvider>
-              <Routes />
-            </DatabaseProvider>
-          </Auth0Provider>
-        </BrowserRouter>
+        <NetworkProvider>
+          <BrowserRouter>
+            <Auth0Provider>
+              <DatabaseProvider>
+                <Routes />
+              </DatabaseProvider>
+            </Auth0Provider>
+          </BrowserRouter>
+        </NetworkProvider>
       </NotificationsProvider>
     </MantineProvider>
   </StrictMode>

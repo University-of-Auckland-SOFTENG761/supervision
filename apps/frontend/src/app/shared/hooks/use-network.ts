@@ -5,6 +5,7 @@ import { showNotification } from '@mantine/notifications';
 /*
 Pings api to check for internet connection.
  */
+
 const ping = async () => {
   if (!navigator.onLine) return false;
 
@@ -40,7 +41,7 @@ const setNotification = async () => {
   }
 };
 
-setInterval(setNotification, 6 * 1000);
+// setInterval(setNotification, 6 * 1000);
 
 export const useNetwork = () => {
   const [online, setOnline] = useState(navigator.onLine);
