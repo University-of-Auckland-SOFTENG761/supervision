@@ -17,49 +17,30 @@ const ping = async () => {
   }
 };
 
+let lastPing = true;
+
 const setNotification = async () => {
   const pingResult = await ping();
-  if (pingResult == true) {
-    showNotification({
-      title: 'True ping',
-      message: 'i hate react',
-      autoClose: 3000,
-    });
-  } else {
-    showNotification({
-      title: 'False ping',
-      message: 'i still hate react',
-      autoClose: 3000,
-    });
+  if (pingResult !== lastPing) {
+    if (pingResult === true) {
+      showNotification({
+        title: 'You are online',
+        message: '',
+        autoClose: 3000,
+      });
+    } else {
+      showNotification({
+        title: 'You are offline',
+        message: 'Please try to reconnect when possible',
+        autoClose: 3000,
+      });
+    }
+
+    lastPing = pingResult;
   }
 };
 
 setInterval(setNotification, 6 * 1000);
-
-// export const IsOnline = () => {
-
-//   const [lastPing, setLastPing] = useState(false);
-
-//   const setNotification = async () => {
-//     const pingResult = await ping();
-//     if (pingResult !== lastPing) {
-//       showNotification({
-//         title: 'True ping',
-//         message: 'i hate react',
-//         autoClose: 3000,
-//       })
-//       setLastPing(pingResult);
-//     } else {
-//       showNotification({
-//         title: 'False ping',
-//         message: 'i still hate react',
-//         autoClose: 3000,
-//       })
-//     }
-//   }
-
-//   setInterval(setNotification, 6*1000)
-// }
 
 export const useNetwork = () => {
   const [online, setOnline] = useState(navigator.onLine);
@@ -69,32 +50,8 @@ export const useNetwork = () => {
   const checkOnline = async () => {
     // Ping api to check for internet connection (navigator.onLine only checks network connection)
     const online = await ping();
-    // if (online !== lastPing) {
-    //   setLastPing(online);
-    //   // setNotification();
-    // }
     setOnline(online);
   };
-
-  // const setNotification = () => {
-  //   if (online !== lastPing) {
-  //     showNotification({
-  //     title: 'Default notification',
-  //     message: 'Hey there, your code is awesome! 🤥',
-  //     autoClose: 3000,
-  //   })
-  //   setLastPing(online);
-  //   }
-  // }
-
-  // // setNotification();
-
-  // const reCheckOnline = async () => {
-  //   await checkOnline();
-  //   setNotification();
-  // }
-
-  // setInterval(reCheckOnline, 6000)
 
   const goOffline = () => setOnline(false);
   const goOnline = () => setOnline(true);
