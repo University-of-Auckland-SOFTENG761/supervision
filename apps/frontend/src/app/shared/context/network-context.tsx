@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState, useRef } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import { showNotification } from '@mantine/notifications';
 import environment from '@environment';
 
@@ -68,12 +75,10 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
     };
   }, []);
 
-  const value = useMemo(() => ({online, isLoading}), [online, isLoading]);
+  const value = useMemo(() => ({ online, isLoading }), [online, isLoading]);
 
   return (
-    <NetworkContext.Provider value={value}>
-      {children}
-    </NetworkContext.Provider>
+    <NetworkContext.Provider value={value}>{children}</NetworkContext.Provider>
   );
 };
 
