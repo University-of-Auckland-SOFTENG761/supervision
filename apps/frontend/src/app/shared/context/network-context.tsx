@@ -59,7 +59,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
 
   const checkOnline = useCallback(async () => {
     const newOnline = await ping();
-    setNotification(newOnline);
+    await setNotification(newOnline);
     return newOnline;
   }, []);
 
