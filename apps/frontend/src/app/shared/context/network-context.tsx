@@ -68,8 +68,8 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
   useEffect(() => {
     setIsLoading(true);
     checkOnline();
-    intervalRef.current = setInterval(() => {
-      checkOnline();
+    intervalRef.current = setInterval(async () => {
+      await checkOnline();
       setOnline(onlineRef.current);
     }, 15 * 1000);
     setIsLoading(false);
