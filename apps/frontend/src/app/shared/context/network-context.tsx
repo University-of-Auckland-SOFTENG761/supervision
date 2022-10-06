@@ -71,7 +71,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
     intervalRef.current = setInterval(() => {
       checkOnline();
       setOnline(onlineRef.current);
-    }, 6 * 1000);
+    }, 15 * 1000);
     setIsLoading(false);
     return () => {
       clearInterval(intervalRef.current);
