@@ -13,8 +13,6 @@ export function Header(props: HeaderProps) {
   const location = useLocation();
   const { online } = useNetwork();
 
-  console.log(online + 'help me i hate this');
-
   return (
     <MantineHeader height={80} pr={10}>
       <Group sx={{ height: '100%' }} position="apart">
