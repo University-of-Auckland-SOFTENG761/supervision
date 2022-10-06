@@ -1,6 +1,5 @@
 import { Table, TableTheme } from '@shared';
 import { PatientDocument } from 'database/rxdb-utils';
-import { useNavigate } from 'react-router-dom';
 
 export const PatientRecordsTable = ({
   patientRecords,
