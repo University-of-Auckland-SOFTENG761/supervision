@@ -96,6 +96,9 @@ export class CreateConsultInput {
   layPersonNotes: string;
 
   @Field({ nullable: true })
+  spectacleId: string;
+
+  @Field({ nullable: true })
   spectacleCode: string;
 
   @Field({ nullable: true })

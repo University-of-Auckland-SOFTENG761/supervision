@@ -107,6 +107,9 @@ export const consultSchemaLiteral = {
     layPersonNotes: {
       type: 'string',
     },
+    spectacleId: {
+      type: 'string',
+    },
     spectacleCode: {
       type: 'string',
     },
@@ -115,6 +118,9 @@ export const consultSchemaLiteral = {
     },
     spectacleLensType: {
       type: 'string',
+    },
+    spectaclePupillaryDistance: {
+      type: 'number',
     },
     spectacleHeights: {
       type: 'string',
