@@ -54,11 +54,15 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
       diagnosis,
       management,
       layPersonNotes,
-      spectacleCode,
-      spectacleColour,
-      spectacleLensType,
-      spectacleHeights,
-      spectacleNotes,
+      spectacle {
+        id,
+        code,
+        colour,
+        lensType,
+        pupillaryDistance,
+        heights,
+        notes
+      }
       recallDate,
       recallDescription,
       prevSpecRxGivenRightEyeSphere,
@@ -159,7 +163,6 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
   const variables = {
     consults: strippedDocs,
   };
-
   return {
     query,
     variables,
@@ -189,6 +192,13 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
             ...deletionFilter(doc),
             userEmail: doc.user.email,
             patientId: doc.patient.id,
+            spectacleId: doc.spectacle?.id,
+            spectacleCode: doc.spectacle?.code,
+            spectacleColour: doc.spectacle?.colour,
+            spectacleLensType: doc.spectacle?.lensType,
+            spectaclePupillaryDistance: doc.spectacle?.pupillaryDistance,
+            spectacleHeights: doc.spectacle?.heights,
+            spectacleNotes: doc.spectacle?.notes,
           }),
         },
         push: {

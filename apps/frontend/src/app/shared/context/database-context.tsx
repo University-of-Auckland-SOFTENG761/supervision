@@ -24,7 +24,7 @@ import {
 import { RxCollection, RxDatabase } from 'rxdb';
 import { RxReplicationError } from 'rxdb/dist/types/plugins/replication';
 import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-graphql';
-import { uuid } from 'uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 import { useNetwork } from '../hooks';
 
 interface IDataBaseContext {
@@ -117,25 +117,26 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
   }, [isAuthenticated, patientsReplicationState, consultsReplicationState]);
 
   const newPatient = useCallback(() => {
-    const newPatient = {
-      id: uuid(),
+    const np = {
+      id: uuidv4(),
     };
-    superVisionDb?.['patients'].insert(newPatient);
-    return newPatient.id;
+    superVisionDb?.['patients'].insert(np);
+    return np.id;
   }, [superVisionDb]);
 
   const newConsult = useCallback(
     (patientId: string) => {
       if (!user || (!online && !userEmail)) return;
 
-      const newConsult = {
-        id: uuid(),
+      const nc = {
+        id: uuidv4(),
         userEmail: online ? user.email : userEmail,
         patientId,
         dateConsentGiven: new Date(Date.now()).toISOString(),
+        spectacleId: uuidv4(),
       };
-      superVisionDb?.['consults'].insert(newConsult);
-      return newConsult.id;
+      superVisionDb?.['consults'].insert(nc);
+      return nc.id;
     },
     [online, superVisionDb, user, userEmail]
   );

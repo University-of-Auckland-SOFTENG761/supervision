@@ -1,7 +1,8 @@
 import { BaseEntity } from '@supervision/shared';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { UserEntity } from '@supervision/users/database/user.entity';
 import { PatientEntity } from '@supervision/patients/database/patient.entity';
+import { SpectacleEntity } from '@supervision/spectacle/database/spectacle.entity';
 
 @Entity({ name: 'consult' })
 export class ConsultEntity extends BaseEntity {
@@ -18,6 +19,14 @@ export class ConsultEntity extends BaseEntity {
     cascade: ['insert', 'update'],
   })
   patient: PatientEntity;
+
+  @JoinColumn()
+  @OneToOne(() => SpectacleEntity, (spectacle) => spectacle.consult, {
+    nullable: true,
+    eager: true,
+    cascade: ['insert', 'update'],
+  })
+  spectacle: SpectacleEntity;
 
   @Column('timestamp', { nullable: true })
   dateConsentGiven: Date;
@@ -106,22 +115,6 @@ export class ConsultEntity extends BaseEntity {
   @Column('varchar', { nullable: true })
   layPersonNotes: string;
 
-  @Column('varchar', { length: 20, nullable: true })
-  spectacleCode: string;
-
-  @Column('varchar', { length: 20, nullable: true })
-  spectacleColour: string;
-
-  @Column('varchar', { length: 20, nullable: true })
-  spectacleLensType: string;
-
-  @Column('varchar', { length: 20, nullable: true, default: 'Datum' })
-  spectacleHeights: string;
-
-  @Column('varchar', { nullable: true })
-  spectacleNotes: string;
-
-  // RECALL COULD BE SUBJECT TO CHANGE
   @Column('timestamp', { nullable: true })
   recallDate: Date;
 
