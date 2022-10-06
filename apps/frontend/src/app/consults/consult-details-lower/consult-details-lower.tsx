@@ -45,7 +45,7 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
     precision: 2,
     step: 0.01,
   };
-  
+
   const navigate = useNavigate();
 
   return (

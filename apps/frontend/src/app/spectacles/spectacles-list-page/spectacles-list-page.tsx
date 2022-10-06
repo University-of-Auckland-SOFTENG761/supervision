@@ -1,11 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ISpectacles } from '../spectacles-details-page';
-import { Table, TableTheme } from '@shared';
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ScrollArea, Stack, Title } from '@mantine/core';
+import { ScrollArea, Stack, Title, TextInput, Select } from '@mantine/core';
+import dayjs from 'dayjs';
+import { IconSearch } from '@tabler/icons';
+import { useDebouncedValue } from '@mantine/hooks';
+import sortBy from 'lodash/sortBy';
+import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 
 export const SpectaclesListPage = () => {
-  //TODO: double-check with Veeran which columns he wants
   const spectaclesRecords: ISpectacles[] = [
     {
       uid: 'fake_id_1234',
@@ -19,6 +23,7 @@ export const SpectaclesListPage = () => {
       pupillaryDistance: 120,
       heights: undefined,
       spectaclesNotes: '',
+      orderStatus: 'created',
     },
     {
       uid: 'fake_id_1235',
@@ -32,6 +37,7 @@ export const SpectaclesListPage = () => {
       pupillaryDistance: 120,
       heights: undefined,
       spectaclesNotes: '',
+      orderStatus: 'created',
     },
     {
       uid: 'fake_id_1236',
@@ -45,43 +51,120 @@ export const SpectaclesListPage = () => {
       pupillaryDistance: 120,
       heights: undefined,
       spectaclesNotes: '',
+      orderStatus: 'delivered',
     },
   ];
 
   const navigate = useNavigate();
 
+  const [isFetching, setIsFetching] = useState(false);
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: 'date',
+    direction: 'asc',
+  });
+  const [tableRecords, setTableRecords] = useState(
+    sortBy(spectaclesRecords, 'name')
+  );
+  useEffect(() => {
+    const data = sortBy(spectaclesRecords, sortStatus.columnAccessor);
+    setTableRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+  }, [sortStatus]);
+  // Search bar text query to filter results by
+  const [query, setQuery] = useState('');
+  const [debouncedQuery] = useDebouncedValue(query, 200);
+  // Select order status query to filter results by
+  const [statusQuery, setStatusQuery] = useState<string | null>(null);
+  const [debouncedStatusQuery] = useDebouncedValue(statusQuery, 200);
+
+  useEffect(() => {
+    setTableRecords(
+      spectaclesRecords.filter(
+        ({ firstName, lastName, orderDate, school, uid, orderStatus }) => {
+          if (
+            debouncedStatusQuery !== '' &&
+            debouncedStatusQuery !== null &&
+            debouncedStatusQuery !== orderStatus
+          ) {
+            return false;
+          }
+          if (
+            debouncedQuery !== '' &&
+            !`${firstName} ${lastName} ${orderDate?.toLocaleDateString()} ${school} ${uid}`
+              .toLowerCase()
+              .includes(debouncedQuery.trim().toLowerCase())
+          ) {
+            return false;
+          }
+          return true;
+        }
+      )
+    );
+  }, [debouncedQuery, debouncedStatusQuery]);
+
   return (
     <ScrollArea className="h-full p-8">
-      <Stack className={'w-4/5 mx-auto'}>
-        <Title order={2}>Spectacles List</Title>
-        <Table theme={TableTheme.Primary}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>School</th>
-            </tr>
-          </thead>
-          <tbody>
-            {spectaclesRecords.map((record) => (
-              <tr
-                key={record.orderDate ? record.orderDate.toString() : undefined}
-                onClick={() => navigate(`/spectacles-details/${record.uid}`)}
-              >
-                {/*TODO: improve date format*/}
-                <td>
-                  {record.orderDate
-                    ? record.orderDate.toISOString().split('T')[0]
-                    : undefined}
-                </td>
-                <td>{record.firstName}</td>
-                <td>{record.lastName}</td>
-                <td>{record.school}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+      <Stack className={'w-4/5 mx-auto min-h-fit'}>
+        <Title order={3}>Spectacles Dispensing Records</Title>
+        <TextInput
+          placeholder="Search dispensing records..."
+          icon={<IconSearch size={16} />}
+          value={query}
+          onChange={(e) => setQuery(e.currentTarget.value)}
+        />
+        <Select
+          label="Select one to filter by"
+          className="w-48"
+          value={statusQuery}
+          onChange={setStatusQuery}
+          placeholder="Order Status"
+          clearable
+          data={[
+            { value: 'created', label: 'Created' },
+            { value: 'orderSent', label: 'Ordered' },
+            { value: 'readyForDelivery', label: 'Ready' },
+            { value: 'delivered', label: 'Delivered' },
+          ]}
+        />
+        <DataTable
+          sx={
+            tableRecords.length === 0
+              ? { height: 200 }
+              : { height: 'fit-content' }
+          }
+          withBorder
+          withColumnBorders
+          borderRadius="md"
+          striped
+          highlightOnHover
+          className="min-h-full"
+          records={tableRecords}
+          idAccessor="uid"
+          columns={[
+            {
+              accessor: 'orderDate',
+              title: 'DATE',
+              render: ({ orderDate }) => dayjs(orderDate).format('DD/MM/YYYY'),
+              sortable: true,
+            },
+            { accessor: 'uid', title: 'ID#', sortable: true },
+            { accessor: 'firstName', title: 'FIRST NAME', sortable: true },
+            { accessor: 'lastName', title: 'LAST NAME', sortable: true },
+            { accessor: 'school', title: 'SCHOOL', sortable: true },
+            {
+              accessor: 'orderStatus',
+              title: 'ORDER STATUS',
+              render: ({ orderStatus }) =>
+                orderStatus &&
+                orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1),
+              sortable: true,
+            },
+          ]}
+          sortStatus={sortStatus}
+          onSortStatusChange={setSortStatus}
+          noRecordsText="No records to show"
+          fetching={isFetching}
+          onRowClick={(record) => navigate(`/spectacles-details/${record.uid}`)}
+        />
       </Stack>
     </ScrollArea>
   );
