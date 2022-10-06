@@ -79,9 +79,9 @@ export function App() {
               </Stack>
             </Navbar.Section>
             <Navbar.Section className="w-full justify-center">
-            <Stack justify="center" align="center">
+              <Stack justify="center" align="center">
                 {online ? <IconWifi /> : <IconWifiOff />}
-              <UserAvatar />
+                <UserAvatar />
               </Stack>
             </Navbar.Section>
           </Navbar>
