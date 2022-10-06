@@ -56,9 +56,6 @@ export const stripUnusedFields = (docJSON?: { [key: string]: unknown }) =>
             !isNaN(value as unknown as number) ? value.toISOString() : null,
           ];
         }
-        return [key, value];
-      })
-      .filter(([key, value]) => {
-        return !(value === null);
+        return [key, value ? value : null];
       })
   );

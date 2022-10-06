@@ -152,9 +152,11 @@ export const ConsultDetailsUpper = ({
           />
           <NumberInput
             label="Pupillary Distance:"
-            defaultValue={consultRef?.current?.pupillaryDistance}
+            defaultValue={consultRef?.current?.spectaclePupillaryDistance}
             onChange={(n) => {
-              consultRef?.current && (consultRef.current.pupillaryDistance = n);
+              consultRef?.current &&
+                (consultRef.current.spectaclePupillaryDistance =
+                  n ?? Number(null));
             }}
           />
           <TextInput
@@ -172,13 +174,14 @@ export const ConsultDetailsUpper = ({
               defaultValue: consultRef?.current?.eyePressureRight,
               onChange: (n) => {
                 consultRef?.current &&
-                  (consultRef.current.eyePressureRight = n);
+                  (consultRef.current.eyePressureRight = n ?? Number(null));
               },
             }}
             eyePressureLeftProps={{
               defaultValue: consultRef?.current?.eyePressureLeft,
               onChange: (n) => {
-                consultRef?.current && (consultRef.current.eyePressureLeft = n);
+                consultRef?.current &&
+                  (consultRef.current.eyePressureLeft = n ?? Number(null));
               },
             }}
             eyePressureTimestampProps={{

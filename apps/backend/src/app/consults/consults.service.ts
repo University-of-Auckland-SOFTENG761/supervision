@@ -62,6 +62,7 @@ export class ConsultsService {
           spectacleLensType,
           spectacleHeights,
           spectacleNotes,
+          spectaclePupillaryDistance,
           ...consult
         }) => {
           const spectacle = spectacleId
@@ -74,6 +75,7 @@ export class ConsultsService {
                 lensType: spectacleLensType,
                 heights: spectacleHeights,
                 notes: spectacleNotes,
+                pupillaryDistance: spectaclePupillaryDistance,
               })
             : null;
           return {

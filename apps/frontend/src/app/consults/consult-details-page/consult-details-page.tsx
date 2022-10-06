@@ -22,7 +22,8 @@ export const ConsultDetailsPage = () => {
       setIsLoading(true);
       consultsCollection
         .findOne({ selector: { id: consultId } })
-        .$.subscribe((p) => {
+        .exec()
+        .then((p) => {
           if (p) {
             setConsult(p);
           }

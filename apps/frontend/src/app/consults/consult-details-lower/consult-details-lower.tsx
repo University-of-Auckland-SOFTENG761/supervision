@@ -7,12 +7,16 @@ import { ConsultDocType } from 'database';
 
 type ConsultDetailsLowerProps = {
   consult: RxDocument<ConsultDocType>;
-  setFieldByKey: (key: string, value: string | number | undefined) => void;
+  setFieldByKey: (key: string, value: string | number | null) => void;
+  setFieldsByKeys: (
+    keyValuePairs: [key: string, value: string | number | null][]
+  ) => void;
 };
 
 export const ConsultDetailsLower = ({
   consult,
   setFieldByKey,
+  setFieldsByKeys,
 }: ConsultDetailsLowerProps) => {
   type RowCode =
     | 'prevSpecRxGiven'
@@ -97,7 +101,7 @@ export const ConsultDetailsLower = ({
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightEyeSphere')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightEyeSphere', value);
+                      setFieldByKey(row.code + 'RightEyeSphere', value ?? null);
                     }}
                   />
                 </td>
@@ -107,7 +111,7 @@ export const ConsultDetailsLower = ({
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightCylinder')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightCylinder', value);
+                      setFieldByKey(row.code + 'RightCylinder', value ?? null);
                     }}
                   />
                 </td>
@@ -116,7 +120,7 @@ export const ConsultDetailsLower = ({
                   <NumberInput
                     defaultValue={consult.get(row.code + 'RightAxis')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightAxis', value);
+                      setFieldByKey(row.code + 'RightAxis', value ?? null);
                     }}
                   />
                 </td>
@@ -137,7 +141,7 @@ export const ConsultDetailsLower = ({
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightAdd')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightAdd', value);
+                      setFieldByKey(row.code + 'RightAdd', value ?? null);
                     }}
                   />
                 </td>
@@ -147,51 +151,65 @@ export const ConsultDetailsLower = ({
                       <IconArrowAutofitDown
                         onClick={() => {
                           const nextRow = consultRows[index + 1];
+                          const fieldsToSet: [
+                            key: string,
+                            value: string | number | null
+                          ][] = [];
 
-                          setFieldByKey(
-                            nextRow.code + 'RightEyeSphere',
-                            consult.get(row.code + 'RightEyeSphere')
+                          fieldsToSet.push(
+                            [
+                              nextRow.code + 'RightEyeSphere',
+                              consult.get(row.code + 'RightEyeSphere'),
+                            ],
+                            [
+                              nextRow.code + 'RightCylinder',
+                              consult.get(row.code + 'RightCylinder'),
+                            ],
+                            [
+                              nextRow.code + 'RightAxis',
+                              consult.get(row.code + 'RightAxis'),
+                            ],
+                            [
+                              nextRow.code + 'RightVA',
+                              consult.get(row.code + 'RightVA'),
+                            ],
+                            [
+                              nextRow.code + 'RightAdd',
+                              consult.get(row.code + 'RightAdd'),
+                            ]
                           );
-                          setFieldByKey(
-                            nextRow.code + 'RightCylinder',
-                            consult.get(row.code + 'RightCylinder')
+
+                          fieldsToSet.push(
+                            [
+                              nextRow.code + 'LeftEyeSphere',
+                              consult.get(row.code + 'LeftEyeSphere'),
+                            ],
+                            [
+                              nextRow.code + 'LeftCylinder',
+                              consult.get(row.code + 'LeftCylinder'),
+                            ],
+                            [
+                              nextRow.code + 'LeftAxis',
+                              consult.get(row.code + 'LeftAxis'),
+                            ],
+                            [
+                              nextRow.code + 'LeftVA',
+                              consult.get(row.code + 'LeftVA'),
+                            ],
+                            [
+                              nextRow.code + 'LeftAdd',
+                              consult.get(row.code + 'LeftAdd'),
+                            ]
                           );
-                          setFieldByKey(
-                            nextRow.code + 'RightAxis',
-                            consult.get(row.code + 'RightAxis')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'RightVA',
-                            consult.get(row.code + 'RightVA')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'RightAdd',
-                            consult.get(row.code + 'RightAdd')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'LeftEyeSphere',
-                            consult.get(row.code + 'LeftEyeSphere')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'LeftCylinder',
-                            consult.get(row.code + 'LeftCylinder')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'LeftAxis',
-                            consult.get(row.code + 'LeftAxis')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'LeftVA',
-                            consult.get(row.code + 'LeftVA')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'LeftAdd',
-                            consult.get(row.code + 'LeftAdd')
-                          );
-                          setFieldByKey(
-                            nextRow.code + 'BVA',
-                            consult.get(row.code + 'BVA')
-                          );
+
+                          (nextRow.name === 'Previous Spectacles Rx' ||
+                            nextRow.name === 'Given refraction') &&
+                            fieldsToSet.push([
+                              nextRow.code + 'BVA',
+                              consult.get(row.code + 'BVA'),
+                            ]);
+
+                          setFieldsByKeys(fieldsToSet);
                         }}
                       />
                     </Button>
@@ -202,7 +220,7 @@ export const ConsultDetailsLower = ({
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'LeftEyeSphere')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftEyeSphere', value);
+                      setFieldByKey(row.code + 'LeftEyeSphere', value ?? null);
                     }}
                   />
                 </td>
@@ -212,7 +230,7 @@ export const ConsultDetailsLower = ({
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'LeftCylinder')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftCylinder', value);
+                      setFieldByKey(row.code + 'LeftCylinder', value ?? null);
                     }}
                   />
                 </td>
@@ -221,7 +239,7 @@ export const ConsultDetailsLower = ({
                   <NumberInput
                     defaultValue={consult.get(row.code + 'LeftAxis')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftAxis', value);
+                      setFieldByKey(row.code + 'LeftAxis', value ?? null);
                     }}
                   />
                 </td>
@@ -241,7 +259,7 @@ export const ConsultDetailsLower = ({
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'LeftAdd')}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftAdd', value);
+                      setFieldByKey(row.code + 'LeftAdd', value ?? null);
                     }}
                   />
                 </td>

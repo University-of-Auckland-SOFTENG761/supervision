@@ -50,7 +50,7 @@ export const PatientInputs = ({
 
   const sendUpdate = () => {
     if (patientRef.current) {
-      updatePatient(stripUnusedFields(patientRef.current));
+      updatePatient(stripUnusedFields(patientRef.current) as PatientDocType);
     }
   };
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
@@ -19,14 +19,14 @@ export const ConsultInputs = ({
   const consultRef = useRef<ConsultDocType | null>(consult);
   const [debouncedRevision, cancelDebounce] = useDebouncedValue(
     consult?.revision,
-    5000
+    100
   );
   consultRef.current = consult.toMutableJSON();
 
   const sendUpdate = () => {
     if (consultRef.current) {
       console.log(consultRef.current);
-      updateConsult(stripUnusedFields(consultRef.current));
+      updateConsult(stripUnusedFields(consultRef.current) as ConsultDocType);
     }
   };
 
@@ -49,7 +49,8 @@ export const ConsultInputs = ({
     };
   }, []);
 
-  const setFieldByKey = (key: string, value: string | number | undefined) => {
+  const setFieldByKey = (key: string, value: string | number | null) => {
+    console.log('setFieldByKey', key, value);
     if (consultRef.current) {
       const newConsult = Object.fromEntries([
         ...Object.entries(consultRef.current),
@@ -59,10 +60,27 @@ export const ConsultInputs = ({
     }
   };
 
+  const setFieldsByKeys = (
+    keyValuePairs: [key: string, value: string | number | null][]
+  ) => {
+    console.log('setFieldsByKeys', keyValuePairs);
+    if (consultRef.current) {
+      const newConsult = Object.fromEntries([
+        ...Object.entries(consultRef.current),
+        ...keyValuePairs,
+      ]) as ConsultDocType;
+      updateConsult(newConsult);
+    }
+  };
+
   return (
     <Stack onChange={cancelRender} key={debouncedRevision}>
       <ConsultDetailsUpper consultRef={consultRef} />
-      <ConsultDetailsLower consult={consult} setFieldByKey={setFieldByKey} />
+      <ConsultDetailsLower
+        consult={consult}
+        setFieldByKey={setFieldByKey}
+        setFieldsByKeys={setFieldsByKeys}
+      />
     </Stack>
   );
 };
