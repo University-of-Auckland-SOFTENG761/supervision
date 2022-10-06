@@ -1,17 +1,17 @@
 import {
   createContext,
-  MutableRefObject,
   useContext,
   useEffect,
   useMemo,
   useState,
   useRef,
+  useCallback,
 } from 'react';
 import { showNotification } from '@mantine/notifications';
 import environment from '@environment';
 
 interface INetworkContext {
-  online: MutableRefObject<boolean>;
+  online: boolean;
   isLoading: boolean;
 }
 
@@ -35,13 +35,14 @@ const ping = async () => {
 
 export const NetworkProvider = ({ children }: NetworkProviderProps) => {
   // const [online, setOnline] = useState(navigator.onLine);
-  const online = useRef(navigator.onLine);
+  const onlineRef = useRef(navigator.onLine);
+  const [online, setOnline] = useState(onlineRef.current);
   const [isLoading, setIsLoading] = useState(false);
 
   const setNotification = async (newOnline: boolean) => {
     console.log('newOnline', newOnline);
-    console.log('online', online);
-    if (newOnline !== online.current) {
+    console.log('online', onlineRef);
+    if (newOnline !== onlineRef.current) {
       if (newOnline === true) {
         showNotification({
           title: 'You are online',
@@ -55,32 +56,32 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
           autoClose: 3000,
         });
       }
-      online.current = newOnline;
+      onlineRef.current = newOnline;
     }
   };
 
-  const checkOnline = async () => {
-    // Ping api to check for internet connection (navigator.onLine only checks network connection)
-    // setIsLoading(true);
+  const checkOnline = useCallback(async () => {
     const newOnline = await ping();
     setNotification(newOnline);
-    // setIsLoading(false);
-  };
+    return newOnline;
+  }, []);
 
   const intervalRef = useRef<NodeJS.Timer>();
 
   useEffect(() => {
+    setIsLoading(true);
     checkOnline();
-    intervalRef.current = setInterval(() => checkOnline(), 6 * 1000);
+    intervalRef.current = setInterval(() => {
+      checkOnline();
+      setOnline(onlineRef.current);
+    }, 6 * 1000);
+    setIsLoading(false);
     return () => {
       clearInterval(intervalRef.current);
     };
-  }, []);
+  }, [checkOnline]);
 
-  const value = useMemo(
-    () => ({ online, isLoading }),
-    [online.current, isLoading]
-  );
+  const value = useMemo(() => ({ online, isLoading }), [online, isLoading]);
 
   return (
     <NetworkContext.Provider value={value}>{children}</NetworkContext.Provider>
