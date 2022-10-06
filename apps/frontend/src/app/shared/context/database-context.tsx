@@ -25,7 +25,7 @@ import { RxDatabase } from 'rxdb';
 import { RxReplicationError } from 'rxdb/dist/types/plugins/replication';
 import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-graphql';
 import { uuid } from 'uuidv4';
-import { useNetwork } from '../hooks';
+import { useNetwork } from '@shared';
 
 interface IDataBaseContext {
   patients: PatientDocument[];
