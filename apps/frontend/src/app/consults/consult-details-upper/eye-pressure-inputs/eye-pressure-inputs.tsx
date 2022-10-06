@@ -31,17 +31,13 @@ export const EyePressureInputs = ({
             if (eyePressureRightProps.onChange) {
               eyePressureRightProps.onChange(value);
             }
-            if (
-              value !== undefined ||
-              eyePressureLeftProps.value !== undefined
-            ) {
-              !eyePressureTimestampProps.value &&
-                setEyePressureTimestamp(new Date());
+            if (value !== undefined) {
+              setEyePressureTimestamp(new Date());
             } else {
               setEyePressureTimestamp(null);
             }
           }}
-          value={Number(eyePressureRightProps.value)}
+          defaultValue={eyePressureRightProps.defaultValue}
         />
         <NumberInput
           label="Left:"
@@ -49,17 +45,13 @@ export const EyePressureInputs = ({
             if (eyePressureLeftProps.onChange) {
               eyePressureLeftProps.onChange(value);
             }
-            if (
-              value !== undefined ||
-              eyePressureRightProps.value !== undefined
-            ) {
-              !eyePressureTimestampProps.value &&
-                setEyePressureTimestamp(new Date());
+            if (value !== undefined) {
+              setEyePressureTimestamp(new Date());
             } else {
               setEyePressureTimestamp(null);
             }
           }}
-          value={Number(eyePressureLeftProps.value)}
+          defaultValue={eyePressureLeftProps.defaultValue}
         />
       </SimpleGrid>
       <TimeInput

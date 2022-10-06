@@ -44,8 +44,8 @@ export const ConsultInputs = ({
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        sendUpdate();
       }
-      sendUpdate();
     };
   }, []);
 
@@ -61,12 +61,8 @@ export const ConsultInputs = ({
 
   return (
     <Stack onChange={cancelRender} key={debouncedRevision}>
-      <div>
-        <ConsultDetailsUpper consultRef={consultRef} />
-      </div>
-      <div>
-        <ConsultDetailsLower consult={consult} setFieldByKey={setFieldByKey} />
-      </div>
+      <ConsultDetailsUpper consultRef={consultRef} />
+      <ConsultDetailsLower consult={consult} setFieldByKey={setFieldByKey} />
     </Stack>
   );
 };

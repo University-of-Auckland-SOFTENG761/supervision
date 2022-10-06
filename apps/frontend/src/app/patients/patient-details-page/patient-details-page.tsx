@@ -11,10 +11,7 @@ import { ConsultDocType, PatientDocType } from 'database';
 export const PatientDetailsPage = () => {
   const { patientsCollection, consultsCollection, newConsult } = useDatabase();
   const [searchParams] = useSearchParams();
-  const patientId = useMemo(
-    () => searchParams.get('patientId'),
-    [searchParams]
-  );
+  const patientId = searchParams.get('patientId');
   const navigate = useNavigate();
 
   const [patient, setPatient] = useState<RxDocument<PatientDocType> | null>(
@@ -35,7 +32,8 @@ export const PatientDetailsPage = () => {
       setIsLoading(true);
       patientsCollection
         .findOne({ selector: { id: patientId } })
-        .$.subscribe((p) => {
+        .exec()
+        .then((p) => {
           if (p) {
             setPatient(p);
           }

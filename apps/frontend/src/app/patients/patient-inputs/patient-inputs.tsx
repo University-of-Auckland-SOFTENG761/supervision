@@ -68,8 +68,8 @@ export const PatientInputs = ({
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        sendUpdate();
       }
-      sendUpdate();
     };
   }, []);
 
