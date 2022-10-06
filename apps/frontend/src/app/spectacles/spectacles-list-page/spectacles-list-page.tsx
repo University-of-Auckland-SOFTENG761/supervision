@@ -32,7 +32,6 @@ export const SpectaclesListPage = () => {
 
   const navigate = useNavigate();
 
-  const [isFetching, setIsFetching] = useState(false);
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'date',
     direction: 'asc',
@@ -77,7 +76,7 @@ export const SpectaclesListPage = () => {
           }
         )
       );
-  }, [debouncedQuery, debouncedStatusQuery]);
+  }, [debouncedQuery, debouncedStatusQuery, consults]);
 
   return (
     <ScrollArea className="h-full p-8">
@@ -140,7 +139,6 @@ export const SpectaclesListPage = () => {
           sortStatus={sortStatus}
           onSortStatusChange={setSortStatus}
           noRecordsText="No records to show"
-          fetching={isFetching}
           onRowClick={(record) =>
             navigate(`/spectacles-details?spectaclesId=${record.id}`)
           }
