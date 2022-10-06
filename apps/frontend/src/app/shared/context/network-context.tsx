@@ -40,8 +40,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const setNotification = async (newOnline: boolean) => {
-    console.log('newOnline', newOnline);
-    console.log('online', onlineRef);
+
     if (newOnline !== onlineRef.current) {
       if (newOnline === true) {
         showNotification({
