@@ -34,7 +34,6 @@ const ping = async () => {
 };
 
 export const NetworkProvider = ({ children }: NetworkProviderProps) => {
-  // const [online, setOnline] = useState(navigator.onLine);
   const onlineRef = useRef(navigator.onLine);
   const [online, setOnline] = useState(onlineRef.current);
   const [isLoading, setIsLoading] = useState(false);
