@@ -37,7 +37,6 @@ export const PatientInputs = ({
   consults,
 }: PatientInputsProps) => {
   const patientRef = useRef<PatientDocType | null>(patient);
-
   const [debouncedRevision] = useDebouncedValue(patient?.revision, 5000);
 
   patientRef.current = patient.toMutableJSON();
@@ -54,7 +53,7 @@ export const PatientInputs = ({
 
   return (
     <SimpleGrid
-      onChange={sendUpdate}
+      onBlur={sendUpdate}
       cols={3}
       spacing={180}
       breakpoints={[

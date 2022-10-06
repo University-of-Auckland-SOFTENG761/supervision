@@ -24,7 +24,7 @@ export const PatientDetailsPage = () => {
     string,
     RxDocument<ConsultDocType>
   > | null>(null);
-  const [isLoading, setIsLoading] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleUpdatePatient = async (patient: PatientDocType) => {
     await patientsCollection?.atomicUpsert(patient);
@@ -32,28 +32,28 @@ export const PatientDetailsPage = () => {
 
   useEffect(() => {
     if (patientsCollection && patientId) {
-      setIsLoading((l) => l + 1);
+      setIsLoading(true);
       patientsCollection
         .findOne({ selector: { id: patientId } })
         .$.subscribe((p) => {
           if (p) {
             setPatient(p);
           }
-          setIsLoading((l) => l - 1);
+          setIsLoading(false);
         });
     }
   }, [patientsCollection, patientId]);
 
   useEffect(() => {
     if (patient && (patient.consultIds?.length ?? []) > 0) {
-      setIsLoading((l) => l + 1);
+      // setIsLoading((l) => l + 1);
       consultsCollection
         ?.findByIds$(patient.consultIds ?? [])
         .subscribe((c) => {
           if (c) {
             setConsults(c);
           }
-          setIsLoading((l) => l - 1);
+          // setIsLoading((l) => l - 1);
         });
     }
   }, [consultsCollection, patient]);
@@ -67,7 +67,7 @@ export const PatientDetailsPage = () => {
     }
   };
 
-  if (isLoading > 0 || (patientId && !patient)) {
+  if (isLoading && patientId) {
     // This is currently ugly but it prevents inputs from being loaded with incorrect defaultValues
     return (
       <Center className="w-full h-full">
@@ -85,7 +85,7 @@ export const PatientDetailsPage = () => {
             patient={patient}
             consults={consults}
             updatePatient={handleUpdatePatient}
-            key={patient.revision}
+            key={patient.id}
           />
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button onClick={handleCreateNewRecord} className="ml-auto">
