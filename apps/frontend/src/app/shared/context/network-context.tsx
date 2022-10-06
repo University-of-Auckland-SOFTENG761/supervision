@@ -59,7 +59,7 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
 
   const checkOnline = useCallback(async () => {
     const newOnline = await ping();
-    setNotification(newOnline);
+    await setNotification(newOnline);
     return newOnline;
   }, []);
 
@@ -68,10 +68,10 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
   useEffect(() => {
     setIsLoading(true);
     checkOnline();
-    intervalRef.current = setInterval(() => {
-      checkOnline();
+    intervalRef.current = setInterval(async () => {
+      await checkOnline();
       setOnline(onlineRef.current);
-    }, 6 * 1000);
+    }, 15 * 1000);
     setIsLoading(false);
     return () => {
       clearInterval(intervalRef.current);
