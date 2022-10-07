@@ -127,12 +127,17 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
     (patientId: string) => {
       if (!user || (!online && !userEmail)) return;
 
+      const consultId = uuidv4();
       const nc = {
-        id: uuidv4(),
+        id: consultId,
         userEmail: online ? user.email : userEmail,
         patientId,
         dateConsentGiven: new Date(Date.now()).toISOString(),
-        spectacleId: uuidv4(),
+        spectacle: {
+          id: uuidv4(),
+          consultId: consultId,
+          patientId: patientId,
+        },
       };
       superVisionDb?.['consults'].insert(nc);
       return nc.id;
