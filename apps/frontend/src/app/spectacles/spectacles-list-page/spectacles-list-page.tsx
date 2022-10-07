@@ -32,7 +32,7 @@ export const SpectaclesListPage = () => {
   });
 
   const navigate = useNavigate();
-  
+
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'date',
     direction: 'asc',
@@ -102,12 +102,13 @@ export const SpectaclesListPage = () => {
           onChange={setStatusQuery}
           placeholder="Order Status"
           clearable
-          data={[
-            { value: 'CREATED', label: 'Created' },
-            { value: 'ORDERSENT', label: 'Order sent' },
-            { value: 'READYFORDELIVERY', label: 'Ready for delivery' },
-            { value: 'DELIVERED', label: 'Delivered' },
-          ]}
+          data={Array.from(
+            (Object.keys(OrderStatus) as Array<keyof typeof OrderStatus>).map(
+              (key) => {
+                return { value: OrderStatus[key], label: key };
+              }
+            )
+          )}
         />
         <DataTable
           sx={
