@@ -4,19 +4,24 @@ import { IconArrowAutofitDown } from '@tabler/icons';
 import { useNavigate } from 'react-router-dom';
 import { RxDocument } from 'rxdb';
 import { ConsultDocType } from 'database';
+import {
+  UseFormRegister,
+  FieldValues,
+  UseFormGetValues,
+} from 'react-hook-form';
 
 type ConsultDetailsLowerProps = {
   consult: RxDocument<ConsultDocType>;
-  setFieldByKey: (key: string, value: string | number | null) => void;
-  setFieldsByKeys: (
-    keyValuePairs: [key: string, value: string | number | null][]
-  ) => void;
+  register: UseFormRegister<FieldValues>;
+  getValues: UseFormGetValues<FieldValues>;
+  setValue: (name: string, value: unknown, urgent?: boolean) => void;
 };
 
 export const ConsultDetailsLower = ({
   consult,
-  setFieldByKey,
-  setFieldsByKeys,
+  register,
+  getValues,
+  setValue,
 }: ConsultDetailsLowerProps) => {
   type RowCode =
     | 'prevSpecRxGiven'
@@ -100,8 +105,16 @@ export const ConsultDetailsLower = ({
                   <NumberInput
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightEyeSphere')}
+                    {...register(`consult.${row.code}RightEyeSphere`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightEyeSphere', value ?? null);
+                      setValue(
+                        `consult.${row.code}RightEyeSphere`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
@@ -110,8 +123,16 @@ export const ConsultDetailsLower = ({
                   <NumberInput
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightCylinder')}
+                    {...register(`consult.${row.code}RightCylinder`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightCylinder', value ?? null);
+                      setValue(
+                        `consult.${row.code}RightCylinder`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
@@ -119,8 +140,16 @@ export const ConsultDetailsLower = ({
                 <td>
                   <NumberInput
                     defaultValue={consult.get(row.code + 'RightAxis')}
+                    {...register(`consult.${row.code}RightAxis`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightAxis', value ?? null);
+                      setValue(
+                        `consult.${row.code}RightAxis`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
@@ -128,20 +157,23 @@ export const ConsultDetailsLower = ({
                   <TextInput
                     maxLength={10}
                     defaultValue={consult.get(row.code + 'RightVA')}
-                    onChange={(event) => {
-                      setFieldByKey(
-                        row.code + 'RightVA',
-                        event.currentTarget.value
-                      );
-                    }}
+                    {...register(`consult.${row.code}RightVA`)}
                   />
                 </td>
                 <td>
                   <NumberInput
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'RightAdd')}
+                    {...register(`consult.${row.code}RightAdd`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'RightAdd', value ?? null);
+                      setValue(
+                        `consult.${row.code}RightAdd`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
@@ -151,65 +183,52 @@ export const ConsultDetailsLower = ({
                       <IconArrowAutofitDown
                         onClick={() => {
                           const nextRow = consultRows[index + 1];
-                          const fieldsToSet: [
-                            key: string,
-                            value: string | number | null
-                          ][] = [];
-
-                          fieldsToSet.push(
-                            [
-                              nextRow.code + 'RightEyeSphere',
-                              consult.get(row.code + 'RightEyeSphere'),
-                            ],
-                            [
-                              nextRow.code + 'RightCylinder',
-                              consult.get(row.code + 'RightCylinder'),
-                            ],
-                            [
-                              nextRow.code + 'RightAxis',
-                              consult.get(row.code + 'RightAxis'),
-                            ],
-                            [
-                              nextRow.code + 'RightVA',
-                              consult.get(row.code + 'RightVA'),
-                            ],
-                            [
-                              nextRow.code + 'RightAdd',
-                              consult.get(row.code + 'RightAdd'),
-                            ]
+                          const newConsult = {
+                            ...getValues('consult'),
+                            [`${nextRow.code}RightEyeSphere`]: getValues(
+                              `consult.${row.code}RightEyeSphere`
+                            ),
+                            [`${nextRow.code}RightCylinder`]: getValues(
+                              `consult.${row.code}RightCylinder`
+                            ),
+                            [`${nextRow.code}RightAxis`]: getValues(
+                              `consult.${row.code}RightAxis`
+                            ),
+                            [`${nextRow.code}RightVA`]: getValues(
+                              `consult.${row.code}RightVA`
+                            ),
+                            [`${nextRow.code}RightAdd`]: getValues(
+                              `consult.${row.code}RightAdd`
+                            ),
+                            [`${nextRow.code}LeftEyeSphere`]: getValues(
+                              `consult.${row.code}LeftEyeSphere`
+                            ),
+                            [`${nextRow.code}LeftCylinder`]: getValues(
+                              `consult.${row.code}LeftCylinder`
+                            ),
+                            [`${nextRow.code}LeftAxis`]: getValues(
+                              `consult.${row.code}LeftAxis`
+                            ),
+                            [`${nextRow.code}LeftVA`]: getValues(
+                              `consult.${row.code}LeftVA`
+                            ),
+                            [`${nextRow.code}LeftAdd`]: getValues(
+                              `consult.${row.code}LeftAdd`
+                            ),
+                          };
+                          setValue(
+                            'consult',
+                            nextRow.name === 'Previous Spectacles Rx' ||
+                              nextRow.name === 'Given refraction'
+                              ? {
+                                  ...newConsult,
+                                  [`${nextRow.code}BVA`]: getValues(
+                                    `consult.${row.code}BVA`
+                                  ),
+                                }
+                              : newConsult,
+                            true
                           );
-
-                          fieldsToSet.push(
-                            [
-                              nextRow.code + 'LeftEyeSphere',
-                              consult.get(row.code + 'LeftEyeSphere'),
-                            ],
-                            [
-                              nextRow.code + 'LeftCylinder',
-                              consult.get(row.code + 'LeftCylinder'),
-                            ],
-                            [
-                              nextRow.code + 'LeftAxis',
-                              consult.get(row.code + 'LeftAxis'),
-                            ],
-                            [
-                              nextRow.code + 'LeftVA',
-                              consult.get(row.code + 'LeftVA'),
-                            ],
-                            [
-                              nextRow.code + 'LeftAdd',
-                              consult.get(row.code + 'LeftAdd'),
-                            ]
-                          );
-
-                          (nextRow.name === 'Previous Spectacles Rx' ||
-                            nextRow.name === 'Given refraction') &&
-                            fieldsToSet.push([
-                              nextRow.code + 'BVA',
-                              consult.get(row.code + 'BVA'),
-                            ]);
-
-                          setFieldsByKeys(fieldsToSet);
                         }}
                       />
                     </Button>
@@ -219,8 +238,16 @@ export const ConsultDetailsLower = ({
                   <NumberInput
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'LeftEyeSphere')}
+                    {...register(`consult.${row.code}LeftEyeSphere`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftEyeSphere', value ?? null);
+                      setValue(
+                        `consult.${row.code}LeftEyeSphere`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
@@ -229,8 +256,16 @@ export const ConsultDetailsLower = ({
                   <NumberInput
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'LeftCylinder')}
+                    {...register(`consult.${row.code}LeftCylinder`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftCylinder', value ?? null);
+                      setValue(
+                        `consult.${row.code}LeftCylinder`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
@@ -238,28 +273,39 @@ export const ConsultDetailsLower = ({
                 <td>
                   <NumberInput
                     defaultValue={consult.get(row.code + 'LeftAxis')}
+                    {...register(`consult.${row.code}LeftAxis`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftAxis', value ?? null);
+                      setValue(
+                        `consult.${row.code}LeftAxis`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
                 <td>
                   <TextInput
                     defaultValue={consult.get(row.code + 'LeftVA')}
-                    onChange={(event) => {
-                      setFieldByKey(
-                        row.code + 'LeftVA',
-                        event.currentTarget.value
-                      );
-                    }}
+                    {...register(`consult.${row.code}LeftVA`)}
                   />
                 </td>
                 <td>
                   <NumberInput
                     {...preciseInputProps}
                     defaultValue={consult.get(row.code + 'LeftAdd')}
+                    {...register(`consult.${row.code}LeftAdd`, {
+                      valueAsNumber: true,
+                    })}
+                    min={undefined}
+                    max={undefined}
                     onChange={(value) => {
-                      setFieldByKey(row.code + 'LeftAdd', value ?? null);
+                      setValue(
+                        `consult.${row.code}LeftAdd`,
+                        value ?? undefined
+                      );
                     }}
                   />
                 </td>
@@ -269,12 +315,7 @@ export const ConsultDetailsLower = ({
                     <TextInput
                       maxLength={10}
                       defaultValue={consult.get(row.code + 'BVA')}
-                      onChange={(event) => {
-                        setFieldByKey(
-                          row.code + 'BVA',
-                          event.currentTarget.value
-                        );
-                      }}
+                      {...register(`consult.${row.code}BVA`)}
                     />
                   </td>
                 ) : (

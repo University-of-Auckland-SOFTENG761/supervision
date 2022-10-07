@@ -1,23 +1,20 @@
-import {
-  NumberInput,
-  NumberInputProps,
-  SimpleGrid,
-  Title,
-} from '@mantine/core';
-import { TimeInput, TimeInputProps } from '@mantine/dates';
+import { NumberInput, SimpleGrid, Title } from '@mantine/core';
+import { TimeInput } from '@mantine/dates';
+import { ConsultDocType } from 'database';
+import { parseDateForInput, parseNumberForInput } from 'database/rxdb-utils';
+import { UseFormRegister, FieldValues } from 'react-hook-form';
+import { RxDocument } from 'rxdb';
 
 type EyePressureInputsProps = {
-  eyePressureRightProps: NumberInputProps;
-  eyePressureLeftProps: NumberInputProps;
-  eyePressureTimestampProps: TimeInputProps;
-  setEyePressureTimestamp: (timestamp: Date | null) => void;
+  consult: RxDocument<ConsultDocType>;
+  register: UseFormRegister<FieldValues>;
+  setValue: (name: string, value: unknown, urgent?: boolean) => void;
 };
 
 export const EyePressureInputs = ({
-  eyePressureRightProps,
-  eyePressureLeftProps,
-  eyePressureTimestampProps,
-  setEyePressureTimestamp,
+  consult,
+  register,
+  setValue,
 }: EyePressureInputsProps) => {
   return (
     <>
@@ -27,38 +24,47 @@ export const EyePressureInputs = ({
       <SimpleGrid cols={3}>
         <NumberInput
           label="Right:"
+          defaultValue={parseNumberForInput(consult.get('eyePressureRight'))}
+          {...register('consult.eyePressureRight', {
+            valueAsNumber: true,
+          })}
+          max={undefined}
+          min={undefined}
           onChange={(value) => {
-            if (eyePressureRightProps.onChange) {
-              eyePressureRightProps.onChange(value);
-            }
-            if (value !== undefined) {
-              setEyePressureTimestamp(new Date());
+            setValue('consult.eyePressureRight', value);
+            if (value && consult.get('eyePressureLeft')) {
+              setValue('consult.eyePressureTimestamp', new Date(), true);
             } else {
-              setEyePressureTimestamp(null);
+              setValue('consult.eyePressureTimestamp', undefined, true);
             }
           }}
-          defaultValue={eyePressureRightProps.defaultValue}
         />
         <NumberInput
           label="Left:"
+          defaultValue={parseNumberForInput(consult.get('eyePressureLeft'))}
+          {...register('consult.eyePressureLeft', {
+            valueAsNumber: true,
+          })}
+          max={undefined}
+          min={undefined}
           onChange={(value) => {
-            if (eyePressureLeftProps.onChange) {
-              eyePressureLeftProps.onChange(value);
-            }
-            if (value !== undefined) {
-              setEyePressureTimestamp(new Date());
+            setValue('consult.eyePressureLeft', value);
+            if (value && consult.get('eyePressureRight')) {
+              setValue('consult.eyePressureTimestamp', new Date(), true);
             } else {
-              setEyePressureTimestamp(null);
+              setValue('consult.eyePressureTimestamp', undefined, true);
             }
           }}
-          defaultValue={eyePressureLeftProps.defaultValue}
         />
       </SimpleGrid>
       <TimeInput
         format="12"
         size="xs"
         className="w-28 -mt-2"
-        {...eyePressureTimestampProps}
+        value={parseDateForInput(consult.get('eyePressureTimestamp'))}
+        onChange={(value) => {
+          setValue('consult.eyePressureTimestamp', value ?? undefined, true);
+        }}
       />
     </>
   );

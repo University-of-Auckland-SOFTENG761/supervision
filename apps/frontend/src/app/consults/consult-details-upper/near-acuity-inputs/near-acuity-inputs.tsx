@@ -1,15 +1,16 @@
-import { SimpleGrid, TextInput, TextInputProps, Title } from '@mantine/core';
+import { SimpleGrid, TextInput, Title } from '@mantine/core';
+import { ConsultDocType } from 'database';
+import { UseFormRegister, FieldValues } from 'react-hook-form';
+import { RxDocument } from 'rxdb';
 
 type NearAcuityInputsProps = {
-  nearAcuityRightProps: TextInputProps;
-  nearAcuityLeftProps: TextInputProps;
-  nearAcuityBothProps: TextInputProps;
+  consult: RxDocument<ConsultDocType>;
+  register: UseFormRegister<FieldValues>;
 };
 
 export const NearAcuityInputs = ({
-  nearAcuityRightProps,
-  nearAcuityLeftProps,
-  nearAcuityBothProps,
+  consult,
+  register,
 }: NearAcuityInputsProps) => {
   return (
     <>
@@ -17,9 +18,23 @@ export const NearAcuityInputs = ({
         Near Acuity
       </Title>
       <SimpleGrid cols={3}>
-        <TextInput label="Right:" required {...nearAcuityRightProps} />
-        <TextInput label="Left:" required {...nearAcuityLeftProps} />
-        <TextInput label="Both:" {...nearAcuityBothProps} />
+        <TextInput
+          label="Right:"
+          required
+          defaultValue={consult.get('nearAcuityRight')}
+          {...register('consult.nearAcuityRight')}
+        />
+        <TextInput
+          label="Left:"
+          required
+          defaultValue={consult.get('nearAcuityLeft')}
+          {...register('consult.nearAcuityLeft')}
+        />
+        <TextInput
+          label="Both:"
+          defaultValue={consult.get('nearAcuityBoth')}
+          {...register('consult.nearAcuityBoth')}
+        />
       </SimpleGrid>
     </>
   );

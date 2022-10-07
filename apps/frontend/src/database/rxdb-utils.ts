@@ -58,3 +58,11 @@ export const stripUnusedFields = (docJSON?: { [key: string]: unknown }) =>
       return [key, value ? value : null];
     })
   );
+
+export const parseDateForInput = (date: string) => {
+  return date ? new Date(date) : undefined;
+};
+
+export const parseNumberForInput = (number: number | string) => {
+  return number ? Number(number) : undefined;
+};

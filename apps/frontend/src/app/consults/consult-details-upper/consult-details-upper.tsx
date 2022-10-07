@@ -17,15 +17,21 @@ import dayjs from 'dayjs';
 import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
 import { EyePressureInputs } from './eye-pressure-inputs';
-import { applyDateFormat } from 'utils/date.utils';
 import { ConsultDocType } from 'database';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { RxDocument } from 'rxdb';
+import { parseDateForInput, parseNumberForInput } from 'database/rxdb-utils';
 
 type ConsultDetailsUpperProps = {
-  consultRef: React.MutableRefObject<ConsultDocType | null>;
+  consult: RxDocument<ConsultDocType>;
+  register: UseFormRegister<FieldValues>;
+  setValue: (name: string, value: unknown, urgent?: boolean) => void;
 };
 
 export const ConsultDetailsUpper = ({
-  consultRef,
+  consult,
+  register,
+  setValue,
 }: ConsultDetailsUpperProps) => {
   return (
     <Grid columns={5} justify="flex-end">
@@ -37,86 +43,19 @@ export const ConsultDetailsUpper = ({
             required
             placeholder="Type here..."
             autosize
+            defaultValue={consult.get('history')}
+            {...register('consult.history')}
             minRows={4}
-            defaultValue={consultRef?.current?.history}
-            onChange={(e) => {
-              consultRef?.current &&
-                (consultRef.current.history = e.currentTarget.value);
-            }}
           />
           <TextInput
             label="Medication:"
-            defaultValue={consultRef?.current?.medication}
-            onChange={(e) =>
-              consultRef?.current &&
-              (consultRef.current.medication = e.currentTarget.value)
-            }
+            defaultValue={consult.get('medication')}
+            {...register('consult.medication')}
             required
           />
-          <VisualAcuityInputs
-            visualAcuityRightProps={{
-              defaultValue: consultRef?.current?.visualAcuityRight,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.visualAcuityRight =
-                    e.currentTarget.value);
-              },
-            }}
-            visualAcuityLeftProps={{
-              defaultValue: consultRef?.current?.visualAcuityLeft,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.visualAcuityLeft = e.currentTarget.value);
-              },
-            }}
-            visualAcuityBothProps={{
-              defaultValue: consultRef?.current?.visualAcuityBoth,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.visualAcuityBoth = e.currentTarget.value);
-              },
-            }}
-          />
-          <NearAcuityInputs
-            nearAcuityRightProps={{
-              defaultValue: consultRef?.current?.nearAcuityRight,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.nearAcuityRight = e.currentTarget.value);
-              },
-            }}
-            nearAcuityLeftProps={{
-              defaultValue: consultRef?.current?.nearAcuityLeft,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.nearAcuityLeft = e.currentTarget.value);
-              },
-            }}
-            nearAcuityBothProps={{
-              defaultValue: consultRef?.current?.nearAcuityBoth,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.nearAcuityBoth = e.currentTarget.value);
-              },
-            }}
-          />
-          <CoverTestInputs
-            coverTestDistanceProps={{
-              defaultValue: consultRef?.current?.coverTestDistance,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.coverTestDistance =
-                    e.currentTarget.value);
-              },
-            }}
-            coverTestNearProps={{
-              defaultValue: consultRef?.current?.coverTestNear,
-              onChange: (e) => {
-                consultRef?.current &&
-                  (consultRef.current.coverTestNear = e.currentTarget.value);
-              },
-            }}
-          />
+          <VisualAcuityInputs consult={consult} register={register} />
+          <NearAcuityInputs consult={consult} register={register} />
+          <CoverTestInputs consult={consult} register={register} />
         </Stack>
       </Grid.Col>
       {/*Column 2*/}
@@ -124,82 +63,47 @@ export const ConsultDetailsUpper = ({
         <Stack>
           <TextInput
             label="NPC:"
+            defaultValue={consult.get('nearPointOfConvergence')}
+            {...register('consult.nearPointOfConvergence')}
             maxLength={8}
-            defaultValue={consultRef?.current?.nearPointOfConvergence}
-            onChange={(e) =>
-              consultRef?.current &&
-              (consultRef.current.nearPointOfConvergence =
-                e.currentTarget.value)
-            }
           />
           <TextInput
             label="Motility:"
+            defaultValue={consult.get('motility')}
+            {...register('consult.motility')}
             maxLength={8}
-            defaultValue={consultRef?.current?.motility}
-            onChange={(e) => {
-              consultRef?.current &&
-                (consultRef.current.motility = e.currentTarget.value);
-            }}
           />
           <TextInput
             label="Pupils:"
+            defaultValue={consult.get('pupils')}
+            {...register('consult.pupils')}
             maxLength={8}
-            defaultValue={consultRef?.current?.pupils}
-            onChange={(e) => {
-              consultRef?.current &&
-                (consultRef.current.pupils = e.currentTarget.value);
-            }}
           />
           <NumberInput
             label="Pupillary Distance:"
-            defaultValue={consultRef?.current?.spectaclePupillaryDistance}
-            onChange={(n) => {
-              consultRef?.current &&
-                (consultRef.current.spectaclePupillaryDistance =
-                  n ?? Number(null));
+            defaultValue={parseNumberForInput(
+              consult.get('spectaclePupillaryDistance')
+            )}
+            {...register('consult.spectaclePupillaryDistance', {
+              valueAsNumber: true,
+            })}
+            min={0}
+            max={undefined}
+            onChange={(value) => {
+              setValue('consult.spectaclePupillaryDistance', value);
             }}
           />
           <TextInput
             label="Fields/Colour Vision/Other:"
+            defaultValue={consult.get('otherField')}
+            {...register('consult.otherField')}
             maxLength={20}
-            defaultValue={consultRef?.current?.otherField}
-            onChange={(e) => {
-              consultRef?.current &&
-                (consultRef.current.otherField = e.currentTarget.value);
-            }}
           />
-          {/*TODO: add timestamp for eye pressure*/}
           <EyePressureInputs
-            eyePressureRightProps={{
-              defaultValue: consultRef?.current?.eyePressureRight,
-              onChange: (n) => {
-                consultRef?.current &&
-                  (consultRef.current.eyePressureRight = n ?? Number(null));
-              },
-            }}
-            eyePressureLeftProps={{
-              defaultValue: consultRef?.current?.eyePressureLeft,
-              onChange: (n) => {
-                consultRef?.current &&
-                  (consultRef.current.eyePressureLeft = n ?? Number(null));
-              },
-            }}
-            eyePressureTimestampProps={{
-              defaultValue: consultRef?.current?.eyePressureTimestamp
-                ? new Date(consultRef?.current?.eyePressureTimestamp)
-                : undefined,
-              onChange: (d) => {
-                consultRef?.current &&
-                  (consultRef.current.eyePressureTimestamp = d.toISOString());
-              },
-            }}
-            setEyePressureTimestamp={(timestamp: Date | null) => {
-              consultRef?.current &&
-                (consultRef.current.eyePressureTimestamp =
-                  timestamp?.toISOString());
-            }}
+            consult={consult}
+            register={register}
+            setValue={setValue}
           />
-          {/*TODO: Refactor cyclopentolate/tropicamide into a separate file*/}
           <Group>
             <Stack>
               <Title order={6} className="-mb-3">
@@ -207,30 +111,33 @@ export const ConsultDetailsUpper = ({
               </Title>
               <Group>
                 <Checkbox
-                  defaultChecked={consultRef?.current?.isCyclopentolate}
+                  defaultChecked={consult.get('isCyclopentolate')}
+                  {...register('consult.isCyclopentolate')}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
-                    const timestamp = checked ? new Date() : null;
-                    consultRef?.current &&
-                      (consultRef.current.isCyclopentolate = checked);
-                    consultRef?.current &&
-                      (consultRef.current.cyclopentolateTimestamp =
-                        timestamp?.toISOString());
+                    const timestamp = checked ? new Date() : undefined;
+                    setValue('consult.isCyclopentolate', checked);
+                    setValue(
+                      'consult.cyclopentolateTimestamp',
+                      timestamp,
+                      true
+                    );
                   }}
                 />
                 <TimeInput
                   label="Administered:"
                   format="12"
                   className="w-28"
-                  defaultValue={
-                    consultRef?.current?.cyclopentolateTimestamp
-                      ? new Date(consultRef?.current?.cyclopentolateTimestamp)
-                      : undefined
-                  }
-                  onChange={(d) => {
-                    consultRef?.current &&
-                      (consultRef.current.cyclopentolateTimestamp =
-                        d.toISOString());
+                  value={parseDateForInput(
+                    consult.get('cyclopentolateTimestamp')
+                  )}
+                  // {...register('consult.cyclopentolateTimestamp')}
+                  onChange={(value) => {
+                    setValue(
+                      'consult.cyclopentolateTimestamp',
+                      value ?? undefined,
+                      true
+                    );
                   }}
                 />
               </Group>
@@ -241,30 +148,26 @@ export const ConsultDetailsUpper = ({
               </Title>
               <Group>
                 <Checkbox
-                  defaultChecked={consultRef?.current?.isTropicamide}
+                  defaultChecked={consult.get('isTropicamide')}
+                  {...register('consult.isTropicamide')}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
                     const timestamp = checked ? new Date() : null;
-                    consultRef?.current &&
-                      (consultRef.current.isTropicamide = checked);
-                    consultRef?.current &&
-                      (consultRef.current.tropicamideTimestamp =
-                        timestamp?.toISOString());
+                    setValue('consult.isTropicamide', checked);
+                    setValue('consult.tropicamideTimestamp', timestamp, true);
                   }}
                 />
                 <TimeInput
                   label="Administered:"
                   format="12"
                   className="w-28"
-                  defaultValue={
-                    consultRef?.current?.tropicamideTimestamp
-                      ? new Date(consultRef?.current?.tropicamideTimestamp)
-                      : undefined
-                  }
-                  onChange={(d) => {
-                    consultRef?.current &&
-                      (consultRef.current.tropicamideTimestamp =
-                        d.toISOString());
+                  value={parseDateForInput(consult.get('tropicamideTimestamp'))}
+                  onChange={(value) => {
+                    setValue(
+                      'consult.tropicamideTimestamp',
+                      value ?? undefined,
+                      true
+                    );
                   }}
                 />
               </Group>
@@ -281,25 +184,18 @@ export const ConsultDetailsUpper = ({
                 label="Binocular Vision:"
                 placeholder="Type here..."
                 autosize
+                defaultValue={consult.get('binocularVision')}
+                {...register('consult.binocularVision')}
                 minRows={4}
-                defaultValue={consultRef?.current?.binocularVision}
-                onChange={(e) => {
-                  consultRef?.current &&
-                    (consultRef.current.binocularVision =
-                      e.currentTarget.value);
-                }}
               />
               <Textarea
                 label="Diagnosis:"
                 placeholder="Type here..."
                 autosize
-                minRows={4}
                 required
-                defaultValue={consultRef?.current?.diagnosis}
-                onChange={(e) => {
-                  consultRef?.current &&
-                    (consultRef.current.diagnosis = e.currentTarget.value);
-                }}
+                defaultValue={consult.get('diagnosis')}
+                {...register('consult.diagnosis')}
+                minRows={4}
               />
             </Stack>
           </Grid.Col>
@@ -309,26 +205,19 @@ export const ConsultDetailsUpper = ({
                 label="Anterior Health:"
                 placeholder="Type here..."
                 autosize
-                minRows={4}
                 required
-                defaultValue={consultRef?.current?.anteriorHealth}
-                onChange={(e) => {
-                  consultRef?.current &&
-                    (consultRef.current.anteriorHealth = e.currentTarget.value);
-                }}
+                defaultValue={consult.get('anteriorHealth')}
+                {...register('consult.anteriorHealth')}
+                minRows={4}
               />
               <Textarea
                 label="Posterior Health:"
                 placeholder="Type here..."
                 autosize
-                minRows={4}
                 required
-                defaultValue={consultRef?.current?.posteriorHealth}
-                onChange={(e) => {
-                  consultRef?.current &&
-                    (consultRef.current.posteriorHealth =
-                      e.currentTarget.value);
-                }}
+                defaultValue={consult.get('posteriorHealth')}
+                {...register('consult.posteriorHealth')}
+                minRows={4}
               />
             </Stack>
           </Grid.Col>
@@ -339,20 +228,13 @@ export const ConsultDetailsUpper = ({
               <TextInput
                 label="Spectacles Code:"
                 classNames={{ label: 'whitespace-nowrap' }}
-                defaultValue={consultRef?.current?.spectacleCode}
-                onChange={(e) => {
-                  consultRef?.current &&
-                    (consultRef.current.spectacleCode = e.currentTarget.value);
-                }}
+                defaultValue={consult.get('spectacleCode')}
+                {...register('consult.spectacleCode')}
               />
               <TextInput
                 label="Heights:"
-                defaultValue={consultRef?.current?.spectacleHeights}
-                onChange={(e) => {
-                  consultRef?.current &&
-                    (consultRef.current.spectacleHeights =
-                      e.currentTarget.value);
-                }}
+                defaultValue={consult.get('spectacleHeights')}
+                {...register('consult.spectacleHeights')}
                 placeholder="Datum"
               />
             </Stack>
@@ -362,30 +244,19 @@ export const ConsultDetailsUpper = ({
               <SimpleGrid cols={2}>
                 <TextInput
                   label="Colour:"
-                  defaultValue={consultRef?.current?.spectacleColour}
-                  onChange={(e) => {
-                    consultRef?.current &&
-                      (consultRef.current.spectacleColour =
-                        e.currentTarget.value);
-                  }}
+                  defaultValue={consult.get('spectacleColour')}
+                  {...register('consult.spectacleColour')}
                 />
                 <TextInput
                   label="Lens Type:"
-                  defaultValue={consultRef?.current?.spectacleLensType}
-                  onChange={(e) => {
-                    consultRef?.current &&
-                      (consultRef.current.spectacleLensType =
-                        e.currentTarget.value);
-                  }}
+                  defaultValue={consult.get('spectacleLensType')}
+                  {...register('consult.spectacleLensType')}
                 />
               </SimpleGrid>
               <TextInput
                 label="Spectacles Note:"
-                defaultValue={consultRef?.current?.spectacleNotes}
-                onChange={(e) => {
-                  consultRef?.current &&
-                    (consultRef.current.spectacleNotes = e.currentTarget.value);
-                }}
+                defaultValue={consult.get('spectacleNotes')}
+                {...register('consult.spectacleNotes')}
               />
             </Stack>
           </Grid.Col>
@@ -400,22 +271,16 @@ export const ConsultDetailsUpper = ({
             autosize
             minRows={4}
             required
-            defaultValue={consultRef?.current?.management}
-            onChange={(e) => {
-              consultRef?.current &&
-                (consultRef.current.management = e.currentTarget.value);
-            }}
+            defaultValue={consult.get('management')}
+            {...register('consult.management')}
           />
           <Textarea
             label="Layperson Notes:"
             placeholder="Include the diagnosis, management plan and prognosis/recall in lay terms"
             autosize
             minRows={11}
-            defaultValue={consultRef?.current?.layPersonNotes}
-            onChange={(e) => {
-              consultRef?.current &&
-                (consultRef.current.layPersonNotes = e.currentTarget.value);
-            }}
+            defaultValue={consult.get('layPersonNotes')}
+            {...register('consult.layPersonNotes')}
           />
           <Title order={6} className="-mb-3">
             Recall
@@ -435,30 +300,20 @@ export const ConsultDetailsUpper = ({
               placeholder="Select one"
               onChange={(value) => {
                 if (!value) {
-                  consultRef?.current &&
-                    (consultRef.current.recallDate = undefined);
+                  setValue('consult.recallDate', undefined);
                   return;
                 }
                 const nextDate = value
                   ? dayjs().add(parseInt(value), 'month')
                   : undefined;
-                consultRef?.current &&
-                  (consultRef.current.recallDate = nextDate?.toISOString());
+                setValue('consult.recallDate', nextDate?.toDate() ?? undefined);
               }}
             />
-            <Text>
-              {consultRef?.current?.recallDate
-                ? applyDateFormat(new Date(consultRef.current.recallDate))
-                : ''}
-            </Text>
+            <Text>{dayjs(consult.get('recallDate')).format('DD/MM/YYYY')}</Text>
             <TextInput
               label="Reason:"
-              defaultValue={consultRef?.current?.recallDescription}
-              onChange={(e) => {
-                consultRef?.current &&
-                  (consultRef.current.recallDescription =
-                    e.currentTarget.value);
-              }}
+              defaultValue={consult.get('recallDescription')}
+              {...register('consult.recallDescription')}
             />
           </Group>
         </Stack>

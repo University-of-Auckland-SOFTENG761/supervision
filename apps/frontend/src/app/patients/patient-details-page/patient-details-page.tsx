@@ -32,11 +32,8 @@ export const PatientDetailsPage = () => {
       setIsLoading(true);
       patientsCollection
         .findOne({ selector: { id: patientId } })
-        .exec()
-        .then((p) => {
-          if (p) {
-            setPatient(p);
-          }
+        .$.subscribe((patient) => {
+          setPatient(patient);
           setIsLoading(false);
         });
     }

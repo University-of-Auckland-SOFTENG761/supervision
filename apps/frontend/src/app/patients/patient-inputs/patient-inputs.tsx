@@ -15,7 +15,11 @@ import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
-import { stripUnusedFields } from 'database/rxdb-utils';
+import {
+  parseDateForInput,
+  parseNumberForInput,
+  stripUnusedFields,
+} from 'database/rxdb-utils';
 import { ConsultDocType, PatientDocType } from 'database';
 import { RxDocument } from 'rxdb';
 import { useForm } from 'react-hook-form';
@@ -37,14 +41,6 @@ export const PatientInputs = ({
   consults,
 }: PatientInputsProps) => {
   const { register, getValues, setValue } = useForm();
-
-  const parseDate = (date: string) => {
-    return date ? new Date(date) : undefined;
-  };
-
-  const parseNumber = (number: number | string) => {
-    return number ? Number(number) : undefined;
-  };
 
   const patientAge =
     patient.get('dateOfBirth') &&
@@ -102,7 +98,7 @@ export const PatientInputs = ({
           <DatePicker
             required
             label="Date of birth:"
-            defaultValue={parseDate(patient.get('dateOfBirth'))}
+            defaultValue={parseDateForInput(patient.get('dateOfBirth'))}
             {...register('patient.dateOfBirth', {
               valueAsDate: true,
             })}
@@ -154,7 +150,7 @@ export const PatientInputs = ({
           <NumberInput
             label="Year:"
             className="w-20"
-            defaultValue={parseNumber(patient.get('yearLevel'))}
+            defaultValue={parseNumberForInput(patient.get('yearLevel'))}
             {...register('patient.yearLevel', {
               valueAsNumber: true,
             })}

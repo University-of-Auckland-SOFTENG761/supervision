@@ -4,8 +4,8 @@ import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
 import { stripUnusedFields } from 'database/rxdb-utils';
 import { ConsultDocType } from 'database';
-import { useDebouncedValue } from '@mantine/hooks';
 import { RxDocument } from 'rxdb';
+import { useForm } from 'react-hook-form';
 
 type ConsultInputsProps = {
   consult: RxDocument<ConsultDocType>;
@@ -16,70 +16,62 @@ export const ConsultInputs = ({
   consult,
   updateConsult,
 }: ConsultInputsProps) => {
-  const consultRef = useRef<ConsultDocType | null>(consult);
-  const [debouncedRevision, cancelDebounce] = useDebouncedValue(
-    consult?.revision,
-    100
-  );
-  consultRef.current = consult.toMutableJSON();
-
-  const sendUpdate = () => {
-    if (consultRef.current) {
-      console.log(consultRef.current);
-      updateConsult(stripUnusedFields(consultRef.current) as ConsultDocType);
-    }
-  };
+  const { register, getValues, setValue } = useForm();
 
   const timeoutRef = useRef<NodeJS.Timer | null>(null);
 
-  const cancelRender = () => {
-    cancelDebounce();
+  const handleUpdateConsult = () => {
+    console.debug('updating consult');
+    const newConsult = {
+      ...stripUnusedFields(getValues('consult')),
+      id: consult.get('id'),
+    } as ConsultDocType;
+    updateConsult(newConsult);
+  };
+
+  const handleChange = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    timeoutRef.current = setTimeout(sendUpdate, 5000);
+    timeoutRef.current = setTimeout(() => {
+      handleUpdateConsult();
+      timeoutRef.current = null;
+    }, 1000);
+  };
+
+  const setAndHandleChange = (
+    name: string,
+    value: unknown,
+    urgent?: boolean
+  ) => {
+    setValue(name, value);
+    if (urgent) {
+      timeoutRef.current && clearTimeout(timeoutRef.current);
+      handleUpdateConsult();
+    } else {
+      handleChange();
+    }
   };
 
   useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        sendUpdate();
-      }
-    };
-  }, []);
-
-  const setFieldByKey = (key: string, value: string | number | null) => {
-    console.log('setFieldByKey', key, value);
-    if (consultRef.current) {
-      const newConsult = Object.fromEntries([
-        ...Object.entries(consultRef.current),
-        [key, value],
-      ]) as ConsultDocType;
-      updateConsult(newConsult);
+    if (!timeoutRef.current) {
+      console.debug('reloading');
+      setValue('consult', consult.toJSON());
     }
-  };
-
-  const setFieldsByKeys = (
-    keyValuePairs: [key: string, value: string | number | null][]
-  ) => {
-    console.log('setFieldsByKeys', keyValuePairs);
-    if (consultRef.current) {
-      const newConsult = Object.fromEntries([
-        ...Object.entries(consultRef.current),
-        ...keyValuePairs,
-      ]) as ConsultDocType;
-      updateConsult(newConsult);
-    }
-  };
+  }, [consult, consult.revision, setValue]);
 
   return (
-    <Stack onChange={cancelRender} key={debouncedRevision}>
-      <ConsultDetailsUpper consultRef={consultRef} />
+    <Stack onChange={handleChange}>
+      <ConsultDetailsUpper
+        consult={consult}
+        register={register}
+        setValue={setAndHandleChange}
+      />
       <ConsultDetailsLower
         consult={consult}
-        setFieldByKey={setFieldByKey}
-        setFieldsByKeys={setFieldsByKeys}
+        register={register}
+        getValues={getValues}
+        setValue={setAndHandleChange}
       />
     </Stack>
   );

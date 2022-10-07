@@ -1,13 +1,16 @@
-import { SimpleGrid, TextInput, TextInputProps, Title } from '@mantine/core';
+import { SimpleGrid, TextInput, Title } from '@mantine/core';
+import { ConsultDocType } from 'database';
+import { UseFormRegister, FieldValues } from 'react-hook-form';
+import { RxDocument } from 'rxdb';
 
 type CoverTestInputsProps = {
-  coverTestDistanceProps: TextInputProps;
-  coverTestNearProps: TextInputProps;
+  consult: RxDocument<ConsultDocType>;
+  register: UseFormRegister<FieldValues>;
 };
 
 export const CoverTestInputs = ({
-  coverTestDistanceProps,
-  coverTestNearProps,
+  consult,
+  register,
 }: CoverTestInputsProps) => {
   return (
     <>
@@ -16,12 +19,18 @@ export const CoverTestInputs = ({
       </Title>
       <SimpleGrid cols={3}>
         <TextInput
-          maxLength={40}
           label="Distance:"
           classNames={{ label: 'whitespace-nowrap' }}
-          {...coverTestDistanceProps}
+          defaultValue={consult.get('coverTestDistance')}
+          {...register('consult.coverTestDistance')}
+          maxLength={40}
         />
-        <TextInput maxLength={40} label="Near:" {...coverTestNearProps} />
+        <TextInput
+          maxLength={40}
+          label="Near:"
+          defaultValue={consult.get('coverTestNear')}
+          {...register('consult.coverTestNear')}
+        />
       </SimpleGrid>
     </>
   );
