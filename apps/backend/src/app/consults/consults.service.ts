@@ -75,7 +75,7 @@ export class ConsultsService {
           user: await this.userService.findOneByEmail(userEmail),
           patient: { id: patientId },
           ...consult,
-          spectacleEntity,
+          spectacle: spectacleEntity,
         };
       })
     );

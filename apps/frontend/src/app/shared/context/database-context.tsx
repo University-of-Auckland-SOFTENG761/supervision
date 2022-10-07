@@ -125,7 +125,8 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
 
   const newConsult = useCallback(
     (patientId: string) => {
-      if (!user || (!online && !userEmail)) return;
+      if (!user || (!online && !userEmail) || !patients) return;
+      const patient = patients.find((p) => p.id === patientId);
 
       const consultId = uuidv4();
       const nc = {
@@ -137,12 +138,13 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
           id: uuidv4(),
           consultId: consultId,
           patientId: patientId,
+          deliverySchool: patient?.school,
         },
       };
       superVisionDb?.['consults'].insert(nc);
       return nc.id;
     },
-    [online, superVisionDb, user, userEmail]
+    [online, superVisionDb, user, userEmail, patients]
   );
 
   const patientDocumentsAreEqual = useCallback(

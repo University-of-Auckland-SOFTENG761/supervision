@@ -17,7 +17,7 @@ export const SpectaclesListPage = () => {
       id: c.spectacle?.id,
       firstName: patient?.firstName,
       lastName: patient?.lastName,
-      school: patient?.school,
+      school: c.spectacle?.deliverySchool,
       spectaclesCode: c.spectacle?.code,
       colour: c.spectacle?.colour,
       lensType: c.spectacle?.lensType,
@@ -25,7 +25,7 @@ export const SpectaclesListPage = () => {
       heights: c.spectacle?.heights,
       spectaclesNotes: c.spectacle?.notes,
       orderStatus: c.spectacle?.orderStatus,
-      associatedPatientUid: c.patientId,
+      associatedPatientUid: c.spectacle?.patientId,
       orderDate: c.spectacle?.orderDate,
     };
   });
