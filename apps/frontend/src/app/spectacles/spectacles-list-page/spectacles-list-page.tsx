@@ -9,6 +9,7 @@ import sortBy from 'lodash/sortBy';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useDatabase } from '@shared';
 import { OrderStatus } from '../spectacles-details-page';
+import styles from './spectacles-list.module.scss';
 
 export const SpectaclesListPage = () => {
   const { consults, patients } = useDatabase();
@@ -122,6 +123,7 @@ export const SpectaclesListPage = () => {
           striped
           highlightOnHover
           className="min-h-full"
+          classNames={{ header: `${styles['datatable-custom-header']}` }}
           records={tableRecords}
           idAccessor="id"
           columns={[
