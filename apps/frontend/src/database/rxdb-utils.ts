@@ -48,14 +48,13 @@ export const buildFormValues = (
 
 export const stripUnusedFields = (docJSON?: { [key: string]: unknown }) =>
   Object.fromEntries(
-    Object.entries(docJSON ?? {})
-      .map(([key, value]) => {
-        if (value instanceof Date) {
-          return [
-            key,
-            !isNaN(value as unknown as number) ? value.toISOString() : null,
-          ];
-        }
-        return [key, value ? value : null];
-      })
+    Object.entries(docJSON ?? {}).map(([key, value]) => {
+      if (value instanceof Date) {
+        return [
+          key,
+          !isNaN(value as unknown as number) ? value.toISOString() : null,
+        ];
+      }
+      return [key, value ? value : null];
+    })
   );

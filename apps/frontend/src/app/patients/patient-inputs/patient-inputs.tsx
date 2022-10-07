@@ -18,7 +18,7 @@ import SchoolAutocomplete from '../school-autocomplete';
 import { stripUnusedFields } from 'database/rxdb-utils';
 import { ConsultDocType, PatientDocType } from 'database';
 import { RxDocument } from 'rxdb';
-import { useDebouncedValue } from '@mantine/hooks';
+import { useForm } from 'react-hook-form';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
@@ -36,87 +36,79 @@ export const PatientInputs = ({
   updatePatient,
   consults,
 }: PatientInputsProps) => {
-  const patientRef = useRef<PatientDocType | null>(patient);
-  const [debouncedRevision, cancelDebounce] = useDebouncedValue(
-    patient?.revision,
-    5000
-  );
+  const { register, getValues, setValue } = useForm();
 
-  patientRef.current = patient.toMutableJSON();
-
-  const patientAge =
-    patientRef.current?.dateOfBirth &&
-    calculateAge(new Date(patientRef.current?.dateOfBirth));
-
-  const sendUpdate = () => {
-    if (patientRef.current) {
-      updatePatient(stripUnusedFields(patientRef.current) as PatientDocType);
-    }
+  const parseDate = (date: string) => {
+    return date ? new Date(date) : undefined;
   };
 
-  const timeoutRef = useRef<NodeJS.Timer | null>(null);
+  const parseNumber = (number: number | string) => {
+    return number ? Number(number) : undefined;
+  };
 
-  const cancelRender = () => {
-    cancelDebounce();
+  const patientAge =
+    patient.get('dateOfBirth') &&
+    calculateAge(new Date(patient.get('dateOfBirth')));
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleChange = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    timeoutRef.current = setTimeout(sendUpdate, 5000);
+    timeoutRef.current = setTimeout(() => {
+      const newPatient = {
+        ...stripUnusedFields(getValues('patient')),
+        id: patient.get('id'),
+      } as PatientDocType;
+      updatePatient(newPatient);
+    }, 1000);
   };
 
   useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        sendUpdate();
-      }
-    };
-  }, []);
+    if (!timeoutRef.current) {
+      console.log('reloading');
+      setValue('patient', patient.toJSON());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patient.revision]);
 
   return (
     <SimpleGrid
-      onChange={cancelRender}
       cols={3}
       spacing={180}
       breakpoints={[
         { maxWidth: 1024, cols: 2, spacing: 100 },
         { maxWidth: 1280, cols: 3, spacing: 100 },
       ]}
-      key={debouncedRevision}
+      onChange={handleChange}
     >
       <Stack>
         <TextInput
           required
-          maxLength={40}
           label="First name:"
-          defaultValue={patientRef.current?.firstName}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.firstName = e.currentTarget.value)
-          }
+          defaultValue={patient.get('firstName')}
+          {...register('patient.firstName')}
+          maxLength={40}
         />
         <TextInput
           required
-          maxLength={40}
           label="Last name:"
-          defaultValue={patientRef.current?.lastName}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.lastName = e.currentTarget.value)
-          }
+          defaultValue={patient.get('lastName')}
+          {...register('patient.lastName')}
+          maxLength={40}
         />
         <Group className="justify-between">
           <DatePicker
             required
             label="Date of birth:"
-            defaultValue={
-              patientRef.current?.dateOfBirth
-                ? new Date(patientRef.current?.dateOfBirth)
-                : undefined
-            }
-            onChange={(d) => {
-              patientRef.current &&
-                (patientRef.current.dateOfBirth = d?.toISOString());
+            defaultValue={parseDate(patient.get('dateOfBirth'))}
+            {...register('patient.dateOfBirth', {
+              valueAsDate: true,
+            })}
+            onChange={(e) => {
+              setValue('patient.dateOfBirth', e ?? undefined);
+              handleChange();
             }}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
@@ -133,53 +125,52 @@ export const PatientInputs = ({
             disabled
           />
         </Group>
-        <TextInput
-          label="Patient ID:"
-          value={patientRef.current?.id}
-          disabled
-        />
+        <TextInput label="Patient ID:" value={patient.get('id')} disabled />
         <EthnicitySelect
-          defaultValue={patientRef.current?.ethnicity}
-          onChange={(s) =>
-            patientRef.current &&
-            (patientRef.current.ethnicity = s ?? undefined)
-          }
+          defaultValue={patient.get('ethnicity')}
+          {...register('patient.ethnicity')}
+          onChange={(e) => {
+            setValue('patient.ethnicity', e ?? undefined);
+            handleChange();
+          }}
         />
         <GenderSelect
-          defaultValue={patientRef.current?.gender}
-          onChange={(s) =>
-            patientRef.current && (patientRef.current.gender = s ?? undefined)
-          }
+          defaultValue={patient.get('gender')}
+          {...register('patient.gender')}
+          onChange={(e) => {
+            setValue('patient.gender', e ?? undefined);
+            handleChange();
+          }}
         />
         <SchoolAutocomplete
-          defaultValue={patientRef.current?.school ?? undefined}
-          onChange={(s) =>
-            patientRef.current && (patientRef.current.school = s ?? undefined)
-          }
+          defaultValue={patient.get('school')}
+          {...register('patient.school')}
+          onChange={(e) => {
+            setValue('patient.school', e ?? undefined);
+            handleChange();
+          }}
         />
         <Group className="w-full">
           <NumberInput
             label="Year:"
             className="w-20"
-            defaultValue={
-              patientRef.current?.yearLevel
-                ? Number(patientRef.current?.yearLevel)
-                : undefined
-            }
-            onChange={(n) =>
-              patientRef.current &&
-              (patientRef.current.yearLevel = n ?? undefined)
-            }
+            defaultValue={parseNumber(patient.get('yearLevel'))}
+            {...register('patient.yearLevel', {
+              valueAsNumber: true,
+            })}
+            max={13}
+            min={0}
+            onChange={(e) => {
+              setValue('patient.yearLevel', e ?? undefined);
+              handleChange();
+            }}
           />
           <TextInput
             maxLength={20}
             label="Room:"
             className="grow"
-            defaultValue={patientRef.current?.room}
-            onChange={(e) =>
-              patientRef.current &&
-              (patientRef.current.room = e.currentTarget.value)
-            }
+            defaultValue={patient.get('room')}
+            {...register('patient.room')}
           />
         </Group>
       </Stack>
@@ -187,73 +178,49 @@ export const PatientInputs = ({
         <TextInput
           label="Address:"
           placeholder="Street Address"
-          defaultValue={patientRef.current?.streetAddress}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.streetAddress = e.currentTarget.value)
-          }
+          defaultValue={patient.get('streetAddress')}
+          {...register('patient.streetAddress')}
         />
         <Group className="w-full" grow>
           <TextInput
             placeholder="Suburb"
-            defaultValue={patientRef.current?.suburb}
-            onChange={(e) =>
-              patientRef.current &&
-              (patientRef.current.suburb = e.currentTarget.value)
-            }
+            defaultValue={patient.get('suburb')}
+            {...register('patient.suburb')}
           />
           <TextInput
             placeholder="City"
-            defaultValue={patientRef.current?.city}
-            onChange={(e) =>
-              patientRef.current &&
-              (patientRef.current.city = e.currentTarget.value)
-            }
+            defaultValue={patient.get('city')}
+            {...register('patient.city')}
           />
         </Group>
         <TextInput
-          maxLength={5}
           placeholder="Postcode"
-          defaultValue={patientRef.current?.postcode}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.postcode = e.currentTarget.value)
-          }
+          defaultValue={patient.get('postcode')}
+          {...register('patient.postcode')}
+          maxLength={5}
         />
         <TextInput
-          maxLength={40}
           label="Caregiver First Name:"
-          defaultValue={patientRef.current?.caregiverFirstName}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.caregiverFirstName = e.currentTarget.value)
-          }
-        />
-        <TextInput
+          defaultValue={patient.get('caregiverFirstName')}
+          {...register('patient.caregiverFirstName')}
           maxLength={40}
-          label="Caregiver Last Name:"
-          defaultValue={patientRef.current?.caregiverLastName}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.caregiverLastName = e.currentTarget.value)
-          }
         />
         <TextInput
-          maxLength={15}
+          label="Caregiver Last Name:"
+          defaultValue={patient.get('caregiverLastName')}
+          {...register('patient.caregiverLastName')}
+          maxLength={40}
+        />
+        <TextInput
           label="Phone:"
-          defaultValue={patientRef.current?.phoneNumber}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.phoneNumber = e.currentTarget.value)
-          }
+          defaultValue={patient.get('phoneNumber')}
+          {...register('patient.phoneNumber')}
+          maxLength={15}
         />
         <TextInput
           label="Email:"
-          defaultValue={patientRef.current?.email}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.email = e.currentTarget.value)
-          }
+          defaultValue={patient.get('email')}
+          {...register('patient.email')}
         />
       </Stack>
       <Stack>
@@ -261,12 +228,9 @@ export const PatientInputs = ({
           label="Admin Notes"
           placeholder="Type here..."
           autosize
+          defaultValue={patient.get('adminNotes')}
+          {...register('patient.adminNotes')}
           minRows={3}
-          defaultValue={patientRef.current?.adminNotes}
-          onChange={(e) =>
-            patientRef.current &&
-            (patientRef.current.adminNotes = e.currentTarget.value)
-          }
         />
         <RecallsTable consults={consults} />
       </Stack>

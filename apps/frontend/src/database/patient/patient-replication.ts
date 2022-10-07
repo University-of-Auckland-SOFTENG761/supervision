@@ -104,22 +104,21 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   const variables = {
     patients: strippedDocs,
   };
-
   return {
     query,
     variables,
   };
 };
 
-const deletionFilter = (doc: PatientDocument) => {
-  doc = {
+const deletionFilter = (doc: PatientDocument & { consults: unknown }) => {
+  const { consults, ...newDoc } = {
     ...doc,
     deletedAt:
       doc.deletedAt && new Date(doc.deletedAt) !== new Date(0)
         ? doc.deletedAt
         : undefined,
   };
-  return doc;
+  return newDoc;
 };
 
 export const buildPatientReplicationState = async (database: RxDatabase) => {

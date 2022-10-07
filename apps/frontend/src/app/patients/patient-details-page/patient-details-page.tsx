@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Center, ScrollArea, Text, Loader } from '@mantine/core';
 import { Button, useDatabase } from '@shared';
 import { PatientTabs } from '../patient-tabs';

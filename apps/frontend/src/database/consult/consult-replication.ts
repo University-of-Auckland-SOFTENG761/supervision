@@ -39,7 +39,6 @@ const pullQueryBuilder = (doc: ConsultDocument) => {
       nearPointOfConvergence,
       motility,
       pupils,
-      pupillaryDistance,
       otherField,
       eyePressureLeft,
       eyePressureRight,
@@ -163,22 +162,23 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
   const variables = {
     consults: strippedDocs,
   };
-  console.log('PUSHING CONSULTS', query, variables);
   return {
     query,
     variables,
   };
 };
 
-const deletionFilter = (doc: ConsultDocument) => {
-  doc = {
+const deletionFilter = (
+  doc: ConsultDocument & { user: unknown; patient: unknown; spectacle: unknown }
+) => {
+  const { user, patient, spectacle, ...newDoc } = {
     ...doc,
     deletedAt:
       doc.deletedAt && new Date(doc.deletedAt) !== new Date(0)
         ? doc.deletedAt
         : undefined,
   };
-  return doc;
+  return newDoc;
 };
 
 export const buildConsultReplicationState = async (database: RxDatabase) => {
@@ -200,9 +200,6 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
             spectaclePupillaryDistance: doc.spectacle?.pupillaryDistance,
             spectacleHeights: doc.spectacle?.heights,
             spectacleNotes: doc.spectacle?.notes,
-            user: undefined,
-            patient: undefined,
-            spectacle: undefined,
           }),
         },
         push: {

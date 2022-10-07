@@ -1,13 +1,11 @@
 import { Autocomplete } from '@mantine/core';
 
 type SchoolAutocompleteProps = {
-  value?: string;
-  defaultValue?: string;
-  onChange?: (value: string | null) => void;
+  defaultValue?: string | null;
+  onChange?: (value: string) => void;
 };
 
 const SchoolAutocomplete = ({
-  value,
   defaultValue,
   onChange,
 }: SchoolAutocompleteProps) => {
@@ -19,8 +17,7 @@ const SchoolAutocomplete = ({
       maxLength={45}
       label="School:"
       data={schoolData}
-      value={value}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue ?? undefined}
       onChange={onChange}
     />
   );
