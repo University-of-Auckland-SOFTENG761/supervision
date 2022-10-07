@@ -1,7 +1,10 @@
 import { useForm } from '@mantine/form';
 import {
+  Center,
   Divider,
   Group,
+  Loader,
+  NumberInput,
   ScrollArea,
   Select,
   Stack,
@@ -9,96 +12,63 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
+import { useDatabase } from '@shared';
+import { useDebouncedValue } from '@mantine/hooks';
+import { ConsultDocType } from 'database';
+import { stripUnusedFields } from 'database/rxdb-utils';
 
-export type ISpectacles = {
-  uid: string;
-  firstName?: string;
-  lastName: string;
-  school: string;
-  spectaclesCode?: string;
-  colour?: string;
-  lensType?: string;
-  pupillaryDistance?: number;
-  heights?: number;
-  spectaclesNotes?: string;
-  orderStatus?: string;
-  orderDate?: Date;
-  deliveryDate?: Date;
-  associatedPatientUid?: string;
+type TimestampFilter = 'spectacle.orderDate' | 'spectacle.deliveredDate';
+
+type FormTimestamps = {
+  [key in TimestampFilter]: Date | null;
 };
 
+export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
+  FormTimestamps;
+
+export enum OrderStatus {
+  'Created' = 'CREATED',
+  'Order sent' = 'ORDERSENT',
+  'Ready for delivery' = 'READYFORDELIVERY',
+  'Delivered' = 'DELIVERED',
+}
+
 export const SpectaclesDetailsPage = () => {
-  // Fake data to match the records in spectacles-list-page
-  // TODO: replace with backend data
-  const spectacleRecords: ISpectacles[] = [
-    {
-      uid: 'fake_id_1234',
-      firstName: 'Henry',
-      lastName: 'Mitchell-Hibbert',
-      school: 'University of Auckland',
-      spectaclesCode: 'some-spec-code',
-      colour: 'Black',
-      lensType: 'some-lens-type',
-      pupillaryDistance: 120.5,
-      heights: 29.5,
-      spectaclesNotes: 'Sat on his last pair',
-      orderStatus: 'orderSent',
-      associatedPatientUid: 'some-patient-id-123456',
-    },
-    {
-      uid: 'fake_id_1235',
-      firstName: 'Joan',
-      lastName: 'Doe',
-      school: 'Massey High School',
-      spectaclesCode: '',
-      colour: 'Blue',
-      lensType: '',
-      pupillaryDistance: 120,
-      heights: 20.5,
-      spectaclesNotes: '',
-    },
-    {
-      uid: 'fake_id_1236',
-      firstName: 'Jezza',
-      lastName: 'Doe',
-      school: 'Massey High School',
-      spectaclesCode: '',
-      colour: 'Green',
-      lensType: '',
-      pupillaryDistance: 120,
-      heights: 42.0,
-      spectaclesNotes: '',
-    },
-  ];
+  const { consults, patients, updateConsult } = useDatabase();
 
-  const { spectaclesUid } = useParams();
+  const [searchParams] = useSearchParams();
+  const spectaclesId = searchParams.get('spectaclesId');
 
-  const spectacles = spectaclesUid
-    ? spectacleRecords?.find((s: ISpectacles) => s.uid === spectaclesUid)
+  const consult = spectaclesId
+    ? consults?.find((c) => c.spectacle?.id === spectaclesId)
+    : undefined;
+  const patient = consult?.patientId
+    ? patients?.find((p) => p.id === consult?.patientId)
     : undefined;
 
-  const buildFormValues = useCallback(
-    () => ({
-      uid: spectacles?.uid,
-      firstName: spectacles?.firstName,
-      lastName: spectacles?.lastName,
-      school: spectacles?.school,
-      spectaclesCode: spectacles?.spectaclesCode,
-      colour: spectacles?.colour,
-      lensType: spectacles?.lensType,
-      pupillaryDistance: spectacles?.pupillaryDistance,
-      heights: spectacles?.heights,
-      spectaclesNotes: spectacles?.spectaclesNotes,
-      orderStatus: spectacles?.orderStatus,
-      associatedPatientUid: spectacles?.associatedPatientUid,
-    }),
-    [spectacles]
-  );
+  const buildFormValues = () => {
+    return {
+      code: consult?.spectacle?.code ?? '',
+      colour: consult?.spectacle?.colour ?? '',
+      lensType: consult?.spectacle?.lensType ?? '',
+      pupillaryDistance: consult?.spectacle?.pupillaryDistance ?? undefined,
+      heights: consult?.spectacle?.heights ?? '',
+      notes: consult?.spectacle?.notes ?? '',
+      deliverySchool: consult?.spectacle?.deliverySchool ?? '',
+      orderStatus: consult?.spectacle?.orderStatus ?? '',
+      orderDate: consult?.spectacle?.orderDate
+        ? new Date(consult?.spectacle?.orderDate)
+        : null,
+      deliveredDate: consult?.spectacle?.deliveredDate
+        ? new Date(consult?.spectacle?.deliveredDate)
+        : null,
+    };
+  };
 
   const form = useForm({
     initialValues: buildFormValues(),
@@ -107,12 +77,37 @@ export const SpectaclesDetailsPage = () => {
   useEffect(() => {
     form.setValues(buildFormValues());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [consult]);
+
+  const sendUpdate = () => {
+    if (updateConsult && form.values && consult)
+      updateConsult({
+        ...consult,
+        spectacle: {
+          id: spectaclesId,
+          ...stripUnusedFields(form.values),
+        },
+      });
+  };
+
+  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
+
+  useEffect(() => {
+    sendUpdate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedFormValues]);
 
   const optometristDetails = {
     email: 'mobile-optometry@auckland.ac.nz',
     mobile: '027 272 3319',
   };
+
+  if (!form.values || !consult)
+    return (
+      <Center className="h-full w-full">
+        <Loader />
+      </Center>
+    );
 
   return (
     <ScrollArea className="h-full p-8">
@@ -141,39 +136,38 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between -mb-12">
           <Text className="-my-8">Patient ID</Text>
-          <Text className="-my-8">
-            {form.getInputProps('associatedPatientUid').value}
-          </Text>
+          <Text className="-my-8">{patient?.id}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">First Name</Text>
-          <Text className="-my-8">{form.getInputProps('firstName').value}</Text>
+          <Text className="-my-8">{patient?.firstName}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Last Name</Text>
-          <Text className="-my-8">{form.getInputProps('lastName').value}</Text>
+          <Text className="-my-8">{patient?.lastName}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">School</Text>
-          <Text className="-my-8">{form.getInputProps('school').value}</Text>
+          <Text className="-my-8">
+            {form.getInputProps('deliverySchool').value}
+          </Text>
         </Group>
         <Divider my="xs" />
-
         <Title order={3}>Spectacles Details</Title>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Spectacles ID</Text>
-          <Text className="-my-8">{form.getInputProps('uid').value}</Text>
+          <Text className="-my-8">{spectaclesId}</Text>
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Code</Text>
           <TextInput
             classNames={{ root: '-my-8', input: 'text-right' }}
-            {...form.getInputProps('spectaclesCode')}
+            {...form.getInputProps('code')}
           />
         </Group>
         <Divider my="xs" />
@@ -195,8 +189,8 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">PD (mm)</Text>
-          <TextInput
-            classNames={{ root: '-my-8', input: 'text-right' }}
+          <NumberInput
+            classNames={{ root: '-my-8', input: 'text-right pr-8' }}
             {...form.getInputProps('pupillaryDistance')}
           />
         </Group>
@@ -215,7 +209,7 @@ export const SpectaclesDetailsPage = () => {
             autosize
             minRows="1"
             classNames={{ root: '-my-3', input: 'text-left py-1' }}
-            {...form.getInputProps('spectaclesNotes')}
+            {...form.getInputProps('notes')}
           />
         </Group>
         <Divider my="xs" />
@@ -224,11 +218,13 @@ export const SpectaclesDetailsPage = () => {
           <Select
             className="w-40"
             classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
-            data={[
-              { value: 'orderSent', label: 'Ordered' },
-              { value: 'readyForDelivery', label: 'Ready' },
-              { value: 'deliveredToPatient', label: 'Delivered' },
-            ]}
+            data={Array.from(
+              (Object.keys(OrderStatus) as Array<keyof typeof OrderStatus>).map(
+                (key) => {
+                  return { value: OrderStatus[key], label: key };
+                }
+              )
+            )}
             {...form.getInputProps('orderStatus')}
           />
         </Group>

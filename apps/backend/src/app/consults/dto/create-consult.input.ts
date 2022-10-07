@@ -1,4 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
+import { UpdateSpectacleInput } from '@supervision/spectacle/dto';
 
 @InputType('ConsultInput')
 export class CreateConsultInput {
@@ -96,22 +97,7 @@ export class CreateConsultInput {
   layPersonNotes: string;
 
   @Field({ nullable: true })
-  spectacleId: string;
-
-  @Field({ nullable: true })
-  spectacleCode: string;
-
-  @Field({ nullable: true })
-  spectacleColour: string;
-
-  @Field({ nullable: true })
-  spectacleLensType: string;
-
-  @Field({ nullable: true })
-  spectacleHeights: string;
-
-  @Field({ nullable: true })
-  spectacleNotes: string;
+  spectacle: UpdateSpectacleInput;
 
   @Field({ nullable: true })
   recallDate: Date;

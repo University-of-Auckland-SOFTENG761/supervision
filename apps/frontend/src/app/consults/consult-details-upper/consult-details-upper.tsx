@@ -228,13 +228,13 @@ export const ConsultDetailsUpper = ({
               <TextInput
                 label="Spectacles Code:"
                 classNames={{ label: 'whitespace-nowrap' }}
-                defaultValue={consult.get('spectacleCode')}
-                {...register('consult.spectacleCode')}
+                defaultValue={consult.get('spectacle.code')}
+                {...register('consult.spectacle.code')}
               />
               <TextInput
                 label="Heights:"
-                defaultValue={consult.get('spectacleHeights')}
-                {...register('consult.spectacleHeights')}
+                defaultValue={consult.get('spectacle.heights')}
+                {...register('consult.spectacle.heights')}
                 placeholder="Datum"
               />
             </Stack>
@@ -244,19 +244,19 @@ export const ConsultDetailsUpper = ({
               <SimpleGrid cols={2}>
                 <TextInput
                   label="Colour:"
-                  defaultValue={consult.get('spectacleColour')}
-                  {...register('consult.spectacleColour')}
+                  defaultValue={consult.get('spectacle.colour')}
+                  {...register('consult.spectacle.colour')}
                 />
                 <TextInput
                   label="Lens Type:"
-                  defaultValue={consult.get('spectacleLensType')}
-                  {...register('consult.spectacleLensType')}
+                  defaultValue={consult.get('spectacle.lensType')}
+                  {...register('consult.spectacle.lensType')}
                 />
               </SimpleGrid>
               <TextInput
                 label="Spectacles Note:"
-                defaultValue={consult.get('spectacleNotes')}
-                {...register('consult.spectacleNotes')}
+                defaultValue={consult.get('spectacle.notes')}
+                {...register('consult.spectacle.notes')}
               />
             </Stack>
           </Grid.Col>

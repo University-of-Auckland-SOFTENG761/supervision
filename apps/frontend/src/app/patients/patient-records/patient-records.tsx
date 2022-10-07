@@ -43,7 +43,7 @@ export const PatientRecords = ({
         <ConsultRecordsTable consults={consults} />
       </Tabs.Panel>
       <Tabs.Panel value="dispensing" className="p-3">
-        <DispensingRecordsTable />
+        <DispensingRecordsTable patientConsults={patientConsults} />
       </Tabs.Panel>
     </Tabs>
   );

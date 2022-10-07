@@ -14,24 +14,37 @@ import {
 } from './login/reconnected-login-modal';
 import { UserAvatar } from './shared/user-avatar';
 import { useAuth0 } from '@auth0/auth0-react';
+import { IconWifiOff, IconWifi } from '@tabler/icons';
 
 export function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const searchModal = useRef<SearchModalRef>(null);
   const reconnectedLoginModal = useRef<ReconnectedLoginModalRef>(null);
-  const { online } = useNetwork();
-  const { isAuthenticated } = useAuth0();
+  const { online, isLoading: networkStatusIsLoading } = useNetwork();
+  const { isAuthenticated, isLoading: authIsLoading } = useAuth0();
 
   const openReconnectedLoginModal = () => reconnectedLoginModal.current?.show();
 
   const hideReconnectedLoginModal = () => reconnectedLoginModal.current?.hide();
 
   useEffect(() => {
-    if (online && !isAuthenticated && location.pathname !== '/')
+    if (
+      !networkStatusIsLoading &&
+      !authIsLoading &&
+      online &&
+      !isAuthenticated &&
+      location.pathname !== '/'
+    )
       openReconnectedLoginModal();
     else hideReconnectedLoginModal();
-  }, [online, location.pathname, isAuthenticated]);
+  }, [
+    online,
+    location.pathname,
+    isAuthenticated,
+    networkStatusIsLoading,
+    authIsLoading,
+  ]);
 
   return (
     <AppShell
@@ -66,7 +79,10 @@ export function App() {
               </Stack>
             </Navbar.Section>
             <Navbar.Section className="w-full justify-center">
-              <UserAvatar />
+              <Stack justify="center" align="center">
+                {online ? <IconWifi /> : <IconWifiOff />}
+                <UserAvatar />
+              </Stack>
             </Navbar.Section>
           </Navbar>
         )
