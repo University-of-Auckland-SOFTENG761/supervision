@@ -11,7 +11,9 @@ import { ConsultDocType, PatientDocType } from 'database';
 export const PatientDetailsPage = () => {
   const { patientsCollection, consultsCollection, newConsult } = useDatabase();
   const [searchParams] = useSearchParams();
-  const patientId = searchParams.get('patientId');
+  const [patientId, setPatientId] = useState<string | null>(
+    searchParams.get('patientId')
+  );
   const navigate = useNavigate();
 
   const [patient, setPatient] = useState<RxDocument<PatientDocType> | null>(
@@ -54,13 +56,15 @@ export const PatientDetailsPage = () => {
   }, [consultsCollection, patient]);
 
   const handleCreateNewRecord = () => {
-    const patientRecordsTab =
-      searchParams.get('patientRecordsTab') ?? 'consult';
-    if (newConsult && patientId && patientRecordsTab === 'consult') {
+    if (newConsult && patientId) {
       const newConsultId = newConsult(patientId);
       navigate(`/consult-details?consultId=${newConsultId}`);
     }
   };
+
+  useEffect(() => {
+    setPatientId(searchParams.get('patientId'));
+  }, [searchParams]);
 
   if (isLoading && patientId) {
     // This is currently ugly but it prevents inputs from being loaded with incorrect defaultValues

@@ -1,39 +1,61 @@
 import { ActionIcon, Group, Tabs } from '@mantine/core';
-import { IconMenu2, IconPlus } from '@tabler/icons';
+import { IconPlus, IconX } from '@tabler/icons';
 import { useDatabase } from '@shared';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { PatientDocument } from 'database/rxdb-utils';
+import { RxDocument } from 'rxdb';
+import { PatientDocType } from 'database';
+import { formatName } from 'utils/name.utils';
 
 export const PatientTabs = () => {
-  const { patients, newPatient } = useDatabase();
+  const { patientsCollection, newPatient } = useDatabase();
   const [searchParams, setSearchParams] = useSearchParams();
   const patientId = searchParams.get('patientId');
+  const [patientTabs, setPatientTabs] = useState<string[]>(
+    localStorage.getItem('openTabs')?.split(',') ?? []
+  );
+  const [openPatients, setOpenPatients] = useState(
+    new Map<string, RxDocument<PatientDocType>>()
+  );
 
   const handleTabChange = useCallback(
-    (newPatientId: string) => setSearchParams({ patientId: newPatientId }),
-    [setSearchParams]
+    (newPatientId: string) => {
+      setSearchParams({ patientId: newPatientId });
+      if (!patientTabs.includes(newPatientId)) {
+        setPatientTabs((t) => [...t, newPatientId]);
+      }
+    },
+    [patientTabs, setSearchParams]
   );
 
   const handleNewPatient = () => newPatient && handleTabChange(newPatient());
 
-  useEffect(() => {
-    if (patients && patients.length > 0 && !patientId) {
-      handleTabChange(patients[0].id);
+  const handleCloseTab = (tab: string) => {
+    setPatientTabs((t) => t.filter((t) => t !== tab));
+    if (tab === patientId) {
+      setSearchParams({ patientId: patientTabs[0] });
     }
-  }, [patients, patientId, handleTabChange]);
+  };
 
-  const patientTabs = useMemo(
-    () =>
-      patients?.map((patient: PatientDocument) => (
-        <Tabs.Tab key={'patient-' + patient.id} value={patient.id}>
-          {!patient.firstName && !patient.lastName
-            ? 'New Patient'
-            : patient.firstName + ' ' + patient.lastName}
-        </Tabs.Tab>
-      )),
-    [patients]
-  );
+  useEffect(() => {
+    if (patientId && !patientTabs.includes(patientId)) {
+      setPatientTabs((tabs) => [...tabs, patientId]);
+    }
+    if (!patientId && patientTabs.length > 0) {
+      handleTabChange(patientTabs[0]);
+    }
+  }, [patientId, patientTabs, handleTabChange]);
+
+  useEffect(() => {
+    localStorage.setItem('openTabs', patientTabs.join(','));
+    if (patientsCollection && patientTabs.length > 0) {
+      patientsCollection?.findByIds$(patientTabs).subscribe((p) => {
+        if (p) {
+          setOpenPatients(p);
+        }
+      });
+    }
+  }, [patientTabs, patientsCollection, setOpenPatients]);
 
   return (
     <Group className="px-4 py-1 m-0 bg-white border-0 border-b-[1px] border-solid border-gray-200">
@@ -44,9 +66,6 @@ export const PatientTabs = () => {
         onClick={() => handleNewPatient()}
       >
         <IconPlus size={24} />
-      </ActionIcon>
-      <ActionIcon color="dark.2" variant="subtle" className="p-1">
-        <IconMenu2 size={24} />
       </ActionIcon>
       <Tabs
         variant="pills"
@@ -61,7 +80,27 @@ export const PatientTabs = () => {
           tab: { color: theme.colors.blue[5] },
         })}
       >
-        <Tabs.List>{patientTabs}</Tabs.List>
+        <Tabs.List>
+          {patientTabs.map((tab) => (
+            <Tabs.Tab
+              key={tab}
+              value={tab}
+              rightSection={
+                <ActionIcon
+                  className="w-auto h-auto min-w-0 min-h-0"
+                  onClick={() => handleCloseTab(tab)}
+                >
+                  <IconX size={12} />
+                </ActionIcon>
+              }
+            >
+              {formatName(
+                openPatients.get(tab)?.firstName,
+                openPatients.get(tab)?.lastName
+              )}
+            </Tabs.Tab>
+          ))}
+        </Tabs.List>
       </Tabs>
     </Group>
   );
