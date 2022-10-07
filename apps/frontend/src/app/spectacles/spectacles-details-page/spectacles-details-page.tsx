@@ -31,6 +31,13 @@ type FormTimestamps = {
 export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
   FormTimestamps;
 
+export enum OrderStatus {
+  'Created' = 'CREATED',
+  'Order sent' = 'ORDERSENT',
+  'Ready for delivery' = 'READYFORDELIVERY',
+  'Delivered' = 'DELIVERED',
+}
+
 export const SpectaclesDetailsPage = () => {
   const { consults, patients, updateConsult } = useDatabase();
 
@@ -211,12 +218,13 @@ export const SpectaclesDetailsPage = () => {
           <Select
             className="w-40"
             classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
-            data={[
-              { value: 'CREATED', label: 'Created' },
-              { value: 'ORDERSENT', label: 'Order sent' },
-              { value: 'READYFORDELIVERY', label: 'Ready for delivery' },
-              { value: 'DELIVERED', label: 'Delivered' },
-            ]}
+            data={Array.from(
+              (Object.keys(OrderStatus) as Array<keyof typeof OrderStatus>).map(
+                (key) => {
+                  return { value: OrderStatus[key], label: key };
+                }
+              )
+            )}
             {...form.getInputProps('orderStatus')}
           />
         </Group>

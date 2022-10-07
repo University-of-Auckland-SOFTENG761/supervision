@@ -8,6 +8,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import sortBy from 'lodash/sortBy';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useDatabase } from '@shared';
+import { OrderStatus } from '../spectacles-details-page';
 
 export const SpectaclesListPage = () => {
   const { consults, patients } = useDatabase();
@@ -78,6 +79,12 @@ export const SpectaclesListPage = () => {
       );
   }, [debouncedQuery, debouncedStatusQuery, consults]);
 
+  const orderStatusArray = Array.from(
+    (Object.keys(OrderStatus) as Array<keyof typeof OrderStatus>).map((key) => {
+      return { key, value: OrderStatus[key] };
+    })
+  );
+
   return (
     <ScrollArea className="h-full p-8">
       <Stack className={'w-4/5 mx-auto min-h-fit'}>
@@ -134,9 +141,12 @@ export const SpectaclesListPage = () => {
             {
               accessor: 'orderStatus',
               title: 'ORDER STATUS',
-              render: ({ orderStatus }) =>
-                orderStatus &&
-                orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1),
+              render: ({ orderStatus }) => {
+                const orderStatusKey = orderStatusArray?.find(
+                  ({ key, value }) => value === orderStatus
+                )?.key;
+                return orderStatusKey;
+              },
               sortable: true,
             },
           ]}
