@@ -1,34 +1,28 @@
 import React from 'react';
 import { Table, TableTheme } from '@shared';
+import { useNavigate } from 'react-router-dom';
+import { ConsultDocument } from 'database/rxdb-utils';
+import { Stack, Text, ThemeIcon } from '@mantine/core';
+import { IconDatabaseOff } from '@tabler/icons';
+import { applyDateFormat } from 'utils/date.utils';
 
-export const DispensingRecordsTable = () => {
-  // TODO: Replace with actual data
-  const dispensingRecords = [
-    {
-      date: '21/08/2022',
-      rxRight: '+4.00/-3.00x180',
-      rxLeft: '+4.00/-3.00x180',
-      pd: '62',
-      heights: '64mm',
-      frameCode: '67925/Pink',
-    },
-    {
-      date: '18/02/2019',
-      rxRight: '+4.00/-3.00x180',
-      rxLeft: '+4.00/-3.00x180',
-      pd: '62',
-      heights: '64mm',
-      frameCode: '39456/Blue',
-    },
-    {
-      date: '13/02/2019',
-      rxRight: '+4.00/-3.00x180',
-      rxLeft: '+4.00/-3.00x180',
-      pd: '62',
-      heights: '64mm',
-      frameCode: '39456/Blue',
-    },
-  ];
+type DispensingRecordsTableProps = {
+  patientConsults: ConsultDocument[];
+};
+
+export const DispensingRecordsTable = ({
+  patientConsults,
+}: DispensingRecordsTableProps) => {
+  const navigate = useNavigate();
+  const dispensingRecords = patientConsults.map((consult) => ({
+    spectacles: consult.spectacle,
+    rxLeft: consult.givenRefractionLeftEyeSphere,
+    rxRight: consult.givenRefractionRightEyeSphere,
+  }));
+
+  const handleDispensingRecordClick = (spectaclesId: string) => {
+    navigate(`/spectacles-details?spectaclesId=${spectaclesId}`);
+  };
 
   return (
     <Table theme={TableTheme.Secondary}>
@@ -43,16 +37,48 @@ export const DispensingRecordsTable = () => {
         </tr>
       </thead>
       <tbody>
-        {dispensingRecords.map((record) => (
-          <tr key={record.date}>
-            <td>{record.date}</td>
-            <td>{record.rxRight}</td>
-            <td>{record.rxLeft}</td>
-            <td>{record.pd}</td>
-            <td>{record.heights}</td>
-            <td>{record.frameCode}</td>
+        {dispensingRecords.length === 0 ? (
+          <tr>
+            <td colSpan={5} className="hover:bg-white">
+              <Stack className="justify-center w-full p-2">
+                <ThemeIcon
+                  color="gray.6"
+                  variant="light"
+                  size="xl"
+                  radius="xl"
+                  className="m-auto"
+                >
+                  <IconDatabaseOff />
+                </ThemeIcon>
+                <Text className="m-auto font-medium">
+                  No dispensing records
+                </Text>
+              </Stack>
+            </td>
           </tr>
-        ))}
+        ) : (
+          dispensingRecords.map((record) => (
+            <tr
+              key={record.spectacles?.id}
+              className="cursor-pointer"
+              onClick={() =>
+                record.spectacles?.id &&
+                handleDispensingRecordClick(record.spectacles.id)
+              }
+            >
+              <td>
+                {record.spectacles?.orderDate
+                  ? applyDateFormat(new Date(record.spectacles?.orderDate))
+                  : 'Not ordered yet'}
+              </td>
+              <td>{record.rxRight}</td>
+              <td>{record.rxLeft}</td>
+              <td>{record.spectacles?.pupillaryDistance}</td>
+              <td>{record.spectacles?.heights}</td>
+              <td>{record.spectacles?.code}</td>
+            </tr>
+          ))
+        )}
       </tbody>
     </Table>
   );
