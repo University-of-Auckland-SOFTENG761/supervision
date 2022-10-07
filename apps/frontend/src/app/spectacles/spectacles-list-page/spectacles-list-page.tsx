@@ -120,7 +120,11 @@ export const SpectaclesListPage = () => {
             {
               accessor: 'orderDate',
               title: 'DATE',
-              render: ({ orderDate }) => dayjs(orderDate).format('DD/MM/YYYY'),
+              render: ({ orderDate }) => {
+                return orderDate
+                  ? dayjs(orderDate).format('DD/MM/YYYY')
+                  : 'Not ordered yet';
+              },
               sortable: true,
             },
             { accessor: 'id', title: 'ID#', sortable: true },
