@@ -69,8 +69,9 @@ export const ConsultInputs = () => {
   }, [consults]);
 
   const sendUpdate = () => {
-    if (updateConsult && form.values)
+    if (updateConsult && form.values) {
       updateConsult(stripUnusedFields(form.values));
+    }
   };
 
   const [debouncedFormValues] = useDebouncedValue(form.values, 5000);

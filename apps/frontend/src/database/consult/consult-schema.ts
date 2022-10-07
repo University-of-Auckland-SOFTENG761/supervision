@@ -107,26 +107,52 @@ export const consultSchemaLiteral = {
     layPersonNotes: {
       type: 'string',
     },
-    spectacleId: {
-      type: 'string',
-    },
-    spectacleCode: {
-      type: 'string',
-    },
-    spectacleColour: {
-      type: 'string',
-    },
-    spectacleLensType: {
-      type: 'string',
-    },
-    spectaclePupillaryDistance: {
-      type: 'number',
-    },
-    spectacleHeights: {
-      type: 'string',
-    },
-    spectacleNotes: {
-      type: 'string',
+    spectacle: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+        },
+        patientId: {
+          type: 'string',
+        },
+        consultId: {
+          type: 'string',
+        },
+        code: {
+          type: 'string',
+        },
+        colour: {
+          type: 'string',
+        },
+        lensType: {
+          type: 'string',
+        },
+        pupillaryDistance: {
+          type: 'number',
+        },
+        heights: {
+          type: 'string',
+        },
+        notes: {
+          type: 'string',
+        },
+        orderStatus: {
+          type: 'string',
+        },
+        createdDate: {
+          type: 'string',
+        },
+        orderDate: {
+          type: 'string',
+        },
+        deliveredDate: {
+          type: 'string',
+        },
+        deliverySchool: {
+          type: 'string',
+        },
+      },
     },
     recallDate: {
       type: 'string',
