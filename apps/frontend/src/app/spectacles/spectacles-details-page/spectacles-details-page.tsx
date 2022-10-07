@@ -52,6 +52,7 @@ export const SpectaclesDetailsPage = () => {
       pupillaryDistance: consult?.spectacle?.pupillaryDistance ?? undefined,
       heights: consult?.spectacle?.heights ?? '',
       notes: consult?.spectacle?.notes ?? '',
+      deliverySchool: consult?.spectacle?.deliverySchool ?? '',
       orderStatus: consult?.spectacle?.orderStatus ?? '',
       orderDate: consult?.spectacle?.orderDate
         ? new Date(consult?.spectacle?.orderDate)
@@ -143,10 +144,11 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">School</Text>
-          <Text className="-my-8">{patient?.school}</Text>
+          <Text className="-my-8">
+            {form.getInputProps('deliverySchool').value}
+          </Text>
         </Group>
         <Divider my="xs" />
-
         <Title order={3}>Spectacles Details</Title>
         <Divider my="xs" />
         <Group className="justify-between">
