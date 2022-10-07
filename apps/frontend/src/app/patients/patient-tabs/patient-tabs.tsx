@@ -30,10 +30,16 @@ export const PatientTabs = () => {
 
   const handleNewPatient = () => newPatient && handleTabChange(newPatient());
 
-  const handleCloseTab = (tab: string) => {
+  const handleCloseTab = (event: React.MouseEvent, tab: string) => {
+    // stop event from bubbling up to tab
+    event.stopPropagation();
     setPatientTabs((t) => t.filter((t) => t !== tab));
     if (tab === patientId) {
-      setSearchParams({ patientId: patientTabs[0] });
+      if (patientTabs.length > 1) {
+        setSearchParams({ patientId: patientTabs[0] });
+      } else {
+        setSearchParams({});
+      }
     }
   };
 
@@ -88,7 +94,7 @@ export const PatientTabs = () => {
               rightSection={
                 <ActionIcon
                   className="w-auto h-auto min-w-0 min-h-0"
-                  onClick={() => handleCloseTab(tab)}
+                  onClick={(e: React.MouseEvent) => handleCloseTab(e, tab)}
                 >
                   <IconX size={12} />
                 </ActionIcon>
