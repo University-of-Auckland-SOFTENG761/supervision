@@ -3,8 +3,10 @@ import { PatientDocument } from 'database/rxdb-utils';
 
 export const PatientRecordsTable = ({
   patientRecords,
+  onPatientSelected,
 }: {
   patientRecords: PatientDocument[];
+  onPatientSelected?: (patient: PatientDocument) => void;
 }) => {
   return (
     <Table theme={TableTheme.Primary}>
@@ -17,7 +19,13 @@ export const PatientRecordsTable = ({
       </thead>
       <tbody>
         {patientRecords.map((record) => (
-          <tr key={record.id}>
+          <tr
+            className="cursor-pointer"
+            key={record.id}
+            onClick={() => {
+              if (onPatientSelected) onPatientSelected(record);
+            }}
+          >
             <td>
               {record.firstName} {record.lastName}
             </td>

@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getIdToken } from '../../../database/authorisation';
 import { Button } from '../button';
-import { useNetwork } from '../hooks';
+import { useNetwork } from '@shared';
 
 export const UserAvatar = () => {
   const { user, isLoading, logout } = useAuth0();

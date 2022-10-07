@@ -4,6 +4,7 @@ import { useDatabase } from '@shared';
 import { IconSearch, IconUserPlus } from '@tabler/icons';
 import { ForwardedRef, forwardRef, useImperativeHandle, useState } from 'react';
 import { PatientDocument } from 'database/rxdb-utils';
+import { useNavigate } from 'react-router-dom';
 
 export interface SearchModalRef {
   show(): void;
@@ -35,6 +36,8 @@ export const SearchModal = forwardRef(
       },
     }));
 
+    const navigate = useNavigate();
+
     return (
       <Modal
         size="xl"
@@ -49,7 +52,13 @@ export const SearchModal = forwardRef(
         }
       >
         <div className="d-flex flex-col">
-          <PatientRecordsTable patientRecords={filteredRecords(searchString)} />
+          <PatientRecordsTable
+            onPatientSelected={(patient) => {
+              navigate(`/patient-details?patientId=${patient.id}`);
+              setOpened(false);
+            }}
+            patientRecords={filteredRecords(searchString)}
+          />
           <ActionIcon
             className="float-right mt-4"
             variant="filled"

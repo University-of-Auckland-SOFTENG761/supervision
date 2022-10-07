@@ -67,6 +67,7 @@
     "@mantine/dates": "^5.2.0",
     "@mantine/form": "^5.2.0",
     "@mantine/hooks": "^5.1.4",
+    "@mantine/notifications": "^5.5.1",
     "@nestjs/apollo": "^10.0.19",
     "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "^9.0.0",

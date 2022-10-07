@@ -32,7 +32,7 @@ export const SpectaclesListPage = () => {
   });
 
   const navigate = useNavigate();
-
+  
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'date',
     direction: 'asc',

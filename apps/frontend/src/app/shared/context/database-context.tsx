@@ -24,8 +24,8 @@ import {
 import { RxDatabase } from 'rxdb';
 import { RxReplicationError } from 'rxdb/dist/types/plugins/replication';
 import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-graphql';
-import { v4 as uuidv4 } from 'uuid';
-import { useNetwork } from '../hooks';
+import { uuid } from 'uuidv4';
+import { useNetwork } from '@shared';
 
 interface IDataBaseContext {
   patients: PatientDocument[];
@@ -117,7 +117,7 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
 
   const newPatient = useCallback(() => {
     const np = {
-      id: uuidv4(),
+      id: uuid(),
     };
     superVisionDb?.['patients'].insert(np);
     return np.id;
