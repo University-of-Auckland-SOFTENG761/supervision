@@ -76,6 +76,12 @@ export function App() {
                   onClick={() => navigate('/spectacles-list')}
                   active={location.pathname === '/spectacles-list'}
                 ></NavbarLink>
+                <NavbarLink
+                  label="Recalls"
+                  icon={IconEye}
+                  onClick={() => navigate('/recalls-list')}
+                  active={location.pathname === '/recalls-list'}
+                ></NavbarLink>
               </Stack>
             </Navbar.Section>
             <Navbar.Section className="w-full justify-center">
