@@ -57,7 +57,7 @@ export const SpectaclesListPage = () => {
 
   const navigate = useNavigate();
 
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching] = useState(false);
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'date',
     direction: 'asc',

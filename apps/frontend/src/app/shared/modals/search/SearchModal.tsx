@@ -123,7 +123,7 @@ export const SearchModal = forwardRef(
         <div className="d-flex flex-col">
           <PatientRecordsTable
             patientRecords={filteredRecords}
-            closeModal={closeModal}
+            closeModal={closeModal} 
           />
           <ActionIcon
             className="float-right mt-4"
