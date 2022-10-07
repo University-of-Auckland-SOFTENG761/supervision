@@ -123,7 +123,7 @@ export const SpectaclesListPage = () => {
           highlightOnHover
           className="min-h-full"
           records={tableRecords}
-          idAccessor="uid"
+          idAccessor="id"
           columns={[
             {
               accessor: 'orderDate',
