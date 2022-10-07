@@ -24,8 +24,8 @@ import {
 import { RxCollection, RxDatabase } from 'rxdb';
 import { RxReplicationError } from 'rxdb/dist/types/plugins/replication';
 import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-graphql';
-import { uuid } from 'uuidv4';
-import { useNetwork } from '@shared';
+import { v4 as uuidv4 } from 'uuid';
+import { useNetwork } from './network-context';
 
 interface IDataBaseContext {
   patientsCollection: RxCollection<PatientDocType>;
@@ -120,7 +120,7 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
 
   const newPatient = useCallback(() => {
     const np = {
-      id: uuid(),
+      id: uuidv4(),
     };
     superVisionDb?.['patients'].insert(np);
     return np.id;
@@ -128,19 +128,26 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
 
   const newConsult = useCallback(
     (patientId: string) => {
-      if (!user || (!online && !userEmail)) return;
+      if (!user || (!online && !userEmail) || !patients) return;
+      const patient = patients.find((p) => p.id === patientId);
 
+      const consultId = uuidv4();
       const nc = {
-        id: uuid(),
+        id: consultId,
         userEmail: online ? user.email : userEmail,
         patientId,
         dateConsentGiven: new Date(Date.now()).toISOString(),
-        spectacleId: uuid(),
+        spectacle: {
+          id: uuidv4(),
+          consultId: consultId,
+          patientId: patientId,
+          deliverySchool: patient?.school,
+        },
       };
       superVisionDb?.['consults'].insert(nc);
       return nc.id;
     },
-    [online, superVisionDb, user, userEmail]
+    [online, superVisionDb, user, userEmail, patients]
   );
 
   const patientDocumentsAreEqual = useCallback(

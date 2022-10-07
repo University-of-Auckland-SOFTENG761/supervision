@@ -52,40 +52,21 @@ export class ConsultsService {
 
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
     const bundledConsults = await Promise.all(
-      consults?.map(
-        async ({
-          userEmail,
-          patientId,
-          spectacleId,
-          spectacleCode,
-          spectacleColour,
-          spectacleLensType,
-          spectacleHeights,
-          spectacleNotes,
-          spectaclePupillaryDistance,
-          ...consult
-        }) => {
-          const spectacle = spectacleId
-            ? await this.spectacleService.saveSpectacle({
-                id: spectacleId,
-                patientId: patientId,
-                consultId: consult.id,
-                code: spectacleCode,
-                colour: spectacleColour,
-                lensType: spectacleLensType,
-                heights: spectacleHeights,
-                notes: spectacleNotes,
-                pupillaryDistance: spectaclePupillaryDistance,
-              })
-            : null;
-          return {
-            user: await this.userService.findOneByEmail(userEmail),
-            patient: { id: patientId },
-            ...consult,
-            spectacle,
-          };
-        }
-      )
+      consults?.map(async ({ userEmail, patientId, spectacle, ...consult }) => {
+        const spectacleEntity = spectacle.id
+          ? await this.spectacleService.saveSpectacle({
+              ...spectacle,
+              patientId: patientId,
+              consultId: consult.id,
+            })
+          : null;
+        return {
+          user: await this.userService.findOneByEmail(userEmail),
+          patient: { id: patientId },
+          ...consult,
+          spectacle: spectacleEntity,
+        };
+      })
     );
     const newConsults = await this.consultsRepository.save(bundledConsults);
     return newConsults[newConsults.length - 1];

@@ -334,8 +334,8 @@ export const ConsultDetailsLower = ({
           <Button
             color="yellow"
             onClick={() => {
-              const placeholder_id = 'fake_id_1234';
-              navigate(`/spectacles-details/${placeholder_id}`);
+              const spectacleId = form.getInputProps('spectacle.id').value;
+              navigate(`/spectacles-details/?spectaclesId=${spectacleId}`);
             }}
           >
             SCRIPT
