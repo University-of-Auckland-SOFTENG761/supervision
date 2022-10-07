@@ -21,7 +21,6 @@ export const ConsultInputs = ({
   const timeoutRef = useRef<NodeJS.Timer | null>(null);
 
   const handleUpdateConsult = () => {
-    console.debug('updating consult');
     const newConsult = {
       ...stripUnusedFields(getValues('consult')),
       id: consult.get('id'),
@@ -55,7 +54,6 @@ export const ConsultInputs = ({
 
   useEffect(() => {
     if (!timeoutRef.current) {
-      console.debug('reloading');
       setValue('consult', consult.toJSON());
     }
   }, [consult, consult.revision, setValue]);

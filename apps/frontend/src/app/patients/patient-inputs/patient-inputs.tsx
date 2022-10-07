@@ -63,7 +63,6 @@ export const PatientInputs = ({
 
   useEffect(() => {
     if (!timeoutRef.current) {
-      console.log('reloading');
       setValue('patient', patient.toJSON());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
