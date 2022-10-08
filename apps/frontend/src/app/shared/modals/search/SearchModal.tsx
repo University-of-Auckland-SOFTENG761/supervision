@@ -11,17 +11,16 @@ import {
 } from 'react';
 import { PatientDocType } from 'database';
 import { RxDocument } from 'rxdb';
+import { useNavigate } from 'react-router-dom';
 
 export interface SearchModalRef {
   show(): void;
 }
 
-export interface SearchModalProps {
-  onUserCreate?: () => void;
-}
-
 export const SearchModal = forwardRef(
-  (props: SearchModalProps, ref: ForwardedRef<SearchModalRef>) => {
+  (_, ref: ForwardedRef<SearchModalRef>) => {
+    const { newPatient } = useDatabase();
+    const navigate = useNavigate();
     const [opened, setOpened] = useState(false);
     const [searchString, setSearchString] = useState('');
     const [filteredRecords, setFilteredRecords] = useState<
@@ -107,6 +106,16 @@ export const SearchModal = forwardRef(
 
     const closeModal = () => setOpened(false);
 
+    const handleCreateNewRecord = async () => {
+      if (newPatient) {
+        const newPatientId = await newPatient();
+        if (newPatientId) {
+          navigate(`/patient-details?patientId=${newPatientId}`);
+          closeModal();
+        }
+      }
+    };
+
     return (
       <Modal
         size="xl"
@@ -130,7 +139,7 @@ export const SearchModal = forwardRef(
             variant="filled"
             color="blue"
             size="lg"
-            onClick={props.onUserCreate}
+            onClick={handleCreateNewRecord}
           >
             <IconUserPlus size={14} />
           </ActionIcon>

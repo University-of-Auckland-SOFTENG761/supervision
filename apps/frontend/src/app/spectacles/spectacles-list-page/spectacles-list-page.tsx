@@ -130,8 +130,17 @@ export const SpectaclesListPage = () => {
           setMatchingPatients((p) => [...p, ...patients]);
           patients.forEach((patient) => {
             consultsCollection
-              .findByIds(patient.consultIds ?? [])
+              .find({
+                selector: {
+                  patientId: patient.id,
+                },
+              })
+              .exec()
               .then((newConsults) => {
+                console.log(
+                  "FOUND CONSULTS FROM PATIENT'S CONSULT IDS",
+                  newConsults
+                );
                 const newConsultsArray = Array.from(newConsults.values());
                 newConsults &&
                   setMatchingConsults((c) => [...c, ...newConsultsArray]);
@@ -177,6 +186,21 @@ export const SpectaclesListPage = () => {
         });
     }
   }, [debouncedQuery, patientsCollection, consultsCollection]);
+
+  useEffect(() => {
+    console.log(
+      'matchingConsults',
+      matchingConsults.map((c) => ({ id: c.id, patientId: c.patientId }))
+    );
+    console.log(
+      'matchingPatients',
+      matchingPatients.map((p) => ({
+        id: p.id,
+        firstName: p.firstName,
+        lastName: p.lastName,
+      }))
+    );
+  }, [matchingConsults, matchingPatients]);
 
   useEffect(() => {
     setMatchingPatients([]);
