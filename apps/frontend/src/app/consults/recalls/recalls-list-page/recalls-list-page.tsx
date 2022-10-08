@@ -207,9 +207,10 @@ export const RecallsListPage = () => {
 
   return (
     <ScrollArea className="h-full p-8">
-      <Stack className={'w-4/5 mx-auto min-h-fit'}>
+      <Stack className={'w-4/5 mx-auto min-h-fit print:w-fit'}>
         <Title order={3}>Recall Records</Title>
         <TextInput
+          className="print:hidden"
           placeholder="Search dispensing records..."
           icon={<IconSearch size={16} />}
           value={query}
@@ -217,7 +218,7 @@ export const RecallsListPage = () => {
         />
         <DatePicker
           allowFreeInput
-          className="w-36"
+          className="w-36 print:hidden"
           inputFormat="DD/MM/YYYY"
           dateParser={(date: string) =>
             dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
