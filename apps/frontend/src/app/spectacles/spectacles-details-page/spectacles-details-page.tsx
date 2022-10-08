@@ -94,7 +94,7 @@ export const SpectaclesDetailsPage = () => {
         return;
       }
       const newConsult = {
-        ...stripUnusedFields(getValues('consult')),
+        ...stripUnusedFields(JSON.parse(JSON.stringify(getValues('consult')))),
         id: consult?.get('id'),
       } as PatientDocType;
       handleUpdateConsult(newConsult);
@@ -103,7 +103,7 @@ export const SpectaclesDetailsPage = () => {
 
   useEffect(() => {
     if (!timeoutRef.current && consult) {
-      setValue('consult', consult.toJSON());
+      setValue('consult', consult.toMutableJSON());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consult?.revision]);

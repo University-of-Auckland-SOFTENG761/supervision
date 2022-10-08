@@ -22,7 +22,7 @@ export const ConsultInputs = ({
 
   const handleUpdateConsult = () => {
     const newConsult = {
-      ...stripUnusedFields(getValues('consult')),
+      ...stripUnusedFields(JSON.parse(JSON.stringify(getValues('consult')))),
       id: consult.get('id'),
     } as ConsultDocType;
     updateConsult(newConsult);
@@ -54,7 +54,7 @@ export const ConsultInputs = ({
 
   useEffect(() => {
     if (!timeoutRef.current) {
-      setValue('consult', consult.toJSON());
+      setValue('consult', consult.toMutableJSON());
     }
   }, [consult, consult.revision, setValue]);
 

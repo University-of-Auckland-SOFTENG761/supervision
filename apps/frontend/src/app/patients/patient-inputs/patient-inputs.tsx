@@ -54,7 +54,7 @@ export const PatientInputs = ({
     }
     timeoutRef.current = setTimeout(() => {
       const newPatient = {
-        ...stripUnusedFields(getValues('patient')),
+        ...stripUnusedFields(JSON.parse(JSON.stringify(getValues('patient')))),
         id: patient.get('id'),
       } as PatientDocType;
       updatePatient(newPatient);
@@ -63,7 +63,7 @@ export const PatientInputs = ({
 
   useEffect(() => {
     if (!timeoutRef.current) {
-      setValue('patient', patient.toJSON());
+      setValue('patient', patient.toMutableJSON());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patient.revision]);
