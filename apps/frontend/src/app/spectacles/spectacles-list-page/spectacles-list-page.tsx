@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea, Stack, Title, TextInput, Select } from '@mantine/core';
 import dayjs from 'dayjs';
@@ -56,6 +56,24 @@ export const SpectaclesListPage = () => {
     setTableRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
   }, [sortStatus]);
 
+  const buildRegex = useCallback(() => {
+    const wordsInDebouncedQuery = debouncedQuery.split(' ');
+    const permutatedQuery = [...wordsInDebouncedQuery, debouncedQuery];
+    const regex = permutatedQuery.map((word) => {
+      return word.trim().replace(/\s+/g, ' ').split('').join('.*');
+    });
+    return regex;
+  }, [debouncedQuery]);
+
+  const buildQuery = useCallback(() => {
+    const regex = buildRegex();
+    const query = regex.map((re) => ({
+      $regex: new RegExp(re, 'i'),
+      $options: 'i',
+    }));
+    return query;
+  }, [buildRegex]);
+
   // Find all patients and consults that could match the query
   useEffect(() => {
     if (patientsCollection && consultsCollection) {
@@ -65,60 +83,8 @@ export const SpectaclesListPage = () => {
             ? {
                 selector: {
                   $or: [
-                    {
-                      firstName: {
-                        $regex: new RegExp(
-                          debouncedQuery
-                            .trim()
-                            .replace(/\s+/g, ' ')
-                            .split('')
-                            .join('.*'),
-                          'i'
-                        ),
-                        $options: 'i',
-                      },
-                    },
-                    {
-                      firstName: {
-                        $regex: new RegExp(
-                          debouncedQuery
-                            .slice(debouncedQuery.indexOf(' ') + 1)
-                            .trim()
-                            .replace(/\s+/g, ' ')
-                            .split('')
-                            .join('.*'),
-                          'i'
-                        ),
-                        $options: 'i',
-                      },
-                    },
-                    {
-                      lastName: {
-                        $regex: new RegExp(
-                          debouncedQuery
-                            .trim()
-                            .replace(/\s+/g, ' ')
-                            .split('')
-                            .join('.*'),
-                          'i'
-                        ),
-                        $options: 'i',
-                      },
-                    },
-                    {
-                      lastName: {
-                        $regex: new RegExp(
-                          debouncedQuery
-                            .slice(debouncedQuery.indexOf(' ') + 1)
-                            .trim()
-                            .replace(/\s+/g, ' ')
-                            .split('')
-                            .join('.*'),
-                          'i'
-                        ),
-                        $options: 'i',
-                      },
-                    },
+                    ...buildQuery().map((q) => ({ firstName: q })),
+                    ...buildQuery().map((q) => ({ lastName: q })),
                   ],
                 },
                 limit: 100,
@@ -185,7 +151,7 @@ export const SpectaclesListPage = () => {
           });
         });
     }
-  }, [debouncedQuery, patientsCollection, consultsCollection]);
+  }, [debouncedQuery, patientsCollection, consultsCollection, buildQuery]);
 
   useEffect(() => {
     console.log(
