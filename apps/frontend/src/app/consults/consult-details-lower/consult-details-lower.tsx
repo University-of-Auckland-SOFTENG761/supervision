@@ -103,18 +103,12 @@ export const ConsultDetailsLower = ({
                 <td>{row.name}</td>
                 <td>
                   <NumberInput
+                    value={consult.get(row.code + 'RightEyeSphere')}
                     {...preciseInputProps}
-                    defaultValue={consult.get(row.code + 'RightEyeSphere')}
-                    {...register(`consult.${row.code}RightEyeSphere`, {
-                      valueAsNumber: true,
-                    })}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}RightEyeSphere`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}RightEyeSphere`, value);
                     }}
                   />
                 </td>
@@ -122,34 +116,22 @@ export const ConsultDetailsLower = ({
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    defaultValue={consult.get(row.code + 'RightCylinder')}
-                    {...register(`consult.${row.code}RightCylinder`, {
-                      valueAsNumber: true,
-                    })}
+                    value={consult.get(row.code + 'RightCylinder')}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}RightCylinder`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}RightCylinder`, value);
                     }}
                   />
                 </td>
                 <td>x</td>
                 <td>
                   <NumberInput
-                    defaultValue={consult.get(row.code + 'RightAxis')}
-                    {...register(`consult.${row.code}RightAxis`, {
-                      valueAsNumber: true,
-                    })}
+                    value={consult.get(row.code + 'RightAxis')}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}RightAxis`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}RightAxis`, value);
                     }}
                   />
                 </td>
@@ -163,17 +145,11 @@ export const ConsultDetailsLower = ({
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    defaultValue={consult.get(row.code + 'RightAdd')}
-                    {...register(`consult.${row.code}RightAdd`, {
-                      valueAsNumber: true,
-                    })}
+                    value={consult.get(row.code + 'RightAdd')}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}RightAdd`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}RightAdd`, value);
                     }}
                   />
                 </td>
@@ -237,17 +213,11 @@ export const ConsultDetailsLower = ({
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    defaultValue={consult.get(row.code + 'LeftEyeSphere')}
-                    {...register(`consult.${row.code}LeftEyeSphere`, {
-                      valueAsNumber: true,
-                    })}
+                    value={consult.get(row.code + 'LeftEyeSphere')}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}LeftEyeSphere`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}LeftEyeSphere`, value);
                     }}
                   />
                 </td>
@@ -255,34 +225,22 @@ export const ConsultDetailsLower = ({
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    defaultValue={consult.get(row.code + 'LeftCylinder')}
-                    {...register(`consult.${row.code}LeftCylinder`, {
-                      valueAsNumber: true,
-                    })}
+                    value={consult.get(row.code + 'LeftCylinder')}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}LeftCylinder`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}LeftCylinder`, value);
                     }}
                   />
                 </td>
                 <td>x</td>
                 <td>
                   <NumberInput
-                    defaultValue={consult.get(row.code + 'LeftAxis')}
-                    {...register(`consult.${row.code}LeftAxis`, {
-                      valueAsNumber: true,
-                    })}
+                    value={consult.get(row.code + 'LeftAxis')}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}LeftAxis`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}LeftAxis`, value);
                     }}
                   />
                 </td>
@@ -295,17 +253,11 @@ export const ConsultDetailsLower = ({
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    defaultValue={consult.get(row.code + 'LeftAdd')}
-                    {...register(`consult.${row.code}LeftAdd`, {
-                      valueAsNumber: true,
-                    })}
+                    value={consult.get(row.code + 'LeftAdd')}
                     min={undefined}
                     max={undefined}
                     onChange={(value) => {
-                      setValue(
-                        `consult.${row.code}LeftAdd`,
-                        value ?? undefined
-                      );
+                      setValue(`consult.${row.code}LeftAdd`, value);
                     }}
                   />
                 </td>

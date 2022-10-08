@@ -2,10 +2,11 @@ import { useEffect, useRef } from 'react';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
-import { stripUnusedFields } from 'database/rxdb-utils';
-import { ConsultDocType } from 'database';
+import { buildFormValues, stripUnusedFields } from 'database/rxdb-utils';
+import { ConsultDocType, consultSchemaTyped } from 'database';
 import { RxDocument } from 'rxdb';
 import { useForm } from 'react-hook-form';
+import { useDebouncedValue } from '@mantine/hooks';
 
 type ConsultInputsProps = {
   consult: RxDocument<ConsultDocType>;
@@ -22,7 +23,9 @@ export const ConsultInputs = ({
 
   const handleUpdateConsult = () => {
     const newConsult = {
-      ...stripUnusedFields(JSON.parse(JSON.stringify(getValues('consult')))),
+      ...stripUnusedFields(
+        buildFormValues(consultSchemaTyped, getValues('consult'))
+      ),
       id: consult.get('id'),
     } as ConsultDocType;
     updateConsult(newConsult);
@@ -52,11 +55,14 @@ export const ConsultInputs = ({
     }
   };
 
+  const debouncedRevision = useDebouncedValue(consult.revision, 1000);
+
   useEffect(() => {
     if (!timeoutRef.current) {
       setValue('consult', consult.toMutableJSON());
     }
-  }, [consult, consult.revision, setValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedRevision]);
 
   return (
     <Stack onChange={handleChange}>

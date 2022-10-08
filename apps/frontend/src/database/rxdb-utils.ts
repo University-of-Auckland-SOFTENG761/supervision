@@ -42,7 +42,7 @@ export const buildFormValues = (
   Object.fromEntries(
     Object.entries(schema.properties).map(([key, { type }]) => {
       const value = docJSON?.[key];
-      return [key, value === null || value === undefined ? '' : value];
+      return [key, value === undefined ? null : value];
     })
   );
 
@@ -55,7 +55,7 @@ export const stripUnusedFields = (docJSON?: { [key: string]: unknown }) =>
           !isNaN(value as unknown as number) ? value.toISOString() : null,
         ];
       }
-      return [key, value ? value : null];
+      return [key, value !== undefined ? value : null];
     })
   );
 

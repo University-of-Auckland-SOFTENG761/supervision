@@ -11,6 +11,11 @@ export const ConsultDetailsPage = () => {
   const [searchParams] = useSearchParams();
   const consultId = searchParams.get('consultId');
   const [consult, setConsult] = useState<RxDocument<ConsultDocType> | null>();
+
+  // !DO NOT REMOVE, react will not re-render if you do
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [consultRevision, setConsultRevision] = useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const handleUpdateConsult = async (consult: ConsultDocType) => {
@@ -22,10 +27,10 @@ export const ConsultDetailsPage = () => {
       setIsLoading(true);
       consultsCollection
         .findOne({ selector: { id: consultId } })
-        .exec()
-        .then((p) => {
-          if (p) {
-            setConsult(p);
+        .$.subscribe((c) => {
+          if (c) {
+            setConsult(c);
+            setConsultRevision(c.revision);
           }
           setIsLoading(false);
         });

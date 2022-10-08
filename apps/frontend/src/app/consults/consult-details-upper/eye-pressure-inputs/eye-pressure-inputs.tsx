@@ -32,7 +32,12 @@ export const EyePressureInputs = ({
           min={undefined}
           onChange={(value) => {
             setValue('consult.eyePressureRight', value);
-            if (value && consult.get('eyePressureLeft')) {
+            if (
+              value !== undefined &&
+              value !== null &&
+              consult.get('eyePressureLeft') !== undefined &&
+              consult.get('eyePressureLeft') !== null
+            ) {
               setValue('consult.eyePressureTimestamp', new Date(), true);
             } else {
               setValue('consult.eyePressureTimestamp', undefined, true);
@@ -49,7 +54,12 @@ export const EyePressureInputs = ({
           min={undefined}
           onChange={(value) => {
             setValue('consult.eyePressureLeft', value);
-            if (value && consult.get('eyePressureRight')) {
+            if (
+              value !== undefined &&
+              value !== null &&
+              consult.get('eyePressureRight') !== undefined &&
+              consult.get('eyePressureRight') !== null
+            ) {
               setValue('consult.eyePressureTimestamp', new Date(), true);
             } else {
               setValue('consult.eyePressureTimestamp', undefined, true);
