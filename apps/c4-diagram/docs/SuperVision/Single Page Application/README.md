@@ -16,15 +16,17 @@
 
 ![diagram](component.svg)
 
-**Level 3: Component diagram**
+## RxDB
 
-Next you can zoom in and decompose each container further to identify the major structural building blocks and their interactions.
+This application relies heavily on [rxdb](https://rxdb.info) for an offline database with push/pull replication.
 
-The Component diagram shows how a container is made up of a number of "components", what each of those components are, their responsibilities and the technology/implementation details.
+    This application is currently using RxDB v12.
+    The documentation is for v13 and so there may be some differences
 
-**Scope**: A single container.
+### Schema
 
-**Primary elements**: Components within the container in scope.
-Supporting elements: Containers (within the software system in scope) plus people and software systems directly connected to the components.
+For each RxDB collection, a separate replication must be established.
 
-**Intended audience**: Software architects and developers.
+### Patient
+
+### Consult
