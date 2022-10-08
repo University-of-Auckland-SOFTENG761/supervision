@@ -16,6 +16,8 @@ export const PatientDetailsPage = () => {
   );
   const navigate = useNavigate();
 
+  //!DO NOT DELETE. REACT WILL NOT RE-RENDER WITHOUT
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [patientRevision, setPatientRevision] = useState<string | undefined>();
   const [patient, setPatient] = useState<RxDocument<PatientDocType> | null>(
     null
@@ -37,6 +39,7 @@ export const PatientDetailsPage = () => {
         .findOne({ selector: { id: patientId } })
         .$.subscribe((patient) => {
           setPatient(patient);
+          setPatientRevision(patient?.revision); //!MUST NOT BE REMOVED
           setIsLoading(false);
         });
     }
@@ -46,7 +49,6 @@ export const PatientDetailsPage = () => {
     if (patient) {
       // setIsLoading((l) => l + 1);
       if (!patient.consultIds || patient.consultIds.length === 0) {
-        console.log('SHOULD BE EMPTY');
         setConsults(new Map());
         return;
       }

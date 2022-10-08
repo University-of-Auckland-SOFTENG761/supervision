@@ -30,7 +30,7 @@ export const ConsultDetailsPage = () => {
         .$.subscribe((c) => {
           if (c) {
             setConsult(c);
-            setConsultRevision(c.revision);
+            setConsultRevision(c.revision); //!MUST NOT BE REMOVED
           }
           setIsLoading(false);
         });

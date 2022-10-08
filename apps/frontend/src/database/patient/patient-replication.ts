@@ -104,7 +104,6 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   const variables = {
     patients: strippedDocs,
   };
-  console.log('pushihg o', variables);
   return {
     query,
     variables,

@@ -33,7 +33,12 @@ export class PatientService {
   }
 
   async set(patients: SetPatientInput[]): Promise<PatientEntity> {
-    const newPatients = await this.patientsRepository.save(patients);
+    const newPatients = await this.patientsRepository.save(
+      patients.map((p) => ({
+        ...p,
+        updatedAt: new Date().toISOString(),
+      }))
+    );
     return newPatients[newPatients.length - 1];
   }
 

@@ -20,8 +20,7 @@ export const ConsultInfo = () => {
     if (consultId) {
       consultsCollection
         ?.findOne(consultId)
-        .exec()
-        .then((consult) => setConsult(consult));
+        .$.subscribe((consult) => setConsult(consult));
     }
   }, [consultId, consultsCollection]);
 
@@ -29,8 +28,7 @@ export const ConsultInfo = () => {
     if (consult) {
       patientsCollection
         ?.findOne(consult.patientId)
-        .exec()
-        .then((patient) => setPatient(patient));
+        .$.subscribe((patient) => setPatient(patient));
     }
   }, [consult, patientsCollection]);
 

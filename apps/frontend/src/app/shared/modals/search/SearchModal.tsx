@@ -93,8 +93,7 @@ export const SearchModal = forwardRef(
             },
             limit: 10,
           })
-          .exec()
-          .then((records) => {
+          .$.subscribe((records) => {
             setFilteredRecords(records);
           });
       }

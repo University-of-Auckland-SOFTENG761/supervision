@@ -59,8 +59,7 @@ export const SpectaclesDetailsPage = () => {
             'spectacle.id': spectaclesId,
           },
         })
-        .exec()
-        .then((consult) => setConsult(consult));
+        .$.subscribe((consult) => setConsult(consult));
     }
   }, [spectaclesId, consultsCollection]);
 
@@ -68,8 +67,7 @@ export const SpectaclesDetailsPage = () => {
     if (consult) {
       patientsCollection
         ?.findOne(consult.patientId)
-        .exec()
-        .then((patient) => setPatient(patient));
+        .$.subscribe((patient) => setPatient(patient));
     }
   }, [consult, patientsCollection]);
 

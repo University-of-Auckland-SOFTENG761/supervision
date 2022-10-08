@@ -76,6 +76,7 @@ export class ConsultsService {
           patient: { id: patientId },
           ...consult,
           spectacle: spectacleEntity,
+          updatedAt: new Date().toISOString(),
         };
       })
     );
