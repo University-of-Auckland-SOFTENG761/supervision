@@ -199,6 +199,7 @@ export const RecallsListPage = () => {
             })),
           ];
         }, [])
+        .filter((r) => r.recallDate)
         .filter((r) =>
           debouncedDateQuery
             ? dayjs(r.recallDate).isBefore(debouncedDateQuery)
