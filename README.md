@@ -44,9 +44,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -71,14 +69,14 @@ while still synchronising in real-time with other clients.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 ### Features
-* Offline first functionality
-* Fast realtime synchronisation
-* Low bandwidth usage
-* Patient Management
-  * Record Consultations
-  * Record Dispensed Spectacles
+
+- Offline first functionality
+- Fast realtime synchronisation
+- Low bandwidth usage
+- Patient Management
+  - Record Consultations
+  - Record Dispensed Spectacles
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -127,43 +125,76 @@ Detailed documentation and C4 diagrams are [available here](/apps/c4-diagram/doc
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+#### node 16.x
+https://nodejs.org/en/download/
 
-This is an example of how to list things you need to use the software and how to install them.
+#### postgresql
+<details>
+<summary>Ubuntu</summary>
 
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+```bash
+# Install PostgreSQL
+sudo apt update
+sudo apt install postgresql postgresql-contrib
 
-### Installation
+# Create a User
+sudo -u postgres createuser --interactive --pwprompt
 
-1. Get a free API Key at [https://example.com](https://example.com)
+# Create database
+sudo -u postgres createdb supervision
+```
+
+</details>
+<details>
+<summary>Windows (chocolatey)</summary>
+
+```bash
+# Install PostgreSQL
+> choco install postgresql --params '/Password:<YOUR_SUPERUSER_PASS>'
+# IMPORTANT: Restart all active terminal/bash/cmd/ps sessions
+# Create a User
+> createuser -U postgres --interactive --pwprompt
+> Enter name of role to add: <windows username>
+> Enter password for new role: <a password>
+> Enter it again: <a password, again>
+> Shall the new role be a superuser? (y/n) n
+> Shall the new role be allowed to create databases? (y/n) y
+> Shall the new role be allowed to create more new roles? (y/n) n
+> Password: <YOUR_SUPERUSER_PASS>
+# Create the database
+> createdb supervision
+> Password: <the password for the role you just created>
+```
+
+</details>
+
+### Configuration
+
+1. Get an API Key at [https://auth0.com](https://auth0.com)
+   1. Sign up or login to access the dashboard
+   2. Click <kbd>Create Application</kbd>
+   3. Choose "Single Page Web Application"
+   4. Take note of the **Client ID** and **Client Secret**
+   5. Repeat the process but choosing the **"Machine to Machine"** application type.
+      * Authorise this application for the **Auth0 Management API**
 2. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/University-of-Auckland-SOFTENG761/project-team-1 supervision
    ```
 3. Install NPM packages
    ```sh
+   cd supervision
    npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+4. Setup backend configuration
+   ```sh
+   cp apps/backend/.env.template apps/backend/.env
    ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- USAGE EXAMPLES -->
-
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+   Fill out the [`.env`](apps/backend/.env) file with the details of your
+   postgresql and auth0 configurations.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -171,29 +202,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-  - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+A roadmap and product backlog are available on Trello.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -201,7 +210,10 @@ Don't forget to give the project a star! Thanks again!
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+This application and all source code contained within are not permitted to be
+used by or released to the public.
+
+Copyright (c) 2022 Veeran Morar & Team 1 SOFTENG761
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -209,8 +221,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Acknowledgments
 
-- []()
-- []()
-- []()
+- [Veeran Morar](https://profiles.auckland.ac.nz/veeran-morar), for being an excellent PO
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
