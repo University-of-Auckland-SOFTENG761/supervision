@@ -13,6 +13,18 @@ import styles from './spectacles-list.module.scss';
 import { RxDocument } from 'rxdb';
 import { ConsultDocType, PatientDocType } from 'database';
 
+type RecordType = Partial<PatientDocType> & {
+  spectaclesCode?: string;
+  colour?: string;
+  lensType?: string;
+  pupillaryDistance?: number;
+  heights?: string;
+  spectaclesNotes?: string;
+  orderStatus?: string;
+  associatedPatientUid?: string;
+  orderDate?: string;
+};
+
 export const SpectaclesListPage = () => {
   const { consultsCollection, patientsCollection } = useDatabase();
   const navigate = useNavigate();
@@ -23,19 +35,7 @@ export const SpectaclesListPage = () => {
   const [matchingPatients, setMatchingPatients] = useState<
     RxDocument<PatientDocType>[]
   >([]);
-  const [spectaclesRecords, setSpectaclesRecords] = useState<
-    (Partial<PatientDocType> & {
-      spectaclesCode?: string;
-      colour?: string;
-      lensType?: string;
-      pupillaryDistance?: number;
-      heights?: string;
-      spectaclesNotes?: string;
-      orderStatus?: string;
-      associatedPatientUid?: string;
-      orderDate?: string;
-    })[]
-  >();
+  const [spectaclesRecords, setSpectaclesRecords] = useState<RecordType[]>();
   const [tableRecords, setTableRecords] = useState(
     sortBy(spectaclesRecords, 'name')
   );
@@ -187,24 +187,27 @@ export const SpectaclesListPage = () => {
   useEffect(() => {
     if (matchingPatients && matchingConsults) {
       const records = matchingPatients
-        .map((p, i) => {
-          const consult = matchingConsults.find((c) => c.patientId === p.id);
-          return {
-            id: consult?.spectacle?.id,
-            firstName: p.firstName,
-            lastName: p.lastName,
-            school: consult?.spectacle?.deliverySchool,
-            spectaclesCode: consult?.spectacle?.code,
-            colour: consult?.spectacle?.colour,
-            lensType: consult?.spectacle?.lensType,
-            pupillaryDistance: consult?.spectacle?.pupillaryDistance,
-            heights: consult?.spectacle?.heights,
-            spectaclesNotes: consult?.spectacle?.notes,
-            orderStatus: consult?.spectacle?.orderStatus,
-            associatedPatientUid: consult?.spectacle?.patientId,
-            orderDate: consult?.spectacle?.orderDate,
-          };
-        })
+        .reduce((a: RecordType[], p) => {
+          const consults = matchingConsults.filter((c) => c.patientId === p.id);
+          return [
+            ...a,
+            ...consults.map((c) => ({
+              id: c?.spectacle?.id,
+              firstName: p.firstName,
+              lastName: p.lastName,
+              school: c?.spectacle?.deliverySchool,
+              spectaclesCode: c?.spectacle?.code,
+              colour: c?.spectacle?.colour,
+              lensType: c?.spectacle?.lensType,
+              pupillaryDistance: c?.spectacle?.pupillaryDistance,
+              heights: c?.spectacle?.heights,
+              spectaclesNotes: c?.spectacle?.notes,
+              orderStatus: c?.spectacle?.orderStatus,
+              associatedPatientUid: c?.spectacle?.patientId,
+              orderDate: c?.spectacle?.orderDate,
+            })),
+          ];
+        }, [])
         .filter((r) =>
           debouncedStatusQuery ? r.orderStatus === debouncedStatusQuery : true
         )

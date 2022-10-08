@@ -70,11 +70,6 @@ export const PatientDetailsPage = () => {
     if (newConsult && patientId) {
       const newConsultId = await newConsult(patientId);
       if (newConsultId) {
-        const newConsultIds = [...(patient?.consultIds ?? []), newConsultId];
-        patientsCollection?.atomicUpsert({
-          id: patientId,
-          consultIds: newConsultIds,
-        });
         navigate(`/consult-details?consultId=${newConsultId}`);
       }
     }
