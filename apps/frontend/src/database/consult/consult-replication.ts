@@ -3,6 +3,36 @@ import { RxDatabase } from 'rxdb';
 import { v4 as uuidv4 } from 'uuid';
 import { getGraphQlHeaders } from 'database/authorisation';
 import { ConsultDocument, stripMetadata } from 'database/rxdb-utils';
+import { LensTypes } from 'app/spectacles/lensType-select/lensType-select';
+
+const toEnumCase = (str: LensTypes | string) =>
+  str.toUpperCase().replaceAll(' ', '');
+
+const serializeEnums = (doc: ConsultDocument) => {
+  if (doc.spectacle) {
+    doc.spectacle.lensType = doc.spectacle.lensType
+      ? toEnumCase(doc.spectacle.lensType)
+      : undefined;
+  }
+  return doc;
+};
+
+const deserializeEnums = (doc: ConsultDocument) => {
+  if (doc.spectacle) {
+    const lensTypesArray = Array.from(
+      (Object.keys(LensTypes) as Array<keyof typeof LensTypes>).map((key) => {
+        return { key, value: toEnumCase(LensTypes[key]) };
+      })
+    );
+    if (doc.spectacle.lensType) {
+      const lensTypeKey = lensTypesArray?.find(
+        ({ key, value }) => value === doc.spectacle?.lensType
+      )?.key;
+      doc.spectacle.lensType = lensTypeKey ? LensTypes[lensTypeKey] : undefined;
+    }
+  }
+  return doc;
+};
 
 const pullQueryBuilder = (doc: ConsultDocument) => {
   const updatedAt = doc?.updatedAt
@@ -154,7 +184,7 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
   // Ensure that the doc has at least an id field and date consent given
   docs = docs.filter((doc) => doc.id && doc.dateConsentGiven);
 
-  const strippedDocs = docs.map((doc) => stripMetadata(doc));
+  const strippedDocs = docs.map((doc) => stripMetadata(serializeEnums(doc)));
 
   const query = `
     mutation SetConsults($consults: [SetConsultInput!]) {
@@ -196,7 +226,7 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
           queryBuilder: pullQueryBuilder, // the queryBuilder from above
           batchSize: 5,
           modifier: (doc) => ({
-            ...deletionFilter(doc),
+            ...deserializeEnums(deletionFilter(doc)),
             userEmail: doc.user.email,
             patientId: doc.patient.id,
             spectacle: {
@@ -211,7 +241,7 @@ export const buildConsultReplicationState = async (database: RxDatabase) => {
         push: {
           queryBuilder: pushQueryBuilder,
           batchSize: 5,
-          modifier: (doc) => deletionFilter(doc),
+          modifier: (doc) => serializeEnums(deletionFilter(doc)),
         },
         deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
         live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
