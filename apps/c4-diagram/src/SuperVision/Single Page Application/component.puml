@@ -1,21 +1,64 @@
 @startuml
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
-LAYOUT_WITH_LEGEND()
-
-Container(api, "API Application", "java and Spring MVC", "Delivers the static content and the internet banking single page application.")
+Container(api, "API Application", "TypeScript and NestJS", "Provides patient data manipulation/replication functionality via a GraphQL API.")
+System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
 
 Container_Boundary(spa, "Single Page Application") {
-    Component(routing, "Routing", "React router", "Handler slient side routing")
-    Component(store, "Data Store", "Redux", "The central object holding the application state")
-    Component(login, "Login form", "React Class", "The login page")
-    Component(profile, "Profile Page", "React Class", "The page where the logged in user can view and edit his/her information")
+    Component(sw, "Offline Service Worker", Service Worker, "Caches page for offline use")
+
+    Component(netProvider, "Network Provider", "React Context", "Provides information on online connectivity")
+    Component(auth0Provider, "Auth0 Provider", "React Context", "Provides auth0 user information")
+    Component(databaseProvider, "Database Provider", "React Context", "Provides access to the RxDB database")
+
+    Component(app, "App", "React Component", Main shell)
+
+
+    Boundary(pages, "Pages"){
+    Component(routing, Routing, React Router)
+    Component(patientDetails, Patient Details, "React Page")
+    Component(consultDetails, Consult Details, "React Page")
+    Component(spectaclesDetails, Spectacles Details, "React Page")
+    Component(spectaclesList, Spectacles List, "React Page")
+    Component(login, Login, "React Page")
+
+    Rel(routing, patientDetails, "Uses")
+    Rel(routing, consultDetails, "Uses")
+    Rel(routing, login, "Uses")
+    Rel(routing, spectaclesDetails, "Uses")
+    Rel(routing, spectaclesList, "Uses")
+    }
+
+    Boundary(repl, "Replication"){
+      Component(patientReplication, Patient Replication Service, "TypeScript")
+      Component(consultReplication, Consult Replication Service, "TypeScript")
+    }
+
+    Rel(app, auth0Provider, Checks login)
+    Rel(app, netProvider, Displays network status)
+
+    Rel(app, routing, "Uses")
+
+    Rel(login, auth0Provider, "Initiates login")
+    Rel(login, netProvider, "Checks network status")
+
+    Rel(pages, databaseProvider, "Reads and Modifies")
+
+    Rel(databaseProvider, auth0Provider, "Get authentication token")
+
+    Rel(databaseProvider, repl, "Manages")
+
+    ComponentDb(rxdb, RxDB, "IndexDB", Offline document database in the browser)
+    Rel(databaseProvider, rxdb, "Reads from and writes to")
+    Rel(repl, rxdb, "Reads from and writes to")
+
+    Rel(sw, app, Caches)
 }
 
-Rel(spa, api, "Uses", "JSON/HTTPS")
 
-Rel(login, store, "Uses");
-Rel(routing, store, "Uses");
-Rel(profile, store, "Uses");
+
+Rel(repl, api, Push/Pull Replication, GraphQL)
+
+Rel(auth0Provider, auth0, Get authentication token, JWT)
 
 @enduml
