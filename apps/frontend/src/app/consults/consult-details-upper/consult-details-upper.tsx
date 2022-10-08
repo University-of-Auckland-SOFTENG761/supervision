@@ -131,7 +131,6 @@ export const ConsultDetailsUpper = ({
                   value={parseDateForInput(
                     consult.get('cyclopentolateTimestamp')
                   )}
-                  // {...register('consult.cyclopentolateTimestamp')}
                   onChange={(value) => {
                     setValue(
                       'consult.cyclopentolateTimestamp',
