@@ -11,6 +11,9 @@ describe('Patient Inputs', () => {
       get() {
         return undefined;
       },
+      toMutableJSON() {
+        return {};
+      },
     };
 
     const consults = new Map<string, RxDocument<ConsultDocType>>();
