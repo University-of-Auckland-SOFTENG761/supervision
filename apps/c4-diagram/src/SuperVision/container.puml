@@ -9,10 +9,10 @@ System_Boundary(sv, "SuperVision") {
 }
 System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
 
-Rel(opt, spa, "Manages patient data")
-Rel(spa, auth0, "Redirect to login page", HTTPS)
-Rel(auth0, spa, "Send user token", JWT)
-Rel(api, auth0, "Verify user token", JWT)
+Rel_R(opt, spa, "Manages patient data")
+Rel_R(spa, auth0, "Redirect to login page", HTTPS)
+Rel_L(auth0, spa, "Send user token", JWT)
+Rel_L(api, auth0, "Verify user token", JWT)
 Rel(spa, api, "Makes API calls to", GraphQL)
-Rel(api, db, "Reads from and writes to", TypeORM)
+Rel_R(api, db, "Reads from and writes to", TypeORM)
 @enduml
