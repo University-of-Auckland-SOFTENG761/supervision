@@ -216,7 +216,7 @@ export const RecallsListPage = () => {
         <Title order={3}>Recall Records</Title>
         <TextInput
           className="print:hidden"
-          placeholder="Search dispensing records..."
+          placeholder="Search recalls..."
           icon={<IconSearch size={16} />}
           value={query}
           onChange={(e) => setQuery(e.currentTarget.value)}
