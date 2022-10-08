@@ -1,7 +1,7 @@
 @startuml
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
-Container(api, "API Application", "TypeScript and NestJS", "Provides patient data manipulation/replication functionality via a GraphQL API.")
+Container(api, "API Application", "TypeScript and NestJS", "Provides data manipulation/replication functionality via a GraphQL API.")
 System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
 
 Container_Boundary(spa, "Single Page Application") {

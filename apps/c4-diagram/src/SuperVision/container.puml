@@ -5,7 +5,7 @@ Person(opt, "Optometrist", "An optometrist who works with patients. Can be a sup
 System_Boundary(sv, "SuperVision") {
     Container(spa, "Single Page Application", "TypeScript and React", "Offline-first application that lets users manage patient data via their web browser.")
     ContainerDb(db, "Database", "PostgreSQL", "Stores user and patient data.")
-    Container(api, "API Application", "TypeScript and NestJS", "Provides patient data manipulation/replication functionality via a GraphQL API.")
+    Container(api, "API Application", "TypeScript and NestJS", "Provides data manipulation/replication functionality via a GraphQL API.")
 }
 System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
 
