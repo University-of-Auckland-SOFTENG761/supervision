@@ -53,11 +53,11 @@ export class ConsultsService {
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
     const bundledConsults = await Promise.all(
       consults?.map(async ({ userEmail, patientId, spectacle, ...consult }) => {
-        const spectacleEntity = spectacle.id
+        const spectacleEntity = spectacle?.id
           ? await this.spectacleService.saveSpectacle({
               ...spectacle,
               patientId: patientId,
-              consultId: consult.id,
+              consultId: consult?.id,
             })
           : null;
         return {

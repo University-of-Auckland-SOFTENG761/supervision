@@ -175,9 +175,9 @@ const pushQueryBuilder = (docs: ConsultDocument[]) => {
 };
 
 const deletionFilter = (
-  doc: ConsultDocument & { user: unknown; patient: unknown; spectacle: unknown }
+  doc: ConsultDocument & { user: unknown; patient: unknown }
 ) => {
-  const { user, patient, spectacle, ...newDoc } = {
+  const { user, patient, ...newDoc } = {
     ...doc,
     deletedAt:
       doc.deletedAt && new Date(doc.deletedAt) !== new Date(0)

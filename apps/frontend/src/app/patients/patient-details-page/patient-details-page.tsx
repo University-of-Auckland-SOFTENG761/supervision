@@ -55,9 +55,9 @@ export const PatientDetailsPage = () => {
     }
   }, [consultsCollection, patient]);
 
-  const handleCreateNewRecord = () => {
+  const handleCreateNewRecord = async () => {
     if (newConsult && patientId) {
-      const newConsultId = newConsult(patientId);
+      const newConsultId = await newConsult(patientId);
       navigate(`/consult-details?consultId=${newConsultId}`);
     }
   };

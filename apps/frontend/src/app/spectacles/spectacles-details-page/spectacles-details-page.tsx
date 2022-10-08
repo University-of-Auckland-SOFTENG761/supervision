@@ -1,4 +1,3 @@
-import { useForm } from '@mantine/form';
 import {
   Center,
   Divider,
@@ -14,13 +13,14 @@ import {
 } from '@mantine/core';
 import { useSearchParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
-import React, { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
 import { useDatabase } from '@shared';
-import { useDebouncedValue } from '@mantine/hooks';
-import { ConsultDocType } from 'database';
-import { stripUnusedFields } from 'database/rxdb-utils';
+import { ConsultDocType, PatientDocType } from 'database';
+import { parseDateForInput, stripUnusedFields } from 'database/rxdb-utils';
+import { RxDocument } from 'rxdb';
+import { useForm } from 'react-hook-form';
 
 type TimestampFilter = 'spectacle.orderDate' | 'spectacle.deliveredDate';
 
@@ -39,78 +39,73 @@ export enum OrderStatus {
 }
 
 export const SpectaclesDetailsPage = () => {
-  const { consults, patients, updateConsult } = useDatabase();
+  const { consultsCollection, patientsCollection } = useDatabase();
 
   const [searchParams] = useSearchParams();
   const spectaclesId = searchParams.get('spectaclesId');
 
-  const consult = spectaclesId
-    ? consults?.find((c) => c.spectacle?.id === spectaclesId)
-    : undefined;
-  const patient = consult?.patientId
-    ? patients?.find((p) => p.id === consult?.patientId)
-    : undefined;
-
-  const buildFormValues = () => {
-    return {
-      code: consult?.spectacle?.code ?? '',
-      colour: consult?.spectacle?.colour ?? '',
-      lensType: consult?.spectacle?.lensType ?? '',
-      pupillaryDistance: consult?.spectacle?.pupillaryDistance ?? undefined,
-      heights: consult?.spectacle?.heights ?? '',
-      notes: consult?.spectacle?.notes ?? '',
-      deliverySchool: consult?.spectacle?.deliverySchool ?? '',
-      orderStatus: consult?.spectacle?.orderStatus ?? '',
-      orderDate: consult?.spectacle?.orderDate
-        ? new Date(consult?.spectacle?.orderDate)
-        : null,
-      deliveredDate: consult?.spectacle?.deliveredDate
-        ? new Date(consult?.spectacle?.deliveredDate)
-        : null,
-    };
-  };
-
-  const form = useForm({
-    initialValues: buildFormValues(),
-  });
+  const [consult, setConsult] = useState<RxDocument<ConsultDocType> | null>();
+  const [patient, setPatient] = useState<RxDocument<PatientDocType> | null>();
 
   useEffect(() => {
-    form.setValues(buildFormValues());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consult]);
-
-  const sendUpdate = () => {
-    if (updateConsult && form.values && consult)
-      updateConsult({
-        ...consult,
-        spectacle: {
-          id: spectaclesId,
-          ...stripUnusedFields(form.values),
-        },
-      });
-  };
-
-  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
+    if (spectaclesId) {
+      consultsCollection
+        ?.findOne({
+          selector: {
+            'spectacle.id': spectaclesId,
+          },
+        })
+        .$.subscribe((consult) => setConsult(consult));
+    }
+  }, [spectaclesId, consultsCollection]);
 
   useEffect(() => {
-    sendUpdate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFormValues]);
+    if (consult) {
+      patientsCollection
+        ?.findOne(consult.patientId)
+        .exec()
+        .then((patient) => setPatient(patient));
+    }
+  }, [consult, patientsCollection]);
 
   const optometristDetails = {
     email: 'mobile-optometry@auckland.ac.nz',
     mobile: '027 272 3319',
   };
 
-  if (!form.values || !consult)
-    return (
-      <Center className="h-full w-full">
-        <Loader />
-      </Center>
-    );
+  const { register, getValues, setValue } = useForm();
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleUpdateConsult = async (consult: Partial<ConsultDocType>) => {
+    await consultsCollection?.atomicUpsert(consult);
+  };
+
+  const handleChange = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      if (!consult) {
+        return;
+      }
+      const newConsult = {
+        ...stripUnusedFields(getValues('consult')),
+        id: consult?.get('id'),
+      } as PatientDocType;
+      handleUpdateConsult(newConsult);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!timeoutRef.current && consult) {
+      setValue('consult', consult.toJSON());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [consult?.revision]);
 
   return (
-    <ScrollArea className="h-full p-8">
+    <ScrollArea onChange={handleChange} className="h-full p-8">
       <Stack className="w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4">
         <Title order={2} className="-mb-8">
           Vision Bus Aotearoa
@@ -152,7 +147,7 @@ export const SpectaclesDetailsPage = () => {
         <Group className="justify-between">
           <Text className="-my-8">School</Text>
           <Text className="-my-8">
-            {form.getInputProps('deliverySchool').value}
+            {consult?.get('spectacle.deliverySchool')}
           </Text>
         </Group>
         <Divider my="xs" />
@@ -167,7 +162,7 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Code</Text>
           <TextInput
             classNames={{ root: '-my-8', input: 'text-right' }}
-            {...form.getInputProps('code')}
+            {...register('consult.spectacle.code')}
           />
         </Group>
         <Divider my="xs" />
@@ -175,7 +170,7 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Colour</Text>
           <TextInput
             classNames={{ root: '-my-8', input: 'text-right' }}
-            {...form.getInputProps('colour')}
+            {...register('consult.spectacle.colour')}
           />
         </Group>
         <Divider my="xs" />
@@ -183,7 +178,7 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Lens Type</Text>
           <TextInput
             classNames={{ root: '-my-8', input: 'text-right' }}
-            {...form.getInputProps('lensType')}
+            {...register('consult.spectacle.lensType')}
           />
         </Group>
         <Divider my="xs" />
@@ -191,7 +186,15 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">PD (mm)</Text>
           <NumberInput
             classNames={{ root: '-my-8', input: 'text-right pr-8' }}
-            {...form.getInputProps('pupillaryDistance')}
+            {...register('consult.spectacle.pupillaryDistance', {
+              valueAsNumber: true,
+            })}
+            min={undefined}
+            max={undefined}
+            onChange={(value) => {
+              setValue('consult.spectacle.pupillaryDistance', value);
+              handleChange();
+            }}
           />
         </Group>
         <Divider my="xs" />
@@ -199,7 +202,7 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Heights (mm)</Text>
           <TextInput
             classNames={{ root: '-my-8', input: 'text-right' }}
-            {...form.getInputProps('heights')}
+            {...register('consult.spectacle.heights')}
           />
         </Group>
         <Divider my="xs" />
@@ -207,9 +210,9 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Notes</Text>
           <Textarea
             autosize
-            minRows="1"
             classNames={{ root: '-my-3', input: 'text-left py-1' }}
-            {...form.getInputProps('notes')}
+            {...register('consult.spectacle.notes')}
+            minRows={1}
           />
         </Group>
         <Divider my="xs" />
@@ -225,7 +228,11 @@ export const SpectaclesDetailsPage = () => {
                 }
               )
             )}
-            {...form.getInputProps('orderStatus')}
+            {...register('consult.spectacle.orderStatus')}
+            onChange={(value) => {
+              setValue('consult.spectacle.orderStatus', value);
+              handleChange();
+            }}
           />
         </Group>
         <Divider my="xs" />
@@ -233,7 +240,16 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Order Date</Text>
           <DatePicker
             classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
-            {...form.getInputProps('orderDate')}
+            defaultValue={parseDateForInput(
+              consult?.get('spectacle.orderDate')
+            )}
+            {...register('consult.spectacle.orderDate', {
+              valueAsDate: true,
+            })}
+            onChange={(e) => {
+              setValue('consult.spectacle.orderDate', e ?? undefined);
+              handleChange();
+            }}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
             dateParser={(date: string) =>
@@ -248,7 +264,16 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Delivery Date</Text>
           <DatePicker
             classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
-            {...form.getInputProps('deliveredDate')}
+            defaultValue={parseDateForInput(
+              consult?.get('spectacle.deliveredDate')
+            )}
+            {...register('consult.spectacle.deliveredDate', {
+              valueAsDate: true,
+            })}
+            onChange={(e) => {
+              setValue('consult.spectacle.deliveredDate', e ?? undefined);
+              handleChange();
+            }}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
             dateParser={(date: string) =>

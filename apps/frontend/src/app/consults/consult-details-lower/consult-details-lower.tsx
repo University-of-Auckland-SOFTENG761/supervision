@@ -334,7 +334,7 @@ export const ConsultDetailsLower = ({
           <Button
             color="yellow"
             onClick={() => {
-              const spectacleId = form.getInputProps('spectacle.id').value;
+              const spectacleId = consult.get('spectacle.id');
               navigate(`/spectacles-details/?spectaclesId=${spectacleId}`);
             }}
           >

@@ -10,41 +10,40 @@ import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useDatabase } from '@shared';
 import { OrderStatus } from '../spectacles-details-page';
 import styles from './spectacles-list.module.scss';
+import { RxDocument } from 'rxdb';
+import { ConsultDocType, PatientDocType } from 'database';
 
 export const SpectaclesListPage = () => {
-  const { consults, patients } = useDatabase();
-  const spectaclesRecords = consults?.map((c) => {
-    const patient = patients?.find((p) => p.id === c.patientId);
-    return {
-      id: c.spectacle?.id,
-      firstName: patient?.firstName,
-      lastName: patient?.lastName,
-      school: c.spectacle?.deliverySchool,
-      spectaclesCode: c.spectacle?.code,
-      colour: c.spectacle?.colour,
-      lensType: c.spectacle?.lensType,
-      pupillaryDistance: c.spectacle?.pupillaryDistance,
-      heights: c.spectacle?.heights,
-      spectaclesNotes: c.spectacle?.notes,
-      orderStatus: c.spectacle?.orderStatus,
-      associatedPatientUid: c.spectacle?.patientId,
-      orderDate: c.spectacle?.orderDate,
-    };
-  });
-
+  const { consultsCollection, patientsCollection } = useDatabase();
   const navigate = useNavigate();
 
+  const [matchingConsults, setMatchingConsults] = useState<
+    RxDocument<ConsultDocType>[]
+  >([]);
+  const [matchingPatients, setMatchingPatients] = useState<
+    RxDocument<PatientDocType>[]
+  >([]);
+  const [spectaclesRecords, setSpectaclesRecords] = useState<
+    (Partial<PatientDocType> & {
+      spectaclesCode?: string;
+      colour?: string;
+      lensType?: string;
+      pupillaryDistance?: number;
+      heights?: string;
+      spectaclesNotes?: string;
+      orderStatus?: string;
+      associatedPatientUid?: string;
+      orderDate?: string;
+    })[]
+  >();
+  const [tableRecords, setTableRecords] = useState(
+    sortBy(spectaclesRecords, 'name')
+  );
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'date',
     direction: 'asc',
   });
-  const [tableRecords, setTableRecords] = useState(
-    sortBy(spectaclesRecords, 'name')
-  );
-  useEffect(() => {
-    const data = sortBy(spectaclesRecords, sortStatus.columnAccessor);
-    setTableRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
-  }, [sortStatus]);
+
   // Search bar text query to filter results by
   const [query, setQuery] = useState('');
   const [debouncedQuery] = useDebouncedValue(query, 200);
@@ -53,32 +52,171 @@ export const SpectaclesListPage = () => {
   const [debouncedStatusQuery] = useDebouncedValue(statusQuery, 200);
 
   useEffect(() => {
-    spectaclesRecords &&
-      setTableRecords(
-        spectaclesRecords.filter(
-          ({ firstName, lastName, orderDate, school, id, orderStatus }) => {
-            if (
-              debouncedStatusQuery !== '' &&
-              debouncedStatusQuery !== null &&
-              debouncedStatusQuery !== orderStatus
-            ) {
-              return false;
-            }
-            if (
-              debouncedQuery !== '' &&
-              !`${firstName} ${lastName} ${
-                orderDate ? new Date(orderDate)?.toLocaleDateString() : null
-              } ${school} ${id}`
-                .toLowerCase()
-                .includes(debouncedQuery.trim().toLowerCase())
-            ) {
-              return false;
-            }
-            return true;
-          }
+    const data = sortBy(spectaclesRecords, sortStatus.columnAccessor);
+    setTableRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+  }, [sortStatus]);
+
+  // Find all patients and consults that could match the query
+  useEffect(() => {
+    if (patientsCollection && consultsCollection) {
+      patientsCollection
+        .find(
+          debouncedQuery
+            ? {
+                selector: {
+                  $or: [
+                    {
+                      firstName: {
+                        $regex: new RegExp(
+                          debouncedQuery
+                            .trim()
+                            .replace(/\s+/g, ' ')
+                            .split('')
+                            .join('.*'),
+                          'i'
+                        ),
+                        $options: 'i',
+                      },
+                    },
+                    {
+                      firstName: {
+                        $regex: new RegExp(
+                          debouncedQuery
+                            .slice(debouncedQuery.indexOf(' ') + 1)
+                            .trim()
+                            .replace(/\s+/g, ' ')
+                            .split('')
+                            .join('.*'),
+                          'i'
+                        ),
+                        $options: 'i',
+                      },
+                    },
+                    {
+                      lastName: {
+                        $regex: new RegExp(
+                          debouncedQuery
+                            .trim()
+                            .replace(/\s+/g, ' ')
+                            .split('')
+                            .join('.*'),
+                          'i'
+                        ),
+                        $options: 'i',
+                      },
+                    },
+                    {
+                      lastName: {
+                        $regex: new RegExp(
+                          debouncedQuery
+                            .slice(debouncedQuery.indexOf(' ') + 1)
+                            .trim()
+                            .replace(/\s+/g, ' ')
+                            .split('')
+                            .join('.*'),
+                          'i'
+                        ),
+                        $options: 'i',
+                      },
+                    },
+                  ],
+                },
+                limit: 100,
+              }
+            : undefined
         )
+        .$.subscribe((patients) => {
+          setMatchingPatients(patients);
+          patients.forEach((patient) => {
+            consultsCollection
+              .findOne({
+                selector: {
+                  patientId: patient.id,
+                },
+              })
+              .exec()
+              .then((newConsults) => {
+                newConsults && setMatchingConsults((c) => [...c, newConsults]);
+              });
+          });
+        });
+      consultsCollection
+        .find(
+          debouncedQuery
+            ? {
+                selector: {
+                  $or: [
+                    {
+                      'spectacle.id': {
+                        $regex: new RegExp(
+                          debouncedQuery
+                            .trim()
+                            .replace(/\s+/g, ' ')
+                            .split('')
+                            .join('.*'),
+                          'i'
+                        ),
+                        $options: 'i',
+                      },
+                    },
+                  ],
+                },
+                limit: 100,
+              }
+            : undefined
+        )
+        .$.subscribe((consults) => {
+          setMatchingConsults(consults);
+          consults.forEach((consult) => {
+            patientsCollection
+              .findOne(consult.patientId)
+              .exec()
+              .then((patient) => {
+                patient && setMatchingPatients((prev) => [...prev, patient]);
+              });
+          });
+        });
+    }
+  }, [debouncedQuery, patientsCollection, consultsCollection]);
+
+  // Combine the matching patients and consults into a single array of records
+  useEffect(() => {
+    if (matchingPatients && matchingConsults) {
+      const records = matchingPatients
+        .map((p, i) => {
+          const consult = matchingConsults.find((c) => c.patientId === p.id);
+          return {
+            id: consult?.spectacle?.id ?? `NO_ID_${i}`,
+            firstName: p.firstName,
+            lastName: p.lastName,
+            school: consult?.spectacle?.deliverySchool,
+            spectaclesCode: consult?.spectacle?.code,
+            colour: consult?.spectacle?.colour,
+            lensType: consult?.spectacle?.lensType,
+            pupillaryDistance: consult?.spectacle?.pupillaryDistance,
+            heights: consult?.spectacle?.heights,
+            spectaclesNotes: consult?.spectacle?.notes,
+            orderStatus: consult?.spectacle?.orderStatus,
+            associatedPatientUid: consult?.spectacle?.patientId,
+            orderDate: consult?.spectacle?.orderDate,
+          };
+        })
+        .filter((r) =>
+          debouncedStatusQuery ? r.orderStatus === debouncedStatusQuery : true
+        )
+        .filter((r, i, a) => a.findIndex((t) => t.id === r.id) === i);
+      console.log(
+        'patients',
+        matchingPatients,
+        'consults',
+        matchingConsults,
+        'records',
+        records
       );
-  }, [debouncedQuery, debouncedStatusQuery, consults]);
+      setSpectaclesRecords(records);
+      setTableRecords(sortBy(records, 'date'));
+    }
+  }, [matchingPatients, matchingConsults, debouncedStatusQuery]);
 
   const orderStatusArray = Array.from(
     (Object.keys(OrderStatus) as Array<keyof typeof OrderStatus>).map((key) => {

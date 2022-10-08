@@ -1,20 +1,38 @@
 import { Avatar, Card, Group, Stack, Text } from '@mantine/core';
 import { useDatabase } from '@shared';
+import { ConsultDocType, PatientDocType } from 'database';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { RxDocument } from 'rxdb';
 import { applyDateFormat, calculateAge } from 'utils/date.utils';
 import { toTitleCase } from 'utils/enum.utils';
 
 export const ConsultInfo = () => {
-  const { consults, patients } = useDatabase();
+  const { consultsCollection, patientsCollection } = useDatabase();
 
   const [searchParams] = useSearchParams();
   const consultId = searchParams.get('consultId');
 
-  const consult = consultId
-    ? consults?.find((p) => p.id === consultId)
-    : undefined;
+  const [consult, setConsult] = useState<RxDocument<ConsultDocType> | null>();
+  const [patient, setPatient] = useState<RxDocument<PatientDocType> | null>();
 
-  const patient = patients?.find((p) => p.id === consult?.patientId);
+  useEffect(() => {
+    if (consultId) {
+      consultsCollection
+        ?.findOne(consultId)
+        .exec()
+        .then((consult) => setConsult(consult));
+    }
+  }, [consultId, consultsCollection]);
+
+  useEffect(() => {
+    if (consult) {
+      patientsCollection
+        ?.findOne(consult.patientId)
+        .exec()
+        .then((patient) => setPatient(patient));
+    }
+  }, [consult, patientsCollection]);
 
   return (
     <Group>

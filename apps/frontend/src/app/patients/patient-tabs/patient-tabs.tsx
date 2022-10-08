@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { RxDocument } from 'rxdb';
 import { PatientDocType } from 'database';
 import { formatName } from 'utils/name.utils';
+import { filterDuplicates } from 'utils/misc.utils';
 
 export const PatientTabs = () => {
   const { patientsCollection, newPatient } = useDatabase();
@@ -53,7 +54,10 @@ export const PatientTabs = () => {
   }, [patientId, patientTabs, handleTabChange]);
 
   useEffect(() => {
-    localStorage.setItem('openTabs', patientTabs.join(','));
+    localStorage.setItem(
+      'openTabs',
+      filterDuplicates(patientTabs.filter((t) => t)).join(',')
+    );
     if (patientsCollection && patientTabs.length > 0) {
       patientsCollection?.findByIds$(patientTabs).subscribe((p) => {
         if (p) {
@@ -87,25 +91,26 @@ export const PatientTabs = () => {
         })}
       >
         <Tabs.List>
-          {patientTabs.map((tab) => (
-            <Tabs.Tab
-              key={tab}
-              value={tab}
-              rightSection={
-                <ActionIcon
-                  className="w-auto h-auto min-w-0 min-h-0"
-                  onClick={(e: React.MouseEvent) => handleCloseTab(e, tab)}
+          {filterDuplicates(patientTabs)?.map(
+            (tab) =>
+              tab && (
+                <Tabs.Tab
+                  key={tab}
+                  value={tab}
+                  rightSection={
+                    <IconX
+                      onClick={(e: React.MouseEvent) => handleCloseTab(e, tab)}
+                      size={12}
+                    />
+                  }
                 >
-                  <IconX size={12} />
-                </ActionIcon>
-              }
-            >
-              {formatName(
-                openPatients.get(tab)?.firstName,
-                openPatients.get(tab)?.lastName
-              )}
-            </Tabs.Tab>
-          ))}
+                  {formatName(
+                    openPatients.get(tab)?.firstName,
+                    openPatients.get(tab)?.lastName
+                  )}
+                </Tabs.Tab>
+              )
+          )}
         </Tabs.List>
       </Tabs>
     </Group>

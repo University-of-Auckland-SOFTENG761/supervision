@@ -112,6 +112,7 @@ export const consultSchemaLiteral = {
       properties: {
         id: {
           type: 'string',
+          maxLength: 32, // <- GraphQL UUID max length
         },
         patientId: {
           type: 'string',
@@ -384,6 +385,7 @@ export const consultSchemaLiteral = {
     },
   },
   required: ['id', 'patientId', 'userEmail', 'dateConsentGiven'],
+  indexes: ['spectacle.id'],
 } as const;
 
 export const consultSchemaTyped = toTypedRxJsonSchema(consultSchemaLiteral);

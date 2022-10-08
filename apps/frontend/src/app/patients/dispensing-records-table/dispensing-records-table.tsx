@@ -1,20 +1,30 @@
 import React from 'react';
 import { Table, TableTheme } from '@shared';
 import { useNavigate } from 'react-router-dom';
-import { ConsultDocument } from 'database/rxdb-utils';
 import { Stack, Text, ThemeIcon } from '@mantine/core';
 import { IconDatabaseOff } from '@tabler/icons';
 import { applyDateFormat } from 'utils/date.utils';
+import { RxDocument } from 'rxdb';
+import { ConsultDocType } from 'database';
 
 type DispensingRecordsTableProps = {
-  patientConsults: ConsultDocument[];
+  consults: Map<string, RxDocument<ConsultDocType>> | null;
 };
 
 export const DispensingRecordsTable = ({
-  patientConsults,
+  consults,
 }: DispensingRecordsTableProps) => {
   const navigate = useNavigate();
-  const dispensingRecords = patientConsults.map((consult) => ({
+
+  const consultsArray = Array.from(consults?.values() ?? []);
+
+  // remove items in consultsArray that have the same id
+  const uniqueConsultsArray = consultsArray.filter(
+    (consult, index, self) =>
+      index === self.findIndex((t) => t.id === consult.id)
+  );
+
+  const dispensingRecords = uniqueConsultsArray.map((consult) => ({
     spectacles: consult.spectacle,
     rxLeft: consult.givenRefractionLeftEyeSphere,
     rxRight: consult.givenRefractionRightEyeSphere,
