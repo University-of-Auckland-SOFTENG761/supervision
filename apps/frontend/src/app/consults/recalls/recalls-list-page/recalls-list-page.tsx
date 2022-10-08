@@ -121,7 +121,12 @@ export const RecallsListPage = () => {
           setMatchingPatients((p) => [...p, ...patients]);
           patients.forEach((patient) => {
             consultsCollection
-              .findByIds(patient.consultIds ?? [])
+              .find({
+                selector: {
+                  patientId: patient.id,
+                },
+              })
+              .exec()
               .then((newConsults) => {
                 const newConsultsArray = Array.from(newConsults.values());
                 newConsults &&
