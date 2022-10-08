@@ -1,0 +1,42 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/c4-diagram/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/c4-diagram",
+        "main": "apps/c4-diagram/src/main.ts",
+        "tsConfig": "apps/c4-diagram/tsconfig.app.json",
+        "assets": ["apps/c4-diagram/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/c4-diagram/src/environments/environment.ts",
+              "with": "apps/c4-diagram/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "c4-diagram:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "c4-diagram:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

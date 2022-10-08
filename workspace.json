@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "backend": "apps/backend",
+    "c4-diagram": "apps/c4-diagram",
     "frontend": "apps/frontend",
     "frontend-e2e": "apps/frontend-e2e"
   }

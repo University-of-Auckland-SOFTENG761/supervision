@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(sup, "Supervisor", "An optometrist who supervises optometry students.")
+Person(stu, "Student", "An optometry student.")
+System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
+System(sv, "SuperVision", "Optometry Patient Management System")
+
+Rel(sup, auth0, "Views and manages accounts")
+Rel(sup, auth0, "Logs in")
+Rel(stu, auth0, "Logs in")
+Rel(stu, sv, "Manages patient data")
+Rel(sup, sv, "Manages patient data")
+Rel(sv, auth0, "Verifies user authentication")
+@enduml
