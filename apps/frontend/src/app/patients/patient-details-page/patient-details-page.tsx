@@ -99,7 +99,7 @@ export const PatientDetailsPage = () => {
           />
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button onClick={handleCreateNewRecord} className="ml-auto">
-              CREATE NEW RECORD
+              CREATE NEW CONSULT
             </Button>
           </div>
           <PatientRecords className="pb-5" consults={consults} />

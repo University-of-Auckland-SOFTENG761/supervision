@@ -38,7 +38,7 @@ export const DispensingRecordsTable = ({
     <Table theme={TableTheme.Secondary}>
       <thead>
         <tr>
-          <th>DATE</th>
+          <th>ORDER DATE</th>
           <th>RX RIGHT</th>
           <th>RX LEFT</th>
           <th>PD</th>

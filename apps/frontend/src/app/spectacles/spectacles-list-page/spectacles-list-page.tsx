@@ -256,7 +256,7 @@ export const SpectaclesListPage = () => {
           columns={[
             {
               accessor: 'orderDate',
-              title: 'DATE',
+              title: 'ORDER DATE',
               render: ({ orderDate }) => {
                 return orderDate
                   ? dayjs(orderDate).format('DD/MM/YYYY')

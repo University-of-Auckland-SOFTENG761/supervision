@@ -204,6 +204,8 @@ export const SpectaclesDetailsPage = () => {
               valueAsNumber: true,
             })}
             min={0}
+            precision={2}
+            step={0.1}
             max={undefined}
             onChange={(value) => {
               setValue('consult.spectacle.pupillaryDistance', value);
