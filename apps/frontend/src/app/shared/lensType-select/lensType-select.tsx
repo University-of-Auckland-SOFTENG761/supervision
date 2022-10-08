@@ -1,9 +1,10 @@
-import React from 'react';
+import { Ref, forwardRef } from 'react';
 import { Select } from '@mantine/core';
 
 type LensTypeSelectProps = {
-  value: string | undefined;
-  onChange: (value: string | null) => void;
+  value?: string | null;
+  defaultValue?: string | null;
+  onChange?: (value: string | null) => void;
 };
 
 export enum LensTypes {
@@ -14,21 +15,30 @@ export enum LensTypes {
   'Bifocal' = 'bifocal',
 }
 
-const LensTypeSelect = ({ value, onChange }: LensTypeSelectProps) => {
-  return (
-    <Select
-      label="Lens Type:"
-      placeholder="Select lens type"
-      data={Array.from(
-        (Object.keys(LensTypes) as Array<keyof typeof LensTypes>).map((key) => {
-          return { value: LensTypes[key], label: key };
-        })
-      )}
-      searchable
-      value={value}
-      onChange={onChange}
-    />
-  );
-};
+const LensTypeSelect = forwardRef(
+  (
+    { value, defaultValue, onChange }: LensTypeSelectProps,
+    ref: Ref<HTMLInputElement> | undefined
+  ) => {
+    return (
+      <Select
+        label="Lens Type:"
+        placeholder="Select lens type"
+        data={Array.from(
+          (Object.keys(LensTypes) as Array<keyof typeof LensTypes>).map(
+            (key) => {
+              return { value: LensTypes[key], label: key };
+            }
+          )
+        )}
+        ref={ref}
+        searchable
+        value={value}
+        defaultValue={defaultValue}
+        onChange={onChange}
+      />
+    );
+  }
+);
 
 export default LensTypeSelect;
