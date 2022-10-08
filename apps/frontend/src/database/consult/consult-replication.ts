@@ -3,7 +3,7 @@ import { RxDatabase } from 'rxdb';
 import { v4 as uuidv4 } from 'uuid';
 import { getGraphQlHeaders } from 'database/authorisation';
 import { ConsultDocument, stripMetadata } from 'database/rxdb-utils';
-import { LensTypes } from 'app/spectacles/lensType-select/lensType-select';
+import { LensTypes } from 'app/shared/lensType-select/lensType-select';
 
 const toEnumCase = (str: LensTypes | string) =>
   str.toUpperCase().replaceAll(' ', '');
