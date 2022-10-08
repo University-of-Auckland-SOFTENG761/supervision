@@ -28,6 +28,9 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#features">Features</a></li>
+      </ul>
+      <ul>
         <li><a href="#screenshots">Screenshots</a></li>
       </ul>
       <ul>
@@ -68,6 +71,17 @@ while still synchronising in real-time with other clients.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+### Features
+* Offline first functionality
+* Fast realtime synchronisation
+* Low bandwidth usage
+* Patient Management
+  * Record Consultations
+  * Record Dispensed Spectacles
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Documentation
 
 Detailed documentation and C4 diagrams are [available here](/apps/c4-diagram/docs/README.md).
@@ -75,6 +89,7 @@ Detailed documentation and C4 diagrams are [available here](/apps/c4-diagram/doc
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Screenshots
+
 <details>
   <summary>Login while online</summary>
   <img src="/assets/screenshots/login-online.jpg" alt="screenshot of login screen">
