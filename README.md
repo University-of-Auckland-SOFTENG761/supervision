@@ -52,10 +52,12 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
+<div align="center">
+  <a href="https://github.com/University-of-Auckland-SOFTENG761/project-team-1">
+        <img src="/assets/screenshots/patient-details-framed.jpg" alt="SuperVision screenshot of patient details screen" width="700">
+  </a>
+</div>
 
-<a href="https://github.com/University-of-Auckland-SOFTENG761/project-team-1">
-      <img src="/assets/screenshots/patient-details-framed.jpg" alt="SuperVision screenshot of patient details screen" width="700">
-</a>
 SuperVision is a patient management system for optometry clinics.
 It has been designed to be used by the [Aotearoa Vision Bus](https://communityeyehealth.auckland.ac.nz/our-research/vision-bus-aotearoa/).
 
