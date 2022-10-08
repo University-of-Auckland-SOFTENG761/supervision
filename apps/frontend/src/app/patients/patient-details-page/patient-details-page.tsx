@@ -42,23 +42,31 @@ export const PatientDetailsPage = () => {
   }, [patientsCollection, patientId]);
 
   useEffect(() => {
-    if (patient && (patient.consultIds?.length ?? []) > 0) {
+    if (patient) {
       // setIsLoading((l) => l + 1);
-      consultsCollection
-        ?.findByIds$(patient.consultIds ?? [])
-        .subscribe((c) => {
-          if (c) {
-            setConsults(c);
-          }
-          // setIsLoading((l) => l - 1);
-        });
+      if (!patient.consultIds || patient.consultIds.length === 0) {
+        console.log('SHOULD BE EMPTY');
+        setConsults(new Map());
+        return;
+      }
+      consultsCollection?.findByIds$(patient.consultIds).subscribe((c) => {
+        setConsults(c);
+        // setIsLoading((l) => l - 1);
+      });
     }
   }, [consultsCollection, patient]);
 
   const handleCreateNewRecord = async () => {
     if (newConsult && patientId) {
       const newConsultId = await newConsult(patientId);
-      navigate(`/consult-details?consultId=${newConsultId}`);
+      if (newConsultId) {
+        const newConsultIds = [...(patient?.consultIds ?? []), newConsultId];
+        patientsCollection?.atomicUpsert({
+          id: patientId,
+          consultIds: newConsultIds,
+        });
+        navigate(`/consult-details?consultId=${newConsultId}`);
+      }
     }
   };
 
@@ -79,12 +87,11 @@ export const PatientDetailsPage = () => {
     <>
       <PatientTabs />
       {patientId && patient ? (
-        <ScrollArea className="h-full p-8">
+        <ScrollArea className="h-full p-8" key={patient.id}>
           <PatientInputs
             patient={patient}
             consults={consults}
             updatePatient={handleUpdatePatient}
-            key={patient.id}
           />
           <div className="flex mt-5 -mb-5 justify-end w-full">
             <Button onClick={handleCreateNewRecord} className="ml-auto">

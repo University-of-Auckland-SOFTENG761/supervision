@@ -134,7 +134,7 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
           deliverySchool: patient?.school,
         },
       };
-      superVisionDb?.['consults'].insert(nc);
+      await superVisionDb?.['consults'].insert(nc);
       return nc.id;
     },
     [user, online, userEmail, patientsCollection, superVisionDb]

@@ -23,15 +23,17 @@ export const RecallsTable = ({ consults }: RecallsTableProps) => {
         </thead>
         <tbody>
           {consultsArray.some((consult) => consult.recallDate) ? (
-            consultsArray.map((record) => (
-              <tr key={record.id}>
-                <td>
-                  {record.recallDate &&
-                    applyDateFormat(new Date(record.recallDate))}
-                </td>
-                <td>{record.recallDescription}</td>
-              </tr>
-            ))
+            consultsArray
+              .filter((r) => r.recallDate)
+              .map((record) => (
+                <tr key={record.id}>
+                  <td>
+                    {record.recallDate &&
+                      applyDateFormat(new Date(record.recallDate))}
+                  </td>
+                  <td>{record.recallDescription}</td>
+                </tr>
+              ))
           ) : (
             <tr>
               <td colSpan={5} className="hover:bg-white">
