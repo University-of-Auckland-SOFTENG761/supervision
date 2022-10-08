@@ -126,17 +126,15 @@ export const SpectaclesListPage = () => {
             : undefined
         )
         .$.subscribe((patients) => {
-          setMatchingPatients(patients);
+          setMatchingPatients((p) => [...p, ...patients]);
           patients.forEach((patient) => {
             consultsCollection
-              .findOne({
-                selector: {
-                  patientId: patient.id,
-                },
-              })
-              .exec()
+              .findByIds(patient.consultIds ?? [])
               .then((newConsults) => {
-                newConsults && setMatchingConsults((c) => [...c, newConsults]);
+                const newConsultsArray = Array.from(newConsults.values());
+                console.log(newConsultsArray);
+                newConsults &&
+                  setMatchingConsults((c) => [...c, ...newConsultsArray]);
               });
           });
         });
@@ -166,7 +164,7 @@ export const SpectaclesListPage = () => {
             : undefined
         )
         .$.subscribe((consults) => {
-          setMatchingConsults(consults);
+          setMatchingConsults((c) => [...c, ...consults]);
           consults.forEach((consult) => {
             patientsCollection
               .findOne(consult.patientId)
@@ -179,6 +177,11 @@ export const SpectaclesListPage = () => {
     }
   }, [debouncedQuery, patientsCollection, consultsCollection]);
 
+  useEffect(() => {
+    setMatchingPatients([]);
+    setMatchingConsults([]);
+  }, [debouncedQuery]);
+
   // Combine the matching patients and consults into a single array of records
   useEffect(() => {
     if (matchingPatients && matchingConsults) {
@@ -186,7 +189,7 @@ export const SpectaclesListPage = () => {
         .map((p, i) => {
           const consult = matchingConsults.find((c) => c.patientId === p.id);
           return {
-            id: consult?.spectacle?.id ?? `NO_ID_${i}`,
+            id: consult?.spectacle?.id,
             firstName: p.firstName,
             lastName: p.lastName,
             school: consult?.spectacle?.deliverySchool,
@@ -204,7 +207,7 @@ export const SpectaclesListPage = () => {
         .filter((r) =>
           debouncedStatusQuery ? r.orderStatus === debouncedStatusQuery : true
         )
-        .filter((r, i, a) => a.findIndex((t) => t.id === r.id) === i);
+        .filter((r, i, a) => a.findIndex((t) => t.id === r.id) === i && r.id);
       console.log(
         'patients',
         matchingPatients,

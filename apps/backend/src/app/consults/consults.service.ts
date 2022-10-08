@@ -55,9 +55,20 @@ export class ConsultsService {
       consults?.map(async ({ userEmail, patientId, spectacle, ...consult }) => {
         const spectacleEntity = spectacle?.id
           ? await this.spectacleService.saveSpectacle({
-              ...spectacle,
+              id: spectacle.id,
               patientId: patientId,
-              consultId: consult?.id,
+              consultId: consult.id,
+              code: spectacle.code,
+              colour: spectacle.colour,
+              lensType: spectacle.lensType,
+              heights: spectacle.heights,
+              pupillaryDistance: spectacle.pupillaryDistance,
+              notes: spectacle.notes,
+              orderStatus: spectacle.orderStatus,
+              createdDate: spectacle.createdDate,
+              orderDate: spectacle.orderDate,
+              deliveredDate: spectacle.deliveredDate,
+              deliverySchool: spectacle.deliverySchool,
             })
           : null;
         return {
