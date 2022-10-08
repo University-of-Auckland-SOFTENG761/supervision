@@ -7,7 +7,7 @@ Deployment_Node(gcp, axial-serenity-361909, "Google Cloud Platform"){
 
   Deployment_Node(dn_api, supervision-backend-dev, "Kubernetes Engine, australia-southeast1"){
     Deployment_Node(k8s, Kubernetes Cluster, Helm){
-      Deployment_Node(ghr, supervision, GitHub Package Registry){
+      Deployment_Node(ghr, supervision, GitHub Container Registry){
         Deployment_Node(docker, Docker, node:16-alpine){
           Container(api, "API Application", "TypeScript and NestJS", "Provides data manipulation/replication functionality via a GraphQL API.")
         }
