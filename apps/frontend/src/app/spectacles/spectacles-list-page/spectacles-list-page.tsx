@@ -125,7 +125,8 @@ export const SpectaclesListPage = () => {
               }
             : undefined
         )
-        .$.subscribe((patients) => {
+        .exec()
+        .then((patients) => {
           setMatchingPatients((p) => [...p, ...patients]);
           patients.forEach((patient) => {
             consultsCollection
@@ -162,7 +163,8 @@ export const SpectaclesListPage = () => {
               }
             : undefined
         )
-        .$.subscribe((consults) => {
+        .exec()
+        .then((consults) => {
           setMatchingConsults((c) => [...c, ...consults]);
           consults.forEach((consult) => {
             patientsCollection

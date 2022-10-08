@@ -96,17 +96,8 @@ export class PatientService {
       query = this.patientsRepository
         .createQueryBuilder('patient')
         .where(
-          `date_trunc('second',"patient"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
-          {
-            minUpdatedAt,
-          }
-        )
-        .orWhere(
-          `date_trunc('second', "patient"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND patient.id > :lastId`,
-          {
-            minUpdatedAt,
-            lastId,
-          }
+          `patient.updatedAt > :minUpdatedAt OR (patient.updatedAt = :minUpdatedAt AND patient.id > :lastId)`,
+          { minUpdatedAt, lastId }
         );
     }
 

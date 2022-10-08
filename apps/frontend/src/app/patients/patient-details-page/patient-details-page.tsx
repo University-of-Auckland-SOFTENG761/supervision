@@ -16,6 +16,7 @@ export const PatientDetailsPage = () => {
   );
   const navigate = useNavigate();
 
+  const [patientRevision, setPatientRevision] = useState<string | undefined>();
   const [patient, setPatient] = useState<RxDocument<PatientDocType> | null>(
     null
   );
@@ -30,7 +31,7 @@ export const PatientDetailsPage = () => {
   };
 
   useEffect(() => {
-    if (patientsCollection && patientId) {
+    if (patientsCollection && patientId && patientId !== patient?.id) {
       setIsLoading(true);
       patientsCollection
         .findOne({ selector: { id: patientId } })
@@ -39,7 +40,7 @@ export const PatientDetailsPage = () => {
           setIsLoading(false);
         });
     }
-  }, [patientsCollection, patientId]);
+  }, [patientsCollection, patientId, patient?.id]);
 
   useEffect(() => {
     if (patient) {
@@ -74,7 +75,7 @@ export const PatientDetailsPage = () => {
     setPatientId(searchParams.get('patientId'));
   }, [searchParams]);
 
-  if (isLoading && patientId) {
+  if ((isLoading && patientId) || (patient?.id && patientId !== patient?.id)) {
     // This is currently ugly but it prevents inputs from being loaded with incorrect defaultValues
     return (
       <Center className="w-full h-full">

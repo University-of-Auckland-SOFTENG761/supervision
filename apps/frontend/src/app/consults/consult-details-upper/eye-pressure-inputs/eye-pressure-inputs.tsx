@@ -30,6 +30,7 @@ export const EyePressureInputs = ({
           })}
           max={undefined}
           min={undefined}
+          maxLength={5}
           onChange={(value) => {
             setValue('consult.eyePressureRight', value);
             if (
@@ -50,6 +51,7 @@ export const EyePressureInputs = ({
           {...register('consult.eyePressureLeft', {
             valueAsNumber: true,
           })}
+          maxLength={5}
           max={undefined}
           min={undefined}
           onChange={(value) => {

@@ -19,18 +19,21 @@ export const NearAcuityInputs = ({
       </Title>
       <SimpleGrid cols={3}>
         <TextInput
+          maxLength={10}
           label="Right:"
           required
           defaultValue={consult.get('nearAcuityRight')}
           {...register('consult.nearAcuityRight')}
         />
         <TextInput
+          maxLength={10}
           label="Left:"
           required
           defaultValue={consult.get('nearAcuityLeft')}
           {...register('consult.nearAcuityLeft')}
         />
         <TextInput
+          maxLength={10}
           label="Both:"
           defaultValue={consult.get('nearAcuityBoth')}
           {...register('consult.nearAcuityBoth')}

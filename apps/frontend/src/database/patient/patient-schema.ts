@@ -23,9 +23,6 @@ export const patientSchemaLiteral = {
     dateOfBirth: {
       type: 'string',
     },
-    patientId: {
-      type: 'string',
-    },
     ethnicity: {
       type: 'string',
     },

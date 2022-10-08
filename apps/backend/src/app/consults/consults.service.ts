@@ -100,17 +100,8 @@ export class ConsultsService {
       query = this.consultsRepository
         .createQueryBuilder('consult')
         .where(
-          `date_trunc('second',"consult"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
-          {
-            minUpdatedAt,
-          }
-        )
-        .orWhere(
-          `date_trunc('second', "consult"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND consult.id > :lastId`,
-          {
-            minUpdatedAt,
-            lastId,
-          }
+          `consult.updatedAt > :minUpdatedAt OR (consult.updatedAt = :minUpdatedAt AND consult.id > :lastId)`,
+          { minUpdatedAt: minUpdatedAt, lastId: lastId }
         );
     }
 

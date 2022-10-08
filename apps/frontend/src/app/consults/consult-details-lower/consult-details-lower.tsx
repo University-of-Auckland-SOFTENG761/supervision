@@ -107,6 +107,7 @@ export const ConsultDetailsLower = ({
                     {...preciseInputProps}
                     min={undefined}
                     max={undefined}
+                    maxLength={5}
                     onChange={(value) => {
                       setValue(`consult.${row.code}RightEyeSphere`, value);
                     }}
@@ -119,6 +120,7 @@ export const ConsultDetailsLower = ({
                     value={consult.get(row.code + 'RightCylinder')}
                     min={undefined}
                     max={undefined}
+                    maxLength={5}
                     onChange={(value) => {
                       setValue(`consult.${row.code}RightCylinder`, value);
                     }}
@@ -148,6 +150,7 @@ export const ConsultDetailsLower = ({
                     value={consult.get(row.code + 'RightAdd')}
                     min={undefined}
                     max={undefined}
+                    maxLength={4}
                     onChange={(value) => {
                       setValue(`consult.${row.code}RightAdd`, value);
                     }}
@@ -216,6 +219,7 @@ export const ConsultDetailsLower = ({
                     value={consult.get(row.code + 'LeftEyeSphere')}
                     min={undefined}
                     max={undefined}
+                    maxLength={5}
                     onChange={(value) => {
                       setValue(`consult.${row.code}LeftEyeSphere`, value);
                     }}
@@ -228,6 +232,7 @@ export const ConsultDetailsLower = ({
                     value={consult.get(row.code + 'LeftCylinder')}
                     min={undefined}
                     max={undefined}
+                    maxLength={5}
                     onChange={(value) => {
                       setValue(`consult.${row.code}LeftCylinder`, value);
                     }}
@@ -246,6 +251,7 @@ export const ConsultDetailsLower = ({
                 </td>
                 <td>
                   <TextInput
+                    maxLength={10}
                     defaultValue={consult.get(row.code + 'LeftVA')}
                     {...register(`consult.${row.code}LeftVA`)}
                   />
@@ -256,6 +262,7 @@ export const ConsultDetailsLower = ({
                     value={consult.get(row.code + 'LeftAdd')}
                     min={undefined}
                     max={undefined}
+                    maxLength={4}
                     onChange={(value) => {
                       setValue(`consult.${row.code}LeftAdd`, value);
                     }}

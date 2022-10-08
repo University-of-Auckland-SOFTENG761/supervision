@@ -16,11 +16,12 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
 import {
+  buildFormValues,
   parseDateForInput,
   parseNumberForInput,
   stripUnusedFields,
 } from 'database/rxdb-utils';
-import { ConsultDocType, PatientDocType } from 'database';
+import { ConsultDocType, PatientDocType, patientSchemaTyped } from 'database';
 import { RxDocument } from 'rxdb';
 import { useForm } from 'react-hook-form';
 dayjs.extend(customParseFormat);
@@ -42,10 +43,6 @@ export const PatientInputs = ({
 }: PatientInputsProps) => {
   const { register, getValues, setValue } = useForm();
 
-  const patientAge =
-    patient.get('dateOfBirth') &&
-    calculateAge(new Date(patient.get('dateOfBirth')));
-
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleChange = () => {
@@ -54,7 +51,9 @@ export const PatientInputs = ({
     }
     timeoutRef.current = setTimeout(() => {
       const newPatient = {
-        ...stripUnusedFields(JSON.parse(JSON.stringify(getValues('patient')))),
+        ...stripUnusedFields(
+          buildFormValues(patientSchemaTyped, getValues('patient'))
+        ),
         id: patient.get('id'),
       } as PatientDocType;
       updatePatient(newPatient);
@@ -63,7 +62,10 @@ export const PatientInputs = ({
 
   useEffect(() => {
     if (!timeoutRef.current) {
-      setValue('patient', patient.toMutableJSON());
+      setValue(
+        'patient',
+        buildFormValues(patientSchemaTyped, patient.toMutableJSON())
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patient.revision]);
@@ -97,10 +99,11 @@ export const PatientInputs = ({
           <DatePicker
             required
             label="Date of birth:"
-            defaultValue={parseDateForInput(patient.get('dateOfBirth'))}
-            {...register('patient.dateOfBirth', {
-              valueAsDate: true,
-            })}
+            value={parseDateForInput(patient.get('dateOfBirth'))}
+            onSubmit={(value) => {
+              setValue('patient.dateOfBirth', value);
+              handleChange();
+            }}
             onChange={(e) => {
               setValue('patient.dateOfBirth', e ?? undefined);
               handleChange();
@@ -116,7 +119,7 @@ export const PatientInputs = ({
           <NumberInput
             label="Age:"
             className="w-20"
-            defaultValue={patientAge ? Number(patientAge) : undefined}
+            value={calculateAge(parseDateForInput(patient.get('dateOfBirth')))}
             disabled
           />
         </Group>

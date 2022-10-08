@@ -59,7 +59,8 @@ export const SpectaclesDetailsPage = () => {
             'spectacle.id': spectaclesId,
           },
         })
-        .$.subscribe((consult) => setConsult(consult));
+        .exec()
+        .then((consult) => setConsult(consult));
     }
   }, [spectaclesId, consultsCollection]);
 
