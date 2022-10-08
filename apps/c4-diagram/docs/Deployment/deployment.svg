@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1166px" preserveAspectRatio="none" style="width:1897px;height:1166px;background:#FFFFFF;" version="1.1" viewBox="0 0 1897 1166" width="1897px" zoomAndPan="magnify"><defs/><g><rect height="26.2969" style="stroke:#00000000;stroke-width:1.0;fill:none;" width="347" x="768" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="337" x="773" y="22.9951">Deployment Diagram for Supervision - Live</text><!--MD5=[ee17a2e8276784b5620f01644bc3cf3c]
+cluster gcp--><g id="cluster_gcp"><rect height="903" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="1570" x="7" y="244.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="765" y="259.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="191" x="696.5" y="277.4453">axial-serenity-361909</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="168" x="708" y="292.3574">[Google Cloud Platform]</text></g><!--MD5=[a1e45e55e5d074555d32867a6a042d6d]
+cluster dn_api--><g id="cluster_dn_api"><rect height="431" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="934" x="619" y="319.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="1059" y="334.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="222" x="975" y="352.4453">supervision-backend-dev</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="304" x="934" y="367.3574">[Kubernetes Engine, australia-southeast1]</text></g><!--MD5=[81d16cdabbe89c1a39395d00a8354929]
+cluster k8s--><g id="cluster_k8s"><rect height="332" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="886" x="643" y="394.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="1059" y="409.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="173" x="999.5" y="427.4453">Kubernetes Cluster</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="45" x="1063.5" y="442.3574">[Helm]</text></g><!--MD5=[5ec7eedd57310648f8059ffb2621ca4b]
+cluster docker--><g id="cluster_docker"><rect height="233" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="236" x="667" y="469.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="758" y="484.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="64" x="753" y="502.4453">Docker</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="116" x="727" y="517.3574">[node:16-alpine]</text></g><!--MD5=[863ecc9ba856a17834f87683a81bd1cb]
+cluster frontentlb--><g id="cluster_frontentlb"><rect height="335" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="290" x="305" y="392.7969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="423" y="407.792">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="147" x="376.5" y="425.9453">frontend-bucket</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="159" x="370.5" y="440.8574">[HTTPS Load Balancer]</text></g><!--MD5=[ba268d5e449b37428f44406c338986fd]
+cluster gcs_1--><g id="cluster_gcs_1"><rect height="236" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="242" x="329" y="467.7969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="423" y="482.792">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="176" x="362" y="500.9453">uoa-supervision.org</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="163" x="368.5" y="515.8574">[Cloud Storage Bucket]</text></g><!--MD5=[71063ea55ab7e046829079f7b27dc3ba]
+cluster gcs_2--><g id="cluster_gcs_2"><rect height="201" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="250" x="31" y="485.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="129" y="500.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="167" x="72.5" y="518.4453">supervision-assets</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="163" x="74.5" y="533.3574">[Cloud Storage Bucket]</text></g><!--MD5=[dcf290915bc5ad70cafef31a23b8c876]
+cluster gcp_db--><g id="cluster_gcp_db"><rect height="210" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="256" x="657" y="913.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="758" y="928.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="140" x="715" y="946.4453">supervision-dev</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="240" x="665" y="961.3574">[Cloud SQL, australia-southeast1]</text></g><!--MD5=[3320c4e17d84b5275ff7273532b2725a]
+cluster computer--><g id="cluster_computer"><rect height="335" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="290" x="1601" y="825.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="1719" y="840.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="148" x="1672" y="858.4453">User's computer</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="60" x="1716" y="873.3574">[Any OS]</text></g><!--MD5=[2de28e47f9582cb6df153deeec479525]
+cluster browser--><g id="cluster_browser"><rect height="236" rx="2.5" ry="2.5" style="stroke:#A2A2A2;stroke-width:1.0;fill:none;" width="242" x="1625" y="900.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="54" x="1719" y="915.292">«node»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="121" x="1685.5" y="933.4453">Web Browser</text><text fill="#000000" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="135" x="1678.5" y="948.3574">[Chrome or Firefox]</text></g><!--MD5=[967c2b1a156e498aabfdc089710fb9a5]
+entity ingress--><g id="elem_ingress"><rect fill="#B3B3B3" height="117.7813" rx="2.5" ry="2.5" style="stroke:#A6A6A6;stroke-width:0.5;" width="192" x="1321" y="552.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="146" x="1344" y="575.292">«external_container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="67" x="1383.5" y="593.4453">Ingress</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="133" x="1350.5" y="608.3574">[External HTTP(S) LB]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1415" y="624.1826"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="164" x="1335" y="640.4795">routes external HTTP(S)</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="37" x="1398.5" y="656.7764">traffic</text></g><!--MD5=[039a2f3ff607854acf72ab8f1b137804]
+entity webserv--><g id="elem_webserv"><rect fill="#B3B3B3" height="134.0781" rx="2.5" ry="2.5" style="stroke:#A6A6A6;stroke-width:0.5;" width="210" x="1024" y="544.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="146" x="1056" y="567.292">«external_container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="111" x="1073.5" y="585.4453">Web Service</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="72" x="1093" y="600.3574">[Node Port]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1127" y="616.1826"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="182" x="1038" y="632.4795">set of pods with a network</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="183" x="1035.5" y="648.7764">endpoint for discovery and</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103" x="1077.5" y="665.0732">load balancing.</text></g><!--MD5=[e2307af040e3f87d22824e7603ca28ec]
+entity api--><g id="elem_api"><rect fill="#438DD5" height="150.375" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="204" x="683" y="536.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="83" x="743.5" y="559.292">«container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="132" x="719" y="577.4453">API Application</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="148" x="711" y="592.3574">[TypeScript and NestJS]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="783" y="608.1826"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="145" x="712.5" y="624.4795">Provides patient data</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="164" x="701" y="640.7764">manipulation/replication</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="180" x="693" y="657.0732">functionality via a GraphQL</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="25" x="772.5" y="673.3701">API.</text></g><!--MD5=[33573e971ff506c0f246109ca3fd77bd]
+entity spa--><g id="elem_spa"><rect fill="#438DD5" height="152.7031" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="210" x="345" y="534.7969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="83" x="408.5" y="557.792">«container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="102" x="396" y="575.9453">Single Page</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="96" x="402" y="594.5703">Application</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="144" x="378" y="609.4824">[TypeScript and React]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="448" y="625.3076"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="182" x="359" y="641.6045">Offline-first application that</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="180" x="358" y="657.9014">lets users manage patient</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="184" x="358" y="674.1982">data via their web browser.</text></g><!--MD5=[e9b32bde77be40a89ab3d0cb042f1407]
+entity assets--><g id="elem_assets"><rect fill="#438DD5" height="117.7813" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="217" x="47.5" y="552.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="83" x="114.5" y="575.292">«container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="114" x="99" y="593.4453">Login Assets</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="36" x="138" y="608.3574">[Misc]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="154" y="624.1826"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="189" x="61.5" y="640.4795">Imagery and Logos used by</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="135.5" y="656.7764">Auth0</text></g><!--MD5=[7468467f3b6b392f1d176d828c753b77]
+entity db--><g id="elem_db"><path d="M690,990.2969 C690,980.2969 785,980.2969 785,980.2969 C785,980.2969 880,980.2969 880,990.2969 L880,1097.0781 C880,1107.0781 785,1107.0781 785,1107.0781 C785,1107.0781 690,1107.0781 690,1097.0781 L690,990.2969 " fill="#438DD5" style="stroke:#3C7FC0;stroke-width:0.5;"/><path d="M690,990.2969 C690,1000.2969 785,1000.2969 785,1000.2969 C785,1000.2969 880,1000.2969 880,990.2969 " fill="none" style="stroke:#3C7FC0;stroke-width:0.5;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="83" x="743.5" y="1017.292">«container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="83" x="743.5" y="1035.4453">Database</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="80" x="745" y="1050.3574">[PostgreSQL]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="783" y="1066.1826"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="162" x="704" y="1082.4795">Stores user and patient</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="34" x="768" y="1098.7764">data.</text></g><!--MD5=[f18a2cd6dbbf51542dc036a45ab3c177]
+entity spa_deployed--><g id="elem_spa_deployed"><rect fill="#438DD5" height="152.7031" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="210" x="1641" y="967.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="83" x="1704.5" y="990.292">«container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="102" x="1692" y="1008.4453">Single Page</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="96" x="1698" y="1027.0703">Application</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="144" x="1674" y="1041.9824">[TypeScript and React]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1744" y="1057.8076"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="182" x="1655" y="1074.1045">Offline-first application that</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="180" x="1654" y="1090.4014">lets users manage patient</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="184" x="1654" y="1106.6982">data via their web browser.</text></g><!--MD5=[766eac0c89f51a4b467d310638b2a60d]
+entity auth0--><g id="elem_auth0"><rect fill="#999999" height="138.7344" rx="2.5" ry="2.5" style="stroke:#8A8A8A;stroke-width:0.5;" width="182" x="65" y="44.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="130" x="91" y="67.292">«external_system»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="100" x="103" y="85.4453">Auth0 User</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="115" x="98.5" y="104.0703">Management</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="154" y="120.8389"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="148" x="82" y="137.1357">Login Provider. Allows</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="158" x="75" y="153.4326">supervisors to manage</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="68" x="122" y="169.7295">accounts.</text></g><!--MD5=[b8eb5188ecc39189e8912a38b0bef85b]
+reverse link webserv to ingress--><g id="link_webserv_ingress"><path d="M1242.2,611.2969 C1268.16,611.2969 1295.52,611.2969 1320.69,611.2969 " fill="none" id="webserv-backto-ingress" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1234.2,611.2969,1242.2,614.2969,1242.2,608.2969,1234.2,611.2969" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="50" x="1252.5" y="605.4355">Routes</text></g><!--MD5=[0a22e9d4c98cc487f2fff98ffbe48abd]
+reverse link api to webserv--><g id="link_api_webserv"><path d="M895.44,611.2969 C936.59,611.2969 983.17,611.2969 1023.84,611.2969 " fill="none" id="api-backto-webserv" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="887.28,611.2969,895.28,614.2969,895.28,608.2969,887.28,611.2969" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="100" x="905.5" y="605.4355">Reverse Proxy</text></g><!--MD5=[6e4f8944ad44e5e0bd096d91d903b4e9]
+link spa to spa_deployed--><g id="link_spa_spa_deployed"><path d="M537.98,687.9169 C575.27,715.3969 620.77,743.3569 667,758.2969 C718.41,774.9069 856.81,756.8269 910,766.2969 C1177.05,813.8369 1475.52,928.3069 1633.57,994.0869 " fill="none" id="spa-to-spa_deployed" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1640.99,997.1769,1634.7649,991.3247,1632.4518,996.861,1640.99,997.1769" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="114" x="1109.5" y="785.4355">Delivered to the</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="141" x="1098" y="799.4043">user's web browser</text></g><!--MD5=[2d1516351d1063715eac1b3154904dff]
+link spa_deployed to ingress--><g id="link_spa_deployed_ingress"><path d="M1688.25,967.2269 C1625.31,884.8669 1525.67,754.4969 1466.28,676.7869 " fill="none" id="spa_deployed-to-ingress" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1461.37,670.3569,1463.8431,678.5351,1468.6108,674.8924,1461.37,670.3569" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="127" x="1562" y="785.4355">Makes API calls to</text><text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="63" x="1594" y="799.4043">[GraphQL]</text></g><!--MD5=[cbddf482ef232e727c6fe174b4623461]
+link auth0 to assets--><g id="link_auth0_assets"><path d="M156,183.4369 C156,278.6969 156,449.8769 156,543.9269 " fill="none" id="auth0-to-assets" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="156,551.9469,159,543.9469,153,543.9469,156,551.9469" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="150" x="157" y="225.4355">Uses for login screen</text></g><!--MD5=[1b9dbcfdb69d97b7ce5f2d963fc4ed75]
+link api to db--><g id="link_api_db"><path d="M785,686.3069 C785,766.3269 785,892.9769 785,971.8069 " fill="none" id="api-to-db" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="785,980.2269,788,972.2269,782,972.2269,785,980.2269" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="111" x="786" y="778.4355">Reads from and</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="64" x="811.5" y="792.4043">writes to</text><text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="66" x="810.5" y="806.373">[TypeORM]</text></g><!--MD5=[0d38f955aa99ef086d454dbaa11fa8b3]
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Deployment.puml
+
+title Deployment Diagram for Supervision - Live
+
+Deployment_Node(gcp, axial-serenity-361909, "Google Cloud Platform"){
+
+  Deployment_Node(dn_api, supervision-backend-dev, "Kubernetes Engine, australia-southeast1"){
+    Deployment_Node(k8s, Kubernetes Cluster, Helm){
+      Deployment_Node(docker, Docker, node:16-alpine){
+        Container(api, "API Application", "TypeScript and NestJS", "Provides patient data manipulation/replication functionality via a GraphQL API.")
+      }
+
+      Container_Ext(ingress, Ingress, "External HTTP(S) LB", routes external HTTP(S) traffic)
+      Container_Ext(webserv, Web Service, "Node Port", set of pods with a network endpoint for discovery and load balancing.)
+
+      Rel_L(ingress, webserv, Routes)
+      Rel_L(webserv, api, Reverse Proxy)
+    }
+  }
+
+  Deployment_Node(frontentlb, frontend-bucket, HTTPS Load Balancer){
+    Deployment_Node(gcs_1, uoa-supervision.org, "Cloud Storage Bucket"){
+      Container(spa, "Single Page Application", "TypeScript and React", "Offline-first application that lets users manage patient data via their web browser.")
+    }
+  }
+
+  Deployment_Node(gcs_2, supervision-assets, "Cloud Storage Bucket"){
+    Container(assets, "Login Assets", "Misc", "Imagery and Logos used by Auth0")
+  }
+
+  Deployment_Node(gcp_db, supervision-dev, "Cloud SQL, australia-southeast1") {
+    ContainerDb(db, "Database", "PostgreSQL", "Stores user and patient data.")
+  }
+
+
+
+}
+
+Deployment_Node(computer, "User's computer", "Any OS"){
+  Deployment_Node(browser, "Web Browser", "Chrome or Firefox") {
+    Container(spa_deployed, "Single Page Application", "TypeScript and React", "Offline-first application that lets users manage patient data via their web browser.")
+  }
+}
+
+System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
+
+Rel(spa, spa_deployed, "Delivered to the user's web browser")
+Rel(spa_deployed, ingress, "Makes API calls to", GraphQL)
+Rel(auth0, assets, Uses for login screen)
+Rel(api, db, Reads from and writes to, TypeORM)
+
+@enduml
+
+@startuml
+
+
+
+
+
+skinparam defaultTextAlignment center
+
+skinparam wrapWidth 200
+skinparam maxMessageSize 150
+
+skinparam LegendBorderColor transparent
+skinparam LegendBackgroundColor transparent
+skinparam LegendFontColor #FFFFFF
+
+skinparam rectangle {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam database {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam queue {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam Arrow {
+    Color #666666
+    FontColor #666666
+    FontSize 12
+}
+
+skinparam rectangle<<boundary>> {
+    Shadowing false
+    StereotypeFontSize 0
+    FontColor #444444
+    BorderColor #444444
+    BorderStyle dashed
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<person>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #08427B
+    BorderColor #073B6F
+}
+
+skinparam rectangle<<external_person>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #686868
+    BorderColor #8A8A8A
+}
+
+skinparam rectangle<<system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #1168BD
+    BorderColor #3C7FC0
+}
+
+skinparam rectangle<<external_system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #999999
+    BorderColor #8A8A8A
+}
+
+sprite $person [48x48/16] {
+000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000
+0000000000000000000049BCCA7200000000000000000000
+0000000000000000006EFFFFFFFFB3000000000000000000
+00000000000000001CFFFFFFFFFFFF700000000000000000
+0000000000000001EFFFFFFFFFFFFFF80000000000000000
+000000000000000CFFFFFFFFFFFFFFFF6000000000000000
+000000000000007FFFFFFFFFFFFFFFFFF100000000000000
+00000000000001FFFFFFFFFFFFFFFFFFF900000000000000
+00000000000006FFFFFFFFFFFFFFFFFFFF00000000000000
+0000000000000BFFFFFFFFFFFFFFFFFFFF40000000000000
+0000000000000EFFFFFFFFFFFFFFFFFFFF70000000000000
+0000000000000FFFFFFFFFFFFFFFFFFFFF80000000000000
+0000000000000FFFFFFFFFFFFFFFFFFFFF80000000000000
+0000000000000DFFFFFFFFFFFFFFFFFFFF60000000000000
+0000000000000AFFFFFFFFFFFFFFFFFFFF40000000000000
+00000000000006FFFFFFFFFFFFFFFFFFFE00000000000000
+00000000000000EFFFFFFFFFFFFFFFFFF800000000000000
+000000000000007FFFFFFFFFFFFFFFFFF100000000000000
+000000000000000BFFFFFFFFFFFFFFFF5000000000000000
+0000000000000001DFFFFFFFFFFFFFF70000000000000000
+00000000000000000BFFFFFFFFFFFF500000000000000000
+0000000000000000005DFFFFFFFFA1000000000000000000
+0000000000000000000037ABB96100000000000000000000
+000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000
+000000000000025788300000000005886410000000000000
+000000000007DFFFFFFD9643347BFFFFFFFB400000000000
+0000000004EFFFFFFFFFFFFFFFFFFFFFFFFFFB1000000000
+000000007FFFFFFFFFFFFFFFFFFFFFFFFFFFFFD200000000
+00000006FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE10000000
+0000003FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0000000
+000000BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5000000
+000003FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD000000
+000009FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF200000
+00000DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF600000
+00000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF800000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA00000
+00000EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF700000
+000006FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE100000
+0000008FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD3000000
+000000014555555555555555555555555555555300000000
+000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+skinparam database<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+skinparam queue<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+skinparam rectangle<<external_container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #B3B3B3
+    BorderColor #A6A6A6
+}
+
+skinparam database<<external_container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #B3B3B3
+    BorderColor #A6A6A6
+}
+
+skinparam queue<<external_container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #B3B3B3
+    BorderColor #A6A6A6
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<node>> {
+    Shadowing false
+    StereotypeFontSize 0
+    FontColor #000000
+    BorderColor #A2A2A2
+    BorderStyle solid
+}
+
+
+title Deployment Diagram for Supervision - Live
+
+rectangle "==axial-serenity-361909\n<size:12>[Google Cloud Platform]</size>" <<node>> as gcp{
+
+  rectangle "==supervision-backend-dev\n<size:12>[Kubernetes Engine, australia-southeast1]</size>" <<node>> as dn_api{
+    rectangle "==Kubernetes Cluster\n<size:12>[Helm]</size>" <<node>> as k8s{
+      rectangle "==Docker\n<size:12>[node:16-alpine]</size>" <<node>> as docker{
+        rectangle "==API Application\n//<size:12>[TypeScript and NestJS]</size>//\n\n Provides patient data manipulation/replication functionality via a GraphQL API." <<container>> as api
+      }
+
+      rectangle "==Ingress\n//<size:12>[External HTTP(S) LB]</size>//\n\n routes external HTTP(S) traffic" <<external_container>> as ingress
+      rectangle "==Web Service\n//<size:12>[Node Port]</size>//\n\n set of pods with a network endpoint for discovery and load balancing." <<external_container>> as webserv
+
+ingress -LEFT->> webserv : **Routes**
+webserv -LEFT->> api : **Reverse Proxy**
+    }
+  }
+
+  rectangle "==frontend-bucket\n<size:12>[HTTPS Load Balancer]</size>" <<node>> as frontentlb{
+    rectangle "==uoa-supervision.org\n<size:12>[Cloud Storage Bucket]</size>" <<node>> as gcs_1{
+      rectangle "==Single Page Application\n//<size:12>[TypeScript and React]</size>//\n\n Offline-first application that lets users manage patient data via their web browser." <<container>> as spa
+    }
+  }
+
+  rectangle "==supervision-assets\n<size:12>[Cloud Storage Bucket]</size>" <<node>> as gcs_2{
+    rectangle "==Login Assets\n//<size:12>[Misc]</size>//\n\n Imagery and Logos used by Auth0" <<container>> as assets
+  }
+
+  rectangle "==supervision-dev\n<size:12>[Cloud SQL, australia-southeast1]</size>" <<node>> as gcp_db {
+    database "==Database\n//<size:12>[PostgreSQL]</size>//\n\n Stores user and patient data." <<container>> as db
+  }
+
+
+
+}
+
+rectangle "==User's computer\n<size:12>[Any OS]</size>" <<node>> as computer{
+  rectangle "==Web Browser\n<size:12>[Chrome or Firefox]</size>" <<node>> as browser {
+    rectangle "==Single Page Application\n//<size:12>[TypeScript and React]</size>//\n\n Offline-first application that lets users manage patient data via their web browser." <<container>> as spa_deployed
+  }
+}
+
+rectangle "==Auth0 User Management\n\n Login Provider. Allows supervisors to manage accounts." <<external_system>> as auth0
+
+spa - ->> spa_deployed : **Delivered to the user's web browser**
+spa_deployed - ->> ingress : **Makes API calls to**\n//<size:12>[GraphQL]</size>//
+auth0 - ->> assets : **Uses for login screen**
+api - ->> db : **Reads from and writes to**\n//<size:12>[TypeORM]</size>//
+
+@enduml
+
+PlantUML version 1.2022.3(Wed Mar 30 05:10:57 NZDT 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: GB
+--></g></svg>
