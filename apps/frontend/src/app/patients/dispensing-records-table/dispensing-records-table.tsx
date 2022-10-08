@@ -49,7 +49,7 @@ export const DispensingRecordsTable = ({
       <tbody>
         {dispensingRecords.length === 0 ? (
           <tr>
-            <td colSpan={5} className="hover:bg-white">
+            <td colSpan={6} className="hover:bg-white">
               <Stack className="justify-center w-full p-2">
                 <ThemeIcon
                   color="gray.6"
