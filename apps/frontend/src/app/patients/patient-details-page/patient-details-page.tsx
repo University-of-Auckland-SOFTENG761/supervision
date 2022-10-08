@@ -53,15 +53,14 @@ export const PatientDetailsPage = () => {
             patientId: patientId,
           },
         })
-        .$.subscribe((consults) => {
-          setConsults(
-            new Map(
-              consults.map(
-                (consult) =>
-                  [consult.id, consult] as [string, RxDocument<ConsultDocType>]
-              )
+        .$.subscribe((newConsults) => {
+          const newConsultsMap = new Map(
+            newConsults.map(
+              (consult) =>
+                [consult.id, consult] as [string, RxDocument<ConsultDocType>]
             )
           );
+          setConsults(newConsults.length > 0 ? newConsultsMap : null);
         });
     }
   }, [consultsCollection, patient, patientId]);
