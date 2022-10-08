@@ -310,7 +310,11 @@ export const ConsultDetailsUpper = ({
                 setValue('consult.recallDate', nextDate?.toDate() ?? undefined);
               }}
             />
-            <Text>{dayjs(consult.get('recallDate')).format('DD/MM/YYYY')}</Text>
+            <Text>
+              {consult.get('recallDate')
+                ? dayjs(consult.get('recallDate')).format('DD/MM/YYYY')
+                : ''}
+            </Text>
             <TextInput
               label="Reason:"
               defaultValue={consult.get('recallDescription')}
