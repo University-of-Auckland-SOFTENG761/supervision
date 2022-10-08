@@ -153,6 +153,7 @@ sudo -u postgres createdb supervision
 </details>
 <details>
 <summary>Windows (chocolatey)</summary>
+<a href="https://chocolatey.org/">https://chocolatey.org/</a>
 
 ```bash
 # Install PostgreSQL
