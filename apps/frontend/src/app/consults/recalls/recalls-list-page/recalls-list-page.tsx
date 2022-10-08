@@ -223,7 +223,7 @@ export const RecallsListPage = () => {
             dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
           }
           placeholder="Find all prior to date..."
-          initialMonth={new Date()}
+          initialMonth={dayjs().add(12, 'month').toDate()}
           value={dateQuery}
           onChange={setDateQuery}
         />
