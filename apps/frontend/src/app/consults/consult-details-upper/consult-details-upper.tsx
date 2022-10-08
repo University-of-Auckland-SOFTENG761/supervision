@@ -82,15 +82,15 @@ export const ConsultDetailsUpper = ({
           <NumberInput
             label="Pupillary Distance:"
             defaultValue={parseNumberForInput(
-              consult.get('spectaclePupillaryDistance')
+              consult.get('spectacle.pupillaryDistance')
             )}
-            {...register('consult.spectaclePupillaryDistance', {
+            {...register('consult.spectacle.pupillaryDistance', {
               valueAsNumber: true,
             })}
             min={0}
             max={undefined}
             onChange={(value) => {
-              setValue('consult.spectaclePupillaryDistance', value);
+              setValue('consult.spectacle.pupillaryDistance', value);
             }}
           />
           <TextInput

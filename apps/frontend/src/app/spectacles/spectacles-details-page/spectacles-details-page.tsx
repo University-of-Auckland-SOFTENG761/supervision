@@ -18,7 +18,11 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
 import { useDatabase } from '@shared';
 import { ConsultDocType, PatientDocType } from 'database';
-import { parseDateForInput, stripUnusedFields } from 'database/rxdb-utils';
+import {
+  parseDateForInput,
+  parseNumberForInput,
+  stripUnusedFields,
+} from 'database/rxdb-utils';
 import { RxDocument } from 'rxdb';
 import { useForm } from 'react-hook-form';
 
@@ -104,6 +108,14 @@ export const SpectaclesDetailsPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consult?.revision]);
 
+  if (!consult) {
+    return (
+      <Center className="h-full">
+        <Loader />
+      </Center>
+    );
+  }
+
   return (
     <ScrollArea onChange={handleChange} className="h-full p-8">
       <Stack className="w-3/5 max-w-2xl min-w-fit mx-auto flex space-y-4">
@@ -147,7 +159,7 @@ export const SpectaclesDetailsPage = () => {
         <Group className="justify-between">
           <Text className="-my-8">School</Text>
           <Text className="-my-8">
-            {consult?.get('spectacle.deliverySchool')}
+            {consult.get('spectacle.deliverySchool')}
           </Text>
         </Group>
         <Divider my="xs" />
@@ -186,14 +198,16 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">PD (mm)</Text>
           <NumberInput
             classNames={{ root: '-my-8', input: 'text-right pr-8' }}
+            defaultValue={parseNumberForInput(
+              consult.get('spectacle.pupillaryDistance')
+            )}
             {...register('consult.spectacle.pupillaryDistance', {
               valueAsNumber: true,
             })}
-            min={undefined}
+            min={0}
             max={undefined}
             onChange={(value) => {
               setValue('consult.spectacle.pupillaryDistance', value);
-              handleChange();
             }}
           />
         </Group>
@@ -211,6 +225,7 @@ export const SpectaclesDetailsPage = () => {
           <Textarea
             autosize
             classNames={{ root: '-my-3', input: 'text-left py-1' }}
+            defaultValue={consult.get('spectacle.notes')}
             {...register('consult.spectacle.notes')}
             minRows={1}
           />
@@ -228,9 +243,10 @@ export const SpectaclesDetailsPage = () => {
                 }
               )
             )}
+            defaultValue={consult.get('spectacle.orderStatus')}
             {...register('consult.spectacle.orderStatus')}
             onChange={(value) => {
-              setValue('consult.spectacle.orderStatus', value);
+              setValue('consult.spectacle.orderStatus', value ?? 'CREATED');
               handleChange();
             }}
           />
@@ -240,9 +256,7 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Order Date</Text>
           <DatePicker
             classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
-            defaultValue={parseDateForInput(
-              consult?.get('spectacle.orderDate')
-            )}
+            defaultValue={parseDateForInput(consult.get('spectacle.orderDate'))}
             {...register('consult.spectacle.orderDate', {
               valueAsDate: true,
             })}
@@ -265,7 +279,7 @@ export const SpectaclesDetailsPage = () => {
           <DatePicker
             classNames={{ root: 'w-40 -my-8', input: 'text-right' }}
             defaultValue={parseDateForInput(
-              consult?.get('spectacle.deliveredDate')
+              consult.get('spectacle.deliveredDate')
             )}
             {...register('consult.spectacle.deliveredDate', {
               valueAsDate: true,

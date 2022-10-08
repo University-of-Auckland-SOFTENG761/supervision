@@ -132,7 +132,6 @@ export const SpectaclesListPage = () => {
               .findByIds(patient.consultIds ?? [])
               .then((newConsults) => {
                 const newConsultsArray = Array.from(newConsults.values());
-                console.log(newConsultsArray);
                 newConsults &&
                   setMatchingConsults((c) => [...c, ...newConsultsArray]);
               });
@@ -208,14 +207,6 @@ export const SpectaclesListPage = () => {
           debouncedStatusQuery ? r.orderStatus === debouncedStatusQuery : true
         )
         .filter((r, i, a) => a.findIndex((t) => t.id === r.id) === i && r.id);
-      console.log(
-        'patients',
-        matchingPatients,
-        'consults',
-        matchingConsults,
-        'records',
-        records
-      );
       setSpectaclesRecords(records);
       setTableRecords(sortBy(records, 'date'));
     }
