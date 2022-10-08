@@ -223,7 +223,7 @@ export const RecallsListPage = () => {
         />
         <DatePicker
           allowFreeInput
-          className="w-36 print:hidden"
+          className="w-fit print:hidden"
           inputFormat="DD/MM/YYYY"
           dateParser={(date: string) =>
             dayjs(date, ['DD/MM/YYYY', 'DD/MM/YY']).toDate()
