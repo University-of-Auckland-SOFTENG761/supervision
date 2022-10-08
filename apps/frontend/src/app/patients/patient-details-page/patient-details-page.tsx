@@ -46,18 +46,25 @@ export const PatientDetailsPage = () => {
   }, [patientsCollection, patientId, patient?.id]);
 
   useEffect(() => {
-    if (patient) {
-      // setIsLoading((l) => l + 1);
-      if (!patient.consultIds || patient.consultIds.length === 0) {
-        setConsults(new Map());
-        return;
-      }
-      consultsCollection?.findByIds$(patient.consultIds).subscribe((c) => {
-        setConsults(c);
-        // setIsLoading((l) => l - 1);
-      });
+    if (consultsCollection && patientId) {
+      consultsCollection
+        .find({
+          selector: {
+            patientId: patientId,
+          },
+        })
+        .$.subscribe((consults) => {
+          setConsults(
+            new Map(
+              consults.map(
+                (consult) =>
+                  [consult.id, consult] as [string, RxDocument<ConsultDocType>]
+              )
+            )
+          );
+        });
     }
-  }, [consultsCollection, patient]);
+  }, [consultsCollection, patient, patientId]);
 
   const handleCreateNewRecord = async () => {
     if (newConsult && patientId) {
