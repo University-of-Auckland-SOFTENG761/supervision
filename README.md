@@ -52,6 +52,7 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
+
 <div align="center">
   <a href="https://github.com/University-of-Auckland-SOFTENG761/project-team-1">
         <img src="/assets/screenshots/patient-details-framed.jpg" alt="SuperVision screenshot of patient details screen" width="700">
@@ -74,7 +75,26 @@ Detailed documentation and C4 diagrams are [available here](/apps/c4-diagram/doc
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Screenshots
-
+<details>
+  <summary>Login while online</summary>
+  <img src="/assets/screenshots/login-online.jpg" alt="screenshot of login screen">
+</details>
+<details>
+  <summary>Login while offline</summary>
+  <img src="/assets/screenshots/login-offline.jpg" alt="screenshot of login screen">
+</details>
+<details>
+  <summary>Editing/viewing patient details</summary>
+  <img src="/assets/screenshots/patient-details.jpg" alt="screenshot of login screen">
+</details>
+<details>
+  <summary>Editing/viewing spectacles details</summary>
+  <img src="/assets/screenshots/spectacles-details.jpg" alt="screenshot of login screen">
+</details>
+<details>
+  <summary>Editing/viewing dispensed spectacles list</summary>
+  <img src="/assets/screenshots/spectacles-list.jpg" alt="screenshot of login screen">
+</details>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
