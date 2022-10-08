@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
-import LensTypeAutocomplete from './lensType-autocomplete';
+import LensTypeSelect from './lensType-select';
 
-describe('LensTypeAutocomplete', () => {
+describe('LensTypeSelect', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
-      <LensTypeAutocomplete value="" onChange={jest.fn()} />
+      <LensTypeSelect value="" onChange={jest.fn()} />
     );
     expect(baseElement).toBeTruthy();
   });
