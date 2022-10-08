@@ -128,10 +128,13 @@ Detailed documentation and C4 diagrams are [available here](/apps/c4-diagram/doc
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+
 #### node 16.x
+
 https://nodejs.org/en/download/
 
 #### postgresql
+
 <details>
 <summary>Ubuntu</summary>
 
@@ -179,7 +182,7 @@ sudo -u postgres createdb supervision
    3. Choose "Single Page Web Application"
    4. Take note of the **Client ID** and **Client Secret**
    5. Repeat the process but choosing the **"Machine to Machine"** application type.
-      * Authorise this application for the **Auth0 Management API**
+      - Authorise this application for the **Auth0 Management API**
 2. Clone the repo
    ```sh
    git clone https://github.com/University-of-Auckland-SOFTENG761/project-team-1 supervision
@@ -195,6 +198,17 @@ sudo -u postgres createdb supervision
    ```
    Fill out the [`.env`](apps/backend/.env) file with the details of your
    postgresql and auth0 configurations.
+5. Modify frontend configuration files as necessary
+   - [/apps/frontend/src/environments/environment.ts](/apps/frontend/src/environments/environment.ts)
+   - [/apps/frontend/src/environments/environment.prod.ts](/apps/frontend/src/environments/environment.prod.ts)
+6. Run backend
+   ```sh
+   nx serve backend
+   ```
+7. Run frontend (in a separate terminal)
+   ```sh
+   nx serve frontend
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -222,6 +236,5 @@ Copyright (c) 2022 Veeran Morar & Team 1 SOFTENG761
 ## Acknowledgments
 
 - [Veeran Morar](https://profiles.auckland.ac.nz/veeran-morar), for being an excellent PO
-
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
