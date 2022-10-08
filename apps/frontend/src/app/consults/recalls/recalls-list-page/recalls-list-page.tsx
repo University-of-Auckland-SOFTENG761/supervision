@@ -251,14 +251,14 @@ export const RecallsListPage = () => {
               },
               sortable: true,
             },
+            { accessor: 'firstName', title: 'FIRST NAME', sortable: true },
+            { accessor: 'lastName', title: 'LAST NAME', sortable: true },
+            { accessor: 'school', title: 'SCHOOL', sortable: true },
             {
               accessor: 'recallDescription',
               title: 'DESCRIPTION',
               sortable: true,
             },
-            { accessor: 'firstName', title: 'FIRST NAME', sortable: true },
-            { accessor: 'lastName', title: 'LAST NAME', sortable: true },
-            { accessor: 'school', title: 'SCHOOL', sortable: true },
           ]}
           sortStatus={sortStatus}
           onSortStatusChange={setSortStatus}
