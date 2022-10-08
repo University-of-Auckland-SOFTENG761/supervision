@@ -1,5 +1,11 @@
 import { Navbar, Stack } from '@mantine/core';
-import { IconEyeglass, IconSearch, IconEye, IconUser } from '@tabler/icons';
+import {
+  IconEyeglass,
+  IconSearch,
+  IconEye,
+  IconUser,
+  IconCalendarEvent,
+} from '@tabler/icons';
 import { AppShell, useNetwork } from './shared';
 import { useEffect, useRef } from 'react';
 import {
@@ -78,7 +84,7 @@ export function App() {
                 ></NavbarLink>
                 <NavbarLink
                   label="Recalls"
-                  icon={IconEye}
+                  icon={IconCalendarEvent}
                   onClick={() => navigate('/recalls-list')}
                   active={location.pathname === '/recalls-list'}
                 ></NavbarLink>
