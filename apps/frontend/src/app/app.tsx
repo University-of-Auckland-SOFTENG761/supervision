@@ -50,7 +50,7 @@ export function App() {
     <AppShell
       navbar={
         location.pathname === '/' ? undefined : (
-          <Navbar width={{ base: 60 }} py={8}>
+          <Navbar width={{ base: 60 }} py={8} className="print:hidden">
             <Navbar.Section grow>
               <Stack justify="center" align="center">
                 <NavbarLink

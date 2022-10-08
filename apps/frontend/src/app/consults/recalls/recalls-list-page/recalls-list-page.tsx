@@ -57,6 +57,7 @@ export const RecallsListPage = () => {
       <Stack className={'w-4/5 mx-auto min-h-fit'}>
         <Title order={3}>Recall Records</Title>
         <TextInput
+          className="print:hidden"
           placeholder="Search dispensing records..."
           icon={<IconSearch size={16} />}
           value={query}
