@@ -1,0 +1,53 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Deployment.puml
+
+title Deployment Diagram for Supervision - Live
+
+Deployment_Node(gcp, axial-serenity-361909, "Google Cloud Platform"){
+
+  Deployment_Node(dn_api, supervision-backend-dev, "Kubernetes Engine, australia-southeast1"){
+    Deployment_Node(k8s, Kubernetes Cluster, Helm){
+      Deployment_Node(docker, Docker, node:16-alpine){
+        Container(api, "API Application", "TypeScript and NestJS", "Provides patient data manipulation/replication functionality via a GraphQL API.")
+      }
+
+      Container_Ext(ingress, Ingress, "External HTTP(S) LB", routes external HTTP(S) traffic)
+      Container_Ext(webserv, Web Service, "Node Port", set of pods with a network endpoint for discovery and load balancing.)
+
+      Rel_L(ingress, webserv, Routes)
+      Rel_L(webserv, api, Reverse Proxy)
+    }
+  }
+
+  Deployment_Node(frontentlb, frontend-bucket, HTTPS Load Balancer){
+    Deployment_Node(gcs_1, uoa-supervision.org, "Cloud Storage Bucket"){
+      Container(spa, "Single Page Application", "TypeScript and React", "Offline-first application that lets users manage patient data via their web browser.")
+    }
+  }
+
+  Deployment_Node(gcs_2, supervision-assets, "Cloud Storage Bucket"){
+    Container(assets, "Login Assets", "Misc", "Imagery and Logos used by Auth0")
+  }
+
+  Deployment_Node(gcp_db, supervision-dev, "Cloud SQL, australia-southeast1") {
+    ContainerDb(db, "Database", "PostgreSQL", "Stores user and patient data.")
+  }
+
+
+
+}
+
+Deployment_Node(computer, "User's computer", "Any OS"){
+  Deployment_Node(browser, "Web Browser", "Chrome or Firefox") {
+    Container(spa_deployed, "Single Page Application", "TypeScript and React", "Offline-first application that lets users manage patient data via their web browser.")
+  }
+}
+
+System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
+
+Rel(spa, spa_deployed, "Delivered to the user's web browser")
+Rel(spa_deployed, ingress, "Makes API calls to", GraphQL)
+Rel(auth0, assets, Uses for login screen)
+Rel(api, db, Reads from and writes to, TypeORM)
+
+@enduml
