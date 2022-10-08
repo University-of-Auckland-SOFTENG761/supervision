@@ -25,6 +25,9 @@
 SuperVision is a patient management system for optometry clinics.
 It has been designed to be used by the [Aotearoa Vision Bus](https://communityeyehealth.auckland.ac.nz/our-research/vision-bus-aotearoa/).
 
+## Documentation
+Detailed documentation and C4 diagrams are [available here](/apps/c4-diagram/docs/README.md).
+
 ### Built With
 
 - [React](reactjs.org/)
