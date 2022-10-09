@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1289px" preserveAspectRatio="none" style="width:1936px;height:1289px;background:#FFFFFF;" version="1.1" viewBox="0 0 1936 1289" width="1936px" zoomAndPan="magnify"><defs/><g><!--MD5=[38c27b35aef4eebaf210b1fd39b25fb0]
+cluster spa--><g id="cluster_spa"><rect height="1276.5" rx="2.5" ry="2.5" style="stroke:#444444;stroke-width:1.0;fill:none;stroke-dasharray:7.0,7.0;" width="1473" x="7" y="7"/><text fill="#444444" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="84" x="701.5" y="21.9951">«boundary»</text><text fill="#444444" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="204" x="641.5" y="40.1484">Single Page Application</text><text fill="#444444" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="80" x="703.5" y="55.0605">[Container]</text></g><!--MD5=[6c6f92573cfc5dec1624c9507009f723]
+cluster pages--><g id="cluster_pages"><rect height="336.5" rx="2.5" ry="2.5" style="stroke:#444444;stroke-width:1.0;fill:none;stroke-dasharray:7.0,7.0;" width="954" x="211" y="439"/><text fill="#444444" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="84" x="646" y="453.9951">«boundary»</text><text fill="#444444" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="54" x="661" y="472.1484">Pages</text></g><!--MD5=[47ebbc41df82a3fd3b68c37ac3cbc51f]
+cluster repl--><g id="cluster_repl"><rect height="173" rx="2.5" ry="2.5" style="stroke:#444444;stroke-width:1.0;fill:none;stroke-dasharray:7.0,7.0;" width="490" x="784" y="859"/><text fill="#444444" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="84" x="987" y="873.9951">«boundary»</text><text fill="#444444" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="96" x="981" y="892.1484">Replication</text></g><!--MD5=[b0ef157527fb795a549c835f33b6de98]
+entity sw--><g id="elem_sw"><rect fill="#85BBF0" height="120.1094" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="212" x="544" y="74"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="601" y="96.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="129" x="582.5" y="115.1484">Offline Service</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="67" x="616.5" y="133.7734">Worker</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="104" x="598" y="148.6855">[Service Worker]</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="648" y="164.5107"> </text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="188" x="558" y="180.8076">Caches page for offline use</text></g><!--MD5=[08314d2f92a395453a0bd994e66616d9]
+entity netProvider--><g id="elem_netProvider"><rect fill="#85BBF0" height="117.7813" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="190" x="67" y="905"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="113" y="927.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="158" x="83" y="946.1484">Network Provider</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="99" x="112.5" y="961.0605">[React Context]</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="160" y="976.8857"> </text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="162" x="81" y="993.1826">Provides information on</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="128" x="98" y="1009.4795">online connectivity</text></g><!--MD5=[3b573619cdaf423de45d67bed337d810]
+entity auth0Provider--><g id="elem_auth0Provider"><rect fill="#85BBF0" height="117.7813" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="166" x="1298" y="905"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="1332" y="927.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="134" x="1314" y="946.1484">Auth0 Provider</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="99" x="1331.5" y="961.0605">[React Context]</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1379" y="976.8857"> </text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="138" x="1312" y="993.1826">Provides auth0 user</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77" x="1342.5" y="1009.4795">information</text></g><!--MD5=[0858a92df0e65a0dbfba80d2c4cf24bf]
+entity databaseProvider--><g id="elem_databaseProvider"><rect fill="#85BBF0" height="117.7813" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="185" x="1188.5" y="658"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="1232" y="680.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="164" x="1199" y="699.1484">Database Provider</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="99" x="1231.5" y="714.0605">[React Context]</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1279" y="729.8857"> </text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="157" x="1202.5" y="746.1826">Provides access to the</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="1228" y="762.4795">RxDB database</text></g><!--MD5=[4541fb81c80c07473fe4b07432ef0971]
+entity app--><g id="elem_app"><rect fill="#85BBF0" height="101.4844" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="142" x="579" y="269"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="601" y="291.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="34" x="633" y="310.1484">App</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="122" x="589" y="325.0605">[React Component]</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="648" y="340.8857"> </text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="68" x="618" y="357.1826">Main shell</text></g><!--MD5=[a43a3fe55455796c2f4baa7a7f70b9aa]
+entity rxdb--><g id="elem_rxdb"><path d="M582,1150.5 C582,1140.5 689,1140.5 689,1140.5 C689,1140.5 796,1140.5 796,1150.5 L796,1257.2813 C796,1267.2813 689,1267.2813 689,1267.2813 C689,1267.2813 582,1267.2813 582,1257.2813 L582,1150.5 " fill="#85BBF0" style="stroke:#78A8D8;stroke-width:0.5;"/><path d="M582,1150.5 C582,1160.5 689,1160.5 689,1160.5 C689,1160.5 796,1160.5 796,1150.5 " fill="none" style="stroke:#78A8D8;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="640" y="1177.4951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="47" x="665.5" y="1195.6484">RxDB</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="62" x="658" y="1210.5605">[IndexDB]</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="687" y="1226.3857"> </text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="186" x="596" y="1242.6826">Offline document database</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99" x="639.5" y="1258.9795">in the browser</text></g><!--MD5=[54409d5519d7646972cabb5538a3d297]
+entity routing--><g id="elem_routing"><rect fill="#85BBF0" height="68.8906" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="118" x="591" y="500"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="601" y="522.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="68" x="616" y="541.1484">Routing</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="92" x="604" y="556.0605">[React Router]</text></g><!--MD5=[7777b0031a10db6d2372acbbfa094121]
+entity patientDetails--><g id="elem_patientDetails"><rect fill="#85BBF0" height="68.8906" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="150" x="388" y="682.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="414" y="705.4951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="130" x="398" y="723.6484">Patient Details</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="81" x="422.5" y="738.5605">[React Page]</text></g><!--MD5=[5ce3081d338ac0d733bd960eb67992b3]
+entity consultDetails--><g id="elem_consultDetails"><rect fill="#85BBF0" height="68.8906" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="153" x="573.5" y="682.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="601" y="705.4951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="133" x="583.5" y="723.6484">Consult Details</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="81" x="609.5" y="738.5605">[React Page]</text></g><!--MD5=[8d41bdc4490fdfb4ebf2abdbb0466807]
+entity spectaclesDetails--><g id="elem_spectaclesDetails"><rect fill="#85BBF0" height="68.8906" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="182" x="762" y="682.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="804" y="705.4951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="162" x="772" y="723.6484">Spectacles Details</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="81" x="812.5" y="738.5605">[React Page]</text></g><!--MD5=[536d34ea3145a8e7fac1f85fcf4b3a16]
+entity spectaclesList--><g id="elem_spectaclesList"><rect fill="#85BBF0" height="68.8906" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="154" x="979" y="682.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="1007" y="705.4951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="134" x="989" y="723.6484">Spectacles List</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="81" x="1015.5" y="738.5605">[React Page]</text></g><!--MD5=[2c4d6263d6a9c508a624946e4f5b83db]
+entity login--><g id="elem_login"><rect fill="#85BBF0" height="68.8906" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="118" x="235" y="682.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="245" y="705.4951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="47" x="270.5" y="723.6484">Login</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="81" x="253.5" y="738.5605">[React Page]</text></g><!--MD5=[ff1aeab572377dc9f0f86ab0cdc8f6d4]
+entity patientReplication--><g id="elem_patientReplication"><rect fill="#85BBF0" height="87.5156" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="192" x="1058" y="920"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="1105" y="942.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="166" x="1068" y="961.1484">Patient Replication</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="65" x="1121.5" y="979.7734">Service</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="76" x="1116" y="994.6855">[TypeScript]</text></g><!--MD5=[aedd45740137d10ca296c06578b5e601]
+entity consultReplication--><g id="elem_consultReplication"><rect fill="#85BBF0" height="87.5156" rx="2.5" ry="2.5" style="stroke:#78A8D8;stroke-width:0.5;" width="195" x="827.5" y="920"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="876" y="942.9951">«component»</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="169" x="837.5" y="961.1484">Consult Replication</text><text fill="#000000" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="65" x="892.5" y="979.7734">Service</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="76" x="887" y="994.6855">[TypeScript]</text></g><!--MD5=[e2307af040e3f87d22824e7603ca28ec]
+entity api--><g id="elem_api"><rect fill="#438DD5" height="150.375" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="204" x="1496" y="1129"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="83" x="1556.5" y="1151.9951">«container»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="132" x="1532" y="1170.1484">API Application</text><text fill="#FFFFFF" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="148" x="1524" y="1185.0605">[TypeScript and NestJS]</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1596" y="1200.8857"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="1551.5" y="1217.1826">Provides data</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="164" x="1514" y="1233.4795">manipulation/replication</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="180" x="1506" y="1249.7764">functionality via a GraphQL</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="25" x="1585.5" y="1266.0732">API.</text></g><!--MD5=[766eac0c89f51a4b467d310638b2a60d]
+entity auth0--><g id="elem_auth0"><rect fill="#999999" height="138.7344" rx="2.5" ry="2.5" style="stroke:#8A8A8A;stroke-width:0.5;" width="182" x="1735" y="1134.5"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="130" x="1761" y="1157.4951">«external_system»</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="100" x="1773" y="1175.6484">Auth0 User</text><text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="115" x="1768.5" y="1194.2734">Management</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="1824" y="1211.042"> </text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="148" x="1752" y="1227.3389">Login Provider. Allows</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="158" x="1745" y="1243.6357">supervisors to manage</text><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="68" x="1792" y="1259.9326">accounts.</text></g><!--MD5=[2e19920a635e8e92eaf5f1bdccd5808a]
+link routing to patientDetails--><g id="link_routing_patientDetails"><path d="M615.26,569.03 C583.74,599.45 537.24,644.34 503.93,676.5 " fill="none" id="routing-to-patientDetails" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="497.87,682.35,505.7052,678.9428,501.5329,674.631,497.87,682.35" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="35" x="585" y="618.1387">Uses</text></g><!--MD5=[9d8c1d06897cc74d2bea6e30c7f876eb]
+link routing to consultDetails--><g id="link_routing_consultDetails"><path d="M650,569.03 C650,598.7 650,642.12 650,674.07 " fill="none" id="routing-to-consultDetails" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="650,682.35,653,674.35,647,674.35,650,682.35" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="35" x="651" y="618.1387">Uses</text></g><!--MD5=[0516d301be5cfa4f43e3be173d65e167]
+link routing to login--><g id="link_routing_login"><path d="M590.74,567.25 C589.48,567.85 588.24,568.43 587,569 C554.03,584.22 544.62,585.28 511,599 C448.48,624.51 429.52,624.32 371,658 C360.98,663.77 350.77,670.64 341.19,677.61 " fill="none" id="routing-to-login" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="334.67,682.43,342.8878,680.0915,339.3238,675.2647,334.67,682.43" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="35" x="512" y="618.1387">Uses</text></g><!--MD5=[932eddbd8c955085600f73e2081891fb]
+link routing to spectaclesDetails--><g id="link_routing_spectaclesDetails"><path d="M687.71,569.03 C722.07,599.58 772.83,644.71 809.02,676.9 " fill="none" id="routing-to-spectaclesDetails" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="815.15,682.35,811.1683,674.7905,807.1795,679.2726,815.15,682.35" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="35" x="752" y="618.1387">Uses</text></g><!--MD5=[71aa2afb748ecc95dfb341d2b55d74f2]
+link routing to spectaclesList--><g id="link_routing_spectaclesList"><path d="M709.24,567.31 C710.5,567.88 711.75,568.45 713,569 C739.88,580.87 935.52,645.27 962,658 C974.28,663.9 986.99,671 998.93,678.17 " fill="none" id="routing-to-spectaclesList" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1005.87,682.39,1000.5967,675.6675,997.4767,680.7925,1005.87,682.39" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="35" x="878" y="618.1387">Uses</text></g><!--MD5=[2a4346bda0e5369a8034d5f34fe51474]
+link app to auth0Provider--><g id="link_app_auth0Provider"><path d="M721.13,320.77 C826.38,324.06 1026.9,341.62 1173,423 C1297.46,492.33 1332.77,527.98 1391,658 C1425.22,734.39 1413.39,832.66 1399.32,896.71 " fill="none" id="app-to-auth0Provider" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1397.51,904.73,1402.2072,897.5931,1396.3562,896.2643,1397.51,904.73" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="89" x="1377" y="618.1387">Checks login</text></g><!--MD5=[9df7236ea23db8df5052fc14646db922]
+link app to netProvider--><g id="link_app_netProvider"><path d="M578.82,322.61 C488.18,328.42 330.03,349.32 219,423 C138.19,476.63 120.16,506.83 90,599 C56.73,700.66 96.91,823.58 129.26,897.41 " fill="none" id="app-to-netProvider" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="132.56,904.84,132.0601,896.3106,126.575,898.7425,132.56,904.84" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="123" x="91" y="611.1387">Displays network</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="46" x="131.5" y="625.1074">status</text></g><!--MD5=[6ec4194f5cd11732d807ad65698dca06]
+link app to routing--><g id="link_app_routing"><path d="M650,370.17 C650,407.04 650,456.77 650,491.63 " fill="none" id="app-to-routing" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="650,499.72,653,491.72,647,491.72,650,499.72" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="35" x="651" y="412.1387">Uses</text></g><!--MD5=[f261566bf72f70b1efaa6d805e4ce69f]
+link login to auth0Provider--><g id="link_login_auth0Provider"><path d="M320.53,751.64 C334.01,766.34 351.64,782.3 371,791.5 C510.58,857.86 561.83,824.19 716,835 C746.48,837.14 1237.98,830.8 1266,843 C1293.33,854.9 1317.32,876.73 1336.23,898.54 " fill="none" id="login-to-auth0Provider" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1341.42,904.68,1338.5553,896.6306,1333.9689,900.499,1341.42,904.68" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="98" x="717" y="825.1387">Initiates login</text></g><!--MD5=[fd3f8d00d70a789e3261643cf5d2dc87]
+link login to netProvider--><g id="link_login_netProvider"><path d="M275.92,751.55 C255.71,789.07 222.48,850.75 197.11,897.83 " fill="none" id="login-to-netProvider" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="193.27,904.96,199.709,899.344,194.4285,896.4949,193.27,904.96" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="113" x="245" y="818.1387">Checks network</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="46" x="280.5" y="832.1074">status</text></g><!--MD5=[8d183f37c15dc25e5a314624f61e0cbe]
+link pages to databaseProvider--><g id="link_pages_databaseProvider"><path d="M1165.0374,582.5319 C1165.0641,582.6165 1165.0907,582.7009 1165.1173,582.7851 C1165.5432,584.1319 1165.9631,585.4259 1166.3819,586.6759 C1168.0569,591.6763 1169.7125,595.9738 1171.6475,600.135 C1175.5175,608.4575 1180.505,616.235 1189,628 C1194.76,635.98 1201.3,643.85 1208.18,651.4 " fill="none" id="pages-to-databaseProvider" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1214.02,657.66,1210.7519,649.7657,1206.367,653.8612,1214.02,657.66" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="139" x="1190" y="618.1387">Reads and Modifies</text></g><!--MD5=[0af16cf924d7adb9db695e0a016cade5]
+link databaseProvider to auth0Provider--><g id="link_databaseProvider_auth0Provider"><path d="M1258.87,776.12 C1254.73,795.33 1253.69,816.51 1261,835 C1264.31,843.36 1290.1,871.25 1316.93,898.87 " fill="none" id="databaseProvider-to-auth0Provider" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1322.66,904.75,1319.2229,896.9278,1314.9271,901.1165,1322.66,904.75" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="134" x="1262" y="818.1387">Get authentication</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="41" x="1310.5" y="832.1074">token</text></g><!--MD5=[f08974b36aaa40ab569d818792138945]
+link databaseProvider to repl--><g id="link_databaseProvider_repl"><path d="M1188.44,774.86 C1175.52,781.21 1162.15,787 1149,791.5 C1005.65,840.58 919.86,736.59 812,843 C809.6325,845.3363 807.5448,848.9144 805.704,853.3934 C805.2438,854.5132 804.799,855.6892 804.3691,856.9163 C804.1542,857.5298 803.943,858.156 803.7354,858.7944 " fill="none" id="databaseProvider-to-repl" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="803.7354,858.7944,809.062,852.114,803.3561,850.2588,803.7354,858.7944" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="65" x="863" y="825.1387">Manages</text></g><!--MD5=[6a78b09e76350fdabef9a7d977bdd795]
+link databaseProvider to rxdb--><g id="link_databaseProvider_rxdb"><path d="M1189.23,776.04 C1176.13,782.24 1162.5,787.68 1149,791.5 C1043.65,821.31 726.96,757.16 659,843 C593.85,925.29 626.7,1053.84 657.26,1132.99 " fill="none" id="databaseProvider-to-rxdb" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="660.21,1140.5,660.0725,1131.9571,654.4891,1134.154,660.21,1140.5" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="111" x="660" y="961.6387">Reads from and</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="64" x="685.5" y="975.6074">writes to</text></g><!--MD5=[fd46aefb413935a80eba205aac6dd161]
+link repl to rxdb--><g id="link_repl_rxdb"><path d="M791.7694,1032.2163 C791.7207,1032.5006 791.6711,1032.7848 791.6206,1033.0686 C791.5197,1033.6363 791.4154,1034.203 791.3076,1034.7685 C790.4448,1039.2925 789.3575,1043.7388 788,1048 C778.4,1078.16 761.38,1108.21 744.14,1133.71 " fill="none" id="repl-to-rxdb" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="739.52,1140.43,746.5271,1135.5411,741.5847,1132.1392,739.52,1140.43" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="111" x="785" y="1075.1387">Reads from and</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="64" x="810.5" y="1089.1074">writes to</text></g><!--MD5=[8adb568f1e8aca5598996c50a92b6488]
+link sw to app--><g id="link_sw_app"><path d="M650,194.07 C650,215.34 650,239.31 650,260.5 " fill="none" id="sw-to-app" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="650,268.77,653,260.77,647,260.77,650,268.77" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="51" x="651" y="236.1387">Caches</text></g><!--MD5=[a95ed26dcd1b0f37211c513f56620bd8]
+link repl to api--><g id="link_repl_api"><path d="M799.4816,1032.2374 C799.5472,1032.366 799.6132,1032.4944 799.6796,1032.6224 C799.8126,1032.8786 799.9473,1033.1336 800.0839,1033.3875 C800.357,1033.8953 800.6375,1034.3984 800.9255,1034.8965 C801.5015,1035.8928 802.1075,1036.8691 802.7451,1037.8228 C805.2955,1041.6373 808.35,1045.0888 812,1048 C826.51,1059.57 1463.32,1047.88 1480,1056 C1509.57,1070.4 1534.1,1096.14 1553,1122.11 " fill="none" id="repl-to-api" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1557.68,1128.7,1555.5004,1120.4387,1550.6058,1123.9089,1557.68,1128.7" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="148" x="1532" y="1075.1387">Push/Pull Replication</text><text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="63" x="1574.5" y="1089.1074">[GraphQL]</text></g><!--MD5=[805418f36c3f071f98bf73b58e1e5245]
+link auth0Provider to auth0--><g id="link_auth0Provider_auth0"><path d="M1464.17,965.26 C1546.72,969.71 1672.67,988.31 1756,1056 C1778.27,1074.09 1793.88,1100.93 1804.61,1126.75 " fill="none" id="auth0Provider-to-auth0" style="stroke:#666666;stroke-width:1.0;"/><polygon fill="#666666" points="1807.65,1134.36,1807.4643,1125.818,1801.8934,1128.0464,1807.65,1134.36" style="stroke:#666666;stroke-width:1.0;"/><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="134" x="1790" y="1068.1387">Get authentication</text><text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="41" x="1838.5" y="1082.1074">token</text><text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="33" x="1842.5" y="1096.0762">[JWT]</text></g><!--MD5=[42e9559b7d4c0f80931cf105515dc613]
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+Container(api, "API Application", "TypeScript and NestJS", "Provides data manipulation/replication functionality via a GraphQL API.")
+System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
+
+Container_Boundary(spa, "Single Page Application") {
+    Component(sw, "Offline Service Worker", Service Worker, "Caches page for offline use")
+
+    Component(netProvider, "Network Provider", "React Context", "Provides information on online connectivity")
+    Component(auth0Provider, "Auth0 Provider", "React Context", "Provides auth0 user information")
+    Component(databaseProvider, "Database Provider", "React Context", "Provides access to the RxDB database")
+
+    Component(app, "App", "React Component", Main shell)
+
+
+    Boundary(pages, "Pages"){
+    Component(routing, Routing, React Router)
+    Component(patientDetails, Patient Details, "React Page")
+    Component(consultDetails, Consult Details, "React Page")
+    Component(spectaclesDetails, Spectacles Details, "React Page")
+    Component(spectaclesList, Spectacles List, "React Page")
+    Component(login, Login, "React Page")
+
+    Rel(routing, patientDetails, "Uses")
+    Rel(routing, consultDetails, "Uses")
+    Rel(routing, login, "Uses")
+    Rel(routing, spectaclesDetails, "Uses")
+    Rel(routing, spectaclesList, "Uses")
+    }
+
+    Boundary(repl, "Replication"){
+      Component(patientReplication, Patient Replication Service, "TypeScript")
+      Component(consultReplication, Consult Replication Service, "TypeScript")
+    }
+
+    Rel(app, auth0Provider, Checks login)
+    Rel(app, netProvider, Displays network status)
+
+    Rel(app, routing, "Uses")
+
+    Rel(login, auth0Provider, "Initiates login")
+    Rel(login, netProvider, "Checks network status")
+
+    Rel(pages, databaseProvider, "Reads and Modifies")
+
+    Rel(databaseProvider, auth0Provider, "Get authentication token")
+
+    Rel(databaseProvider, repl, "Manages")
+
+    ComponentDb(rxdb, RxDB, "IndexDB", Offline document database in the browser)
+    Rel(databaseProvider, rxdb, "Reads from and writes to")
+    Rel(repl, rxdb, "Reads from and writes to")
+
+    Rel(sw, app, Caches)
+}
+
+
+
+Rel(repl, api, Push/Pull Replication, GraphQL)
+
+Rel(auth0Provider, auth0, Get authentication token, JWT)
+
+@enduml
+
+@startuml
+
+
+
+
+
+skinparam defaultTextAlignment center
+
+skinparam wrapWidth 200
+skinparam maxMessageSize 150
+
+skinparam LegendBorderColor transparent
+skinparam LegendBackgroundColor transparent
+skinparam LegendFontColor #FFFFFF
+
+skinparam rectangle {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam database {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam queue {
+    StereotypeFontSize 12
+    shadowing false
+}
+
+skinparam Arrow {
+    Color #666666
+    FontColor #666666
+    FontSize 12
+}
+
+skinparam rectangle<<boundary>> {
+    Shadowing false
+    StereotypeFontSize 0
+    FontColor #444444
+    BorderColor #444444
+    BorderStyle dashed
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<person>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #08427B
+    BorderColor #073B6F
+}
+
+skinparam rectangle<<external_person>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #686868
+    BorderColor #8A8A8A
+}
+
+skinparam rectangle<<system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #1168BD
+    BorderColor #3C7FC0
+}
+
+skinparam rectangle<<external_system>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #999999
+    BorderColor #8A8A8A
+}
+
+sprite $person [48x48/16] {
+000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000
+0000000000000000000049BCCA7200000000000000000000
+0000000000000000006EFFFFFFFFB3000000000000000000
+00000000000000001CFFFFFFFFFFFF700000000000000000
+0000000000000001EFFFFFFFFFFFFFF80000000000000000
+000000000000000CFFFFFFFFFFFFFFFF6000000000000000
+000000000000007FFFFFFFFFFFFFFFFFF100000000000000
+00000000000001FFFFFFFFFFFFFFFFFFF900000000000000
+00000000000006FFFFFFFFFFFFFFFFFFFF00000000000000
+0000000000000BFFFFFFFFFFFFFFFFFFFF40000000000000
+0000000000000EFFFFFFFFFFFFFFFFFFFF70000000000000
+0000000000000FFFFFFFFFFFFFFFFFFFFF80000000000000
+0000000000000FFFFFFFFFFFFFFFFFFFFF80000000000000
+0000000000000DFFFFFFFFFFFFFFFFFFFF60000000000000
+0000000000000AFFFFFFFFFFFFFFFFFFFF40000000000000
+00000000000006FFFFFFFFFFFFFFFFFFFE00000000000000
+00000000000000EFFFFFFFFFFFFFFFFFF800000000000000
+000000000000007FFFFFFFFFFFFFFFFFF100000000000000
+000000000000000BFFFFFFFFFFFFFFFF5000000000000000
+0000000000000001DFFFFFFFFFFFFFF70000000000000000
+00000000000000000BFFFFFFFFFFFF500000000000000000
+0000000000000000005DFFFFFFFFA1000000000000000000
+0000000000000000000037ABB96100000000000000000000
+000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000
+000000000000025788300000000005886410000000000000
+000000000007DFFFFFFD9643347BFFFFFFFB400000000000
+0000000004EFFFFFFFFFFFFFFFFFFFFFFFFFFB1000000000
+000000007FFFFFFFFFFFFFFFFFFFFFFFFFFFFFD200000000
+00000006FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE10000000
+0000003FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0000000
+000000BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5000000
+000003FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD000000
+000009FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF200000
+00000DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF600000
+00000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF800000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB00000
+00001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA00000
+00000EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF700000
+000006FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE100000
+0000008FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD3000000
+000000014555555555555555555555555555555300000000
+000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+skinparam database<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+skinparam queue<<container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #438DD5
+    BorderColor #3C7FC0
+}
+
+skinparam rectangle<<external_container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #B3B3B3
+    BorderColor #A6A6A6
+}
+
+skinparam database<<external_container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #B3B3B3
+    BorderColor #A6A6A6
+}
+
+skinparam queue<<external_container>> {
+    StereotypeFontColor #FFFFFF
+    FontColor #FFFFFF
+    BackgroundColor #B3B3B3
+    BorderColor #A6A6A6
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam rectangle<<component>> {
+    StereotypeFontColor #000000
+    FontColor #000000
+    BackgroundColor #85BBF0
+    BorderColor #78A8D8
+}
+
+skinparam database<<component>> {
+    StereotypeFontColor #000000
+    FontColor #000000
+    BackgroundColor #85BBF0
+    BorderColor #78A8D8
+}
+
+skinparam queue<<component>> {
+    StereotypeFontColor #000000
+    FontColor #000000
+    BackgroundColor #85BBF0
+    BorderColor #78A8D8
+}
+
+skinparam rectangle<<external_component>> {
+    StereotypeFontColor #000000
+    FontColor #000000
+    BackgroundColor #CCCCCC
+    BorderColor #BFBFBF
+}
+
+skinparam database<<external_component>> {
+    StereotypeFontColor #000000
+    FontColor #000000
+    BackgroundColor #CCCCCC
+    BorderColor #BFBFBF
+}
+
+skinparam queue<<external_component>> {
+    StereotypeFontColor #000000
+    FontColor #000000
+    BackgroundColor #CCCCCC
+    BorderColor #BFBFBF
+}
+
+
+
+
+
+
+
+
+
+
+
+rectangle "==API Application\n//<size:12>[TypeScript and NestJS]</size>//\n\n Provides data manipulation/replication functionality via a GraphQL API." <<container>> as api
+rectangle "==Auth0 User Management\n\n Login Provider. Allows supervisors to manage accounts." <<external_system>> as auth0
+
+rectangle "==Single Page Application\n<size:12>[Container]</size>" <<boundary>> as spa {
+    rectangle "==Offline Service Worker\n//<size:12>[Service Worker]</size>//\n\n Caches page for offline use" <<component>> as sw
+
+    rectangle "==Network Provider\n//<size:12>[React Context]</size>//\n\n Provides information on online connectivity" <<component>> as netProvider
+    rectangle "==Auth0 Provider\n//<size:12>[React Context]</size>//\n\n Provides auth0 user information" <<component>> as auth0Provider
+    rectangle "==Database Provider\n//<size:12>[React Context]</size>//\n\n Provides access to the RxDB database" <<component>> as databaseProvider
+
+    rectangle "==App\n//<size:12>[React Component]</size>//\n\n Main shell" <<component>> as app
+
+
+    rectangle "==Pages" <<boundary>> as pages{
+    rectangle "==Routing\n//<size:12>[React Router]</size>//" <<component>> as routing
+    rectangle "==Patient Details\n//<size:12>[React Page]</size>//" <<component>> as patientDetails
+    rectangle "==Consult Details\n//<size:12>[React Page]</size>//" <<component>> as consultDetails
+    rectangle "==Spectacles Details\n//<size:12>[React Page]</size>//" <<component>> as spectaclesDetails
+    rectangle "==Spectacles List\n//<size:12>[React Page]</size>//" <<component>> as spectaclesList
+    rectangle "==Login\n//<size:12>[React Page]</size>//" <<component>> as login
+
+routing - ->> patientDetails : **Uses**
+routing - ->> consultDetails : **Uses**
+routing - ->> login : **Uses**
+routing - ->> spectaclesDetails : **Uses**
+routing - ->> spectaclesList : **Uses**
+    }
+
+    rectangle "==Replication" <<boundary>> as repl{
+      rectangle "==Patient Replication Service\n//<size:12>[TypeScript]</size>//" <<component>> as patientReplication
+      rectangle "==Consult Replication Service\n//<size:12>[TypeScript]</size>//" <<component>> as consultReplication
+    }
+
+app - ->> auth0Provider : **Checks login**
+app - ->> netProvider : **Displays network status**
+
+app - ->> routing : **Uses**
+
+login - ->> auth0Provider : **Initiates login**
+login - ->> netProvider : **Checks network status**
+
+pages - ->> databaseProvider : **Reads and Modifies**
+
+databaseProvider - ->> auth0Provider : **Get authentication token**
+
+databaseProvider - ->> repl : **Manages**
+
+    database "==RxDB\n//<size:12>[IndexDB]</size>//\n\n Offline document database in the browser" <<component>> as rxdb
+databaseProvider - ->> rxdb : **Reads from and writes to**
+repl - ->> rxdb : **Reads from and writes to**
+
+sw - ->> app : **Caches**
+}
+
+
+
+repl - ->> api : **Push/Pull Replication**\n//<size:12>[GraphQL]</size>//
+
+auth0Provider - ->> auth0 : **Get authentication token**\n//<size:12>[JWT]</size>//
+
+@enduml
+
+PlantUML version 1.2022.3(Wed Mar 30 05:10:57 NZDT 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: GB
+--></g></svg>

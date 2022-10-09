@@ -1,0 +1,46 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+Container(spa, "Single Page Application", "TypeScript and React", "Offline-first application that lets users manage patient data via their web browser.")
+ContainerDb(db, "Database", "PostgreSQL", "Stores user and patient data.")
+System_Ext(auth0, "Auth0 User Management", "Login Provider. Allows supervisors to manage accounts.")
+
+Container_Boundary(api, "API Application") {
+    Component(health, "Health Controller", NestJS Controller,"Provides health information on the current deployment")
+
+    Component(userR, "User Resolver", NestJS GraphQL Resolver,"Allows users to query and manipulate users")
+    Component(userS, "User Service", NestJS Service,"Provides functionality related to user replication/manipulation")
+
+    Component(patientR, "Patient Resolver", NestJS GraphQL Resolver,"Allows users to query and manipulate patient data")
+    Component(patientS, "Patient Service", NestJS Service,"Provides functionality related to patient replication/manipulation")
+
+    Component(spectacleS, "Spectacles Service", NestJS Service,"Provides functionality related to spectacle replication/manipulation")
+
+    Component(consultR, "Consult Resolver", NestJS GraphQL Resolver,"Allows users to query and manipulate consult data")
+    Component(consultS, "Consult Service", NestJS Service,"Provides functionality related to consult replication/manipulation")
+
+    Component(authS, "Authentication Service", NestJS Service,"Provides functionality related to signing in and auth0")
+
+    Rel_D(userR, userS, "Uses")
+    Rel_D(patientR, patientS, "Uses")
+    Rel_D(consultR, consultS, "Uses")
+
+    Rel(consultS, userS, "Uses")
+    Rel(consultS, spectacleS, "Uses")
+    Rel(userS, authS, "Uses")
+}
+
+Rel(spa, health, "Checks if online/offline to inform user", JSON/HTTPS)
+Rel(spa, userR, "Makes API calls to", GraphQL)
+Rel(spa, patientR, "Makes API calls to", GraphQL)
+Rel(spa, consultR, "Makes API calls to", GraphQL)
+
+Rel(authS, auth0, "Verifies tokens and performs management actions")
+
+Rel(userS, db, Reads from and writes to, TypeORM)
+Rel(patientS, db, Reads from and writes to, TypeORM)
+Rel(spectacleS, db, Reads from and writes to, TypeORM)
+Rel(consultS, db, Reads from and writes to, TypeORM)
+Rel(authS, db, Reads from and writes to, TypeORM)
+
+@enduml
