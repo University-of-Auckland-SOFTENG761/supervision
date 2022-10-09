@@ -1,8 +1,12 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
-import { OrderStatus } from '../database';
+import { LensType, OrderStatus } from '../database';
 
 registerEnumType(OrderStatus, {
   name: 'OrderStatus',
+});
+
+registerEnumType(LensType, {
+  name: 'LensType',
 });
 @InputType()
 export class CreateSpectacleInput {
@@ -30,11 +34,11 @@ export class CreateSpectacleInput {
   })
   colour: string;
 
-  @Field({
+  @Field(() => LensType, {
     description: 'spectacle lens type',
     nullable: false,
   })
-  lensType: string;
+  lensType: LensType;
 
   @Field({
     description: 'spectacle pupillaryDistance',

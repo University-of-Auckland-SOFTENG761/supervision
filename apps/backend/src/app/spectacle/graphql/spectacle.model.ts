@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { ConsultModel } from '@supervision/consults';
 import { PatientModel } from '@supervision/patients';
 import { BaseModel } from '@supervision/shared';
-import { OrderStatus } from '../database';
+import { LensType, OrderStatus } from '../database';
 
 @ObjectType({ description: 'spectacle' })
 export class SpectacleModel extends BaseModel {
@@ -18,8 +18,8 @@ export class SpectacleModel extends BaseModel {
   @Field({ nullable: true })
   colour: string;
 
-  @Field({ nullable: true })
-  lensType: string;
+  @Field(() => LensType, { nullable: true })
+  lensType: LensType;
 
   @Field({ nullable: true })
   pupillaryDistance: number;

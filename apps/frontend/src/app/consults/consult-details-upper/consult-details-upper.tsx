@@ -17,6 +17,8 @@ import dayjs from 'dayjs';
 import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
 import { EyePressureInputs } from './eye-pressure-inputs';
+import LensTypeSelect from 'app/shared/lensType-select';
+import CodeAutocomplete from 'app/shared/code-autocomplete';
 import { ConsultDocType } from 'database';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { RxDocument } from 'rxdb';
@@ -226,11 +228,13 @@ export const ConsultDetailsUpper = ({
         <Grid columns={3}>
           <Grid.Col span={1}>
             <Stack>
-              <TextInput
+              <CodeAutocomplete
                 label="Spectacles Code:"
-                classNames={{ label: 'whitespace-nowrap' }}
                 defaultValue={consult.get('spectacle.code')}
                 {...register('consult.spectacle.code')}
+                onChange={(e) => {
+                  setValue('consult.spectacle.code', e ?? undefined);
+                }}
               />
               <TextInput
                 label="Heights:"
@@ -248,10 +252,12 @@ export const ConsultDetailsUpper = ({
                   defaultValue={consult.get('spectacle.colour')}
                   {...register('consult.spectacle.colour')}
                 />
-                <TextInput
+                <LensTypeSelect
                   label="Lens Type:"
-                  defaultValue={consult.get('spectacle.lensType')}
                   {...register('consult.spectacle.lensType')}
+                  onChange={(e) => {
+                    setValue('consult.spectacle.lensType', e ?? undefined);
+                  }}
                 />
               </SimpleGrid>
               <TextInput

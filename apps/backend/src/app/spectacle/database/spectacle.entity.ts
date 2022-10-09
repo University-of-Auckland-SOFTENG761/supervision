@@ -10,6 +10,14 @@ export enum OrderStatus {
   DELIVERED = 'delivered',
 }
 
+export enum LensType {
+  SINGLEVISIONDISTANCE = 'singleVisionDistance',
+  SINGLEVISIONNEAR = 'singleVisionNear',
+  MULTIFOCAL = 'multifocal',
+  OCCUPATIONALS = 'occupationals',
+  BIFOCALS = 'bifocals',
+}
+
 @Entity({ name: 'spectacle' })
 export class SpectacleEntity extends BaseEntity {
   @OneToOne(() => ConsultEntity, (consult) => consult.spectacle)
@@ -24,8 +32,11 @@ export class SpectacleEntity extends BaseEntity {
   @Column('varchar', { length: 22, nullable: true })
   colour: string;
 
-  @Column('varchar', { length: 20, nullable: true })
-  lensType: string;
+  @Column('enum', {
+    enum: LensType,
+    nullable: true,
+  })
+  lensType: LensType;
 
   @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
   pupillaryDistance: number;

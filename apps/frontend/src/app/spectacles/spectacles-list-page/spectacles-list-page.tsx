@@ -154,21 +154,6 @@ export const SpectaclesListPage = () => {
   }, [debouncedQuery, patientsCollection, consultsCollection, buildQuery]);
 
   useEffect(() => {
-    console.log(
-      'matchingConsults',
-      matchingConsults.map((c) => ({ id: c.id, patientId: c.patientId }))
-    );
-    console.log(
-      'matchingPatients',
-      matchingPatients.map((p) => ({
-        id: p.id,
-        firstName: p.firstName,
-        lastName: p.lastName,
-      }))
-    );
-  }, [matchingConsults, matchingPatients]);
-
-  useEffect(() => {
     setMatchingPatients([]);
     setMatchingConsults([]);
   }, [debouncedQuery]);
