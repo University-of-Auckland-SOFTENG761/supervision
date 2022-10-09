@@ -1,5 +1,11 @@
 import { Navbar, Stack } from '@mantine/core';
-import { IconEyeglass, IconSearch, IconEye, IconUser } from '@tabler/icons';
+import {
+  IconEyeglass,
+  IconSearch,
+  IconEye,
+  IconUser,
+  IconCalendarEvent,
+} from '@tabler/icons';
 import { AppShell, useNetwork } from './shared';
 import { useEffect, useRef } from 'react';
 import {
@@ -50,7 +56,7 @@ export function App() {
     <AppShell
       navbar={
         location.pathname === '/' ? undefined : (
-          <Navbar width={{ base: 60 }} py={8}>
+          <Navbar width={{ base: 60 }} py={8} className="print:hidden">
             <Navbar.Section grow>
               <Stack justify="center" align="center">
                 <NavbarLink
@@ -75,6 +81,12 @@ export function App() {
                   icon={IconEyeglass}
                   onClick={() => navigate('/spectacles-list')}
                   active={location.pathname === '/spectacles-list'}
+                ></NavbarLink>
+                <NavbarLink
+                  label="Recalls"
+                  icon={IconCalendarEvent}
+                  onClick={() => navigate('/recalls-list')}
+                  active={location.pathname === '/recalls-list'}
                 ></NavbarLink>
               </Stack>
             </Navbar.Section>
