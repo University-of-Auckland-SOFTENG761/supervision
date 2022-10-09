@@ -191,6 +191,7 @@ export const SpectaclesDetailsPage = () => {
           <Text className="-my-8">Lens Type</Text>
           <LensTypeSelect
             {...register('consult.spectacle.lensType')}
+            defaultValue={consult.get('spectacle.lensType')}
             onChange={(e) => {
               setValue('consult.spectacle.lensType', e ?? undefined);
               handleChange();
