@@ -22,6 +22,7 @@ import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { RxDocument } from 'rxdb';
 import { parseDateForInput, parseNumberForInput } from 'database/rxdb-utils';
 import LensTypeSelect from 'app/shared/lensType-select';
+import CodeAutocomplete from 'app/shared/code-autocomplete';
 
 type ConsultDetailsUpperProps = {
   consult: RxDocument<ConsultDocType>;
@@ -227,11 +228,13 @@ export const ConsultDetailsUpper = ({
         <Grid columns={3}>
           <Grid.Col span={1}>
             <Stack>
-              <TextInput
+              <CodeAutocomplete
                 label="Spectacles Code:"
-                classNames={{ label: 'whitespace-nowrap' }}
                 defaultValue={consult.get('spectacle.code')}
                 {...register('consult.spectacle.code')}
+                onChange={(e) => {
+                  setValue('consult.spectacle.code', e ?? undefined);
+                }}
               />
               <TextInput
                 label="Heights:"
