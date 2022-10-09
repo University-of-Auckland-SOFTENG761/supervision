@@ -37,7 +37,7 @@ export const RecallsListPage = () => {
 
   // Search bar text query to filter results by
   const [query, setQuery] = useState('');
-  const [debouncedQuery] = useDebouncedValue(query, 200);
+  const [debouncedQuery] = useDebouncedValue(query.trim(), 200);
   // Select order status query to filter results by
   const [dateQuery, setDateQuery] = useState<Date | null>(null);
   const [debouncedDateQuery] = useDebouncedValue(dateQuery, 200);
@@ -98,6 +98,20 @@ export const RecallsListPage = () => {
                     },
                     {
                       lastName: {
+                        $regex: new RegExp(
+                          debouncedQuery
+                            .slice(debouncedQuery.indexOf(' ') + 1)
+                            .trim()
+                            .replace(/\s+/g, ' ')
+                            .split('')
+                            .join('.*'),
+                          'i'
+                        ),
+                        $options: 'i',
+                      },
+                    },
+                    {
+                      school: {
                         $regex: new RegExp(
                           debouncedQuery
                             .slice(debouncedQuery.indexOf(' ') + 1)
