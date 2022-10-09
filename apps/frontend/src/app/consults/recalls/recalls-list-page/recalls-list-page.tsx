@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ScrollArea, Stack, Title, TextInput, Select } from '@mantine/core';
+import { ScrollArea, Stack, Title, TextInput } from '@mantine/core';
 import dayjs from 'dayjs';
 import { IconSearch } from '@tabler/icons';
 import { useDebouncedValue } from '@mantine/hooks';
@@ -9,7 +9,6 @@ import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useDatabase } from '@shared';
 import { ConsultDocType, PatientDocType } from '../../../../database';
 import { RxDocument } from 'rxdb';
-import { OrderStatus } from '../../../spectacles/spectacles-details-page';
 import styles from '../../../spectacles/spectacles-list-page/spectacles-list.module.scss';
 import { DatePicker } from '@mantine/dates';
 
