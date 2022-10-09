@@ -1,90 +1,82 @@
-import { useEffect } from 'react';
-import { useForm } from '@mantine/form';
+import { useEffect, useRef } from 'react';
 import { Stack } from '@mantine/core';
 import { ConsultDetailsUpper } from '../consult-details-upper';
 import { ConsultDetailsLower } from '../consult-details-lower';
 import { buildFormValues, stripUnusedFields } from 'database/rxdb-utils';
-import { useDatabase } from '@shared';
-import { useSearchParams } from 'react-router-dom';
 import { ConsultDocType, consultSchemaTyped } from 'database';
+import { RxDocument } from 'rxdb';
+import { useForm } from 'react-hook-form';
 import { useDebouncedValue } from '@mantine/hooks';
 
-type TimestampFilter =
-  | 'eyePressureTimestamp'
-  | 'cyclopentolateTimestamp'
-  | 'tropicamideTimestamp';
-
-type FormTimestamps = {
-  [key in TimestampFilter]: Date | null;
+type ConsultInputsProps = {
+  consult: RxDocument<ConsultDocType>;
+  updateConsult: (consultJSON: ConsultDocType) => void;
 };
 
-export type FormInputType = Omit<ConsultDocType, TimestampFilter> &
-  FormTimestamps;
+export const ConsultInputs = ({
+  consult,
+  updateConsult,
+}: ConsultInputsProps) => {
+  const { register, getValues, setValue } = useForm();
 
-export const ConsultInputs = () => {
-  const { consults, updateConsult } = useDatabase();
+  const timeoutRef = useRef<NodeJS.Timer | null>(null);
 
-  const [searchParams] = useSearchParams();
-  const consultId = searchParams.get('consultId');
-
-  const consult = consultId
-    ? consults?.find((p) => p.id === consultId)
-    : undefined;
-
-  const form = useForm({
-    initialValues: {
-      ...buildFormValues(
-        consultSchemaTyped,
-        consult?.toJSON !== undefined ? consult.toJSON() : consult
+  const handleUpdateConsult = () => {
+    const newConsult = {
+      ...stripUnusedFields(
+        buildFormValues(consultSchemaTyped, getValues('consult'))
       ),
-      eyePressureTimestamp: consult?.eyePressureTimestamp
-        ? new Date(consult?.eyePressureTimestamp)
-        : null,
-      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
-        ? new Date(consult?.cyclopentolateTimestamp)
-        : null,
-      tropicamideTimestamp: consult?.tropicamideTimestamp
-        ? new Date(consult?.tropicamideTimestamp)
-        : null,
-    } as FormInputType,
-  });
+      id: consult.get('id'),
+    } as ConsultDocType;
+    updateConsult(newConsult);
+  };
 
-  useEffect(() => {
-    form.setValues({
-      ...buildFormValues(
-        consultSchemaTyped,
-        consult?.toJSON !== undefined ? consult.toJSON() : consult
-      ),
-      eyePressureTimestamp: consult?.eyePressureTimestamp
-        ? new Date(consult?.eyePressureTimestamp)
-        : null,
-      cyclopentolateTimestamp: consult?.cyclopentolateTimestamp
-        ? new Date(consult?.cyclopentolateTimestamp)
-        : null,
-      tropicamideTimestamp: consult?.tropicamideTimestamp
-        ? new Date(consult?.tropicamideTimestamp)
-        : null,
-    } as FormInputType);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consults]);
+  const handleChange = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      handleUpdateConsult();
+      timeoutRef.current = null;
+    }, 1000);
+  };
 
-  const sendUpdate = () => {
-    if (updateConsult && form.values) {
-      updateConsult(stripUnusedFields(form.values));
+  const setAndHandleChange = (
+    name: string,
+    value: unknown,
+    urgent?: boolean
+  ) => {
+    setValue(name, value);
+    if (urgent) {
+      timeoutRef.current && clearTimeout(timeoutRef.current);
+      handleUpdateConsult();
+    } else {
+      handleChange();
     }
   };
 
-  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
+  const debouncedRevision = useDebouncedValue(consult.revision, 1000);
 
   useEffect(() => {
-    sendUpdate();
+    if (!timeoutRef.current) {
+      setValue('consult', consult.toMutableJSON());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFormValues]);
+  }, [debouncedRevision]);
 
   return (
-    <Stack onBlur={sendUpdate}>
-      <ConsultDetailsUpper form={form} />
-      <ConsultDetailsLower form={form} />
+    <Stack onChange={handleChange}>
+      <ConsultDetailsUpper
+        consult={consult}
+        register={register}
+        setValue={setAndHandleChange}
+      />
+      <ConsultDetailsLower
+        consult={consult}
+        register={register}
+        getValues={getValues}
+        setValue={setAndHandleChange}
+      />
     </Stack>
   );
 };

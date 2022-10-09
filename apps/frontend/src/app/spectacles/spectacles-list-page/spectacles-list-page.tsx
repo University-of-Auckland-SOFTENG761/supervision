@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea, Stack, Title, TextInput, Select } from '@mantine/core';
 import dayjs from 'dayjs';
@@ -10,41 +10,40 @@ import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useDatabase } from '@shared';
 import { OrderStatus } from '../spectacles-details-page';
 import styles from './spectacles-list.module.scss';
+import { RxDocument } from 'rxdb';
+import { ConsultDocType, PatientDocType } from 'database';
+
+type RecordType = Partial<PatientDocType> & {
+  spectaclesCode?: string;
+  colour?: string;
+  lensType?: string;
+  pupillaryDistance?: number;
+  heights?: string;
+  spectaclesNotes?: string;
+  orderStatus?: string;
+  associatedPatientUid?: string;
+  orderDate?: string;
+};
 
 export const SpectaclesListPage = () => {
-  const { consults, patients } = useDatabase();
-  const spectaclesRecords = consults?.map((c) => {
-    const patient = patients?.find((p) => p.id === c.patientId);
-    return {
-      id: c.spectacle?.id,
-      firstName: patient?.firstName,
-      lastName: patient?.lastName,
-      school: c.spectacle?.deliverySchool,
-      spectaclesCode: c.spectacle?.code,
-      colour: c.spectacle?.colour,
-      lensType: c.spectacle?.lensType,
-      pupillaryDistance: c.spectacle?.pupillaryDistance,
-      heights: c.spectacle?.heights,
-      spectaclesNotes: c.spectacle?.notes,
-      orderStatus: c.spectacle?.orderStatus,
-      associatedPatientUid: c.spectacle?.patientId,
-      orderDate: c.spectacle?.orderDate,
-    };
-  });
-
+  const { consultsCollection, patientsCollection } = useDatabase();
   const navigate = useNavigate();
 
+  const [matchingConsults, setMatchingConsults] = useState<
+    RxDocument<ConsultDocType>[]
+  >([]);
+  const [matchingPatients, setMatchingPatients] = useState<
+    RxDocument<PatientDocType>[]
+  >([]);
+  const [spectaclesRecords, setSpectaclesRecords] = useState<RecordType[]>();
+  const [tableRecords, setTableRecords] = useState(
+    sortBy(spectaclesRecords, 'name')
+  );
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'date',
     direction: 'asc',
   });
-  const [tableRecords, setTableRecords] = useState(
-    sortBy(spectaclesRecords, 'name')
-  );
-  useEffect(() => {
-    const data = sortBy(spectaclesRecords, sortStatus.columnAccessor);
-    setTableRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
-  }, [sortStatus]);
+
   // Search bar text query to filter results by
   const [query, setQuery] = useState('');
   const [debouncedQuery] = useDebouncedValue(query, 200);
@@ -53,32 +52,160 @@ export const SpectaclesListPage = () => {
   const [debouncedStatusQuery] = useDebouncedValue(statusQuery, 200);
 
   useEffect(() => {
-    spectaclesRecords &&
-      setTableRecords(
-        spectaclesRecords.filter(
-          ({ firstName, lastName, orderDate, school, id, orderStatus }) => {
-            if (
-              debouncedStatusQuery !== '' &&
-              debouncedStatusQuery !== null &&
-              debouncedStatusQuery !== orderStatus
-            ) {
-              return false;
-            }
-            if (
-              debouncedQuery !== '' &&
-              !`${firstName} ${lastName} ${
-                orderDate ? new Date(orderDate)?.toLocaleDateString() : null
-              } ${school} ${id}`
-                .toLowerCase()
-                .includes(debouncedQuery.trim().toLowerCase())
-            ) {
-              return false;
-            }
-            return true;
-          }
+    const data = sortBy(spectaclesRecords, sortStatus.columnAccessor);
+    setTableRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+  }, [sortStatus]);
+
+  const buildRegex = useCallback(() => {
+    const wordsInDebouncedQuery = debouncedQuery.split(' ');
+    const permutatedQuery = [...wordsInDebouncedQuery, debouncedQuery];
+    const regex = permutatedQuery.map((word) => {
+      return word.trim().replace(/\s+/g, ' ').split('').join('.*');
+    });
+    return regex;
+  }, [debouncedQuery]);
+
+  const buildQuery = useCallback(() => {
+    const regex = buildRegex();
+    const query = regex.map((re) => ({
+      $regex: new RegExp(re, 'i'),
+      $options: 'i',
+    }));
+    return query;
+  }, [buildRegex]);
+
+  // Find all patients and consults that could match the query
+  useEffect(() => {
+    if (patientsCollection && consultsCollection) {
+      patientsCollection
+        .find(
+          debouncedQuery
+            ? {
+                selector: {
+                  $or: [
+                    ...buildQuery().map((q) => ({ firstName: q })),
+                    ...buildQuery().map((q) => ({ lastName: q })),
+                  ],
+                },
+                limit: 100,
+              }
+            : undefined
         )
-      );
-  }, [debouncedQuery, debouncedStatusQuery, consults]);
+        .exec()
+        .then((patients) => {
+          setMatchingPatients((p) => [...p, ...patients]);
+          patients.forEach((patient) => {
+            consultsCollection
+              .find({
+                selector: {
+                  patientId: patient.id,
+                },
+              })
+              .exec()
+              .then((newConsults) => {
+                console.log(
+                  "FOUND CONSULTS FROM PATIENT'S CONSULT IDS",
+                  newConsults
+                );
+                const newConsultsArray = Array.from(newConsults.values());
+                newConsults &&
+                  setMatchingConsults((c) => [...c, ...newConsultsArray]);
+              });
+          });
+        });
+      consultsCollection
+        .find(
+          debouncedQuery
+            ? {
+                selector: {
+                  $or: [
+                    {
+                      'spectacle.id': {
+                        $regex: new RegExp(
+                          debouncedQuery
+                            .trim()
+                            .replace(/\s+/g, ' ')
+                            .split('')
+                            .join('.*'),
+                          'i'
+                        ),
+                        $options: 'i',
+                      },
+                    },
+                  ],
+                },
+                limit: 100,
+              }
+            : undefined
+        )
+        .exec()
+        .then((consults) => {
+          setMatchingConsults((c) => [...c, ...consults]);
+          consults.forEach((consult) => {
+            patientsCollection
+              .findOne(consult.patientId)
+              .exec()
+              .then((patient) => {
+                patient && setMatchingPatients((prev) => [...prev, patient]);
+              });
+          });
+        });
+    }
+  }, [debouncedQuery, patientsCollection, consultsCollection, buildQuery]);
+
+  useEffect(() => {
+    console.log(
+      'matchingConsults',
+      matchingConsults.map((c) => ({ id: c.id, patientId: c.patientId }))
+    );
+    console.log(
+      'matchingPatients',
+      matchingPatients.map((p) => ({
+        id: p.id,
+        firstName: p.firstName,
+        lastName: p.lastName,
+      }))
+    );
+  }, [matchingConsults, matchingPatients]);
+
+  useEffect(() => {
+    setMatchingPatients([]);
+    setMatchingConsults([]);
+  }, [debouncedQuery]);
+
+  // Combine the matching patients and consults into a single array of records
+  useEffect(() => {
+    if (matchingPatients && matchingConsults) {
+      const records = matchingPatients
+        .reduce((a: RecordType[], p) => {
+          const consults = matchingConsults.filter((c) => c.patientId === p.id);
+          return [
+            ...a,
+            ...consults.map((c) => ({
+              id: c?.spectacle?.id,
+              firstName: p.firstName,
+              lastName: p.lastName,
+              school: c?.spectacle?.deliverySchool,
+              spectaclesCode: c?.spectacle?.code,
+              colour: c?.spectacle?.colour,
+              lensType: c?.spectacle?.lensType,
+              pupillaryDistance: c?.spectacle?.pupillaryDistance,
+              heights: c?.spectacle?.heights,
+              spectaclesNotes: c?.spectacle?.notes,
+              orderStatus: c?.spectacle?.orderStatus,
+              associatedPatientUid: c?.spectacle?.patientId,
+              orderDate: c?.spectacle?.orderDate,
+            })),
+          ];
+        }, [])
+        .filter((r) =>
+          debouncedStatusQuery ? r.orderStatus === debouncedStatusQuery : true
+        )
+        .filter((r, i, a) => a.findIndex((t) => t.id === r.id) === i && r.id);
+      setSpectaclesRecords(records);
+      setTableRecords(sortBy(records, 'date'));
+    }
+  }, [matchingPatients, matchingConsults, debouncedStatusQuery]);
 
   const orderStatusArray = Array.from(
     (Object.keys(OrderStatus) as Array<keyof typeof OrderStatus>).map((key) => {
@@ -129,7 +256,7 @@ export const SpectaclesListPage = () => {
           columns={[
             {
               accessor: 'orderDate',
-              title: 'DATE',
+              title: 'ORDER DATE',
               render: ({ orderDate }) => {
                 return orderDate
                   ? dayjs(orderDate).format('DD/MM/YYYY')

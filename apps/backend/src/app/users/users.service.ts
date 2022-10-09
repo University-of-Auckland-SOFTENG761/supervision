@@ -44,17 +44,7 @@ export class UserService {
       query = this.usersRepository
         .createQueryBuilder('user')
         .where(
-          `date_trunc('second',"user"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
-          {
-            minUpdatedAt,
-          }
-        )
-        .orWhere(
-          `date_trunc('second', "user"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND user.id > :lastId`,
-          {
-            minUpdatedAt,
-            lastId,
-          }
+          'user.updatedAt > :minUpdatedAt OR (user.updatedAt = :minUpdatedAt AND user.id > :lastId)'
         );
     }
 

@@ -33,7 +33,12 @@ export class PatientService {
   }
 
   async set(patients: SetPatientInput[]): Promise<PatientEntity> {
-    const newPatients = await this.patientsRepository.save(patients);
+    const newPatients = await this.patientsRepository.save(
+      patients.map((p) => ({
+        ...p,
+        updatedAt: new Date().toISOString(),
+      }))
+    );
     return newPatients[newPatients.length - 1];
   }
 
@@ -96,17 +101,8 @@ export class PatientService {
       query = this.patientsRepository
         .createQueryBuilder('patient')
         .where(
-          `date_trunc('second',"patient"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
-          {
-            minUpdatedAt,
-          }
-        )
-        .orWhere(
-          `date_trunc('second', "patient"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND patient.id > :lastId`,
-          {
-            minUpdatedAt,
-            lastId,
-          }
+          `patient.updatedAt > :minUpdatedAt OR (patient.updatedAt = :minUpdatedAt AND patient.id > :lastId)`,
+          { minUpdatedAt, lastId }
         );
     }
 

@@ -52,7 +52,7 @@ export class CreateConsultInput {
   pupils: string;
 
   @Field({ nullable: true })
-  pupillaryDistance: number;
+  spectaclePupillaryDistance: number;
 
   @Field({ nullable: true })
   otherField: string;

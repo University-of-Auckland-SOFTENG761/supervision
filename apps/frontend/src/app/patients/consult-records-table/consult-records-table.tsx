@@ -1,17 +1,16 @@
 import { Table, TableTheme } from '@shared';
-import { ConsultDocument } from 'database/rxdb-utils';
 import { Stack, Text, ThemeIcon } from '@mantine/core';
 import { applyDateFormat } from 'utils/date.utils';
 import { useNavigate } from 'react-router-dom';
 import { IconDatabaseOff } from '@tabler/icons';
+import { RxDocument } from 'rxdb';
+import { ConsultDocType } from 'database';
 
 type ConsultRecordsTableProps = {
-  patientConsults: ConsultDocument[];
+  consults: Map<string, RxDocument<ConsultDocType>> | null;
 };
 
-export const ConsultRecordsTable = ({
-  patientConsults,
-}: ConsultRecordsTableProps) => {
+export const ConsultRecordsTable = ({ consults }: ConsultRecordsTableProps) => {
   const navigate = useNavigate();
 
   const applyRefractionFormat = (
@@ -27,6 +26,8 @@ export const ConsultRecordsTable = ({
     navigate(`/consult-details?consultId=${consultId}`);
   };
 
+  const consultsArray = Array.from(consults?.values() ?? []);
+
   return (
     <Table theme={TableTheme.Primary}>
       <thead>
@@ -39,7 +40,7 @@ export const ConsultRecordsTable = ({
         </tr>
       </thead>
       <tbody>
-        {patientConsults.length === 0 ? (
+        {consultsArray.length === 0 ? (
           <tr>
             <td colSpan={5} className="hover:bg-white">
               <Stack className="justify-center w-full p-2">
@@ -57,7 +58,7 @@ export const ConsultRecordsTable = ({
             </td>
           </tr>
         ) : (
-          patientConsults?.map((record) => (
+          consultsArray?.map((record) => (
             <tr
               key={record.id}
               className="cursor-pointer"

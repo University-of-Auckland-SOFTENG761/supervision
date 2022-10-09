@@ -1,13 +1,23 @@
 import { Table, TableTheme } from '@shared';
-import { PatientDocument } from 'database/rxdb-utils';
+import { PatientDocType } from 'database';
+import { useNavigate } from 'react-router-dom';
+import { RxDocument } from 'rxdb';
+import { formatName } from 'utils/name.utils';
 
 export const PatientRecordsTable = ({
   patientRecords,
-  onPatientSelected,
+  closeModal,
 }: {
-  patientRecords: PatientDocument[];
-  onPatientSelected?: (patient: PatientDocument) => void;
+  patientRecords: RxDocument<PatientDocType>[];
+  closeModal?: () => void;
 }) => {
+  const navigate = useNavigate();
+
+  const openPatient = (patientId: string) => {
+    navigate('/patient-details?patientId=' + patientId);
+    closeModal?.();
+  };
+
   return (
     <Table theme={TableTheme.Primary}>
       <thead>
@@ -20,15 +30,11 @@ export const PatientRecordsTable = ({
       <tbody>
         {patientRecords.map((record) => (
           <tr
-            className="cursor-pointer"
             key={record.id}
-            onClick={() => {
-              if (onPatientSelected) onPatientSelected(record);
-            }}
+            className="cursor-pointer"
+            onClick={() => openPatient(record.id)}
           >
-            <td>
-              {record.firstName} {record.lastName}
-            </td>
+            <td>{formatName(record.firstName, record.lastName)}</td>
             <td>
               {record.dateOfBirth
                 ? new Date(record.dateOfBirth).toLocaleDateString()

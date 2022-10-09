@@ -19,6 +19,7 @@ export const consultSchemaLiteral = {
     },
     patientId: {
       type: 'string',
+      maxLength: 32, // <- GraphQL UUID max length
     },
     dateConsentGiven: {
       type: 'string',
@@ -61,9 +62,6 @@ export const consultSchemaLiteral = {
     },
     pupils: {
       type: 'string',
-    },
-    pupillaryDistance: {
-      type: 'number',
     },
     otherField: {
       type: 'string',
@@ -112,6 +110,7 @@ export const consultSchemaLiteral = {
       properties: {
         id: {
           type: 'string',
+          maxLength: 32, // <- GraphQL UUID max length
         },
         patientId: {
           type: 'string',
@@ -384,6 +383,7 @@ export const consultSchemaLiteral = {
     },
   },
   required: ['id', 'patientId', 'userEmail', 'dateConsentGiven'],
+  indexes: ['spectacle.id', 'patientId'],
 } as const;
 
 export const consultSchemaTyped = toTypedRxJsonSchema(consultSchemaLiteral);

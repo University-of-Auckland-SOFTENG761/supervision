@@ -3,16 +3,10 @@ import {
   runPatientReplication,
   getSuperVisionDatabase,
   runConsultReplication,
-  patientSchemaTyped,
   PatientDocType,
-  consultSchemaTyped,
   ConsultDocType,
 } from 'database';
-import {
-  buildFormValues,
-  ConsultDocument,
-  PatientDocument,
-} from 'database/rxdb-utils';
+import { ConsultDocument, PatientDocument } from 'database/rxdb-utils';
 import {
   createContext,
   useCallback,
@@ -21,19 +15,17 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { RxDatabase } from 'rxdb';
+import { RxCollection, RxDatabase } from 'rxdb';
 import { RxReplicationError } from 'rxdb/dist/types/plugins/replication';
 import { RxGraphQLReplicationState } from 'rxdb/dist/types/plugins/replication-graphql';
 import { v4 as uuidv4 } from 'uuid';
 import { useNetwork } from './network-context';
 
 interface IDataBaseContext {
-  patients: PatientDocument[];
+  patientsCollection: RxCollection<PatientDocType>;
   newPatient: () => string;
-  updatePatient: (patient: PatientDocument | PatientDocType) => void;
-  consults: ConsultDocument[];
-  newConsult: (patientId: string) => string | undefined;
-  updateConsult: (consult: ConsultDocument | ConsultDocType) => void;
+  consultsCollection: RxCollection<ConsultDocType>;
+  newConsult: (patientId: string) => Promise<string | undefined>;
 }
 
 const DatabaseContext = createContext<Partial<IDataBaseContext>>({});
@@ -44,14 +36,13 @@ type DatabaseProviderProps = {
 
 export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
   const [superVisionDb, setSuperVisionDb] = useState<RxDatabase | null>(null);
+  const patientsCollection = superVisionDb?.collections['patients'];
+  const consultsCollection = superVisionDb?.collections['consults'];
 
   const [patientsReplicationState, setPatientsReplicationState] =
     useState<RxGraphQLReplicationState<PatientDocument> | null>(null);
-  const [patients, setPatients] = useState<PatientDocument[]>([]);
-
   const [consultsReplicationState, setConsultsReplicationState] =
     useState<RxGraphQLReplicationState<ConsultDocument> | null>(null);
-  const [consults, setConsults] = useState<ConsultDocument[]>([]);
 
   const { isAuthenticated, user } = useAuth0();
   const { online } = useNetwork();
@@ -124,9 +115,11 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
   }, [superVisionDb]);
 
   const newConsult = useCallback(
-    (patientId: string) => {
-      if (!user || (!online && !userEmail) || !patients) return;
-      const patient = patients.find((p) => p.id === patientId);
+    async (patientId: string) => {
+      if (!user || (!online && !userEmail) || !patientsCollection) return;
+      const patient = await patientsCollection
+        .findOne({ selector: { id: patientId } })
+        .exec();
 
       const consultId = uuidv4();
       const nc = {
@@ -141,78 +134,11 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
           deliverySchool: patient?.school,
         },
       };
-      superVisionDb?.['consults'].insert(nc);
+      await superVisionDb?.['consults'].insert(nc);
       return nc.id;
     },
-    [online, superVisionDb, user, userEmail, patients]
+    [user, online, userEmail, patientsCollection, superVisionDb]
   );
-
-  const patientDocumentsAreEqual = useCallback(
-    (a: PatientDocument, b: PatientDocument) => {
-      const aJSON = JSON.stringify(
-        buildFormValues(patientSchemaTyped, a as PatientDocType)
-      );
-      const bJSON = JSON.stringify(
-        buildFormValues(patientSchemaTyped, b as PatientDocType)
-      );
-      return aJSON === bJSON;
-    },
-    []
-  );
-
-  const consultDocumentsAreEqual = useCallback(
-    (a: ConsultDocument, b: ConsultDocument) => {
-      const aJSON = JSON.stringify(
-        buildFormValues(consultSchemaTyped, a as ConsultDocType)
-      );
-      const bJSON = JSON.stringify(
-        buildFormValues(consultSchemaTyped, b as ConsultDocType)
-      );
-      return aJSON === bJSON;
-    },
-    []
-  );
-
-  const updatePatient = useCallback(
-    (patient: PatientDocument | PatientDocType) => {
-      const oldPatient = patients.find((p) => p.id === patient.id);
-      if (
-        oldPatient &&
-        patientDocumentsAreEqual(oldPatient, patient as PatientDocument)
-      ) {
-        return;
-      }
-      superVisionDb?.['patients'].upsert(patient);
-    },
-    [patientDocumentsAreEqual, patients, superVisionDb]
-  );
-
-  const updateConsult = useCallback(
-    (consult: ConsultDocument | ConsultDocType) => {
-      const oldConsult = consults.find((c) => c.id === consult.id);
-      if (
-        oldConsult &&
-        consultDocumentsAreEqual(oldConsult, consult as ConsultDocument)
-      ) {
-        return;
-      }
-      superVisionDb?.['consults'].atomicUpsert(consult);
-    },
-    [consults, consultDocumentsAreEqual, superVisionDb]
-  );
-
-  useEffect(() => {
-    if (superVisionDb) {
-      superVisionDb['patients'].find().$.subscribe((value) => {
-        setPatients(value);
-      });
-
-      superVisionDb['consults'].find().$.subscribe((value) => {
-        const newConsults = JSON.parse(JSON.stringify(value));
-        setConsults(newConsults);
-      });
-    }
-  }, [superVisionDb]);
 
   useEffect(() => {
     if (!superVisionDb) {
@@ -228,14 +154,12 @@ export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
 
   const value = useMemo(
     () => ({
-      patients,
+      patientsCollection,
       newPatient,
-      updatePatient,
-      consults,
+      consultsCollection,
       newConsult,
-      updateConsult,
     }),
-    [patients, newPatient, updatePatient, consults, newConsult, updateConsult]
+    [patientsCollection, newPatient, consultsCollection, newConsult]
   );
 
   return (

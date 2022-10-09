@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Group, NumberInput, Stack, Textarea, TextInput } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
-import { useForm } from '@mantine/form';
+import { useEffect, useRef } from 'react';
+import {
+  Group,
+  NumberInput,
+  SimpleGrid,
+  Stack,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import { RecallsTable } from '../recalls-table';
 import { DatePicker } from '@mantine/dates';
 import { calculateAge } from 'utils/date.utils';
@@ -10,102 +15,99 @@ import GenderSelect from '../gender-select';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import SchoolAutocomplete from '../school-autocomplete';
-import { useDatabase } from '@shared';
-import { useSearchParams } from 'react-router-dom';
 import {
-  ConsultDocument,
   buildFormValues,
+  parseDateForInput,
+  parseNumberForInput,
   stripUnusedFields,
 } from 'database/rxdb-utils';
-import { PatientDocType, patientSchemaTyped } from 'database';
+import { ConsultDocType, PatientDocType, patientSchemaTyped } from 'database';
+import { RxDocument } from 'rxdb';
+import { useForm } from 'react-hook-form';
 dayjs.extend(customParseFormat);
 
 type PatientInputsProps = {
-  patientConsults: ConsultDocument[];
+  patient: RxDocument<PatientDocType>;
+  updatePatient: (patientJSON: PatientDocType) => void;
+  consults: Map<string, RxDocument<ConsultDocType>> | null;
 };
 
 export type FormInputType = Omit<PatientDocType, 'dateOfBirth'> & {
   dateOfBirth: Date | null;
 };
 
-export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
-  const { patients, updatePatient } = useDatabase();
+export const PatientInputs = ({
+  patient,
+  updatePatient,
+  consults,
+}: PatientInputsProps) => {
+  const { register, getValues, setValue } = useForm();
 
-  const [searchParams] = useSearchParams();
-  const patientId = searchParams.get('patientId');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const patient = patientId
-    ? patients?.find((p) => p.id === patientId)
-    : undefined;
-
-  const [patientAge, setPatientAge] = useState(
-    patient?.dateOfBirth
-      ? calculateAge(new Date(patient?.dateOfBirth))
-      : undefined
-  );
-
-  const form = useForm({
-    initialValues: {
-      ...buildFormValues(
-        patientSchemaTyped,
-        patient?.toJSON !== undefined ? patient.toJSON() : patient
-      ),
-      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
-    } as FormInputType,
-  });
-
-  useEffect(() => {
-    form.setValues({
-      ...buildFormValues(
-        patientSchemaTyped,
-        patient?.toJSON !== undefined ? patient.toJSON() : patient
-      ),
-      dateOfBirth: patient?.dateOfBirth ? new Date(patient?.dateOfBirth) : null,
-    } as FormInputType);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patient]);
-
-  useEffect(() => {
-    setPatientAge(
-      form.values.dateOfBirth
-        ? calculateAge(new Date(form.values.dateOfBirth))
-        : undefined
-    );
-  }, [form.values.dateOfBirth]);
-
-  const sendUpdate = () => {
-    if (updatePatient && form.values)
-      updatePatient(stripUnusedFields(form.values));
+  const handleChange = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      const newPatient = {
+        ...stripUnusedFields(
+          buildFormValues(patientSchemaTyped, getValues('patient'))
+        ),
+        id: patient.get('id'),
+      } as PatientDocType;
+      updatePatient(newPatient);
+    }, 1000);
   };
 
-  const [debouncedFormValues] = useDebouncedValue(form.values, 5000);
-
   useEffect(() => {
-    sendUpdate();
+    if (!timeoutRef.current) {
+      setValue(
+        'patient',
+        buildFormValues(patientSchemaTyped, patient.toMutableJSON())
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFormValues]);
+  }, [patient.revision]);
 
   return (
-    <>
-      <Stack onBlur={sendUpdate}>
+    <SimpleGrid
+      cols={3}
+      spacing={180}
+      breakpoints={[
+        { maxWidth: 1024, cols: 2, spacing: 100 },
+        { maxWidth: 1280, cols: 3, spacing: 100 },
+      ]}
+      onChange={handleChange}
+    >
+      <Stack>
         <TextInput
           required
           label="First name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('firstName')}
+          defaultValue={patient.get('firstName')}
+          {...register('patient.firstName')}
+          maxLength={40}
         />
         <TextInput
           required
           label="Last name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('lastName')}
+          defaultValue={patient.get('lastName')}
+          {...register('patient.lastName')}
+          maxLength={40}
         />
         <Group className="justify-between">
           <DatePicker
             required
             label="Date of birth:"
-            onBlur={sendUpdate}
-            {...form.getInputProps('dateOfBirth')}
+            value={parseDateForInput(patient.get('dateOfBirth'))}
+            onSubmit={(value) => {
+              setValue('patient.dateOfBirth', value);
+              handleChange();
+            }}
+            onChange={(e) => {
+              setValue('patient.dateOfBirth', e ?? undefined);
+              handleChange();
+            }}
             allowFreeInput
             inputFormat="DD/MM/YYYY"
             dateParser={(date: string) =>
@@ -117,38 +119,56 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
           <NumberInput
             label="Age:"
             className="w-20"
-            value={patientAge}
+            value={calculateAge(parseDateForInput(patient.get('dateOfBirth')))}
             disabled
           />
         </Group>
-        <TextInput
-          label="Patient ID:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('id')}
-          disabled
-        />
+        <TextInput label="Patient ID:" value={patient.get('id')} disabled />
         <EthnicitySelect
-          onBlur={sendUpdate}
-          {...form.getInputProps('ethnicity')}
+          defaultValue={patient.get('ethnicity')}
+          {...register('patient.ethnicity')}
+          onChange={(e) => {
+            setValue('patient.ethnicity', e ?? undefined);
+            handleChange();
+          }}
         />
-        <GenderSelect onBlur={sendUpdate} {...form.getInputProps('gender')} />
+        <GenderSelect
+          defaultValue={patient.get('gender')}
+          {...register('patient.gender')}
+          onChange={(e) => {
+            setValue('patient.gender', e ?? undefined);
+            handleChange();
+          }}
+        />
         <SchoolAutocomplete
-          label="School"
-          onBlur={sendUpdate}
-          {...form.getInputProps('school')}
+          defaultValue={patient.get('school')}
+          {...register('patient.school')}
+          onChange={(e) => {
+            setValue('patient.school', e ?? undefined);
+            handleChange();
+          }}
         />
         <Group className="w-full">
           <NumberInput
             label="Year:"
             className="w-20"
-            onBlur={sendUpdate}
-            {...form.getInputProps('yearLevel')}
+            defaultValue={parseNumberForInput(patient.get('yearLevel'))}
+            {...register('patient.yearLevel', {
+              valueAsNumber: true,
+            })}
+            max={13}
+            min={0}
+            onChange={(e) => {
+              setValue('patient.yearLevel', e ?? undefined);
+              handleChange();
+            }}
           />
           <TextInput
+            maxLength={20}
             label="Room:"
             className="grow"
-            onBlur={sendUpdate}
-            {...form.getInputProps('room')}
+            defaultValue={patient.get('room')}
+            {...register('patient.room')}
           />
         </Group>
       </Stack>
@@ -156,45 +176,49 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
         <TextInput
           label="Address:"
           placeholder="Street Address"
-          onBlur={sendUpdate}
-          {...form.getInputProps('streetAddress')}
+          defaultValue={patient.get('streetAddress')}
+          {...register('patient.streetAddress')}
         />
         <Group className="w-full" grow>
           <TextInput
             placeholder="Suburb"
-            onBlur={sendUpdate}
-            {...form.getInputProps('suburb')}
+            defaultValue={patient.get('suburb')}
+            {...register('patient.suburb')}
           />
           <TextInput
             placeholder="City"
-            onBlur={sendUpdate}
-            {...form.getInputProps('city')}
+            defaultValue={patient.get('city')}
+            {...register('patient.city')}
           />
         </Group>
         <TextInput
           placeholder="Postcode"
-          onBlur={sendUpdate}
-          {...form.getInputProps('postcode')}
+          defaultValue={patient.get('postcode')}
+          {...register('patient.postcode')}
+          maxLength={5}
         />
         <TextInput
           label="Caregiver First Name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('caregiverFirstName')}
+          defaultValue={patient.get('caregiverFirstName')}
+          {...register('patient.caregiverFirstName')}
+          maxLength={40}
         />
         <TextInput
           label="Caregiver Last Name:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('caregiverLastName')}
+          defaultValue={patient.get('caregiverLastName')}
+          {...register('patient.caregiverLastName')}
+          maxLength={40}
         />
         <TextInput
           label="Phone:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('phoneNumber')}
+          defaultValue={patient.get('phoneNumber')}
+          {...register('patient.phoneNumber')}
+          maxLength={15}
         />
         <TextInput
           label="Email:"
-          onBlur={sendUpdate}
-          {...form.getInputProps('email')}
+          defaultValue={patient.get('email')}
+          {...register('patient.email')}
         />
       </Stack>
       <Stack>
@@ -202,13 +226,13 @@ export const PatientInputs = ({ patientConsults }: PatientInputsProps) => {
           label="Admin Notes"
           placeholder="Type here..."
           autosize
+          defaultValue={patient.get('adminNotes')}
+          {...register('patient.adminNotes')}
           minRows={3}
-          onBlur={sendUpdate}
-          {...form.getInputProps('adminNotes')}
         />
-        <RecallsTable patientConsults={patientConsults} />
+        <RecallsTable consults={consults} />
       </Stack>
-    </>
+    </SimpleGrid>
   );
 };
 

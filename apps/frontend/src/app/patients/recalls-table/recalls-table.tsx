@@ -1,15 +1,16 @@
 import { Stack, Text, ThemeIcon } from '@mantine/core';
 import { Table, TableTheme } from '@shared';
 import { IconDatabaseOff } from '@tabler/icons';
-import { ConsultDocument } from 'database/rxdb-utils';
-import React from 'react';
+import { ConsultDocType } from 'database';
 import { applyDateFormat } from 'utils/date.utils';
+import { RxDocument } from 'rxdb';
 
 type RecallsTableProps = {
-  patientConsults: ConsultDocument[];
+  consults: Map<string, RxDocument<ConsultDocType>> | null;
 };
 
-export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
+export const RecallsTable = ({ consults }: RecallsTableProps) => {
+  const consultsArray = Array.from(consults?.values() ?? []);
   return (
     <Stack>
       <Text className="-mb-3 text-sm">Recalls</Text>
@@ -21,9 +22,10 @@ export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
           </tr>
         </thead>
         <tbody>
-          {patientConsults.some((consult) => consult.recallDate) ? (
-            patientConsults?.map((record) =>
-              record.recallDate ? (
+          {consultsArray.some((consult) => consult.recallDate) ? (
+            consultsArray
+              .filter((r) => r.recallDate)
+              .map((record) => (
                 <tr key={record.id}>
                   <td>
                     {record.recallDate &&
@@ -31,8 +33,7 @@ export const RecallsTable = ({ patientConsults }: RecallsTableProps) => {
                   </td>
                   <td>{record.recallDescription}</td>
                 </tr>
-              ) : null
-            )
+              ))
           ) : (
             <tr>
               <td colSpan={5} className="hover:bg-white">

@@ -30,7 +30,7 @@ export class SpectacleEntity extends BaseEntity {
   @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
   pupillaryDistance: number;
 
-  @Column({ type: 'decimal', precision: 4, scale: 2, nullable: true })
+  @Column({ nullable: true })
   heights: string;
 
   @Column('varchar', { nullable: true })

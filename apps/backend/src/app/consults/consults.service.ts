@@ -53,7 +53,7 @@ export class ConsultsService {
   async set(consults: SetConsultInput[]): Promise<ConsultEntity> {
     const bundledConsults = await Promise.all(
       consults?.map(async ({ userEmail, patientId, spectacle, ...consult }) => {
-        const spectacleEntity = spectacle.id
+        const spectacleEntity = spectacle?.id
           ? await this.spectacleService.saveSpectacle({
               id: spectacle.id,
               patientId: patientId,
@@ -76,6 +76,7 @@ export class ConsultsService {
           patient: { id: patientId },
           ...consult,
           spectacle: spectacleEntity,
+          updatedAt: new Date().toISOString(),
         };
       })
     );
@@ -100,17 +101,8 @@ export class ConsultsService {
       query = this.consultsRepository
         .createQueryBuilder('consult')
         .where(
-          `date_trunc('second',"consult"."updatedAt") > date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE))`,
-          {
-            minUpdatedAt,
-          }
-        )
-        .orWhere(
-          `date_trunc('second', "consult"."updatedAt") = date_trunc('second',CAST (:minUpdatedAt AS TIMESTAMP WITH TIME ZONE)) AND consult.id > :lastId`,
-          {
-            minUpdatedAt,
-            lastId,
-          }
+          `consult.updatedAt > :minUpdatedAt OR (consult.updatedAt = :minUpdatedAt AND consult.id > :lastId)`,
+          { minUpdatedAt: minUpdatedAt, lastId: lastId }
         );
     }
 
