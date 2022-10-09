@@ -13,6 +13,8 @@ import {
 } from '@mantine/core';
 import { useSearchParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
+import LensTypeSelect from 'app/shared/lensType-select';
+import CodeAutocomplete from 'app/shared/code-autocomplete';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
@@ -25,8 +27,6 @@ import {
 } from 'database/rxdb-utils';
 import { RxDocument } from 'rxdb';
 import { useForm } from 'react-hook-form';
-import LensTypeSelect from 'app/shared/lensType-select';
-import CodeAutocomplete from 'app/shared/code-autocomplete';
 
 type TimestampFilter = 'spectacle.orderDate' | 'spectacle.deliveredDate';
 

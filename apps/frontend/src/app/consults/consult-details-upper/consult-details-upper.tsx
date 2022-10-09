@@ -17,12 +17,12 @@ import dayjs from 'dayjs';
 import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
 import { EyePressureInputs } from './eye-pressure-inputs';
+import LensTypeSelect from 'app/shared/lensType-select';
+import CodeAutocomplete from 'app/shared/code-autocomplete';
 import { ConsultDocType } from 'database';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { RxDocument } from 'rxdb';
 import { parseDateForInput, parseNumberForInput } from 'database/rxdb-utils';
-import LensTypeSelect from 'app/shared/lensType-select';
-import CodeAutocomplete from 'app/shared/code-autocomplete';
 
 type ConsultDetailsUpperProps = {
   consult: RxDocument<ConsultDocType>;
@@ -316,7 +316,11 @@ export const ConsultDetailsUpper = ({
                 setValue('consult.recallDate', nextDate?.toDate() ?? undefined);
               }}
             />
-            <Text>{dayjs(consult.get('recallDate')).format('DD/MM/YYYY')}</Text>
+            <Text>
+              {consult.get('recallDate')
+                ? dayjs(consult.get('recallDate')).format('DD/MM/YYYY')
+                : ''}
+            </Text>
             <TextInput
               label="Reason:"
               defaultValue={consult.get('recallDescription')}
