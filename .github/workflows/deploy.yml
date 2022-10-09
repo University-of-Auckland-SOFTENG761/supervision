@@ -106,7 +106,9 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Install Dependencies
-        run: npm ci --production
+        run: |
+          npm set-script prepare ""
+          npm ci --production
 
       - name: Build
         run: npx nx run frontend:build:production --production --parallel=true --baseHref=uoa-supervision.org
