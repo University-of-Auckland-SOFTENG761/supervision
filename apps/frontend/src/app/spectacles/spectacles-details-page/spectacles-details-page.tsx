@@ -26,6 +26,7 @@ import {
 import { RxDocument } from 'rxdb';
 import { useForm } from 'react-hook-form';
 import LensTypeSelect from 'app/shared/lensType-select';
+import CodeAutocomplete from 'app/shared/code-autocomplete';
 
 type TimestampFilter = 'spectacle.orderDate' | 'spectacle.deliveredDate';
 
@@ -172,9 +173,13 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Code</Text>
-          <TextInput
-            classNames={{ root: '-my-8', input: 'text-right' }}
+          <CodeAutocomplete
+            defaultValue={consult.get('spectacle.code')}
             {...register('consult.spectacle.code')}
+            onChange={(e) => {
+              setValue('consult.spectacle.code', e ?? undefined);
+              handleChange();
+            }}
           />
         </Group>
         <Divider my="xs" />
