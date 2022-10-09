@@ -21,6 +21,7 @@ import { ConsultDocType } from 'database';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { RxDocument } from 'rxdb';
 import { parseDateForInput, parseNumberForInput } from 'database/rxdb-utils';
+import LensTypeSelect from 'app/shared/lensType-select';
 
 type ConsultDetailsUpperProps = {
   consult: RxDocument<ConsultDocType>;
@@ -248,10 +249,12 @@ export const ConsultDetailsUpper = ({
                   defaultValue={consult.get('spectacle.colour')}
                   {...register('consult.spectacle.colour')}
                 />
-                <TextInput
+                <LensTypeSelect
                   label="Lens Type:"
-                  defaultValue={consult.get('spectacle.lensType')}
                   {...register('consult.spectacle.lensType')}
+                  onChange={(e) => {
+                    setValue('consult.spectacle.lensType', e ?? undefined);
+                  }}
                 />
               </SimpleGrid>
               <TextInput
