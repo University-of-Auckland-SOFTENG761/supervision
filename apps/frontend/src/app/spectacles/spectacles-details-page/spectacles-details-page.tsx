@@ -13,6 +13,8 @@ import {
 } from '@mantine/core';
 import { useSearchParams } from 'react-router-dom';
 import { Text } from '@mantine/core';
+import LensTypeSelect from 'app/shared/lensType-select';
+import CodeAutocomplete from 'app/shared/code-autocomplete';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
@@ -171,9 +173,13 @@ export const SpectaclesDetailsPage = () => {
         <Divider my="xs" />
         <Group className="justify-between">
           <Text className="-my-8">Code</Text>
-          <TextInput
-            classNames={{ root: '-my-8', input: 'text-right' }}
+          <CodeAutocomplete
+            defaultValue={consult.get('spectacle.code')}
             {...register('consult.spectacle.code')}
+            onChange={(e) => {
+              setValue('consult.spectacle.code', e ?? undefined);
+              handleChange();
+            }}
           />
         </Group>
         <Divider my="xs" />
@@ -186,10 +192,15 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
+          {' '}
           <Text className="-my-8">Lens Type</Text>
-          <TextInput
-            classNames={{ root: '-my-8', input: 'text-right' }}
+          <LensTypeSelect
             {...register('consult.spectacle.lensType')}
+            defaultValue={consult.get('spectacle.lensType')}
+            onChange={(e) => {
+              setValue('consult.spectacle.lensType', e ?? undefined);
+              handleChange();
+            }}
           />
         </Group>
         <Divider my="xs" />
