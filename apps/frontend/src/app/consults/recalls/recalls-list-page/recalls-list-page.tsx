@@ -43,6 +43,7 @@ export const RecallsListPage = () => {
   useEffect(() => {
     const data = sortBy(recallRecords, sortStatus.columnAccessor);
     setTableRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortStatus]);
 
   // Find all patients and consults that could match the query
