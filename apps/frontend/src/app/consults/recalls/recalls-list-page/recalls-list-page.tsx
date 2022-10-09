@@ -147,44 +147,6 @@ export const RecallsListPage = () => {
               });
           });
         });
-
-      consultsCollection
-        .find(
-          debouncedQuery
-            ? {
-                selector: {
-                  $or: [
-                    {
-                      recallDescription: {
-                        $regex: new RegExp(
-                          debouncedQuery
-                            .trim()
-                            .replace(/\s+/g, ' ')
-                            .split('')
-                            .join('.*'),
-                          'i'
-                        ),
-                        $options: 'i',
-                      },
-                    },
-                  ],
-                },
-                limit: 100,
-              }
-            : undefined
-        )
-        .exec()
-        .then((consults) => {
-          setMatchingConsults((c) => [...c, ...consults]);
-          consults.forEach((consult) => {
-            patientsCollection
-              .findOne(consult.patientId)
-              .exec()
-              .then((patient) => {
-                patient && setMatchingPatients((prev) => [...prev, patient]);
-              });
-          });
-        });
     }
   }, [debouncedQuery, patientsCollection, consultsCollection]);
 
