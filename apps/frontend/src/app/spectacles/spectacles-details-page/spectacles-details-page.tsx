@@ -25,6 +25,7 @@ import {
 } from 'database/rxdb-utils';
 import { RxDocument } from 'rxdb';
 import { useForm } from 'react-hook-form';
+import LensTypeSelect from 'app/shared/lensType-select';
 
 type TimestampFilter = 'spectacle.orderDate' | 'spectacle.deliveredDate';
 
@@ -186,10 +187,14 @@ export const SpectaclesDetailsPage = () => {
         </Group>
         <Divider my="xs" />
         <Group className="justify-between">
+          {' '}
           <Text className="-my-8">Lens Type</Text>
-          <TextInput
-            classNames={{ root: '-my-8', input: 'text-right' }}
+          <LensTypeSelect
             {...register('consult.spectacle.lensType')}
+            onChange={(e) => {
+              setValue('consult.spectacle.lensType', e ?? undefined);
+              handleChange();
+            }}
           />
         </Group>
         <Divider my="xs" />
