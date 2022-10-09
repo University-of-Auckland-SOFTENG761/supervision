@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import {
   SearchModal,
   SearchModalRef,
-} from './shared/modals/search/SearchModal';
+} from './shared/modals/search/search-modal';
 import NavbarLink from './shared/navbar/link/navbar-link';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {

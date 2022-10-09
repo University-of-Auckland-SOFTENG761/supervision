@@ -11,21 +11,28 @@ import {
   Text,
   NumberInput,
 } from '@mantine/core';
-import { UseFormReturnType } from '@mantine/form';
 import { VisualAcuityInputs } from './visual-acuity-inputs';
 import { TimeInput } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { NearAcuityInputs } from './near-acuity-inputs';
 import { CoverTestInputs } from './cover-test-inputs';
 import { EyePressureInputs } from './eye-pressure-inputs';
-import { FormInputType } from '../consult-inputs';
-import { applyDateFormat } from 'utils/date.utils';
+import { ConsultDocType } from 'database';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { RxDocument } from 'rxdb';
+import { parseDateForInput, parseNumberForInput } from 'database/rxdb-utils';
 
 type ConsultDetailsUpperProps = {
-  form: UseFormReturnType<FormInputType>;
+  consult: RxDocument<ConsultDocType>;
+  register: UseFormRegister<FieldValues>;
+  setValue: (name: string, value: unknown, urgent?: boolean) => void;
 };
 
-export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
+export const ConsultDetailsUpper = ({
+  consult,
+  register,
+  setValue,
+}: ConsultDetailsUpperProps) => {
   return (
     <Grid columns={5} justify="flex-end">
       {/*Column 1*/}
@@ -36,28 +43,19 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
             required
             placeholder="Type here..."
             autosize
+            defaultValue={consult.get('history')}
+            {...register('consult.history')}
             minRows={4}
-            {...form.getInputProps('history')}
           />
           <TextInput
             label="Medication:"
-            {...form.getInputProps('medication')}
+            defaultValue={consult.get('medication')}
+            {...register('consult.medication')}
             required
           />
-          <VisualAcuityInputs
-            visualAcuityRightProps={form.getInputProps('visualAcuityRight')}
-            visualAcuityLeftProps={form.getInputProps('visualAcuityLeft')}
-            visualAcuityBothProps={form.getInputProps('visualAcuityBoth')}
-          />
-          <NearAcuityInputs
-            nearAcuityRightProps={form.getInputProps('nearAcuityRight')}
-            nearAcuityLeftProps={form.getInputProps('nearAcuityLeft')}
-            nearAcuityBothProps={form.getInputProps('nearAcuityBoth')}
-          />
-          <CoverTestInputs
-            coverTestDistanceProps={form.getInputProps('coverTestDistance')}
-            coverTestNearProps={form.getInputProps('coverTestNear')}
-          />
+          <VisualAcuityInputs consult={consult} register={register} />
+          <NearAcuityInputs consult={consult} register={register} />
+          <CoverTestInputs consult={consult} register={register} />
         </Stack>
       </Grid.Col>
       {/*Column 2*/}
@@ -65,36 +63,49 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
         <Stack>
           <TextInput
             label="NPC:"
-            {...form.getInputProps('nearPointOfConvergence')}
+            defaultValue={consult.get('nearPointOfConvergence')}
+            {...register('consult.nearPointOfConvergence')}
+            maxLength={8}
           />
-          <TextInput label="Motility:" {...form.getInputProps('motility')} />
-          <TextInput label="Pupils:" {...form.getInputProps('pupils')} />
+          <TextInput
+            label="Motility:"
+            defaultValue={consult.get('motility')}
+            {...register('consult.motility')}
+            maxLength={8}
+          />
+          <TextInput
+            label="Pupils:"
+            defaultValue={consult.get('pupils')}
+            {...register('consult.pupils')}
+            maxLength={8}
+          />
           <NumberInput
             label="Pupillary Distance:"
-            {...form.getInputProps('pupillaryDistance')}
+            defaultValue={parseNumberForInput(
+              consult.get('spectacle.pupillaryDistance')
+            )}
+            {...register('consult.spectacle.pupillaryDistance', {
+              valueAsNumber: true,
+            })}
+            min={0}
+            precision={2}
+            step={0.1}
+            max={undefined}
+            onChange={(value) => {
+              setValue('consult.spectacle.pupillaryDistance', value);
+            }}
           />
           <TextInput
             label="Fields/Colour Vision/Other:"
-            {...form.getInputProps('otherField')}
+            defaultValue={consult.get('otherField')}
+            {...register('consult.otherField')}
+            maxLength={20}
           />
-          {/*TODO: add timestamp for eye pressure*/}
           <EyePressureInputs
-            {...{
-              ...form.getInputProps('eyePressureRight'),
-              ...form.getInputProps('eyePressureLeft'),
-            }}
-            eyePressureRightProps={{
-              ...form.getInputProps('eyePressureRight'),
-            }}
-            eyePressureLeftProps={{ ...form.getInputProps('eyePressureLeft') }}
-            eyePressureTimestampProps={{
-              ...form.getInputProps('eyePressureTimestamp'),
-            }}
-            setEyePressureTimestamp={(timestamp: Date | null) => {
-              form.setFieldValue('eyePressureTimestamp', timestamp);
-            }}
+            consult={consult}
+            register={register}
+            setValue={setValue}
           />
-          {/*TODO: Refactor cyclopentolate/tropicamide into a separate file*/}
           <Group>
             <Stack>
               <Title order={6} className="-mb-3">
@@ -102,21 +113,33 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               </Title>
               <Group>
                 <Checkbox
-                  {...form.getInputProps('isCyclopentolate', {
-                    type: 'checkbox',
-                  })}
+                  defaultChecked={consult.get('isCyclopentolate')}
+                  {...register('consult.isCyclopentolate')}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
-                    const timestamp = checked ? new Date() : null;
-                    form.setFieldValue('isCyclopentolate', checked);
-                    form.setFieldValue('cyclopentolateTimestamp', timestamp);
+                    const timestamp = checked ? new Date() : undefined;
+                    setValue('consult.isCyclopentolate', checked);
+                    setValue(
+                      'consult.cyclopentolateTimestamp',
+                      timestamp,
+                      true
+                    );
                   }}
                 />
                 <TimeInput
                   label="Administered:"
                   format="12"
                   className="w-28"
-                  {...form.getInputProps('cyclopentolateTimestamp')}
+                  value={parseDateForInput(
+                    consult.get('cyclopentolateTimestamp')
+                  )}
+                  onChange={(value) => {
+                    setValue(
+                      'consult.cyclopentolateTimestamp',
+                      value ?? undefined,
+                      true
+                    );
+                  }}
                 />
               </Group>
             </Stack>
@@ -126,19 +149,27 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               </Title>
               <Group>
                 <Checkbox
-                  {...form.getInputProps('isTropicamide', { type: 'checkbox' })}
+                  defaultChecked={consult.get('isTropicamide')}
+                  {...register('consult.isTropicamide')}
                   onChange={(event) => {
                     const checked: boolean = event.currentTarget.checked;
                     const timestamp = checked ? new Date() : null;
-                    form.setFieldValue('isTropicamide', checked);
-                    form.setFieldValue('tropicamideTimestamp', timestamp);
+                    setValue('consult.isTropicamide', checked);
+                    setValue('consult.tropicamideTimestamp', timestamp, true);
                   }}
                 />
                 <TimeInput
                   label="Administered:"
                   format="12"
                   className="w-28"
-                  {...form.getInputProps('tropicamideTimestamp')}
+                  value={parseDateForInput(consult.get('tropicamideTimestamp'))}
+                  onChange={(value) => {
+                    setValue(
+                      'consult.tropicamideTimestamp',
+                      value ?? undefined,
+                      true
+                    );
+                  }}
                 />
               </Group>
             </Stack>
@@ -154,16 +185,18 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
                 label="Binocular Vision:"
                 placeholder="Type here..."
                 autosize
+                defaultValue={consult.get('binocularVision')}
+                {...register('consult.binocularVision')}
                 minRows={4}
-                {...form.getInputProps('binocularVision')}
               />
               <Textarea
                 label="Diagnosis:"
                 placeholder="Type here..."
                 autosize
-                minRows={4}
                 required
-                {...form.getInputProps('diagnosis')}
+                defaultValue={consult.get('diagnosis')}
+                {...register('consult.diagnosis')}
+                minRows={4}
               />
             </Stack>
           </Grid.Col>
@@ -173,17 +206,19 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
                 label="Anterior Health:"
                 placeholder="Type here..."
                 autosize
-                minRows={4}
                 required
-                {...form.getInputProps('anteriorHealth')}
+                defaultValue={consult.get('anteriorHealth')}
+                {...register('consult.anteriorHealth')}
+                minRows={4}
               />
               <Textarea
                 label="Posterior Health:"
                 placeholder="Type here..."
                 autosize
-                minRows={4}
                 required
-                {...form.getInputProps('posteriorHealth')}
+                defaultValue={consult.get('posteriorHealth')}
+                {...register('consult.posteriorHealth')}
+                minRows={4}
               />
             </Stack>
           </Grid.Col>
@@ -194,11 +229,13 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               <TextInput
                 label="Spectacles Code:"
                 classNames={{ label: 'whitespace-nowrap' }}
-                {...form.getInputProps('spectacle.code')}
+                defaultValue={consult.get('spectacle.code')}
+                {...register('consult.spectacle.code')}
               />
               <TextInput
                 label="Heights:"
-                {...form.getInputProps('spectacle.heights')}
+                defaultValue={consult.get('spectacle.heights')}
+                {...register('consult.spectacle.heights')}
                 placeholder="Datum"
               />
             </Stack>
@@ -208,16 +245,19 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               <SimpleGrid cols={2}>
                 <TextInput
                   label="Colour:"
-                  {...form.getInputProps('spectacle.colour')}
+                  defaultValue={consult.get('spectacle.colour')}
+                  {...register('consult.spectacle.colour')}
                 />
                 <TextInput
                   label="Lens Type:"
-                  {...form.getInputProps('spectacle.lensType')}
+                  defaultValue={consult.get('spectacle.lensType')}
+                  {...register('consult.spectacle.lensType')}
                 />
               </SimpleGrid>
               <TextInput
                 label="Spectacles Note:"
-                {...form.getInputProps('spectacle.notes')}
+                defaultValue={consult.get('spectacle.notes')}
+                {...register('consult.spectacle.notes')}
               />
             </Stack>
           </Grid.Col>
@@ -232,14 +272,16 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
             autosize
             minRows={4}
             required
-            {...form.getInputProps('management')}
+            defaultValue={consult.get('management')}
+            {...register('consult.management')}
           />
           <Textarea
             label="Layperson Notes:"
             placeholder="Include the diagnosis, management plan and prognosis/recall in lay terms"
             autosize
             minRows={11}
-            {...form.getInputProps('layPersonNotes')}
+            defaultValue={consult.get('layPersonNotes')}
+            {...register('consult.layPersonNotes')}
           />
           <Title order={6} className="-mb-3">
             Recall
@@ -259,23 +301,24 @@ export const ConsultDetailsUpper = ({ form }: ConsultDetailsUpperProps) => {
               placeholder="Select one"
               onChange={(value) => {
                 if (!value) {
-                  form.setFieldValue('recallDate', undefined);
+                  setValue('consult.recallDate', undefined);
                   return;
                 }
                 const nextDate = value
                   ? dayjs().add(parseInt(value), 'month')
                   : undefined;
-                form.setFieldValue('recallDate', nextDate?.toISOString() ?? '');
+                setValue('consult.recallDate', nextDate?.toDate() ?? undefined);
               }}
             />
             <Text>
-              {form.values.recallDate
-                ? applyDateFormat(new Date(form.values.recallDate))
+              {consult.get('recallDate')
+                ? dayjs(consult.get('recallDate')).format('DD/MM/YYYY')
                 : ''}
             </Text>
             <TextInput
               label="Reason:"
-              {...form.getInputProps('recallDescription')}
+              defaultValue={consult.get('recallDescription')}
+              {...register('consult.recallDescription')}
             />
           </Group>
         </Stack>

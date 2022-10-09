@@ -104,22 +104,21 @@ const pushQueryBuilder = (docs: PatientDocument[]) => {
   const variables = {
     patients: strippedDocs,
   };
-
   return {
     query,
     variables,
   };
 };
 
-const deletionFilter = (doc: PatientDocument) => {
-  doc = {
+const deletionFilter = (doc: PatientDocument & { consults: unknown }) => {
+  const { consults, ...newDoc } = {
     ...doc,
     deletedAt:
       doc.deletedAt && new Date(doc.deletedAt) !== new Date(0)
         ? doc.deletedAt
         : undefined,
   };
-  return doc;
+  return newDoc;
 };
 
 export const buildPatientReplicationState = async (database: RxDatabase) => {
@@ -135,6 +134,7 @@ export const buildPatientReplicationState = async (database: RxDatabase) => {
             consultIds: doc.consults.map(
               (consult: { id: string }) => consult.id
             ),
+            consults: undefined,
           }),
         },
         push: {
@@ -145,6 +145,7 @@ export const buildPatientReplicationState = async (database: RxDatabase) => {
         deletedFlag: 'deletedAt', // the flag which indicates if a pulled document is deleted
         live: true, // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
         headers,
+        waitForLeadership: true,
       })
     : null;
 };

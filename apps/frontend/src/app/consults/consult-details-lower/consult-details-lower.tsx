@@ -1,16 +1,37 @@
 import { Table, TableTheme, Button } from '@shared';
 import { TextInput, Grid, Stack, NumberInput } from '@mantine/core';
-import { UseFormReturnType } from '@mantine/form';
 import { IconArrowAutofitDown } from '@tabler/icons';
-import { FormInputType } from '../consult-inputs';
 import { useNavigate } from 'react-router-dom';
+import { RxDocument } from 'rxdb';
+import { ConsultDocType } from 'database';
+import {
+  UseFormRegister,
+  FieldValues,
+  UseFormGetValues,
+} from 'react-hook-form';
 
 type ConsultDetailsLowerProps = {
-  form: UseFormReturnType<FormInputType>;
+  consult: RxDocument<ConsultDocType>;
+  register: UseFormRegister<FieldValues>;
+  getValues: UseFormGetValues<FieldValues>;
+  setValue: (name: string, value: unknown, urgent?: boolean) => void;
 };
 
-export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
-  const consultRows = [
+export const ConsultDetailsLower = ({
+  consult,
+  register,
+  getValues,
+  setValue,
+}: ConsultDetailsLowerProps) => {
+  type RowCode =
+    | 'prevSpecRxGiven'
+    | 'habitual'
+    | 'dryRetinoscopy'
+    | 'autoRefraction'
+    | 'wetRefraction'
+    | 'subjectiveRefraction'
+    | 'givenRefraction';
+  const consultRows: { name: string; code: RowCode }[] = [
     {
       name: 'Previous Spectacles Rx',
       code: 'prevSpecRxGiven',
@@ -43,7 +64,7 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
 
   const preciseInputProps = {
     precision: 2,
-    step: 0.01,
+    step: 0.25,
   };
 
   const navigate = useNavigate();
@@ -82,113 +103,110 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
                 <td>{row.name}</td>
                 <td>
                   <NumberInput
+                    value={consult.get(row.code + 'RightEyeSphere')}
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'RightEyeSphere')}
+                    min={undefined}
+                    max={undefined}
+                    maxLength={5}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}RightEyeSphere`, value);
+                    }}
                   />
                 </td>
                 <td>/</td>
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'RightCylinder')}
+                    value={consult.get(row.code + 'RightCylinder')}
+                    min={undefined}
+                    max={undefined}
+                    maxLength={5}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}RightCylinder`, value);
+                    }}
                   />
                 </td>
                 <td>x</td>
                 <td>
                   <NumberInput
-                    {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'RightAxis')}
+                    value={consult.get(row.code + 'RightAxis')}
+                    min={undefined}
+                    max={undefined}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}RightAxis`, value);
+                    }}
                   />
                 </td>
                 <td>
-                  <TextInput {...form.getInputProps(row.code + 'RightVA')} />
+                  <TextInput
+                    maxLength={10}
+                    defaultValue={consult.get(row.code + 'RightVA')}
+                    {...register(`consult.${row.code}RightVA`)}
+                  />
                 </td>
                 <td>
-                  <NumberInput {...form.getInputProps(row.code + 'RightAdd')} />
+                  <NumberInput
+                    {...preciseInputProps}
+                    value={consult.get(row.code + 'RightAdd')}
+                    min={undefined}
+                    max={undefined}
+                    maxLength={4}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}RightAdd`, value);
+                    }}
+                  />
                 </td>
                 <td>
                   {index !== consultRows.length - 1 && (
                     <Button compact variant="subtle">
                       <IconArrowAutofitDown
                         onClick={() => {
-                          const valRightEyeSphere = {
-                            ...form.getInputProps(row.code + 'RightEyeSphere'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightEyeSphere',
-                            valRightEyeSphere
-                          );
-
-                          const valRightCylinder = {
-                            ...form.getInputProps(row.code + 'RightCylinder'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightCylinder',
-                            valRightCylinder
-                          );
-
-                          const valRightAxis = {
-                            ...form.getInputProps(row.code + 'RightAxis'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightAxis',
-                            valRightAxis
-                          );
-
-                          const valRightVA = {
-                            ...form.getInputProps(row.code + 'RightVA'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightVA',
-                            valRightVA
-                          );
-
-                          const valRightAdd = {
-                            ...form.getInputProps(row.code + 'RightAdd'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'RightAdd',
-                            valRightAdd
-                          );
-
-                          const valLeftEyeSphere = {
-                            ...form.getInputProps(row.code + 'LeftEyeSphere'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftEyeSphere',
-                            valLeftEyeSphere
-                          );
-
-                          const valLeftCylinder = {
-                            ...form.getInputProps(row.code + 'LeftCylinder'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftCylinder',
-                            valLeftCylinder
-                          );
-
-                          const valLeftAxis = {
-                            ...form.getInputProps(row.code + 'LeftAxis'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftAxis',
-                            valLeftAxis
-                          );
-
-                          const valLeftVA = {
-                            ...form.getInputProps(row.code + 'LeftVA'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftVA',
-                            valLeftVA
-                          );
-
-                          const valLeftAdd = {
-                            ...form.getInputProps(row.code + 'LeftAdd'),
-                          }.value;
-                          form.setFieldValue(
-                            consultRows[index + 1].code + 'LeftAdd',
-                            valLeftAdd
+                          const nextRow = consultRows[index + 1];
+                          const newConsult = {
+                            ...getValues('consult'),
+                            [`${nextRow.code}RightEyeSphere`]: getValues(
+                              `consult.${row.code}RightEyeSphere`
+                            ),
+                            [`${nextRow.code}RightCylinder`]: getValues(
+                              `consult.${row.code}RightCylinder`
+                            ),
+                            [`${nextRow.code}RightAxis`]: getValues(
+                              `consult.${row.code}RightAxis`
+                            ),
+                            [`${nextRow.code}RightVA`]: getValues(
+                              `consult.${row.code}RightVA`
+                            ),
+                            [`${nextRow.code}RightAdd`]: getValues(
+                              `consult.${row.code}RightAdd`
+                            ),
+                            [`${nextRow.code}LeftEyeSphere`]: getValues(
+                              `consult.${row.code}LeftEyeSphere`
+                            ),
+                            [`${nextRow.code}LeftCylinder`]: getValues(
+                              `consult.${row.code}LeftCylinder`
+                            ),
+                            [`${nextRow.code}LeftAxis`]: getValues(
+                              `consult.${row.code}LeftAxis`
+                            ),
+                            [`${nextRow.code}LeftVA`]: getValues(
+                              `consult.${row.code}LeftVA`
+                            ),
+                            [`${nextRow.code}LeftAdd`]: getValues(
+                              `consult.${row.code}LeftAdd`
+                            ),
+                          };
+                          setValue(
+                            'consult',
+                            nextRow.name === 'Previous Spectacles Rx' ||
+                              nextRow.name === 'Given refraction'
+                              ? {
+                                  ...newConsult,
+                                  [`${nextRow.code}BVA`]: getValues(
+                                    `consult.${row.code}BVA`
+                                  ),
+                                }
+                              : newConsult,
+                            true
                           );
                         }}
                       />
@@ -198,30 +216,66 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'LeftEyeSphere')}
+                    value={consult.get(row.code + 'LeftEyeSphere')}
+                    min={undefined}
+                    max={undefined}
+                    maxLength={5}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}LeftEyeSphere`, value);
+                    }}
                   />
                 </td>
                 <td>/</td>
                 <td>
                   <NumberInput
                     {...preciseInputProps}
-                    {...form.getInputProps(row.code + 'LeftCylinder')}
+                    value={consult.get(row.code + 'LeftCylinder')}
+                    min={undefined}
+                    max={undefined}
+                    maxLength={5}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}LeftCylinder`, value);
+                    }}
                   />
                 </td>
                 <td>x</td>
                 <td>
-                  <NumberInput {...form.getInputProps(row.code + 'LeftAxis')} />
+                  <NumberInput
+                    value={consult.get(row.code + 'LeftAxis')}
+                    min={undefined}
+                    max={undefined}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}LeftAxis`, value);
+                    }}
+                  />
                 </td>
                 <td>
-                  <TextInput {...form.getInputProps(row.code + 'LeftVA')} />
+                  <TextInput
+                    maxLength={10}
+                    defaultValue={consult.get(row.code + 'LeftVA')}
+                    {...register(`consult.${row.code}LeftVA`)}
+                  />
                 </td>
                 <td>
-                  <NumberInput {...form.getInputProps(row.code + 'LeftAdd')} />
+                  <NumberInput
+                    {...preciseInputProps}
+                    value={consult.get(row.code + 'LeftAdd')}
+                    min={undefined}
+                    max={undefined}
+                    maxLength={4}
+                    onChange={(value) => {
+                      setValue(`consult.${row.code}LeftAdd`, value);
+                    }}
+                  />
                 </td>
                 {row.name === 'Previous Spectacles Rx' ||
                 row.name === 'Given refraction' ? (
                   <td>
-                    <TextInput {...form.getInputProps(row.code + 'BVA')} />
+                    <TextInput
+                      maxLength={10}
+                      defaultValue={consult.get(row.code + 'BVA')}
+                      {...register(`consult.${row.code}BVA`)}
+                    />
                   </td>
                 ) : (
                   <td></td>
@@ -239,7 +293,7 @@ export const ConsultDetailsLower = ({ form }: ConsultDetailsLowerProps) => {
           <Button
             color="yellow"
             onClick={() => {
-              const spectacleId = form.getInputProps('spectacle.id').value;
+              const spectacleId = consult.get('spectacle.id');
               navigate(`/spectacles-details/?spectaclesId=${spectacleId}`);
             }}
           >

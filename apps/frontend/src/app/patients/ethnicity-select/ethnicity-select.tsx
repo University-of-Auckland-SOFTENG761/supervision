@@ -1,9 +1,10 @@
-import React from 'react';
+import { forwardRef, Ref } from 'react';
 import { Select } from '@mantine/core';
 
 type EthnicitySelectProps = {
-  value: string | null;
-  onChange: (value: string | null) => void;
+  value?: string | null;
+  defaultValue?: string | null;
+  onChange?: (value: string | null) => void;
 };
 
 export enum Ethnicities {
@@ -27,23 +28,30 @@ export enum Ethnicities {
   'Other Ethnicity' = 'other ethnicity',
 }
 
-const EthnicitySelect = ({ value, onChange }: EthnicitySelectProps) => {
-  return (
-    <Select
-      label="Ethnicity:"
-      placeholder="Pick one"
-      data={Array.from(
-        (Object.keys(Ethnicities) as Array<keyof typeof Ethnicities>).map(
-          (key) => {
-            return { value: Ethnicities[key], label: key };
-          }
-        )
-      )}
-      searchable
-      value={value}
-      onChange={onChange}
-    />
-  );
-};
+const EthnicitySelect = forwardRef(
+  (
+    { value, defaultValue, onChange }: EthnicitySelectProps,
+    ref: Ref<HTMLInputElement> | undefined
+  ) => {
+    return (
+      <Select
+        label="Ethnicity:"
+        placeholder="Pick one"
+        data={Array.from(
+          (Object.keys(Ethnicities) as Array<keyof typeof Ethnicities>).map(
+            (key) => {
+              return { value: Ethnicities[key], label: key };
+            }
+          )
+        )}
+        ref={ref}
+        searchable
+        value={value}
+        defaultValue={defaultValue}
+        onChange={onChange}
+      />
+    );
+  }
+);
 
 export default EthnicitySelect;
