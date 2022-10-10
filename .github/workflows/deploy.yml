@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'hotfix/fix-hotfix-hotfix'
 
 env:
   REGISTRY: ghcr.io
