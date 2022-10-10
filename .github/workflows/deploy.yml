@@ -108,7 +108,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm pkg set scripts.prepare=""
           npm ci --omit=dev
 
       - name: Build
