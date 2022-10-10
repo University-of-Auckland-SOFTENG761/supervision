@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'hotfix/fix-hotfix-hotfix'
 
 env:
   REGISTRY: ghcr.io
@@ -106,9 +107,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Install Dependencies
-        run: |
-          npm set-script prepare ""
-          npm ci --production
+        run: npm ci --omit=optional
 
       - name: Build
         run: npx nx run frontend:build:production --production --parallel=true --baseHref=uoa-supervision.org

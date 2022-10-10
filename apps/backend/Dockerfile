@@ -6,8 +6,7 @@ USER node
 WORKDIR /home/node
 
 COPY package*.json ./
-RUN npm set-script prepare ""
-RUN npm ci --production
+RUN npm ci --omit=optional
 
 COPY --chown=node:node . .
 RUN npx nx run backend:build:production
