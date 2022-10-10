@@ -6,6 +6,7 @@ USER node
 WORKDIR /home/node
 
 COPY package*.json ./
+RUN npm set-script prepare ""
 RUN npm ci --production
 
 COPY --chown=node:node . .
