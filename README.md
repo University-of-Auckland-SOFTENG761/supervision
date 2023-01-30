@@ -45,7 +45,6 @@
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -217,18 +216,7 @@ sudo -u postgres createdb supervision
 
 ## Roadmap
 
-A roadmap and product backlog are available on Trello.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- LICENSE -->
-
-## License
-
-This application and all source code contained within are not permitted to be
-used by or released to the public.
-
-Copyright (c) 2022 Veeran Morar & Team 1 SOFTENG761
+This project was created as part of a university course and is no longer actively maintained.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
